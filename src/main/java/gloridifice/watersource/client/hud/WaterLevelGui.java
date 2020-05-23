@@ -14,7 +14,6 @@ import java.util.Random;
 
 public class WaterLevelGui extends AbstractGui {
     protected final Random rand = new Random();
-    protected int tick = 0;
     protected final static ResourceLocation OVERLAY_BAR = new ResourceLocation(WaterSource.MODID,"textures/gui/hud/icons.png");
     protected final static int WIDTH = 9;
     protected final static int HEIGHT = 9;

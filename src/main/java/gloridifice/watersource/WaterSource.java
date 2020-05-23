@@ -1,9 +1,8 @@
 package gloridifice.watersource;
 
 import gloridifice.watersource.registry.CapabilityRegistry;
-import gloridifice.watersource.registry.HUDRegistry;
 import gloridifice.watersource.registry.ItemRegistry;
-import net.minecraftforge.common.MinecraftForge;
+import gloridifice.watersource.registry.RecipesRegistry;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
@@ -18,5 +17,6 @@ public class WaterSource {
     public void setup(FMLCommonSetupEvent event)
     {
         CapabilityRegistry.init();
+        RecipesRegistry.init();
     }
 }
