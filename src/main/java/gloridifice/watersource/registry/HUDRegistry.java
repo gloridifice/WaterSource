@@ -18,8 +18,8 @@ public class HUDRegistry {
 
     @SubscribeEvent(receiveCanceled = true)
     public static void onRenderGameOverlayEvent(RenderGameOverlayEvent.Pre event){
-        int screenHeight = event.getWindow().getHeight();
-        int screenWidth = event.getWindow().getWidth();
+        int screenHeight = event.getWindow().getScaledHeight();
+        int screenWidth = event.getWindow().getScaledWidth();
         ClientPlayerEntity playerEntity = Minecraft.getInstance().player;
         if (playerEntity != null){
             THIRST_RENDER.renderThirst(screenWidth, screenHeight,5);

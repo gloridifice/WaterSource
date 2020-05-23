@@ -26,7 +26,7 @@ public class ThirstRender extends AbstractGui {
         RenderSystem.blendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
         mc.getTextureManager().bindTexture(OVERLAY_BAR);
 
-        int oriOffsetX = screenWidth / 2 + 91;
+        int oriOffsetX = screenWidth / 2 + 1;
         int oriOffsetY = screenHeight - 50;
         int texU = 0;
         int texV = 0;
