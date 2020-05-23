@@ -1,7 +1,8 @@
 package gloridifice.watersource.registry;
 
 import gloridifice.watersource.WaterSource;
-import gloridifice.watersource.client.hud.ThirstRender;
+import gloridifice.watersource.client.hud.WaterLevelGui;
+import gloridifice.watersource.common.capability.WaterLevelCapability;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.player.ClientPlayerEntity;
 import net.minecraft.util.ResourceLocation;
@@ -14,7 +15,7 @@ import net.minecraftforge.fml.common.Mod;
 public class HUDRegistry {
     public final static ResourceLocation DEFAULT = new ResourceLocation("minecraft", "textures/gui/icons.png");
 
-    private final static ThirstRender THIRST_RENDER = new ThirstRender(Minecraft.getInstance());
+    private final static WaterLevelGui WATER_LEVEL_GUI = new WaterLevelGui(Minecraft.getInstance());
 
     @SubscribeEvent(receiveCanceled = true)
     public static void onRenderGameOverlayEvent(RenderGameOverlayEvent.Pre event){
@@ -22,7 +23,13 @@ public class HUDRegistry {
         int screenWidth = event.getWindow().getScaledWidth();
         ClientPlayerEntity playerEntity = Minecraft.getInstance().player;
         if (playerEntity != null){
-            THIRST_RENDER.renderThirst(screenWidth, screenHeight,5);
+            if (!playerEntity.isSpectator())
+            {
+                playerEntity.getCapability(WaterLevelCapability.PLAYER_WATER_LEVEL).ifPresent(t ->
+                {
+                    WATER_LEVEL_GUI.renderWaterLevel(screenWidth,screenHeight,t);
+                });
+            }
         }
     }
 }
