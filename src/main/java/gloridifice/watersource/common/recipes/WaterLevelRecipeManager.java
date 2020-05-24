@@ -22,7 +22,7 @@ public class WaterLevelRecipeManager {
     }
     public static WaterLevelRecipe getRecipeFromItemStack(ItemStack itemStack){
         for (WaterLevelRecipe r : recipes){
-            if (r.getItemStack().equals(itemStack)){
+            if (r.getItemStack().isItemEqual(itemStack)){
                 return r;
             }
         }
