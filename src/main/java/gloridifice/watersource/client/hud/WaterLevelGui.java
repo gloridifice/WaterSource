@@ -6,15 +6,18 @@ import gloridifice.watersource.common.capability.WaterLevelCapability;
 import gloridifice.watersource.registry.HUDRegistry;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.AbstractGui;
-import net.minecraft.potion.Effects;
 import net.minecraft.util.ResourceLocation;
-import org.lwjgl.opengl.GL11;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.event.TickEvent;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fml.common.Mod;
 
 import java.util.Random;
 
+@Mod.EventBusSubscriber(value = Dist.CLIENT, modid = WaterSource.MODID)
 public class WaterLevelGui extends AbstractGui {
     protected final Random rand = new Random();
-    protected int tick = 0;
+    protected static int tick = 0;
     protected final static ResourceLocation OVERLAY_BAR = new ResourceLocation(WaterSource.MODID,"textures/gui/hud/icons.png");
     protected final static int WIDTH = 9;
     protected final static int HEIGHT = 9;
@@ -24,6 +27,7 @@ public class WaterLevelGui extends AbstractGui {
     public WaterLevelGui(Minecraft mc){
         this.mc = mc;
     }
+
     public void renderWaterLevel(int screenWidth, int screenHeight, WaterLevelCapability.Data capData)
     {
         RenderSystem.color4f(1.0F, 1.0F, 1.0F, 1.0F);
@@ -39,8 +43,8 @@ public class WaterLevelGui extends AbstractGui {
         int texU = 0;
         int texV = 0;
         for(int k6 = 0; k6 < 10; ++k6) {
-            if (waterSaturationLevel <= 0.0F && mc.ingameGUI.getTicks() % (waterLevel * 3 + 1) == 0) {
-                OffsetY1 = OffsetY + (this.rand.nextInt(3) - 1);
+            if (waterSaturationLevel <= 0.0F && tick/8 % (waterLevel + 1) == 0) {
+                OffsetY1 = OffsetY + (tick/8+ k6 + waterLevel) % 3 - 1;
             }
             int OffsetX1 = OffsetX - k6 * 8 - 9;
             this.blit(OffsetX1, OffsetY1, 36, texV, WIDTH, HEIGHT);
@@ -53,5 +57,12 @@ public class WaterLevelGui extends AbstractGui {
         }
         RenderSystem.disableAlphaTest();
         mc.getTextureManager().bindTexture(HUDRegistry.DEFAULT);
+    }
+
+    @SubscribeEvent
+    public static void onClientTick(TickEvent.ClientTickEvent event)
+    {
+        tick ++;
+        tick %= 1200;
     }
 }

@@ -3,7 +3,7 @@ package gloridifice.watersource.event;
 import gloridifice.watersource.WaterSource;
 import gloridifice.watersource.common.capability.WaterLevelCapability;
 import gloridifice.watersource.common.recipes.WaterLevelRecipe;
-import gloridifice.watersource.registry.RecipesRegistry;
+import gloridifice.watersource.common.recipes.WaterLevelRecipeManager;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
@@ -28,7 +28,7 @@ public class CommonEventHandler {
     public static void onLivingEntityUseItemEventFinish(LivingEntityUseItemEvent.Finish event){
         LivingEntity entity = event.getEntityLiving();
         if (entity instanceof PlayerEntity){
-            WaterLevelRecipe recipe = RecipesRegistry.THIRST_LEVEL.getRecipeFromItemStack(event.getResultStack());
+            WaterLevelRecipe recipe = WaterLevelRecipeManager.getRecipeFromItemStack(event.getResultStack());
             if (recipe != null){
                 entity.getCapability(WaterLevelCapability.PLAYER_WATER_LEVEL).ifPresent(data -> {
                     data.addThirstLevel(recipe.getWaterLevel());

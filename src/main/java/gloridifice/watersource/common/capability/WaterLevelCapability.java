@@ -43,11 +43,11 @@ public class WaterLevelCapability {
 
         public void addThirstLevel(int add)
         {
-            this.waterLevel = this.waterLevel + add <= 20 ? waterLevel + add : 20;
+            this.waterLevel = Math.min(this.waterLevel + add, 20);
         }
         public void addThirstSaturationLevel(int add)
         {
-            this.waterSaturationLevel = this.waterSaturationLevel + add <= 20 ? waterSaturationLevel + add : 20;
+            this.waterSaturationLevel = Math.min(this.waterSaturationLevel + add, 20);
         }
         public void addWaterExhaustionLevel(float add){
             if (this.waterExhaustionLevel + add < 4.0f){
