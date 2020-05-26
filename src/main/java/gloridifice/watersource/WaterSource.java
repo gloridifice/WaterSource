@@ -2,6 +2,7 @@ package gloridifice.watersource;
 
 import gloridifice.watersource.common.network.SimpleNetworkHandler;
 import gloridifice.watersource.registry.CapabilityRegistry;
+import gloridifice.watersource.registry.EffectRegistry;
 import gloridifice.watersource.registry.ItemRegistry;
 import gloridifice.watersource.registry.RecipesRegistry;
 import net.minecraftforge.fml.common.Mod;
@@ -14,6 +15,7 @@ public class WaterSource {
     public static final String NETWORK_VERSION = "1.0";
     public WaterSource(){
         new ItemRegistry();
+        new EffectRegistry();
         FMLJavaModLoadingContext.get().getModEventBus().addListener(this::setup);
     }
     public void setup(FMLCommonSetupEvent event)

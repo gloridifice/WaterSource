@@ -18,17 +18,19 @@ public class HUDRegistry {
     private final static WaterLevelGui WATER_LEVEL_GUI = new WaterLevelGui(Minecraft.getInstance());
 
     @SubscribeEvent(receiveCanceled = true)
-    public static void onRenderGameOverlayEvent(RenderGameOverlayEvent.Pre event){
-        int screenHeight = event.getWindow().getScaledHeight();
-        int screenWidth = event.getWindow().getScaledWidth();
-        ClientPlayerEntity playerEntity = Minecraft.getInstance().player;
-        if (playerEntity != null){
-            if (!playerEntity.isSpectator())
-            {
-                playerEntity.getCapability(WaterLevelCapability.PLAYER_WATER_LEVEL).ifPresent(t ->
+    public static void onRenderGameOverlayEvent(RenderGameOverlayEvent.Post event){
+        if (event.getType() == RenderGameOverlayEvent.ElementType.FOOD){
+            int screenHeight = event.getWindow().getScaledHeight();
+            int screenWidth = event.getWindow().getScaledWidth();
+            ClientPlayerEntity playerEntity = Minecraft.getInstance().player;
+            if (playerEntity != null && !playerEntity.isCreative() && !playerEntity.isSpectator() && !Minecraft.getInstance().gameSettings.hideGUI){
+                if (!playerEntity.isSpectator())
                 {
-                    WATER_LEVEL_GUI.renderWaterLevel(screenWidth,screenHeight,t);
-                });
+                    playerEntity.getCapability(WaterLevelCapability.PLAYER_WATER_LEVEL).ifPresent(t ->
+                    {
+                        WATER_LEVEL_GUI.renderWaterLevel(screenWidth,screenHeight,t);
+                    });
+                }
             }
         }
     }

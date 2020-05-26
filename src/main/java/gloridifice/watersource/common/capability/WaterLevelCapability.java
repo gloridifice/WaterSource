@@ -1,19 +1,27 @@
 package gloridifice.watersource.common.capability;
 
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.INBT;
 import net.minecraft.util.Direction;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.CapabilityInject;
 import net.minecraftforge.common.capabilities.ICapabilitySerializable;
+import net.minecraftforge.common.util.FakePlayer;
 import net.minecraftforge.common.util.LazyOptional;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+import static net.minecraft.world.Difficulty.PEACEFUL;
+
 public class WaterLevelCapability {
     @CapabilityInject(Data.class)
     public static Capability<Data> PLAYER_WATER_LEVEL;
+
+    public static boolean canPlayerAddWaterExhaustionLevel(PlayerEntity player){
+        return !(player instanceof FakePlayer) && !player.isCreative() && !player.isSpectator() && player.getCapability(WaterLevelCapability.PLAYER_WATER_LEVEL) != null && player.getEntityWorld().getDifficulty() != PEACEFUL;
+    }
 
     public static class Storage implements Capability.IStorage<Data>
     {
@@ -38,14 +46,13 @@ public class WaterLevelCapability {
     public static class Data
     {
         private int waterLevel = 20;
-        private int waterSaturationLevel = 0;
+        private int waterSaturationLevel = 10;
         private float waterExhaustionLevel = 0;
 
-        public void addThirstLevel(int add)
+        public void addWaterLevel(int add)
         {
-            this.waterLevel = Math.min(this.waterLevel + add, 20);
-        }
-        public void addThirstSaturationLevel(int add)
+            this.waterLevel = Math.min(this.waterLevel + add, 20); }
+        public void addWaterSaturationLevel(int add)
         {
             this.waterSaturationLevel = Math.min(this.waterSaturationLevel + add, 20);
         }
@@ -96,7 +103,7 @@ public class WaterLevelCapability {
     }
     public static class Provider implements ICapabilitySerializable<INBT>
     {
-        private Data playerThirstLevel = new Data();
+        private Data playerWaterLevel = new Data();
         private Capability.IStorage<Data> storage = PLAYER_WATER_LEVEL.getStorage();
 
         @Nonnull
@@ -104,7 +111,7 @@ public class WaterLevelCapability {
         public <T> LazyOptional<T> getCapability(@Nonnull Capability<T> cap, @Nullable Direction side)
         {
             if (cap.equals(PLAYER_WATER_LEVEL))
-                return LazyOptional.of(() -> playerThirstLevel).cast();
+                return LazyOptional.of(() -> playerWaterLevel).cast();
             else
                 return LazyOptional.empty();
         }
@@ -112,13 +119,13 @@ public class WaterLevelCapability {
         @Override
         public INBT serializeNBT()
         {
-            return storage.writeNBT(PLAYER_WATER_LEVEL, playerThirstLevel, null);
+            return storage.writeNBT(PLAYER_WATER_LEVEL, playerWaterLevel, null);
         }
 
         @Override
         public void deserializeNBT(INBT nbt)
         {
-            storage.readNBT(PLAYER_WATER_LEVEL, playerThirstLevel, null, nbt);
+            storage.readNBT(PLAYER_WATER_LEVEL, playerWaterLevel, null, nbt);
         }
     }
 }
