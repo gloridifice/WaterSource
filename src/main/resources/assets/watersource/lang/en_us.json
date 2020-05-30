@@ -1,0 +1,9 @@
+{
+  "effect.watersource.thirst": "Thirst",
+  "death.attack.byThirst": "%s turned into Dried %s.",
+  "item.watersource.primitive_strainer": "PrimitiveStrainer",
+  "item.watersource.paper_strainer": "Paper Strainer",
+  "item.watersource.soul_strainer": "Soul Strainer",
+  "item.watersource.purified_water_bottle": "Purified Water Bottle",
+  "item.watersource.soul_water_bottle": "Soul water Bottle"
+}

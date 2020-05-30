@@ -21,6 +21,8 @@ build
 eclipse
 run
 .psd
+logo_cn.png
+logo_en.png
 
 # Files from Forge MDK
 forge*changelog.txt
