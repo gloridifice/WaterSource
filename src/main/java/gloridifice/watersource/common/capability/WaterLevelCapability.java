@@ -1,9 +1,15 @@
 package gloridifice.watersource.common.capability;
 
+import gloridifice.watersource.registry.EffectRegistry;
+import net.minecraft.block.SoundType;
+import net.minecraft.client.audio.Sound;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.INBT;
-import net.minecraft.util.Direction;
+import net.minecraft.potion.EffectInstance;
+import net.minecraft.potion.Effects;
+import net.minecraft.util.*;
+import net.minecraft.world.Difficulty;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.CapabilityInject;
 import net.minecraftforge.common.capabilities.ICapabilitySerializable;
@@ -46,7 +52,7 @@ public class WaterLevelCapability {
     public static class Data
     {
         private int waterLevel = 20;
-        private int waterSaturationLevel = 10;
+        private int waterSaturationLevel = 6;
         private float waterExhaustionLevel = 0;
 
         public void addWaterLevel(int add)
@@ -56,13 +62,19 @@ public class WaterLevelCapability {
         {
             this.waterSaturationLevel = Math.min(this.waterSaturationLevel + add, 20);
         }
-        public void addWaterExhaustionLevel(float add){
+        protected void addExhaustion(float add){
             if (this.waterExhaustionLevel + add < 4.0f){
                 this.waterExhaustionLevel += add;
             }else {
                 this.waterExhaustionLevel = 0;
                 reduceLevel(1);
             }
+        }
+        public void addExhaustion(PlayerEntity player, float reduce){
+            EffectInstance effect = player.getActivePotionEffect(EffectRegistry.THIRST);
+            if (effect != null){
+                addExhaustion(reduce * (3 + effect.getAmplifier())/2);
+            }else addExhaustion(reduce);
         }
         public void setWaterLevel(int temp)
         {
@@ -97,6 +109,22 @@ public class WaterLevelCapability {
                 }else {
                     waterLevel = 0;
                     waterSaturationLevel = 0;
+                }
+            }
+        }
+        public void punishment(PlayerEntity player){
+            if (getWaterLevel() <= 6){
+                player.addPotionEffect(new EffectInstance(Effects.WEAKNESS,1800,0,false,false));
+                player.addPotionEffect(new EffectInstance(Effects.SLOWNESS,1800,0,false,false));
+            }
+
+            int i = 0;
+            if (player.getEntityWorld().getDifficulty() != Difficulty.HARD) i = 1;
+            if (getWaterLevel() == 0 && player.getHealth() > i){
+                if (!player.getEntityWorld().isRemote){
+                    player.setHealth(player.getHealth() - 1);
+                    player.getEntityWorld().playSound(player,player.getPosition(), SoundEvents.ENTITY_GUARDIAN_ATTACK, SoundCategory.PLAYERS ,1.0F, 1.0F);
+                    player.attackEntityFrom(new DamageSource("byThirst"),0);
                 }
             }
         }

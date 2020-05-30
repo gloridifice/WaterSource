@@ -1,22 +1,21 @@
 package gloridifice.watersource.event;
 
 import gloridifice.watersource.WaterSource;
+import gloridifice.watersource.common.capability.PlayerLastPosCapability;
 import gloridifice.watersource.common.capability.WaterLevelCapability;
 import gloridifice.watersource.common.network.PlayerWaterLevelMessage;
 import gloridifice.watersource.common.network.SimpleNetworkHandler;
-import gloridifice.watersource.common.recipes.ThirstItemRecipe;
-import gloridifice.watersource.common.recipes.ThirstItemRecipeManager;
-import gloridifice.watersource.common.recipes.WaterLevelRecipe;
-import gloridifice.watersource.common.recipes.WaterLevelRecipeManager;
+import gloridifice.watersource.common.recipe.ThirstItemRecipe;
+import gloridifice.watersource.common.recipe.ThirstItemRecipeManager;
+import gloridifice.watersource.common.recipe.WaterLevelRecipe;
+import gloridifice.watersource.common.recipe.WaterLevelRecipeManager;
 import gloridifice.watersource.registry.EffectRegistry;
-import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.potion.EffectInstance;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
 import net.minecraftforge.common.util.FakePlayer;
@@ -30,7 +29,6 @@ import net.minecraftforge.event.world.BlockEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.network.PacketDistributor;
-import org.omg.CORBA.PUBLIC_MEMBER;
 
 import java.util.Random;
 
@@ -42,6 +40,7 @@ public class CommonEventHandler {
     public static void addCap(AttachCapabilitiesEvent<Entity> event) {
         if (event.getObject() instanceof PlayerEntity && !(event.getObject() instanceof FakePlayer)) {
             event.addCapability(new ResourceLocation(WaterSource.MODID, "player_thirst_level"), new WaterLevelCapability.Provider());
+            event.addCapability(new ResourceLocation(WaterSource.MODID,"player_last_position"), new PlayerLastPosCapability.Provider());
         }
     }
 
@@ -72,7 +71,7 @@ public class CommonEventHandler {
         if (entity instanceof PlayerEntity) {
             if (WaterLevelCapability.canPlayerAddWaterExhaustionLevel((PlayerEntity)entity)){
                 entity.getCapability(WaterLevelCapability.PLAYER_WATER_LEVEL).ifPresent(data -> {
-                    data.addWaterExhaustionLevel(0.1f);
+                    data.addExhaustion((PlayerEntity) entity,0.1f);
                 });
             }
         }
@@ -107,34 +106,35 @@ public class CommonEventHandler {
             event.getEntity().getCapability(WaterLevelCapability.PLAYER_WATER_LEVEL).ifPresent(t -> SimpleNetworkHandler.CHANNEL.send(PacketDistributor.PLAYER.with(() -> (ServerPlayerEntity) event.getEntity()), new PlayerWaterLevelMessage(t.getWaterLevel(), t.getWaterSaturationLevel(),t.getWaterExhaustionLevel())));
         }
     }
-    static double lastX,lastY,lastZ;
-    static World lastWorld = null;
-    static boolean lastOnGround = false;
+
     @SubscribeEvent
     public static void onPlayerTickEvent(TickEvent.PlayerTickEvent event){
         tick ++;
         tick %= 8000;
         PlayerEntity player = event.player;
         World world = player.getEntityWorld();
-        if (player != null && WaterLevelCapability.canPlayerAddWaterExhaustionLevel(player)){
-            if (lastWorld != null){
-                if (world == lastWorld && lastOnGround && player.onGround){
+        if (tick % 2 == 0 && player != null && WaterLevelCapability.canPlayerAddWaterExhaustionLevel(player)){
+            player.getCapability(PlayerLastPosCapability.PLAYER_LAST_POSITION).ifPresent(data -> {
+                boolean lastOnGround = data.isLastOnGround();
+                double lastX = data.getLastX();
+                double lastY = data.getLastY();
+                double lastZ = data.getLastZ();
+                if (lastOnGround && player.onGround){
                     double x = Math.sqrt(Math.pow(lastX-player.getPosX(),2)+Math.pow(lastY-player.getPosY(),2)+Math.pow(lastZ-player.getPosZ(),2));
-                    //System.out.println(x);
                     if (x < 5){
-                      player.getCapability(WaterLevelCapability.PLAYER_WATER_LEVEL).ifPresent(data -> {
-                          data.addWaterExhaustionLevel((float)(x/15));
-                      });
+                        player.getCapability(WaterLevelCapability.PLAYER_WATER_LEVEL).ifPresent(dataW -> {
+                            dataW.addExhaustion(player,(float)(x/60));
+                        });
                     }
                 }
-            }
-            if (player.onGround){
-                lastX = player.getPosX();
-                lastY = player.getPosY();
-                lastZ = player.getPosZ();
-                lastWorld = world;
-            }
-            lastOnGround = player.onGround;
+
+                if (player.onGround){
+                    data.setLastX(player.getPosX());
+                    data.setLastY(player.getPosY());
+                    data.setLastZ(player.getPosZ());
+                }
+                data.setLastOnGround(player.onGround);
+            });
 
             if(tick % 10 == 0){
                 //自然状态
@@ -142,12 +142,12 @@ public class CommonEventHandler {
                 if (world.getLight(player.getPosition()) == 15 && world.getDayTime() < 11000 && world.getDayTime() > 450){
                     if (biome.getDefaultTemperature() > 0.3){
                         player.getCapability(WaterLevelCapability.PLAYER_WATER_LEVEL).ifPresent(data -> {
-                            data.addWaterExhaustionLevel(0.0065f);
+                            data.addExhaustion(player,0.0065f);
                         });
                     }
                     if (biome.getDefaultTemperature() > 0.9){
                         player.getCapability(WaterLevelCapability.PLAYER_WATER_LEVEL).ifPresent(data -> {
-                            data.addWaterExhaustionLevel(0.0025f);
+                            data.addExhaustion(player,0.0025f);
                         });
                     }
                 }
@@ -156,10 +156,15 @@ public class CommonEventHandler {
                 EffectInstance effectInstance = player.getActivePotionEffect(EffectRegistry.THIRST);
                 if (effectInstance != null){
                     player.getCapability(WaterLevelCapability.PLAYER_WATER_LEVEL).ifPresent(data -> {
-                        data.addWaterExhaustionLevel(0.05f + 0.02f * effectInstance.getAmplifier());
+                        data.addExhaustion(player,0.05f + 0.02f * effectInstance.getAmplifier());
                     });
                 }
 
+            }
+            if (tick % 60 == 0 && player != null){
+                player.getCapability(WaterLevelCapability.PLAYER_WATER_LEVEL).ifPresent(data -> {
+                    data.punishment(player);
+                });
             }
         }
     }
@@ -167,7 +172,7 @@ public class CommonEventHandler {
     public static void onBlockBreakEvent(BlockEvent.BreakEvent event){
         PlayerEntity player = event.getPlayer();
         if (WaterLevelCapability.canPlayerAddWaterExhaustionLevel(player)){
-            player.getCapability(WaterLevelCapability.PLAYER_WATER_LEVEL).ifPresent(data -> data.addWaterExhaustionLevel(0.005f));
+            player.getCapability(WaterLevelCapability.PLAYER_WATER_LEVEL).ifPresent(data -> data.addExhaustion(player,0.005f));
         }
     }
 

@@ -1,4 +1,4 @@
-package gloridifice.watersource.common.recipes;
+package gloridifice.watersource.common.recipe;
 
 import net.minecraft.item.ItemStack;
 

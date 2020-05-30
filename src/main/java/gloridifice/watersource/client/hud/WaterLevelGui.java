@@ -19,7 +19,7 @@ import java.util.Random;
 @Mod.EventBusSubscriber(value = Dist.CLIENT, modid = WaterSource.MODID)
 public class WaterLevelGui extends AbstractGui {
     protected static int tick = 0;
-    protected final static ResourceLocation OVERLAY_BAR = new ResourceLocation(WaterSource.MODID,"textures/gui/hud/icons.png");
+    public final static ResourceLocation OVERLAY_BAR = new ResourceLocation(WaterSource.MODID,"textures/gui/hud/icons.png");
     protected final static int WIDTH = 9;
     protected final static int HEIGHT = 9;
 
@@ -52,7 +52,7 @@ public class WaterLevelGui extends AbstractGui {
             texU2 += 9;
         }
         for(int k6 = 0; k6 < 10; ++k6) {
-            if (waterSaturationLevel <= 0.0F && tick/8 % (waterLevel + 1) == 0) {
+            if (waterSaturationLevel <= 0.0F && tick % (waterLevel * 3 + 1) == 0) {
                 OffsetY1 = OffsetY + (tick/8+ k6 + waterLevel) % 3 - 1;
             }
             int OffsetX1 = OffsetX - k6 * 8 - 9;

@@ -1,10 +1,7 @@
 package gloridifice.watersource;
 
 import gloridifice.watersource.common.network.SimpleNetworkHandler;
-import gloridifice.watersource.registry.CapabilityRegistry;
-import gloridifice.watersource.registry.EffectRegistry;
-import gloridifice.watersource.registry.ItemRegistry;
-import gloridifice.watersource.registry.RecipesRegistry;
+import gloridifice.watersource.registry.*;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
@@ -17,11 +14,12 @@ public class WaterSource {
         new ItemRegistry();
         new EffectRegistry();
         FMLJavaModLoadingContext.get().getModEventBus().addListener(this::setup);
+        RecipeSerializersRegistry.RECIPE_SERIALIZERS.register(FMLJavaModLoadingContext.get().getModEventBus());
     }
     public void setup(FMLCommonSetupEvent event)
     {
         CapabilityRegistry.init();
-        RecipesRegistry.init();
+        RecipeRegistry.init();
         SimpleNetworkHandler.init();
     }
 }
