@@ -53,7 +53,7 @@ public class WaterLevelGui extends AbstractGui {
         }
         for(int k6 = 0; k6 < 10; ++k6) {
             if (waterSaturationLevel <= 0.0F && tick % (waterLevel * 3 + 1) == 0) {
-                OffsetY1 = OffsetY + (tick/4+ k6 + waterLevel) % 3 - 1;
+                OffsetY1 = OffsetY + (tick/2 + k6 + waterLevel) % 3 - 1;
             }
             int OffsetX1 = OffsetX - k6 * 8 - 9;
             this.blit(OffsetX1, OffsetY1, 36 + texU2, texV, WIDTH, HEIGHT);
