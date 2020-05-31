@@ -2,10 +2,11 @@ modLoader="javafml"
 loaderVersion="[31,)"
 [[mods]]
 modId="watersource"
-version="1.0.0"
+version="alpha1.0.0"
 displayName="Water Source"
 credits="Lemon Slice Studio"
 authors="Gloridifice"
+logoFile="watersource.png"
 description='''
 This is a mod added a Thirst and Drinking System to Minecraft.
 '''

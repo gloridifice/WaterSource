@@ -20,7 +20,7 @@ build
 # other
 eclipse
 run
-.psd
+*.psd
 logo_cn.png
 logo_en.png
 

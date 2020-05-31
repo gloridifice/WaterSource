@@ -14,4 +14,5 @@ public class SoulWaterBottle extends PurifiedWaterBottleItem{
         //TODO
         return new ItemStack(Items.GLASS_BOTTLE);
     }
+
 }

@@ -1,0 +1,23 @@
+{
+    "type": "minecraft:crafting_shaped",
+    "group": "watersource",
+    "pattern": [
+        "yyy",
+        "zzz",
+		"xxx"
+    ],
+    "key": {
+        "x": {
+            "item": "minecraft:clay_ball"
+        },
+		"y": {
+            "item": "minecraft:charcoal"
+        },
+		"z":{
+		"item":"minecraft:sand"
+		}
+    },
+    "result": {
+        "item": "watersource:primitive_strainer"
+    }
+}

@@ -6,7 +6,8 @@ public class ThirstNbtRecipe extends ThirstItemRecipe{
     public ThirstNbtRecipe(ItemStack itemStack, int duration, int amplifier, int probability) {
         super(itemStack, duration, amplifier, probability);
     }
-    public static boolean isItemStackEqual(ItemStack i){
-        return itemStack.isItemEqual(i) && i.getTag() == itemStack.getTag();
+    @Override
+    public boolean isItemStackEqual(ItemStack i){
+        return itemStack.isItemEqual(i) && ItemStack.areItemStackTagsEqual(i,itemStack);
     }
 }

@@ -112,10 +112,15 @@ public class WaterLevelCapability {
                 }
             }
         }
+        public void restoreWaterLevel(int restore){
+            if (waterLevel + restore < 20){
+                waterLevel += restore;
+            }else waterLevel = 20;
+        }
         public void punishment(PlayerEntity player){
             if (getWaterLevel() <= 6){
-                player.addPotionEffect(new EffectInstance(Effects.WEAKNESS,1800,0,false,false));
-                player.addPotionEffect(new EffectInstance(Effects.SLOWNESS,1800,0,false,false));
+                player.addPotionEffect(new EffectInstance(Effects.WEAKNESS,800,0,false,false));
+                player.addPotionEffect(new EffectInstance(Effects.SLOWNESS,800,0,false,false));
             }
 
             int i = 0;
@@ -123,9 +128,8 @@ public class WaterLevelCapability {
             if (getWaterLevel() == 0 && player.getHealth() > i){
                 if (!player.getEntityWorld().isRemote){
                     player.setHealth(player.getHealth() - 1);
-                    player.getEntityWorld().playSound(player,player.getPosition(), SoundEvents.ENTITY_GUARDIAN_ATTACK, SoundCategory.PLAYERS ,1.0F, 1.0F);
-                    player.attackEntityFrom(new DamageSource("byThirst"),0);
-                }
+                    player.attackEntityFrom(new DamageSource("byThirst"),1);
+                }else player.getEntityWorld().playSound(player,player.getPosition(), SoundEvents.ENTITY_GUARDIAN_ATTACK, SoundCategory.PLAYERS ,1.0F, 1.0F);
             }
         }
     }

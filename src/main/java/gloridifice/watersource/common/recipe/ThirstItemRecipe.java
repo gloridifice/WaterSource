@@ -26,7 +26,7 @@ public class ThirstItemRecipe {
     public ItemStack getItemStack() {
         return itemStack;
     }
-    public static boolean isItemStackEqual(ItemStack i){
+    public boolean isItemStackEqual(ItemStack i){
         return itemStack.isItemEqual(i);
     }
 }

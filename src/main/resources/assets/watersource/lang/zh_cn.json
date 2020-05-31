@@ -1,6 +1,7 @@
 {
   "effect.watersource.thirst": "口渴",
   "death.attack.byThirst": "%s 变成了%s干。",
+  "itemGroup.watersource_group": "水源",
   "item.watersource.primitive_strainer": "原始滤层",
   "item.watersource.paper_strainer": "纸滤层",
   "item.watersource.soul_strainer": "灵魂沙滤层",

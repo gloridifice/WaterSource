@@ -1,6 +1,7 @@
 {
   "effect.watersource.thirst": "Thirst",
   "death.attack.byThirst": "%s turned into Dried %s.",
+  "itemGroup.watersource_group": "Water Source",
   "item.watersource.primitive_strainer": "PrimitiveStrainer",
   "item.watersource.paper_strainer": "Paper Strainer",
   "item.watersource.soul_strainer": "Soul Strainer",

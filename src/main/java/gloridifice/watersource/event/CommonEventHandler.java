@@ -16,6 +16,7 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.potion.EffectInstance;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.world.Difficulty;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
 import net.minecraftforge.common.util.FakePlayer;
@@ -71,7 +72,7 @@ public class CommonEventHandler {
         if (entity instanceof PlayerEntity) {
             if (WaterLevelCapability.canPlayerAddWaterExhaustionLevel((PlayerEntity)entity)){
                 entity.getCapability(WaterLevelCapability.PLAYER_WATER_LEVEL).ifPresent(data -> {
-                    data.addExhaustion((PlayerEntity) entity,0.1f);
+                    data.addExhaustion((PlayerEntity) entity,0.14f);
                 });
             }
         }
@@ -113,45 +114,46 @@ public class CommonEventHandler {
         tick %= 8000;
         PlayerEntity player = event.player;
         World world = player.getEntityWorld();
-        if (tick % 2 == 0 && player != null && WaterLevelCapability.canPlayerAddWaterExhaustionLevel(player)){
-            player.getCapability(PlayerLastPosCapability.PLAYER_LAST_POSITION).ifPresent(data -> {
-                boolean lastOnGround = data.isLastOnGround();
-                double lastX = data.getLastX();
-                double lastY = data.getLastY();
-                double lastZ = data.getLastZ();
-                if (lastOnGround && player.onGround){
-                    double x = Math.sqrt(Math.pow(lastX-player.getPosX(),2)+Math.pow(lastY-player.getPosY(),2)+Math.pow(lastZ-player.getPosZ(),2));
-                    if (x < 5){
-                        player.getCapability(WaterLevelCapability.PLAYER_WATER_LEVEL).ifPresent(dataW -> {
-                            dataW.addExhaustion(player,(float)(x/60));
-                        });
+        if (player != null && WaterLevelCapability.canPlayerAddWaterExhaustionLevel(player)){
+            if (tick % 2 == 0){
+                player.getCapability(PlayerLastPosCapability.PLAYER_LAST_POSITION).ifPresent(data -> {
+                    boolean lastOnGround = data.isLastOnGround();
+                    double lastX = data.getLastX();
+                    double lastY = data.getLastY();
+                    double lastZ = data.getLastZ();
+                    if (lastOnGround && player.onGround) {
+                        double x = Math.sqrt(Math.pow(lastX - player.getPosX(), 2) + Math.pow(lastY - player.getPosY(), 2) + Math.pow(lastZ - player.getPosZ(), 2));
+                        if (x < 5) {
+                            player.getCapability(WaterLevelCapability.PLAYER_WATER_LEVEL).ifPresent(dataW -> {
+                                dataW.addExhaustion(player, (float) (x / 40));
+                            });
+                        }
                     }
-                }
 
-                if (player.onGround){
-                    data.setLastX(player.getPosX());
-                    data.setLastY(player.getPosY());
-                    data.setLastZ(player.getPosZ());
-                }
-                data.setLastOnGround(player.onGround);
-            });
+                    if (player.onGround) {
+                        data.setLastX(player.getPosX());
+                        data.setLastY(player.getPosY());
+                        data.setLastZ(player.getPosZ());
+                    }
+                    data.setLastOnGround(player.onGround);
+                });
+            }
 
             if(tick % 10 == 0){
                 //自然状态
                 Biome biome = world.getBiome(player.getPosition());
-                if (world.getLight(player.getPosition()) == 15 && world.getDayTime() < 11000 && world.getDayTime() > 450){
+                if (world.getLight(player.getPosition()) == 15 && world.getDayTime() < 11000 && world.getDayTime() > 450 && !world.isRainingAt(player.getPosition())){
                     if (biome.getDefaultTemperature() > 0.3){
                         player.getCapability(WaterLevelCapability.PLAYER_WATER_LEVEL).ifPresent(data -> {
-                            data.addExhaustion(player,0.0065f);
+                            data.addExhaustion(player,0.0075f);
                         });
                     }
                     if (biome.getDefaultTemperature() > 0.9){
                         player.getCapability(WaterLevelCapability.PLAYER_WATER_LEVEL).ifPresent(data -> {
-                            data.addExhaustion(player,0.0025f);
+                            data.addExhaustion(player,0.0055f);
                         });
                     }
                 }
-
                 //口渴状态
                 EffectInstance effectInstance = player.getActivePotionEffect(EffectRegistry.THIRST);
                 if (effectInstance != null){
@@ -159,11 +161,15 @@ public class CommonEventHandler {
                         data.addExhaustion(player,0.05f + 0.02f * effectInstance.getAmplifier());
                     });
                 }
-
             }
-            if (tick % 60 == 0 && player != null){
+        }
+        if (tick % 60 == 0 && player != null && !(player instanceof FakePlayer)){
+            player.getCapability(WaterLevelCapability.PLAYER_WATER_LEVEL).ifPresent(data -> {
+                data.punishment(player);
+            });
+            if (world.getDifficulty() == Difficulty.PEACEFUL){
                 player.getCapability(WaterLevelCapability.PLAYER_WATER_LEVEL).ifPresent(data -> {
-                    data.punishment(player);
+                    data.restoreWaterLevel(2);
                 });
             }
         }
