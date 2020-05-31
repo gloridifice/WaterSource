@@ -30,14 +30,13 @@ public class ClientEventHandler {
     @SubscribeEvent
     public static void onRenderGameOverlayEvent(RenderGameOverlayEvent.Pre event) {
         if (event.getType() == RenderGameOverlayEvent.ElementType.AIR) {
-            RenderSystem.translated(0, -12, 0);
+            RenderSystem.translated(0, -11, 0);
         }
     }
-
     @SubscribeEvent
     public static void onRenderGameOverlayEvent(RenderGameOverlayEvent.Post event) {
         if (event.getType() == RenderGameOverlayEvent.ElementType.AIR) {
-            RenderSystem.translated(0, 12, 0);
+            RenderSystem.translated(0, 11, 0);
         }
     }
     @SubscribeEvent
@@ -64,6 +63,7 @@ public class ClientEventHandler {
                 FontRenderer fontRenderer = event.getFontRenderer();
 
                 int OffsetY = event.getY() + event.getHeight() - 8;
+                int OffsetX = event.getX() - 1;
                 int texU = 0;
                 int texU1 = texU, texU2 = texU;
                 if (recipe1 != null) {
@@ -74,15 +74,15 @@ public class ClientEventHandler {
                 Minecraft.getInstance().getTextureManager().bindTexture(OVERLAY_BAR);
                 if (recipe.getWaterLevel() % 2 == 0){
                     for(int i = 0; i < recipe.getWaterLevel()/2; i++){
-                        AbstractGui.blit(event.getX() + i * 9, OffsetY, 36 + texU2, 0, 9, 9, 256, 256);
-                        AbstractGui.blit(event.getX() + i * 9, OffsetY, texU1, 0, 9, 9, 256, 256);
+                        AbstractGui.blit(OffsetX + i * 9, OffsetY, 36 + texU2, 0, 9, 9, 256, 256);
+                        AbstractGui.blit(OffsetX + i * 9, OffsetY, texU1, 0, 9, 9, 256, 256);
                     }
                 }else {
-                    AbstractGui.blit(event.getX(), OffsetY, 36 + texU2, 0, 9, 9, 256, 256);
-                    AbstractGui.blit(event.getX(), OffsetY, 9 + texU1, 0, 9, 9, 256, 256);
+                    AbstractGui.blit(OffsetX, OffsetY, 36 + texU2, 0, 9, 9, 256, 256);
+                    AbstractGui.blit(OffsetX, OffsetY, 9 + texU1, 0, 9, 9, 256, 256);
                     for (int n = 1; n < (recipe.getWaterLevel() + 1)/2; n++){
-                        AbstractGui.blit(event.getX() + n * 9, OffsetY, 36 + texU2, 0, 9, 9, 256, 256);
-                        AbstractGui.blit(event.getX() + n * 9, OffsetY, texU1, 0, 9, 9, 256, 256);
+                        AbstractGui.blit(OffsetX + n * 9, OffsetY, 36 + texU2, 0, 9, 9, 256, 256);
+                        AbstractGui.blit(OffsetX + n * 9, OffsetY, texU1, 0, 9, 9, 256, 256);
                     }
                 }
                 //TODO:SaturationLevel

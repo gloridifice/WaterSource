@@ -7,6 +7,8 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.potion.PotionUtils;
 import net.minecraft.potion.Potions;
+import net.minecraftforge.fml.ModList;
+import roito.afterthedrizzle.common.item.ItemsRegistry;
 
 public class RecipeRegistry {
     public static void init(){
@@ -25,6 +27,10 @@ public class RecipeRegistry {
         WaterLevelRecipeManager.add(new ItemStack(Items.RABBIT_STEW),3,1);
         WaterLevelRecipeManager.add(new ItemStack(Items.MUSHROOM_STEW),2,1);
         WaterLevelRecipeManager.add(new ItemStack(Items.MILK_BUCKET),1,0);
+        if (ModList.get().isLoaded("afterthedrizzle")){
+            WaterLevelRecipeManager.add(new ItemStack(ItemsRegistry.PORCELAIN_CUP_DRINK),4,3);
+            WaterLevelRecipeManager.add(new ItemStack(ItemsRegistry.BOTTLE_DRINK),7,6);
+        }
     }
     public static void addThirstItem(){
         ThirstItemRecipeManager.add(new ThirstNbtRecipe(PotionUtils.addPotionToItemStack(new ItemStack(Items.POTION), Potions.WATER),2000,0,75));

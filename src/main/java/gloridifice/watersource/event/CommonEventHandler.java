@@ -9,6 +9,7 @@ import gloridifice.watersource.common.recipe.ThirstItemRecipe;
 import gloridifice.watersource.common.recipe.ThirstItemRecipeManager;
 import gloridifice.watersource.common.recipe.WaterLevelRecipe;
 import gloridifice.watersource.common.recipe.WaterLevelRecipeManager;
+import gloridifice.watersource.registry.CapabilityRegistry;
 import gloridifice.watersource.registry.EffectRegistry;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
@@ -28,8 +29,12 @@ import net.minecraftforge.event.entity.living.LivingEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.event.world.BlockEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fml.ModList;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.network.PacketDistributor;
+import roito.afterthedrizzle.common.capability.CapabilitiesRegistry;
+import roito.afterthedrizzle.common.capability.CapabilityPlayerTemperature;
+import roito.afterthedrizzle.common.environment.temperature.ApparentTemperature;
 
 import java.util.Random;
 
@@ -141,17 +146,32 @@ public class CommonEventHandler {
 
             if(tick % 10 == 0){
                 //自然状态
-                Biome biome = world.getBiome(player.getPosition());
-                if (world.getLight(player.getPosition()) == 15 && world.getDayTime() < 11000 && world.getDayTime() > 450 && !world.isRainingAt(player.getPosition())){
-                    if (biome.getDefaultTemperature() > 0.3){
-                        player.getCapability(WaterLevelCapability.PLAYER_WATER_LEVEL).ifPresent(data -> {
-                            data.addExhaustion(player,0.0075f);
-                        });
-                    }
-                    if (biome.getDefaultTemperature() > 0.9){
-                        player.getCapability(WaterLevelCapability.PLAYER_WATER_LEVEL).ifPresent(data -> {
-                            data.addExhaustion(player,0.0055f);
-                        });
+                if (ModList.get().isLoaded("afterthedrizzle") && player.getCapability(CapabilityPlayerTemperature.PLAYER_TEMP) != null){
+                    player.getCapability(CapabilityPlayerTemperature.PLAYER_TEMP).ifPresent(d -> {
+                        if (d.getApparentTemperature() == ApparentTemperature.HOT){
+                            player.getCapability(WaterLevelCapability.PLAYER_WATER_LEVEL).ifPresent(data -> {
+                                data.addExhaustion(player, 0.0075f);
+                            });
+                        }
+                        if (d.getApparentTemperature() == ApparentTemperature.HOT){
+                            player.getCapability(WaterLevelCapability.PLAYER_WATER_LEVEL).ifPresent(data -> {
+                                data.addExhaustion(player, 0.0135f);
+                            });
+                        }
+                    });
+                }else {
+                    Biome biome = world.getBiome(player.getPosition());
+                    if (world.getLight(player.getPosition()) == 15 && world.getDayTime() < 11000 && world.getDayTime() > 450 && !world.isRainingAt(player.getPosition())) {
+                        if (biome.getDefaultTemperature() > 0.3) {
+                            player.getCapability(WaterLevelCapability.PLAYER_WATER_LEVEL).ifPresent(data -> {
+                                data.addExhaustion(player, 0.0075f);
+                            });
+                        }
+                        if (biome.getDefaultTemperature() > 0.9) {
+                            player.getCapability(WaterLevelCapability.PLAYER_WATER_LEVEL).ifPresent(data -> {
+                                data.addExhaustion(player, 0.0055f);
+                            });
+                        }
                     }
                 }
                 //口渴状态
