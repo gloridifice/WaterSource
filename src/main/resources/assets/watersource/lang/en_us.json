@@ -1,10 +1,12 @@
 {
   "effect.watersource.thirst": "Thirst",
+  "effect.watersource.accompanying_soul": "Accompanying Soul",
   "death.attack.byThirst": "%s turned into Dried %s.",
   "itemGroup.watersource_group": "Water Source",
   "item.watersource.primitive_strainer": "PrimitiveStrainer",
   "item.watersource.paper_strainer": "Paper Strainer",
+  "item.watersource.paper_soul_strainer": "Paper Soul Strainer",
   "item.watersource.soul_strainer": "Soul Strainer",
   "item.watersource.purified_water_bottle": "Purified Water Bottle",
-  "item.watersource.soul_water_bottle": "Soul water Bottle"
+  "item.watersource.soul_water_bottle": "Soul Water Bottle"
 }

@@ -77,7 +77,9 @@ public class CommonEventHandler {
         if (entity instanceof PlayerEntity) {
             if (WaterLevelCapability.canPlayerAddWaterExhaustionLevel((PlayerEntity)entity)){
                 entity.getCapability(WaterLevelCapability.PLAYER_WATER_LEVEL).ifPresent(data -> {
-                    data.addExhaustion((PlayerEntity) entity,0.14f);
+                    if (entity.isSprinting()){
+                        data.addExhaustion((PlayerEntity) entity,0.24f);
+                    }else data.addExhaustion((PlayerEntity) entity,0.14f);
                 });
             }
         }
@@ -126,21 +128,24 @@ public class CommonEventHandler {
                     double lastX = data.getLastX();
                     double lastY = data.getLastY();
                     double lastZ = data.getLastZ();
-                    if (lastOnGround && player.onGround) {
+                    if (lastOnGround && player.onGround || player.isInWater()) {
                         double x = Math.sqrt(Math.pow(lastX - player.getPosX(), 2) + Math.pow(lastY - player.getPosY(), 2) + Math.pow(lastZ - player.getPosZ(), 2));
                         if (x < 5) {
                             player.getCapability(WaterLevelCapability.PLAYER_WATER_LEVEL).ifPresent(dataW -> {
-                                dataW.addExhaustion(player, (float) (x / 40));
+                                if (player.isSprinting()){
+                                    dataW.addExhaustion(player, (float) (x / 20));
+                                }else dataW.addExhaustion(player, (float) (x / 40));
+
                             });
                         }
                     }
 
-                    if (player.onGround) {
+                    if (player.onGround || player.isInWater()) {
                         data.setLastX(player.getPosX());
                         data.setLastY(player.getPosY());
                         data.setLastZ(player.getPosZ());
-                    }
-                    data.setLastOnGround(player.onGround);
+                        data.setLastOnGround(true);
+                    }else data.setLastOnGround(false);
                 });
             }
 

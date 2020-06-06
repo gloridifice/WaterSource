@@ -1,6 +1,7 @@
 package gloridifice.watersource.event;
 
 import gloridifice.watersource.WaterSource;
+import gloridifice.watersource.common.data.provider.ItemTagProvider;
 import gloridifice.watersource.common.data.provider.RecipeProvider;
 import net.minecraft.data.DataGenerator;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -16,6 +17,7 @@ public class DataGatherHandler {
         if (event.includeServer())
         {
             gen.addProvider(new RecipeProvider(gen));
+            gen.addProvider(new ItemTagProvider(gen));
         }
     }
 }

@@ -16,10 +16,12 @@ public class RecipeRegistry {
         addThirstItem();
     }
     public static void addWaterLevel(){
+        WaterLevelRecipeManager.add(new ItemStack(ItemRegistry.itemSoulWaterBottle),4,3);
+        WaterLevelRecipeManager.add(new ItemStack(ItemRegistry.itemPurifiedWaterBottle),6,4);
+
         WaterLevelRecipeManager.add(new ItemStack(Items.APPLE),2,1);
         WaterLevelRecipeManager.add(new ItemStack(Items.SWEET_BERRIES),1,1);
         WaterLevelRecipeManager.add(new ItemStack(Items.POTION),4,2);
-        WaterLevelRecipeManager.add(new ItemStack(ItemRegistry.itemPurifiedWaterBottle),6,4);
         WaterLevelRecipeManager.add(new ItemStack(Items.GOLDEN_APPLE),2,6);
         WaterLevelRecipeManager.add(new ItemStack(Items.ENCHANTED_GOLDEN_APPLE),2,6);
         WaterLevelRecipeManager.add(new ItemStack(Items.CARROT),1,0);

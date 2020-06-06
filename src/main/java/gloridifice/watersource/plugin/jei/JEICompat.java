@@ -2,8 +2,7 @@ package gloridifice.watersource.plugin.jei;
 
 import mezz.jei.api.IModPlugin;
 import mezz.jei.api.JeiPlugin;
-import mezz.jei.api.registration.IRecipeCategoryRegistration;
-import mezz.jei.api.registration.IRecipeRegistration;
+import mezz.jei.api.registration.*;
 import net.minecraft.util.ResourceLocation;
 
 import static gloridifice.watersource.WaterSource.MODID;
@@ -19,7 +18,6 @@ public class JEICompat implements IModPlugin {
     public void registerCategories(IRecipeCategoryRegistration registration) {
 
     }
-
     @Override
     public void registerRecipes(IRecipeRegistration registration) {
 

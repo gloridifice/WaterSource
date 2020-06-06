@@ -15,8 +15,6 @@ import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
-import java.util.Random;
-
 @Mod.EventBusSubscriber(value = Dist.CLIENT, modid = WaterSource.MODID)
 public class WaterLevelGui extends AbstractGui {
     protected static int tick = 0;
@@ -77,7 +75,7 @@ public class WaterLevelGui extends AbstractGui {
             }
         }
         //test↓
-        if (ConfigRegistry.IS_TEST_MODE_OPEN.get()){
+        if (ConfigRegistry.IS_DEBUG_MODE_OPEN.get()){
             this.drawString(mc.fontRenderer, String.valueOf(waterExhaustionLevel), OffsetX, OffsetY - 10, 16777215);
         }
 

@@ -1,16 +1,14 @@
 package gloridifice.watersource.common.recipe.type;
 
-import gloridifice.watersource.WaterSource;
+import gloridifice.watersource.common.data.tag.ModTags;
 import gloridifice.watersource.common.item.StrainerItem;
 import gloridifice.watersource.registry.ItemRegistry;
 import gloridifice.watersource.registry.RecipeSerializersRegistry;
 import net.minecraft.inventory.CraftingInventory;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.item.crafting.IRecipeSerializer;
 import net.minecraft.item.crafting.Ingredient;
-import net.minecraft.item.crafting.ShapelessRecipe;
 
 import net.minecraft.item.crafting.SpecialRecipe;
 import net.minecraft.potion.PotionUtils;
@@ -23,9 +21,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-public class StrainerUsingRecipe extends SpecialRecipe {
+public class PurifiedWaterBottleRecipe extends SpecialRecipe {
 
-    public StrainerUsingRecipe(ResourceLocation idIn) {
+    public PurifiedWaterBottleRecipe(ResourceLocation idIn) {
         super(idIn);
     }
 
@@ -35,7 +33,7 @@ public class StrainerUsingRecipe extends SpecialRecipe {
         boolean hasStrainer = false,hasPotion = false;
         for(int j = 0; j < inv.getSizeInventory(); ++j) {
             ItemStack itemstack = inv.getStackInSlot(j);
-            if (itemstack.getItem() instanceof StrainerItem){
+            if (ModTags.Item.PURIFICATION_STRAINER.contains(itemstack.getItem())){
                 list.add(itemstack);
                 hasStrainer = true;
             }
@@ -55,7 +53,7 @@ public class StrainerUsingRecipe extends SpecialRecipe {
 
     @Override
     public boolean canFit(int width, int height) {
-        return true;
+        return false;
     }
 
     @Override
@@ -63,7 +61,7 @@ public class StrainerUsingRecipe extends SpecialRecipe {
         NonNullList<ItemStack> nonnulllist = NonNullList.withSize(inv.getSizeInventory(), ItemStack.EMPTY);
         for(int j = 0; j < inv.getSizeInventory(); ++j) {
             ItemStack itemstack = inv.getStackInSlot(j);
-            if (itemstack.getItem() instanceof StrainerItem){
+            if (ModTags.Item.PURIFICATION_STRAINER.contains(itemstack.getItem())){
                 ItemStack i = itemstack.copy();
                 if(i.getDamage() + 1 < i.getMaxDamage()){
                     i.setDamage(i.getDamage() + 1);
@@ -76,6 +74,19 @@ public class StrainerUsingRecipe extends SpecialRecipe {
 
     @Override
     public IRecipeSerializer<?> getSerializer() {
-        return RecipeSerializersRegistry.STRAINER_USING_CRAFTING.get();
+        return RecipeSerializersRegistry.CRAFTING_PURIFIED_WATER_BOTTLE.get();
+    }
+
+    @Override
+    public ItemStack getRecipeOutput() {
+        return new ItemStack(ItemRegistry.itemPurifiedWaterBottle);
+    }
+
+    @Override
+    public NonNullList<Ingredient> getIngredients() {
+        NonNullList<Ingredient> list = NonNullList.withSize(2, Ingredient.EMPTY);
+        list.set(0, Ingredient.fromTag(ModTags.Item.PURIFICATION_STRAINER));
+        list.set(1, Ingredient.fromStacks(PotionUtils.addPotionToItemStack(new ItemStack(Items.POTION), Potions.WATER)));
+        return list;
     }
 }

@@ -16,6 +16,9 @@ public class RecipeProvider extends ForgeRecipeProvider {
     @Override
     protected void registerRecipes(Consumer<IFinishedRecipe> consumer)
     {
-        CustomRecipeBuilder.customRecipe(RecipeSerializersRegistry.STRAINER_USING_CRAFTING.get()).build(consumer, WaterSource.MODID + ":" + "strainer_using");
+        CustomRecipeBuilder.customRecipe(RecipeSerializersRegistry.CRAFTING_PURIFIED_WATER_BOTTLE.get()).build(consumer, WaterSource.MODID + ":" + "purified_water");
+        CustomRecipeBuilder.customRecipe(RecipeSerializersRegistry.CRAFTING_SOUL_WATER_BOTTLE.get()).build(consumer, WaterSource.MODID + ":" + "soul_water");
+
+        //ShapelessRecipeBuilder.shapelessRecipe(ItemRegistry.itemPurifiedWaterBottle).addIngredient(Ingredient.fromTag(ModTags.Item.PURIFICATION_STRAINER)).addIngredient(Ingredient.fromStacks(PotionUtils.addPotionToItemStack(new ItemStack(Items.POTION), Potions.WATER))).setGroup("purified_water").build(consumer);
     }
 }

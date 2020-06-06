@@ -46,7 +46,8 @@ public class ClientEventHandler {
             if (recipe != null) {
                 StringBuilder stringBuilder = new StringBuilder(" ");
                 for (int i = 0;i < recipe.getWaterLevel()/2 ;i++) stringBuilder.append("  ");
-                event.getToolTip().add(new StringTextComponent(stringBuilder.toString()));
+                event.getToolTip().add(1,new StringTextComponent(stringBuilder.toString()));
+
             }
         }
 
@@ -62,7 +63,7 @@ public class ClientEventHandler {
 
                 FontRenderer fontRenderer = event.getFontRenderer();
 
-                int OffsetY = event.getY() + event.getHeight() - 8;
+                int OffsetY = event.getY() + 11;
                 int OffsetX = event.getX() - 1;
                 int texU = 0;
                 int texU1 = texU, texU2 = texU;
