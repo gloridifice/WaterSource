@@ -15,12 +15,14 @@ import net.minecraft.client.renderer.IRenderTypeBuffer;
 import net.minecraft.client.renderer.Matrix4f;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.util.text.StringTextComponent;
+import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.client.event.RenderTooltipEvent;
 import net.minecraftforge.event.entity.player.ItemTooltipEvent;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fml.ModList;
 import net.minecraftforge.fml.common.Mod;
 
 import static gloridifice.watersource.client.hud.WaterLevelGui.OVERLAY_BAR;
@@ -39,18 +41,22 @@ public class ClientEventHandler {
             RenderSystem.translated(0, 11, 0);
         }
     }
-    @SubscribeEvent
+    private static int x;
+    @SubscribeEvent(priority = EventPriority.LOW)
     public static void onItemTooltipEvent(ItemTooltipEvent event) {
         if (ConfigRegistry.IS_FOOD_WATER_LEVEL_OPEN.get()) {
             WaterLevelRecipe recipe = WaterLevelRecipeManager.getRecipeFromItemStack(event.getItemStack());
             if (recipe != null) {
                 StringBuilder stringBuilder = new StringBuilder(" ");
                 for (int i = 0;i < recipe.getWaterLevel()/2 ;i++) stringBuilder.append("  ");
-                event.getToolTip().add(1,new StringTextComponent(stringBuilder.toString()));
-
+                if (ModList.get().isLoaded("quark") && event.getItemStack().isFood()){
+                    if (event.getToolTip().size() >= 3 && event.getToolTip().get(2) instanceof TranslationTextComponent && event.getToolTip().get(2).getString().startsWith("quark.misc.saturation")){
+                        x = 3;
+                    }else x = 2;
+                }else x = 1;
+                event.getToolTip().add(x,new StringTextComponent(stringBuilder.toString()));
             }
         }
-
     }
     @SubscribeEvent
     public static void onRenderTooltipEvent(RenderTooltipEvent.PostText event) {
@@ -63,7 +69,7 @@ public class ClientEventHandler {
 
                 FontRenderer fontRenderer = event.getFontRenderer();
 
-                int OffsetY = event.getY() + 11;
+                int OffsetY = event.getY() + x * 9 + 3;
                 int OffsetX = event.getX() - 1;
                 int texU = 0;
                 int texU1 = texU, texU2 = texU;

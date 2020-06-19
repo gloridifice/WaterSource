@@ -1,4 +1,4 @@
-package gloridifice.watersource.event;
+package gloridifice.watersource.common.event;
 
 import gloridifice.watersource.WaterSource;
 import gloridifice.watersource.common.data.provider.ItemTagProvider;

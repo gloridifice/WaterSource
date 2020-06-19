@@ -1,4 +1,4 @@
-package gloridifice.watersource.event;
+package gloridifice.watersource.common.event;
 
 import gloridifice.watersource.WaterSource;
 import gloridifice.watersource.common.capability.PlayerLastPosCapability;
@@ -9,7 +9,6 @@ import gloridifice.watersource.common.recipe.ThirstItemRecipe;
 import gloridifice.watersource.common.recipe.ThirstItemRecipeManager;
 import gloridifice.watersource.common.recipe.WaterLevelRecipe;
 import gloridifice.watersource.common.recipe.WaterLevelRecipeManager;
-import gloridifice.watersource.registry.CapabilityRegistry;
 import gloridifice.watersource.registry.EffectRegistry;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
@@ -32,7 +31,6 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.ModList;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.network.PacketDistributor;
-import roito.afterthedrizzle.common.capability.CapabilitiesRegistry;
 import roito.afterthedrizzle.common.capability.CapabilityPlayerTemperature;
 import roito.afterthedrizzle.common.environment.temperature.ApparentTemperature;
 
@@ -198,6 +196,11 @@ public class CommonEventHandler {
                 });
             }
         }
+        if (tick % 400 == 0 && player != null && !(player instanceof FakePlayer) && !world.isRemote){
+            player.getCapability(WaterLevelCapability.PLAYER_WATER_LEVEL).ifPresent(data -> {
+                SimpleNetworkHandler.CHANNEL.send(PacketDistributor.PLAYER.with(() -> (ServerPlayerEntity) player), new PlayerWaterLevelMessage(data.getWaterLevel(), data.getWaterSaturationLevel(),data.getWaterExhaustionLevel()));
+            });
+        }
     }
     @SubscribeEvent
     public static void onBlockBreakEvent(BlockEvent.BreakEvent event){
@@ -206,5 +209,4 @@ public class CommonEventHandler {
             player.getCapability(WaterLevelCapability.PLAYER_WATER_LEVEL).ifPresent(data -> data.addExhaustion(player,0.005f));
         }
     }
-
 }
