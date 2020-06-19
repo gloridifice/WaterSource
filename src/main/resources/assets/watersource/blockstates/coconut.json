@@ -1,0 +1,124 @@
+{
+  "variants": {
+    "age=0,facing=north,isnatural=true": {
+      "model": "watersource:block/coconut_0"
+    },
+    "age=0,facing=south,isnatural=true": {
+      "model": "watersource:block/coconut_0",
+      "y": 180
+    },
+    "age=0,facing=east,isnatural=true": {
+      "model": "watersource:block/coconut_0",
+      "y": 90
+    },
+    "age=0,facing=west,isnatural=true": {
+      "model": "watersource:block/coconut_0",
+      "y": 270
+    },
+    "age=1,facing=north,isnatural=true": {
+      "model": "watersource:block/coconut_1"
+    },
+    "age=1,facing=south,isnatural=true": {
+      "model": "watersource:block/coconut_1",
+      "y": 180
+    },
+    "age=1,facing=east,isnatural=true": {
+      "model": "watersource:block/coconut_1",
+      "y": 90
+    },
+    "age=1,facing=west,isnatural=true": {
+      "model": "watersource:block/coconut_1",
+      "y": 270
+    },
+    "age=2,facing=north,isnatural=true": {
+      "model": "watersource:block/coconut_2"
+    },
+    "age=2,facing=south,isnatural=true": {
+      "model": "watersource:block/coconut_2",
+      "y": 180
+    },
+    "age=2,facing=east,isnatural=true": {
+      "model": "watersource:block/coconut_2",
+      "y": 90
+    },
+    "age=2,facing=west,isnatural=true": {
+      "model": "watersource:block/coconut_2",
+      "y": 270
+    },
+    "age=3,facing=north,isnatural=true": {
+      "model": "watersource:block/coconut_3"
+    },
+    "age=3,facing=south,isnatural=true": {
+      "model": "watersource:block/coconut_3",
+      "y": 180
+    },
+    "age=3,facing=east,isnatural=true": {
+      "model": "watersource:block/coconut_3",
+      "y": 90
+    },
+    "age=3,facing=west,isnatural=true": {
+      "model": "watersource:block/coconut_3",
+      "y": 270
+    },
+    "age=0,facing=north,isnatural=false": {
+      "model": "watersource:block/coconut_ground"
+    },
+    "age=0,facing=south,isnatural=false": {
+      "model": "watersource:block/coconut_ground",
+      "y": 180
+    },
+    "age=0,facing=east,isnatural=false": {
+      "model": "watersource:block/coconut_ground",
+      "y": 90
+    },
+    "age=0,facing=west,isnatural=false": {
+      "model": "watersource:block/coconut_ground",
+      "y": 270
+    },
+    "age=1,facing=north,isnatural=false": {
+      "model": "watersource:block/coconut_ground"
+    },
+    "age=1,facing=south,isnatural=false": {
+      "model": "watersource:block/coconut_ground",
+      "y": 180
+    },
+    "age=1,facing=east,isnatural=false": {
+      "model": "watersource:block/coconut_ground",
+      "y": 90
+    },
+    "age=1,facing=west,isnatural=false": {
+      "model": "watersource:block/coconut_ground",
+      "y": 270
+    },
+    "age=2,facing=north,isnatural=false": {
+      "model": "watersource:block/coconut_ground"
+    },
+    "age=2,facing=south,isnatural=false": {
+      "model": "watersource:block/coconut_ground",
+      "y": 180
+    },
+    "age=2,facing=east,isnatural=false": {
+      "model": "watersource:block/coconut_ground",
+      "y": 90
+    },
+    "age=2,facing=west,isnatural=false": {
+      "model": "watersource:block/coconut_ground",
+      "y": 270
+    },
+    "age=3,facing=north,isnatural=false": {
+      "model": "watersource:block/coconut_ground"
+    },
+    "age=3,facing=south,isnatural=false": {
+      "model": "watersource:block/coconut_ground",
+      "y": 180
+    },
+    "age=3,facing=east,isnatural=false": {
+      "model": "watersource:block/coconut_ground",
+      "y": 90
+    },
+    "age=3,facing=west,isnatural=false": {
+      "model": "watersource:block/coconut_ground",
+      "y": 270
+    }
+  }
+}
