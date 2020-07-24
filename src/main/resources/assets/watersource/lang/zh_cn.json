@@ -8,5 +8,7 @@
   "item.watersource.paper_soul_strainer": "纸灵魂沙滤层",
   "item.watersource.soul_strainer": "原始灵魂沙滤层",
   "item.watersource.purified_water_bottle": "净化水瓶",
-  "item.watersource.soul_water_bottle": "灵魂水瓶"
+  "item.watersource.soul_water_bottle": "灵魂水瓶",
+  "watersource.test": "这个物品还在测试"
+
 }

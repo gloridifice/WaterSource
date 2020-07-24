@@ -1,7 +1,6 @@
 package gloridifice.watersource.common.recipe.type;
 
 import gloridifice.watersource.common.data.tag.ModTags;
-import gloridifice.watersource.common.item.StrainerItem;
 import gloridifice.watersource.registry.ItemRegistry;
 import gloridifice.watersource.registry.RecipeSerializersRegistry;
 import net.minecraft.inventory.CraftingInventory;

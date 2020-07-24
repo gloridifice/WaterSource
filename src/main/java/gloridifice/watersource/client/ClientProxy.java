@@ -14,8 +14,11 @@ public class ClientProxy {
         registerCutoutType(BlockRegistry.blockCoconutTreeHead);
         registerCutoutType(BlockRegistry.blockCoconut);
         registerCutoutMippedType(BlockRegistry.blockCoconutTreeLeaf);
+        registerCutoutType(BlockRegistry.blockCoconutSapling);
+/*
         RenderTypeLookup.setRenderLayer(FluidRegistry.purifiedWaterFluid.get(),RenderType.getTranslucent());
         RenderTypeLookup.setRenderLayer(FluidRegistry.purifiedWaterFluidFlowing.get(),RenderType.getTranslucent());
+*/
     }
 
     private static void registerCutoutType(Block block)

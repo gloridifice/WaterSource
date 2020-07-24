@@ -8,5 +8,6 @@
   "item.watersource.paper_soul_strainer": "Paper Soul Strainer",
   "item.watersource.soul_strainer": "Soul Strainer",
   "item.watersource.purified_water_bottle": "Purified Water Bottle",
-  "item.watersource.soul_water_bottle": "Soul Water Bottle"
+  "item.watersource.soul_water_bottle": "Soul Water Bottle",
+  "watersource.test": "This item is still in Testing"
 }

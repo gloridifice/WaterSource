@@ -10,6 +10,7 @@ import gloridifice.watersource.common.recipe.ThirstItemRecipeManager;
 import gloridifice.watersource.common.recipe.WaterLevelRecipe;
 import gloridifice.watersource.common.recipe.WaterLevelRecipeManager;
 import gloridifice.watersource.registry.EffectRegistry;
+import net.minecraft.client.renderer.texture.AtlasTexture;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
@@ -19,6 +20,7 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.Difficulty;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
+import net.minecraftforge.client.event.TextureStitchEvent;
 import net.minecraftforge.common.util.FakePlayer;
 import net.minecraftforge.event.AttachCapabilitiesEvent;
 import net.minecraftforge.event.TickEvent;
@@ -148,7 +150,7 @@ public class CommonEventHandler {
             }
 
             if(tick % 10 == 0){
-                //自然状态
+                //Natural State
                 if (ModList.get().isLoaded("afterthedrizzle") && player.getCapability(CapabilityPlayerTemperature.PLAYER_TEMP) != null){
                     player.getCapability(CapabilityPlayerTemperature.PLAYER_TEMP).ifPresent(d -> {
                         if (d.getApparentTemperature() == ApparentTemperature.HOT){
@@ -177,7 +179,7 @@ public class CommonEventHandler {
                         }
                     }
                 }
-                //口渴状态
+                //Thirty State
                 EffectInstance effectInstance = player.getActivePotionEffect(EffectRegistry.THIRST);
                 if (effectInstance != null){
                     player.getCapability(WaterLevelCapability.PLAYER_WATER_LEVEL).ifPresent(data -> {
@@ -186,17 +188,22 @@ public class CommonEventHandler {
                 }
             }
         }
-        if (tick % 60 == 0 && player != null && !(player instanceof FakePlayer)){
+        //Punishment
+        if (tick % 600 == 0 && player != null && !(player instanceof FakePlayer)){
             player.getCapability(WaterLevelCapability.PLAYER_WATER_LEVEL).ifPresent(data -> {
                 data.punishment(player);
             });
+        }
+        //Restore water level in Peaceful difficulty mode
+        if (tick % 150 == 0 && player != null && !(player instanceof FakePlayer)){
             if (world.getDifficulty() == Difficulty.PEACEFUL){
                 player.getCapability(WaterLevelCapability.PLAYER_WATER_LEVEL).ifPresent(data -> {
                     data.restoreWaterLevel(2);
                 });
             }
         }
-        if (tick % 400 == 0 && player != null && !(player instanceof FakePlayer) && !world.isRemote){
+        //Update water between common and client - 30s
+        if (tick % 1500 == 0 && player != null && !(player instanceof FakePlayer) && !world.isRemote){
             player.getCapability(WaterLevelCapability.PLAYER_WATER_LEVEL).ifPresent(data -> {
                 SimpleNetworkHandler.CHANNEL.send(PacketDistributor.PLAYER.with(() -> (ServerPlayerEntity) player), new PlayerWaterLevelMessage(data.getWaterLevel(), data.getWaterSaturationLevel(),data.getWaterExhaustionLevel()));
             });

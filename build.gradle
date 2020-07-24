@@ -66,6 +66,11 @@ repositories {
         name = "jei"
         url = "https://dvs1.progwml6.com/files/maven"
     }
+    maven {
+        //for AutoRegLib and Quark
+        name = "blamejared"
+        url = "http://maven.blamejared.com/"
+    }
 
     flatDir {
         dirs 'libs'
@@ -76,6 +81,9 @@ dependencies {
     minecraft "net.minecraftforge:forge:${minecraft_version}-${forge_version}"
 
     compile fg.deobf("mezz.jei:jei-${minecraft_version}:${jei_version}")
+
+    //compile fg.deobf("vazkii.autoreglib:AutoRegLib:${arl_version}")
+    //compile fg.deobf("vazkii.quark:Quark:${quark_version}")
 
     compile files("libs/After the Drizzle-${atd_version}-${minecraft_version}-deobf.jar")
 }

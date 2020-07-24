@@ -16,5 +16,6 @@ public class ItemTagProvider extends ForgeItemTagsProvider {
         getBuilder(ModTags.Item.STRAINER);
         getBuilder(ModTags.Item.PURIFICATION_STRAINER);
         getBuilder(ModTags.Item.SOUL_STRAINER);
+
     }
 }

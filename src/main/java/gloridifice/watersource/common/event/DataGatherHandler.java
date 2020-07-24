@@ -1,6 +1,7 @@
 package gloridifice.watersource.common.event;
 
 import gloridifice.watersource.WaterSource;
+import gloridifice.watersource.common.data.provider.BlockTagProvider;
 import gloridifice.watersource.common.data.provider.ItemTagProvider;
 import gloridifice.watersource.common.data.provider.RecipeProvider;
 import net.minecraft.data.DataGenerator;
@@ -18,6 +19,7 @@ public class DataGatherHandler {
         {
             gen.addProvider(new RecipeProvider(gen));
             gen.addProvider(new ItemTagProvider(gen));
+            gen.addProvider(new BlockTagProvider(gen));
         }
     }
 }

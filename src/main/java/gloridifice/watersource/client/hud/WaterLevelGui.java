@@ -13,6 +13,7 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fml.ModList;
 import net.minecraftforge.fml.common.Mod;
 
 @Mod.EventBusSubscriber(value = Dist.CLIENT, modid = WaterSource.MODID)
@@ -28,7 +29,7 @@ public class WaterLevelGui extends AbstractGui {
         this.mc = mc;
     }
 
-    public void renderWaterLevel(int screenWidth, int screenHeight, WaterLevelCapability.Data capData) {
+    public void renderWaterLevel(int screenWidth, int screenHeight, WaterLevelCapability.Data capData, double toughness) {
         RenderSystem.color4f(1.0F, 1.0F, 1.0F, 1.0F);
         RenderSystem.enableAlphaTest();
         RenderSystem.enableBlend();
@@ -40,6 +41,9 @@ public class WaterLevelGui extends AbstractGui {
         float waterExhaustionLevel = capData.getWaterExhaustionLevel();
         int OffsetX = screenWidth / 2 + 91;
         int OffsetY = screenHeight - 50;
+        if (ModList.get().isLoaded("toughnessbar") && toughness != 0){
+            OffsetY -= 10;
+        }
         int OffsetY1 = OffsetY;
         int texU = 0;
         int texV = 0;

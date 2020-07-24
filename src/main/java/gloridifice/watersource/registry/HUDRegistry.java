@@ -5,6 +5,7 @@ import gloridifice.watersource.client.hud.WaterLevelGui;
 import gloridifice.watersource.common.capability.WaterLevelCapability;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.player.ClientPlayerEntity;
+import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
@@ -28,7 +29,7 @@ public class HUDRegistry {
                 {
                     playerEntity.getCapability(WaterLevelCapability.PLAYER_WATER_LEVEL).ifPresent(t ->
                     {
-                        WATER_LEVEL_GUI.renderWaterLevel(screenWidth,screenHeight,t);
+                        WATER_LEVEL_GUI.renderWaterLevel(screenWidth,screenHeight,t,playerEntity.getAttribute(SharedMonsterAttributes.ARMOR_TOUGHNESS).getValue());
                     });
                 }
             }
