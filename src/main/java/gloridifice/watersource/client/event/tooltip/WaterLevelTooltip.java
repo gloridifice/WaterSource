@@ -2,10 +2,7 @@ package gloridifice.watersource.client.event.tooltip;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 import gloridifice.watersource.WaterSource;
-import gloridifice.watersource.common.recipe.ThirstItemRecipe;
-import gloridifice.watersource.common.recipe.ThirstItemRecipeManager;
-import gloridifice.watersource.common.recipe.WaterLevelRecipe;
-import gloridifice.watersource.common.recipe.WaterLevelRecipeManager;
+import gloridifice.watersource.common.recipe.*;
 import gloridifice.watersource.registry.ConfigRegistry;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.AbstractGui;
@@ -14,9 +11,8 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.potion.EffectInstance;
 import net.minecraft.potion.Effects;
 import net.minecraft.potion.PotionUtils;
-import net.minecraft.potion.Potions;
 import net.minecraft.util.text.StringTextComponent;
-import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraft.util.text.TextFormatting;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.RenderTooltipEvent;
 import net.minecraftforge.event.entity.player.ItemTooltipEvent;
@@ -36,17 +32,12 @@ public class WaterLevelTooltip {
     public static void onItemTooltipEvent(ItemTooltipEvent event) {
         x = 1;
         if (ConfigRegistry.IS_FOOD_WATER_LEVEL_OPEN.get()) {
-            WaterLevelRecipe recipe = WaterLevelRecipeManager.getRecipeFromItemStack(event.getItemStack());
+            WaterLevelItemRecipe recipe = WaterLevelRecipeManager.getRecipeFromItemStack(event.getItemStack());
             if (recipe != null) {
                 StringBuilder stringBuilder = new StringBuilder(" ");
                 for (int i = 0;i < recipe.getWaterLevel()/2 ;i++) stringBuilder.append("  ");
-                if (ModList.get().isLoaded("quark") && event.getItemStack().isFood()){
-                    if (event.getToolTip().size() >= 3 && event.getToolTip().get(2) instanceof TranslationTextComponent && event.getToolTip().get(2).getString().startsWith("quark.misc.saturation")){
-                        x = 3;
-                    }else x = 2;
-                }else x = 1;
-                if (ModList.get().isLoaded("quark") && PotionUtils.getEffectsFromStack(event.getItemStack()).size() != 0){
-                    x += getQuarkPotionCount(event.getItemStack());
+                if (ModList.get().isLoaded("quark")){
+                    x += getQuarkLineCount(event.getItemStack());
                 }
                 event.getToolTip().add(x,new StringTextComponent(stringBuilder.toString()));
             }
@@ -55,15 +46,26 @@ public class WaterLevelTooltip {
     @SubscribeEvent
     public static void onRenderTooltipEvent(RenderTooltipEvent.PostText event) {
         if (ConfigRegistry.IS_FOOD_WATER_LEVEL_OPEN.get()) {
-            WaterLevelRecipe recipe = WaterLevelRecipeManager.getRecipeFromItemStack(event.getStack());
+            WaterLevelItemRecipe recipe = WaterLevelRecipeManager.getRecipeFromItemStack(event.getStack());
             if (recipe != null) {
+                event.getLines();
                 RenderSystem.pushMatrix();
                 ThirstItemRecipe recipe1 = ThirstItemRecipeManager.getRecipeFromItemStick(event.getStack());
                 RenderSystem.color3f(1.0F, 1.0F, 1.0F);
 
                 FontRenderer fontRenderer = event.getFontRenderer();
-
-                int OffsetY = event.getY() + x * 9 + 3;
+                int a = 0;
+                for (int i = 0; i < event.getLines().size();i++){
+                    String s = event.getLines().get(i);
+                    s = TextFormatting.getTextWithoutFormattingCodes(s);
+                    if (s.trim().isEmpty()){
+                        a = i;
+                        break;
+                    }
+                }
+                int OffsetY;
+                if (ModList.get().isLoaded("quark")) a += getQuarkLineCount(event.getStack());
+                OffsetY = getQuarkLineCount(event.getStack()) >= 1 ? event.getY() + a * 9 + 3 : event.getY() + a * 9 + 2;
                 int OffsetX = event.getX() - 1;
                 int texU = 0;
                 int texU1 = texU, texU2 = texU;
@@ -100,7 +102,7 @@ public class WaterLevelTooltip {
             }
         }
     }
-    public static int getQuarkPotionCount(ItemStack itemStack){
+    public static int getQuarkLineCount(ItemStack itemStack){
         int i = 0;
         List<EffectInstance> potions = PotionUtils.getEffectsFromStack(itemStack);
         for (EffectInstance instance : potions){
@@ -116,10 +118,29 @@ public class WaterLevelTooltip {
             if (instance.getPotion() == Effects.WEAKNESS){
                 i++;
             }
-            if (instance.getPotion() == Effects.CONDUIT_POWER){
+            if (instance.getPotion() == Effects.STRENGTH){
+                i++;
+            }
+            //for Quark
+            if (instance.getPotion().getEffect().getName() == "resilience"){
                 i++;
             }
         }
+        if (itemStack.isFood()){
+            i++;
+        }
         return i;
+    }
+
+    public static int shiftTextByLines(List<String> lines, int y) {
+        for(int i = 1; i < lines.size(); i++) {
+            String s = lines.get(i);
+            s = TextFormatting.getTextWithoutFormattingCodes(s);
+            if(s != null && s.trim().isEmpty()) {
+                y += 10 * (i - 1) + 1;
+                break;
+            }
+        }
+        return y;
     }
 }

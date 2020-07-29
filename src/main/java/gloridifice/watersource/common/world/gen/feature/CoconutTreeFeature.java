@@ -2,12 +2,16 @@ package gloridifice.watersource.common.world.gen.feature;
 
 import com.mojang.datafixers.Dynamic;
 import gloridifice.watersource.common.block.NaturalCoconutBlock;
+import gloridifice.watersource.common.data.tag.ModTags;
 import gloridifice.watersource.registry.BlockRegistry;
 import net.minecraft.block.BlockState;
+import net.minecraft.block.Blocks;
 import net.minecraft.block.LeavesBlock;
+import net.minecraft.dispenser.Position;
 import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MutableBoundingBox;
+import net.minecraft.world.gen.IWorldGenerationBaseReader;
 import net.minecraft.world.gen.IWorldGenerationReader;
 import net.minecraft.world.gen.feature.*;
 
@@ -24,68 +28,76 @@ public class CoconutTreeFeature extends AbstractTreeFeature<TreeFeatureConfig> {
 
     @Override
     protected boolean place(IWorldGenerationReader generationReader, Random rand, BlockPos positionIn, Set<BlockPos> posSet1, Set<BlockPos> posSet2, MutableBoundingBox boundingBoxIn, TreeFeatureConfig configIn) {
-        int height = 7 + rand.nextInt(2);
-        BlockPos pos = positionIn;
-        for (int i = 0 ; i < height/2; i++){
-            pos = positionIn.up(i);
-            setBlockState(generationReader,pos,configIn.trunkProvider.getBlockState(rand,pos));
-        }
         int a = rand.nextInt(4);
-        for (int i = 0; i < height/2; i++){
-            switch (a) {
-                case 0 :
-                    pos = positionIn.up(height/2 +i).north();
-                    break;
-                case 1:
-                    pos = positionIn.up(height/2 +i).east();
-                    break;
-                case 2:
-                    pos = positionIn.up(height/2 +i).south();
-                    break;
-                case 3:
-                    pos = positionIn.up(height/2 +i).west();
-                    break;
-                default:
-                    pos = positionIn.up(height/2 +i);
+        int height = 7 + rand.nextInt(2);
+        if (isSand(generationReader,positionIn.down(),configIn.getSapling()) && canPlace(generationReader,positionIn,height,a)){
+            BlockPos pos = positionIn;
+            for (int i = 0 ; i < height/2; i++){
+                pos = positionIn.up(i);
+                setBlockState(generationReader,pos,configIn.trunkProvider.getBlockState(rand,pos));
             }
-            if (i == height/2 - 1){
-                setBlockState(generationReader, pos, BlockRegistry.blockCoconutTreeHead.getDefaultState());
-                if (rand.nextInt(4) == 0){
-                    setBlockState(generationReader, pos.west(), BlockRegistry.blockNaturalCoconut.getDefaultState().with(NaturalCoconutBlock.AGE,3).with(NaturalCoconutBlock.HORIZONTAL_FACING, Direction.EAST));
+            for (int i = 0; i < height/2; i++){
+                pos = positionIn.up(height/2 +i).offset(Direction.byIndex(a + 2));
+                if (i == height/2 - 1){
+                    setBlockState(generationReader, pos, BlockRegistry.blockCoconutTreeHead.getDefaultState());
+                    for (int n = 2; n <= 5; n++){
+                        if (rand.nextInt(4) == 0){
+                            placeLeaves(generationReader, pos.offset(Direction.byIndex(n)), BlockRegistry.blockNaturalCoconut.getDefaultState().with(NaturalCoconutBlock.AGE,3).with(NaturalCoconutBlock.HORIZONTAL_FACING, Direction.byIndex(n).getOpposite()));
+                        }
+                    }
+                }else setBlockState(generationReader, pos, configIn.trunkProvider.getBlockState(rand,pos));
+            }
+            //generate leaves
+            pos = pos.up();
+            placeLeaves(generationReader,pos,configIn.leavesProvider.getBlockState(rand,pos).with(LeavesBlock.DISTANCE,1));
+            for (int i = 1; i <= 5;i++){
+                for (int j = 2; j <= 5; j++){
+                    if (i <= 4){
+                        placeLeaves(generationReader,pos.offset(Direction.byIndex(j),i),configIn.leavesProvider.getBlockState(rand,pos.west(i)).with(LeavesBlock.DISTANCE,1));
+                    }
+                    if (i == 2){
+                        placeLeaves(generationReader,pos.offset(Direction.byIndex(j),i).up(),configIn.leavesProvider.getBlockState(rand,pos.west(i).up()).with(LeavesBlock.DISTANCE,1));
+                        for (int u = 2; u <= 5; u++) {
+                            placeLeaves(generationReader, pos.offset(Direction.byIndex(j),i).offset(Direction.byIndex(u)), configIn.leavesProvider.getBlockState(rand, pos.west(i).up()).with(LeavesBlock.DISTANCE, 1));
+                        }
+                    }
+                    if (i == 4 || i == 2 || i == 5){
+                        placeLeaves(generationReader,pos.offset(Direction.byIndex(j),i).down(),configIn.leavesProvider.getBlockState(rand,pos.west(i).down()).with(LeavesBlock.DISTANCE,1));
+                    }
                 }
-                if (rand.nextInt(4) == 0){
-                    setBlockState(generationReader, pos.east(), BlockRegistry.blockNaturalCoconut.getDefaultState().with(NaturalCoconutBlock.AGE,3).with(NaturalCoconutBlock.HORIZONTAL_FACING, Direction.WEST));
-                }
-                if (rand.nextInt(4) == 0){
-                    setBlockState(generationReader, pos.south(), BlockRegistry.blockNaturalCoconut.getDefaultState().with(NaturalCoconutBlock.AGE,3).with(NaturalCoconutBlock.HORIZONTAL_FACING, Direction.NORTH));
-                }
-                if (rand.nextInt(4) == 0){
-                    setBlockState(generationReader, pos.north(), BlockRegistry.blockNaturalCoconut.getDefaultState().with(NaturalCoconutBlock.AGE,3).with(NaturalCoconutBlock.HORIZONTAL_FACING, Direction.SOUTH));
-                }
-            }else setBlockState(generationReader, pos, configIn.trunkProvider.getBlockState(rand,pos));
+            }
+            return true;
+        }else return false;
+    }
+    protected static boolean isSand(IWorldGenerationBaseReader reader, BlockPos pos, net.minecraftforge.common.IPlantable sapling) {
+        if (!(reader instanceof net.minecraft.world.IBlockReader) || sapling == null)
+            //todo 自定义生长方块
+            return reader.hasBlockState(pos, (data) -> {
+                return ModTags.Block.COCONUTS_SOIL.contains(data.getBlock());
+            });
+        return reader.hasBlockState(pos, state -> state.canSustainPlant((net.minecraft.world.IBlockReader)reader, pos, Direction.UP, sapling));
+    }
+    protected boolean placeLeaves(IWorldGenerationReader generationReader, BlockPos pos, BlockState blockState){
+        if (isAirOrLeaves(generationReader,pos)){
+            setBlockState(generationReader,pos,blockState);
+            return true;
+        }else return false;
+    }
+    protected boolean canPlace(IWorldGenerationBaseReader generationReader, BlockPos positionIn, int height, int randA) {
+        boolean flag = true;
+        BlockPos pos = positionIn;
+        for (int i = 0; i < height / 2; i++) {
+            pos = positionIn.up(i);
+            flag = flag && canBeReplacedByLogs(generationReader, pos);
+            if (!flag) return flag;
         }
-        pos = pos.up();
-        setBlockState(generationReader,pos,configIn.leavesProvider.getBlockState(rand,pos).with(LeavesBlock.DISTANCE,1));
-        for (int i = 1; i <= 5;i++){
-            if (i <= 4){
-                setBlockState(generationReader,pos.west(i),configIn.leavesProvider.getBlockState(rand,pos.west(i)).with(LeavesBlock.DISTANCE,1));
-                setBlockState(generationReader,pos.east(i),configIn.leavesProvider.getBlockState(rand,pos.east(i)).with(LeavesBlock.DISTANCE,1));
-                setBlockState(generationReader,pos.south(i),configIn.leavesProvider.getBlockState(rand,pos.south(i)).with(LeavesBlock.DISTANCE,1));
-                setBlockState(generationReader,pos.north(i),configIn.leavesProvider.getBlockState(rand,pos.north(i)).with(LeavesBlock.DISTANCE,1));
-            }
-            if (i == 2){
-                setBlockState(generationReader,pos.west(i).up(),configIn.leavesProvider.getBlockState(rand,pos.west(i).up()).with(LeavesBlock.DISTANCE,1));
-                setBlockState(generationReader,pos.east(i).up(),configIn.leavesProvider.getBlockState(rand,pos.east(i).up()).with(LeavesBlock.DISTANCE,1));
-                setBlockState(generationReader,pos.south(i).up(),configIn.leavesProvider.getBlockState(rand,pos.south(i).up()).with(LeavesBlock.DISTANCE,1));
-                setBlockState(generationReader,pos.north(i).up(),configIn.leavesProvider.getBlockState(rand,pos.north(i).up()).with(LeavesBlock.DISTANCE,1));
-            }
-            if (i == 4 || i == 2 || i == 5){
-                setBlockState(generationReader,pos.west(i).down(),configIn.leavesProvider.getBlockState(rand,pos.west(i).down()).with(LeavesBlock.DISTANCE,1));
-                setBlockState(generationReader,pos.east(i).down(),configIn.leavesProvider.getBlockState(rand,pos.east(i).down()).with(LeavesBlock.DISTANCE,1));
-                setBlockState(generationReader,pos.south(i).down(),configIn.leavesProvider.getBlockState(rand,pos.south(i).down()).with(LeavesBlock.DISTANCE,1));
-                setBlockState(generationReader,pos.north(i).down(),configIn.leavesProvider.getBlockState(rand,pos.north(i).down()).with(LeavesBlock.DISTANCE,1));
+        for (int i = 0; i < height / 2; i++) {
+            pos = positionIn.up(height / 2 + i).offset(Direction.byIndex(randA + 2));
+            if (i == height / 2 - 1) {
+                flag = flag && canBeReplacedByLogs(generationReader, pos);
+                if (!flag) return flag;
             }
         }
-        return true;
+        return flag;
     }
 }

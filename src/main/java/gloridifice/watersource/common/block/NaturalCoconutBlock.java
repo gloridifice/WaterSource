@@ -145,13 +145,13 @@ public class NaturalCoconutBlock extends HorizontalBlock implements IGrowable {
 
     @Override
     public boolean canUseBonemeal(World worldIn, Random rand, BlockPos pos, BlockState state) {
-        return false;
+        return true;
     }
 
     @Override
     public void grow(ServerWorld worldIn, Random rand, BlockPos pos, BlockState state) {
         if (canGrow(worldIn, pos, state, false)) {
-            if (worldIn.getBlockState(pos).get(AGE) < 3)
+            if (state.get(AGE) < 3)
                 worldIn.setBlockState(pos, state.with(AGE, worldIn.getBlockState(pos).get(AGE) + 1));
         }
     }
@@ -161,12 +161,10 @@ public class NaturalCoconutBlock extends HorizontalBlock implements IGrowable {
         if (canGrow(worldIn, pos, state, false)) {
             if (!worldIn.isAreaLoaded(pos, 1))
                 return; // Forge: prevent loading unloaded chunks when checking neighbor's light
-
             if (net.minecraftforge.common.ForgeHooks.onCropsGrowPre(worldIn, pos, state, rand.nextInt((int) (25.0F) + 1) == 0)) {
                 grow(worldIn, rand, pos, state);
                 net.minecraftforge.common.ForgeHooks.onCropsGrowPost(worldIn, pos, state);
             }
-
         }
     }
 }

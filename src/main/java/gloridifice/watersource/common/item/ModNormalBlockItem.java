@@ -32,9 +32,4 @@ public class ModNormalBlockItem extends BlockItem {
         super(blockIn, properties);
         this.setRegistryName(name);
     }
-
-    @Override
-    public void addInformation(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
-        tooltip.add(new TranslationTextComponent("watersource.test").setStyle(new Style().setColor(TextFormatting.DARK_RED).setItalic(true)));
-    }
 }

@@ -6,7 +6,9 @@ import com.mojang.blaze3d.vertex.IVertexBuilder;
 import gloridifice.watersource.WaterSource;
 import gloridifice.watersource.common.item.StrainerBlockItem;
 import gloridifice.watersource.common.tile.WaterFilterUpTile;
+import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.BlockRendererDispatcher;
 import net.minecraft.client.renderer.IRenderTypeBuffer;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.model.Material;
@@ -17,25 +19,13 @@ import net.minecraft.client.renderer.tileentity.TileEntityRenderer;
 import net.minecraft.client.renderer.tileentity.TileEntityRendererDispatcher;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.event.TextureStitchEvent;
+import net.minecraftforge.client.model.data.EmptyModelData;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fluids.FluidStack;
 
 public class WaterFilterUpTER extends TileEntityRenderer<WaterFilterUpTile> {
-    private final ModelRenderer strainer;
-
-    @SubscribeEvent
-    public static void onTextureStitch(TextureStitchEvent.Pre event) {
-        if (!event.getMap().getTextureLocation().equals(AtlasTexture.LOCATION_BLOCKS_TEXTURE)) {
-            return;
-        }
-        event.addSprite(new ResourceLocation(WaterSource.MODID,"entity/strainer/primitive_strainer"));
-    }
-
     public WaterFilterUpTER(TileEntityRendererDispatcher rendererDispatcherIn) {
         super(rendererDispatcherIn);
-        this.strainer = new ModelRenderer(32,32,0,0);
-        this.strainer.setRotationPoint(0.0F, 0.0F, 0.0F);
-        this.strainer.addBox(4.0F, -2.0F, 4.0F, 8.0F, 4.0F, 8.0F, 0.0F, false);
     }
 
     @Override
@@ -44,21 +34,11 @@ public class WaterFilterUpTER extends TileEntityRenderer<WaterFilterUpTile> {
         matrixStackIn.push();
         //Render strainer
         tileEntityIn.getStrainer().ifPresent(itemStackHandler -> {
-            IVertexBuilder buffer = bufferIn.getBuffer(RenderType.getCutout());
+            matrixStackIn.translate(0,-0.125,0);
             if (!itemStackHandler.getStackInSlot(0).isEmpty() && itemStackHandler.getStackInSlot(0).getItem() instanceof StrainerBlockItem){
-                //StrainerItem strainerItem = (StrainerItem) itemStackHandler.getStackInSlot(0).getItem();
-                Material material = new Material(AtlasTexture.LOCATION_BLOCKS_TEXTURE, new ResourceLocation(WaterSource.MODID,"entity/strainer/primitive_strainer"));
-                //System.out.println(strainerItem.getStrainerTexture());
-                //TODO
-                //TextureAtlasSprite sprite = mc.getAtlasSpriteGetter(AtlasTexture.LOCATION_BLOCKS_TEXTURE).apply(new ResourceLocation(WaterSource.MODID,"entity/strainer/primitive_strainer"));
-                IVertexBuilder ivertexbuilder = material.getBuffer(bufferIn, RenderType::getEntitySolid);
-
-/*                add(buffer,matrixStackIn,0.25f,0f,0.25f, sprite.getMinU(), sprite.getMinV());
-                add(buffer,matrixStackIn,0.25f,0f,0.75f, sprite.getMinU(), sprite.getMaxV());
-                add(buffer,matrixStackIn,0.75f,0f,0.75f, sprite.getMaxU(), sprite.getMaxV());
-                add(buffer,matrixStackIn,0.75f,0f,0.25f, sprite.getMaxU(), sprite.getMinV());*/
-                this.strainer.render(matrixStackIn, ivertexbuilder, combinedLightIn, combinedOverlayIn);
-
+                Block block = Block.getBlockFromItem(itemStackHandler.getStackInSlot(0).getItem());
+                BlockRendererDispatcher rendererDispatcher = mc.getBlockRendererDispatcher();
+                rendererDispatcher.renderBlock(block.getDefaultState(),matrixStackIn,bufferIn,60,combinedOverlayIn, EmptyModelData.INSTANCE);
             }
         });
         matrixStackIn.pop();

@@ -1,10 +1,86 @@
 package gloridifice.watersource.common.block;
 
+import gloridifice.watersource.common.tile.StrainerTile;
 import net.minecraft.block.Block;
+import net.minecraft.block.BlockState;
+import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.item.BlockItemUseContext;
+import net.minecraft.item.ItemStack;
+import net.minecraft.stats.Stats;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.RayTraceResult;
+import net.minecraft.util.math.shapes.ISelectionContext;
+import net.minecraft.util.math.shapes.VoxelShape;
+import net.minecraft.world.IBlockReader;
+import net.minecraft.world.World;
+import net.minecraft.world.storage.loot.LootContext;
+
+import javax.annotation.Nullable;
+import java.util.List;
 
 public class StrainerBlock extends Block {
+    public static final VoxelShape STRAINER_SHAPE;
+    static {
+        STRAINER_SHAPE = Block.makeCuboidShape(4,0,4,12,4,12);
+    }
     public StrainerBlock(String name,Properties properties) {
         super(properties);
         this.setRegistryName(name);
+    }
+    @Override
+    public void onBlockHarvested(World worldIn, BlockPos pos, BlockState state, PlayerEntity player) {
+        super.onBlockHarvested(worldIn, pos, state, player);
+        if (!player.isCreative()){
+            player.addStat(Stats.BLOCK_MINED.get(this));
+            player.addExhaustion(0.005F);
+            ItemStack itemStack = this.getItem(worldIn,pos,state);
+            if (worldIn.getTileEntity(pos) instanceof StrainerTile){
+                StrainerTile tile = (StrainerTile) worldIn.getTileEntity(pos);
+                itemStack.setDamage(tile.getDamage());
+                spawnAsEntity(worldIn,pos,itemStack);
+            }
+        }
+    }
+
+    @Override
+    public VoxelShape getShape(BlockState state, IBlockReader worldIn, BlockPos pos, ISelectionContext context) {
+        return STRAINER_SHAPE;
+    }
+
+    @Override
+    public boolean isNormalCube(BlockState state, IBlockReader worldIn, BlockPos pos) {
+        return false;
+    }
+
+    @Nullable
+    @Override
+    public TileEntity createTileEntity(BlockState state, IBlockReader world) {
+        return new StrainerTile();
+    }
+
+    @Override
+    public boolean hasTileEntity(BlockState state) {
+        return true;
+    }
+
+    @Override
+    public void onBlockPlacedBy(World worldIn, BlockPos pos, BlockState state, @Nullable LivingEntity placer, ItemStack stack) {
+        super.onBlockPlacedBy(worldIn, pos, state, placer, stack);
+        if (worldIn.getTileEntity(pos) instanceof StrainerTile){
+            StrainerTile tile = (StrainerTile)worldIn.getTileEntity(pos);
+            tile.setDamage(stack.getDamage());
+        }
+    }
+
+    @Override
+    public ItemStack getPickBlock(BlockState state, RayTraceResult target, IBlockReader world, BlockPos pos, PlayerEntity player) {
+        ItemStack itemStack = getItem(world,pos,state).copy();
+        if (world.getTileEntity(pos) instanceof StrainerTile){
+            StrainerTile tile = (StrainerTile)world.getTileEntity(pos);
+            itemStack.setDamage(tile.getDamage());
+        }
+        return itemStack;
     }
 }

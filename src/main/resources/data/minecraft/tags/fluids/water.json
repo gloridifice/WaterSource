@@ -2,6 +2,10 @@
   "replace": false,
   "values": [
     "watersource:purified_water_fluid",
-    "watersource:purified_water_fluid_flowing"
+    "watersource:purified_water_fluid_flowing",
+	"watersource:coconut_juice_fluid",
+	"watersource:coconut_juice_fluid_flowing",
+    "watersource:soul_water_fluid",
+    "watersource:soul_water_fluid_flowing"
   ]
 }

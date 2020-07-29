@@ -1,13 +1,34 @@
 {
   "effect.watersource.thirst": "Thirst",
-  "effect.watersource.accompanying_soul": "Accompanying Soul",
+  "effect.watersource.accompanying_soul": "Soul Buddy",
   "death.attack.byThirst": "%s turned into Dried %s.",
   "itemGroup.watersource_group": "Water Source",
-  "item.watersource.primitive_strainer": "PrimitiveStrainer",
-  "item.watersource.paper_strainer": "Paper Strainer",
-  "item.watersource.paper_soul_strainer": "Paper Soul Strainer",
-  "item.watersource.soul_strainer": "Soul Strainer",
+
+  "block.watersource.primitive_strainer": "Primitive Strainer",
+  "block.watersource.paper_strainer": "Paper Strainer",
+  "block.watersource.paper_soul_strainer": "Paper Soul Strainer",
+  "block.watersource.soul_strainer": "Soul Strainer",
+  "block.watersource.dirty_strainer": "Dirty Strainer",
+  "block.watersource.wooden_water_filter": "Wooden Water Filter",
+  "block.watersource.coconut_tree_head": "Coconut Tree Head",
+  "block.watersource.coconut_tree_log": "Coconut Tree Log",
+  "block.watersource.coconut": "Coconut",
+  "block.watersource.coconut_sapling": "Coconut Sapling",
+  "block.watersource.natural_coconut": "Natural Coconut",
+  "block.watersource.coconut_tree_leaf": "Coconut Tree Leaf",
+
   "item.watersource.purified_water_bottle": "Purified Water Bottle",
   "item.watersource.soul_water_bottle": "Soul Water Bottle",
-  "watersource.test": "This item is still in Testing"
+  "item.watersource.coconut_juice_bottle": "Coconut Juice bottle",
+  "item.watersource.wooden_cup": "Wooden Cup",
+  "item.watersource.wooden_cup_drink": "Filled Wooden Cup",
+  "item.watersource.purified_water_bucket": "Purified Water Bucket",
+  "item.watersource.soul_water_bucket": "Soul Water Bucket",
+  "item.watersource.coconut_juice_bucket": "Coconut Juice Bucket",
+  "item.watersource.leather_water_bag": "Leather Water Bag",
+
+  "watersource.test": "This item is still in Testing",
+  "fluid.watersource.coconut_juice_fluid":"Coconut Juice",
+  "fluid.watersource.soul_water_fluid":"Soul Water",
+  "fluid.watersource.purified_water_fluid":"Purified Water"
 }

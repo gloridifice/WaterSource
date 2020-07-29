@@ -3,9 +3,11 @@ package gloridifice.watersource.common.tile;
 import gloridifice.watersource.client.render.tile.WaterFilterDownTER;
 import gloridifice.watersource.common.recipe.WaterFilterRecipe;
 import gloridifice.watersource.common.recipe.WaterFilterRecipeManager;
+import gloridifice.watersource.registry.BlockRegistry;
 import gloridifice.watersource.registry.TileEntityTypesRegistry;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.ServerPlayerEntity;
+import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.IntNBT;
 import net.minecraft.network.NetworkManager;
@@ -60,20 +62,20 @@ public class WaterFilterUpTile extends TileEntity implements ITickableTileEntity
         processTicks = ((IntNBT) compound.get("processTicks")).getInt();
 
     }
+
     @Override
-    public CompoundNBT getUpdateTag()
-    {
+    public CompoundNBT getUpdateTag() {
         return this.write(new CompoundNBT());
     }
+
     @Override
-    public void onDataPacket(NetworkManager net, SUpdateTileEntityPacket pkt)
-    {
+    public void onDataPacket(NetworkManager net, SUpdateTileEntityPacket pkt) {
         this.read(pkt.getNbtCompound());
     }
+
     @Nullable
     @Override
-    public SUpdateTileEntityPacket getUpdatePacket()
-    {
+    public SUpdateTileEntityPacket getUpdatePacket() {
         CompoundNBT nbtTag = new CompoundNBT();
         this.write(nbtTag);
         return new SUpdateTileEntityPacket(getPos(), 1, nbtTag);
@@ -113,23 +115,27 @@ public class WaterFilterUpTile extends TileEntity implements ITickableTileEntity
         if (processTicks % 50 == 0) {
             WaterFilterDownTile downTile = (WaterFilterDownTile) world.getTileEntity(pos.down());
             strainer.ifPresent(itemStackHandler -> {
+                        ItemStack itemStack = itemStackHandler.getStackInSlot(0);
                         upTank.ifPresent(fluidTankUp -> {
-                            WaterFilterRecipe recipe = WaterFilterRecipeManager.getRecipeFromInput(itemStackHandler.getStackInSlot(0), fluidTankUp.getFluid().getFluid());
+                            WaterFilterRecipe recipe = WaterFilterRecipeManager.getRecipeFromInput(itemStack, fluidTankUp.getFluid().getFluid());
                             if (recipe != null) {
                                 downTile.getDownTank().ifPresent(fluidTankDown -> {
                                     if (fluidTankDown.isEmpty() || fluidTankDown.getFluid().getFluid().isEquivalentTo(recipe.getOutputFluid())) {
-                                        fluidTankDown.fill(new FluidStack(recipe.getOutputFluid(), 5), IFluidHandler.FluidAction.EXECUTE);
-                                        fluidTankUp.drain(5, IFluidHandler.FluidAction.EXECUTE);
+                                        fluidTankDown.fill(new FluidStack(recipe.getOutputFluid(), 10), IFluidHandler.FluidAction.EXECUTE);
+                                        fluidTankUp.drain(10, IFluidHandler.FluidAction.EXECUTE);
                                     }
                                 });
                             }
 
-                        });
-                        if (processTicks % 1000 == 0) {
-                            if (itemStackHandler.getStackInSlot(0).isDamageable()) {
-                                itemStackHandler.getStackInSlot(0).setDamage(itemStackHandler.getStackInSlot(0).getDamage() + 1);
+                            if (processTicks % 1000 == 0) {
+                                //减少滤网耐久
+                                if (itemStack.isDamageable()) {
+                                    if (itemStack.getDamage() < itemStack.getItem().getMaxDamage())
+                                        itemStack.setDamage(itemStack.getDamage() + 1);
+                                    else itemStackHandler.setStackInSlot(0, new ItemStack(BlockRegistry.itemDirtyStrainer));
+                                }
                             }
-                        }
+                        });
                     }
             );
         }
@@ -140,7 +146,7 @@ public class WaterFilterUpTile extends TileEntity implements ITickableTileEntity
     }
 
     private FluidTank createFluidHandler() {
-        return new FluidTank(1000) {
+        return new FluidTank(2000) {
             @Override
             protected void onContentsChanged() {
                 WaterFilterUpTile.this.markDirty();

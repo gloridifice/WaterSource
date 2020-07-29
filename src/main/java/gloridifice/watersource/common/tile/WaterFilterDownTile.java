@@ -79,7 +79,7 @@ public class WaterFilterDownTile extends TileEntity {
     }
 
     private FluidTank createFluidHandler() {
-        return new FluidTank(1000) {
+        return new FluidTank(2000) {
             @Override
             protected void onContentsChanged() {
                 WaterFilterDownTile.this.markDirty();

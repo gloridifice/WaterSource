@@ -1,11 +1,12 @@
 package gloridifice.watersource.common.recipe;
 
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 
-public class WaterLevelRecipe {
-    private final int waterLevel, waterSaturationLevel;
-    private final ItemStack itemStack;
-    public WaterLevelRecipe(ItemStack itemStack, int waterLevel, int waterSaturationLevel) {
+public class WaterLevelItemRecipe{
+    protected final int waterLevel, waterSaturationLevel;
+    protected final ItemStack itemStack;
+    public WaterLevelItemRecipe(ItemStack itemStack, int waterLevel, int waterSaturationLevel) {
         this.waterLevel = waterLevel;
         this.waterSaturationLevel = waterSaturationLevel;
         this.itemStack = itemStack;
@@ -22,4 +23,10 @@ public class WaterLevelRecipe {
     public ItemStack getItemStack() {
         return itemStack;
     }
+
+    public boolean conform(ItemStack stack){
+        return  this.itemStack.isItemEqual(stack);
+    }
+
+
 }

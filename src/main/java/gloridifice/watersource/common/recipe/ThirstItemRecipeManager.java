@@ -14,7 +14,7 @@ public class ThirstItemRecipeManager {
     }
     public static ThirstItemRecipe getRecipeFromItemStick(ItemStack itemStack){
         for (ThirstItemRecipe r : recipes){
-            if (r.isItemStackEqual(itemStack)) return r;
+            if (r.conform(itemStack)) return r;
         }
         return null;
     }

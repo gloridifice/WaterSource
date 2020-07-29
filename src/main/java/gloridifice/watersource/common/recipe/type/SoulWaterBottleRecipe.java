@@ -3,6 +3,7 @@ package gloridifice.watersource.common.recipe.type;
 import gloridifice.watersource.common.data.tag.ModTags;
 import gloridifice.watersource.registry.ItemRegistry;
 import gloridifice.watersource.registry.RecipeSerializersRegistry;
+import net.minecraft.block.Block;
 import net.minecraft.inventory.CraftingInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
@@ -28,14 +29,13 @@ public class SoulWaterBottleRecipe extends SpecialRecipe {
         boolean hasStrainer = false,hasPotion = false;
         for(int j = 0; j < inv.getSizeInventory(); ++j) {
             ItemStack itemstack = inv.getStackInSlot(j);
-            if (ModTags.Item.SOUL_STRAINER.contains(itemstack.getItem())){
+            if (ModTags.Block.SOUL_STRAINER.contains(Block.getBlockFromItem(itemstack.getItem()))){
                 list.add(itemstack);
                 hasStrainer = true;
             }
             if (itemstack.isItemEqual(new ItemStack(Items.POTION)) && ItemStack.areItemStackTagsEqual(PotionUtils.addPotionToItemStack(new ItemStack(Items.POTION), Potions.WATER),itemstack)){
                 list.add(itemstack);
                 hasPotion = true;
-
             }
         }
         return hasPotion && hasStrainer && list.size() == 2;
@@ -50,11 +50,9 @@ public class SoulWaterBottleRecipe extends SpecialRecipe {
         NonNullList<ItemStack> nonnulllist = NonNullList.withSize(inv.getSizeInventory(), ItemStack.EMPTY);
         for(int j = 0; j < inv.getSizeInventory(); ++j) {
             ItemStack itemstack = inv.getStackInSlot(j);
-            if (ModTags.Item.SOUL_STRAINER.contains(itemstack.getItem())){
+            if (ModTags.Block.SOUL_STRAINER.contains(Block.getBlockFromItem(itemstack.getItem()))){
                 ItemStack i = itemstack.copy();
-                if(i.getDamage() + 1 < i.getMaxDamage()){
-                    i.setDamage(i.getDamage() + 1);
-                }else i =ItemStack.EMPTY;
+                i.setDamage(i.getDamage() + 1);
                 nonnulllist.set(j,i);
             }
         }

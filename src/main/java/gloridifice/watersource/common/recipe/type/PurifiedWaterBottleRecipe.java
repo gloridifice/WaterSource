@@ -1,8 +1,10 @@
 package gloridifice.watersource.common.recipe.type;
 
 import gloridifice.watersource.common.data.tag.ModTags;
+import gloridifice.watersource.registry.BlockRegistry;
 import gloridifice.watersource.registry.ItemRegistry;
 import gloridifice.watersource.registry.RecipeSerializersRegistry;
+import net.minecraft.block.Block;
 import net.minecraft.inventory.CraftingInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
@@ -32,7 +34,7 @@ public class PurifiedWaterBottleRecipe extends SpecialRecipe {
         boolean hasStrainer = false,hasPotion = false;
         for(int j = 0; j < inv.getSizeInventory(); ++j) {
             ItemStack itemstack = inv.getStackInSlot(j);
-            if (ModTags.Item.PURIFICATION_STRAINER.contains(itemstack.getItem())){
+            if (ModTags.Block.PURIFICATION_STRAINER.contains(Block.getBlockFromItem(itemstack.getItem()))){
                 list.add(itemstack);
                 hasStrainer = true;
             }
@@ -60,11 +62,11 @@ public class PurifiedWaterBottleRecipe extends SpecialRecipe {
         NonNullList<ItemStack> nonnulllist = NonNullList.withSize(inv.getSizeInventory(), ItemStack.EMPTY);
         for(int j = 0; j < inv.getSizeInventory(); ++j) {
             ItemStack itemstack = inv.getStackInSlot(j);
-            if (ModTags.Item.PURIFICATION_STRAINER.contains(itemstack.getItem())){
+            if (ModTags.Block.PURIFICATION_STRAINER.contains(Block.getBlockFromItem(itemstack.getItem()))){
                 ItemStack i = itemstack.copy();
-                if(i.getDamage() + 1 < i.getMaxDamage()){
+                if (i.getDamage() + 1 < i.getItem().getMaxDamage()){
                     i.setDamage(i.getDamage() + 1);
-                }else i =ItemStack.EMPTY;
+                }else i = new ItemStack(BlockRegistry.itemDirtyStrainer);
                 nonnulllist.set(j,i);
             }
         }
@@ -84,7 +86,9 @@ public class PurifiedWaterBottleRecipe extends SpecialRecipe {
     @Override
     public NonNullList<Ingredient> getIngredients() {
         NonNullList<Ingredient> list = NonNullList.withSize(2, Ingredient.EMPTY);
-        list.set(0, Ingredient.fromTag(ModTags.Item.PURIFICATION_STRAINER));
+        for (Block block : ModTags.Block.PURIFICATION_STRAINER.getAllElements()){
+            list.set(0, Ingredient.fromStacks(new ItemStack(block.asItem())));
+        }
         list.set(1, Ingredient.fromStacks(PotionUtils.addPotionToItemStack(new ItemStack(Items.POTION), Potions.WATER)));
         return list;
     }

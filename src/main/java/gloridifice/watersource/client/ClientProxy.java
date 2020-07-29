@@ -15,6 +15,8 @@ public class ClientProxy {
         registerCutoutType(BlockRegistry.blockCoconut);
         registerCutoutMippedType(BlockRegistry.blockCoconutTreeLeaf);
         registerCutoutType(BlockRegistry.blockCoconutSapling);
+        registerCutoutType(BlockRegistry.blockPrimitiveStrainer);
+        registerCutoutType(BlockRegistry.blockNaturalCoconut);
 /*
         RenderTypeLookup.setRenderLayer(FluidRegistry.purifiedWaterFluid.get(),RenderType.getTranslucent());
         RenderTypeLookup.setRenderLayer(FluidRegistry.purifiedWaterFluidFlowing.get(),RenderType.getTranslucent());

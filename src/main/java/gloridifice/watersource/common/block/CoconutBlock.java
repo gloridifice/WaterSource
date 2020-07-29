@@ -6,6 +6,7 @@ import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.block.IGrowable;
 import net.minecraft.item.BlockItemUseContext;
+import net.minecraft.item.ItemStack;
 import net.minecraft.state.EnumProperty;
 import net.minecraft.state.StateContainer;
 import net.minecraft.util.Direction;
@@ -18,8 +19,10 @@ import net.minecraft.world.IWorld;
 import net.minecraft.world.IWorldReader;
 import net.minecraft.world.World;
 import net.minecraft.world.server.ServerWorld;
+import net.minecraft.world.storage.loot.LootContext;
 
 import javax.annotation.Nullable;
+import java.util.List;
 import java.util.Random;
 
 public class CoconutBlock extends Block implements IGrowable {
@@ -47,16 +50,8 @@ public class CoconutBlock extends Block implements IGrowable {
     }
 
     @Override
-    public BlockState updatePostPlacement(BlockState stateIn, Direction facing, BlockState facingState, IWorld worldIn, BlockPos currentPos, BlockPos facingPos) {
-        return super.updatePostPlacement(stateIn, facing, facingState, worldIn, currentPos, facingPos);
-    }
-
-    @Override
     public void neighborChanged(BlockState state, World worldIn, BlockPos pos, Block blockIn, BlockPos fromPos, boolean isMoving) {
-        System.out.println("neighborChanged");
-        System.out.println(pos.down() + "/" + fromPos);
         if (pos.down().equals(fromPos)){
-            System.out.println("pos.down() == fromPos");
             if (worldIn.getBlockState(fromPos).getBlock() == Blocks.SAND){
                 worldIn.setBlockState(pos,this.getDefaultState().with(GROUND_TYPE,GroundType.SAND));
             }
@@ -65,7 +60,6 @@ public class CoconutBlock extends Block implements IGrowable {
             }
             if (worldIn.getBlockState(fromPos).isAir()){
                 worldIn.setBlockState(pos,this.getDefaultState().with(GROUND_TYPE,GroundType.ORDINARY));
-                System.out.println("worldIn.getBlockState(fromPos).isAir()");
             }
         }
     }
@@ -100,11 +94,10 @@ public class CoconutBlock extends Block implements IGrowable {
         worldIn.setBlockState(pos, BlockRegistry.blockCoconutSapling.getDefaultState());
     }
 
-    @Override
     public void tick(BlockState state, ServerWorld worldIn, BlockPos pos, Random rand) {
         super.tick(state, worldIn, pos, rand);
         if (!worldIn.isAreaLoaded(pos, 1)) return; // Forge: prevent loading unloaded chunks when checking neighbor's light
-        if (canGrow(worldIn,pos,state,false) && worldIn.getLight(pos.up()) >= 9 && rand.nextInt(14) == 0) {
+        if (worldIn.getLight(pos.up()) >= 9 && rand.nextInt(7) == 0) {
             grow(worldIn,rand,pos,state);
         }
     }

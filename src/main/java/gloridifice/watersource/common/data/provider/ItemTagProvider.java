@@ -13,9 +13,6 @@ public class ItemTagProvider extends ForgeItemTagsProvider {
     }
     @Override
     public void registerTags() {
-        getBuilder(ModTags.Item.STRAINER);
-        getBuilder(ModTags.Item.PURIFICATION_STRAINER);
-        getBuilder(ModTags.Item.SOUL_STRAINER);
 
     }
 }

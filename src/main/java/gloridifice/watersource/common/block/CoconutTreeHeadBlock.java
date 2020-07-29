@@ -31,14 +31,14 @@ public class CoconutTreeHeadBlock extends Block implements IGrowable {
 
     @Override
     public boolean canUseBonemeal(World worldIn, Random rand, BlockPos pos, BlockState state) {
-        return false;
+        return true;
     }
 
     @Override
     public void grow(ServerWorld worldIn, Random rand, BlockPos pos, BlockState state) {
         int a = rand.nextInt(4);
         if (worldIn.isAirBlock(pos.west()) && a == 0) {
-            worldIn.setBlockState(pos.west(), BlockRegistry.blockNaturalCoconut.getDefaultState().with(NaturalCoconutBlock.AGE, 0).with(NaturalCoconutBlock.HORIZONTAL_FACING, Direction.SOUTH));
+            worldIn.setBlockState(pos.west(), BlockRegistry.blockNaturalCoconut.getDefaultState().with(NaturalCoconutBlock.AGE, 0).with(NaturalCoconutBlock.HORIZONTAL_FACING, Direction.EAST));
         }
         if (worldIn.isAirBlock(pos.east()) && a == 1) {
             worldIn.setBlockState(pos.east(), BlockRegistry.blockNaturalCoconut.getDefaultState().with(NaturalCoconutBlock.AGE, 0).with(NaturalCoconutBlock.HORIZONTAL_FACING, Direction.WEST));
@@ -62,4 +62,5 @@ public class CoconutTreeHeadBlock extends Block implements IGrowable {
             }
         }
     }
+
 }

@@ -7,20 +7,25 @@ import gloridifice.watersource.common.network.PlayerWaterLevelMessage;
 import gloridifice.watersource.common.network.SimpleNetworkHandler;
 import gloridifice.watersource.common.recipe.ThirstItemRecipe;
 import gloridifice.watersource.common.recipe.ThirstItemRecipeManager;
-import gloridifice.watersource.common.recipe.WaterLevelRecipe;
+import gloridifice.watersource.common.recipe.WaterLevelItemRecipe;
 import gloridifice.watersource.common.recipe.WaterLevelRecipeManager;
 import gloridifice.watersource.registry.EffectRegistry;
-import net.minecraft.client.renderer.texture.AtlasTexture;
+import gloridifice.watersource.registry.ItemRegistry;
+import net.minecraft.block.BlockState;
+import net.minecraft.block.Blocks;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
+import net.minecraft.fluid.FluidState;
+import net.minecraft.fluid.Fluids;
+import net.minecraft.item.ItemStack;
 import net.minecraft.potion.EffectInstance;
+import net.minecraft.util.Hand;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.Difficulty;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
-import net.minecraftforge.client.event.TextureStitchEvent;
 import net.minecraftforge.common.util.FakePlayer;
 import net.minecraftforge.event.AttachCapabilitiesEvent;
 import net.minecraftforge.event.TickEvent;
@@ -28,11 +33,16 @@ import net.minecraftforge.event.entity.EntityJoinWorldEvent;
 import net.minecraftforge.event.entity.living.LivingEntityUseItemEvent;
 import net.minecraftforge.event.entity.living.LivingEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
+import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.event.world.BlockEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
+import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.fml.ModList;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.network.PacketDistributor;
+import org.lwjgl.system.CallbackI;
 import roito.afterthedrizzle.common.capability.CapabilityPlayerTemperature;
 import roito.afterthedrizzle.common.environment.temperature.ApparentTemperature;
 
@@ -49,13 +59,12 @@ public class CommonEventHandler {
             event.addCapability(new ResourceLocation(WaterSource.MODID,"player_last_position"), new PlayerLastPosCapability.Provider());
         }
     }
-
     @SubscribeEvent
     public static void onLivingEntityUseItemEventFinish(LivingEntityUseItemEvent.Finish event) {
         LivingEntity entity = event.getEntityLiving();
         if (entity instanceof PlayerEntity && !(entity instanceof FakePlayer)) {
             Random rand = new Random();
-            WaterLevelRecipe wRecipe = WaterLevelRecipeManager.getRecipeFromItemStack(event.getItem());
+            WaterLevelItemRecipe wRecipe = WaterLevelRecipeManager.getRecipeFromItemStack(event.getItem());
             if (wRecipe != null) {
                 entity.getCapability(WaterLevelCapability.PLAYER_WATER_LEVEL).ifPresent(data -> {
                     data.addWaterLevel(wRecipe.getWaterLevel());
@@ -133,9 +142,8 @@ public class CommonEventHandler {
                         if (x < 5) {
                             player.getCapability(WaterLevelCapability.PLAYER_WATER_LEVEL).ifPresent(dataW -> {
                                 if (player.isSprinting()){
-                                    dataW.addExhaustion(player, (float) (x / 20));
-                                }else dataW.addExhaustion(player, (float) (x / 40));
-
+                                    dataW.addExhaustion(player, (float) (x / 15));
+                                }else dataW.addExhaustion(player, (float) (x / 30));
                             });
                         }
                     }
@@ -183,7 +191,7 @@ public class CommonEventHandler {
                 EffectInstance effectInstance = player.getActivePotionEffect(EffectRegistry.THIRST);
                 if (effectInstance != null){
                     player.getCapability(WaterLevelCapability.PLAYER_WATER_LEVEL).ifPresent(data -> {
-                        data.addExhaustion(player,0.05f + 0.02f * effectInstance.getAmplifier());
+                        data.addExhaustion(player,0.1f + 0.05f * effectInstance.getAmplifier());
                     });
                 }
             }

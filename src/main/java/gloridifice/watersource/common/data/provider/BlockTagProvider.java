@@ -12,5 +12,9 @@ public class BlockTagProvider extends ForgeBlockTagsProvider {
     @Override
     public void registerTags() {
         getBuilder(ModTags.Block.COCONUT_LOG);
+        getBuilder(ModTags.Block.STRAINER);
+        getBuilder(ModTags.Block.PURIFICATION_STRAINER);
+        getBuilder(ModTags.Block.SOUL_STRAINER);
+        getBuilder(ModTags.Block.COCONUTS_SOIL);
     }
 }
