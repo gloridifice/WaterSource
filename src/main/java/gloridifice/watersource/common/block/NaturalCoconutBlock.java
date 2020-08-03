@@ -2,10 +2,7 @@ package gloridifice.watersource.common.block;
 
 import gloridifice.watersource.registry.BlockRegistry;
 import gloridifice.watersource.registry.ItemRegistry;
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.HorizontalBlock;
-import net.minecraft.block.IGrowable;
+import net.minecraft.block.*;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -63,12 +60,11 @@ public class NaturalCoconutBlock extends HorizontalBlock implements IGrowable {
     }
 
     @Override
-    public void onNeighborChange(BlockState state, IWorldReader world, BlockPos pos, BlockPos neighbor) {
-        if (!world.getBlockState(neighbor).getBlock().canSpawnInBlock()) {
-            if (pos.crossProduct(state.get(HORIZONTAL_FACING).getDirectionVec()) == neighbor) {
-                ((World) world).removeBlock(pos, false);
-                spawnDrops(state, (World) world, pos);
-            }
+    public void neighborChanged(BlockState state, World worldIn, BlockPos pos, Block blockIn, BlockPos fromPos, boolean isMoving) {
+        if (pos.offset(state.get(HORIZONTAL_FACING)) == fromPos && !worldIn.getBlockState(fromPos).isAir())
+        {
+            spawnDrops(state,worldIn,pos);
+            worldIn.setBlockState(pos, Blocks.AIR.getDefaultState());
         }
     }
 

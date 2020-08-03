@@ -1,11 +1,14 @@
 package gloridifice.watersource.common.block.tree;
 
+import com.google.common.collect.Sets;
+import gloridifice.watersource.common.world.gen.feature.CoconutTreeFeature;
 import gloridifice.watersource.registry.BlockRegistry;
 import gloridifice.watersource.registry.FeatureRegistry;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.block.trees.Tree;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.MutableBoundingBox;
 import net.minecraft.world.IWorld;
 import net.minecraft.world.gen.ChunkGenerator;
 import net.minecraft.world.gen.blockstateprovider.SimpleBlockStateProvider;
@@ -16,9 +19,10 @@ import net.minecraft.world.gen.foliageplacer.BlobFoliagePlacer;
 
 import javax.annotation.Nullable;
 import java.util.Random;
+import java.util.Set;
 
 public class CoconutTree extends Tree {
-    public static final TreeFeatureConfig COCONUT_TREE_CONFIG = (new TreeFeatureConfig.Builder(new SimpleBlockStateProvider(BlockRegistry.blockCoconutTreeLog.getDefaultState()), new SimpleBlockStateProvider(BlockRegistry.blockCoconutTreeLeaf.getDefaultState()), new BlobFoliagePlacer(2, 0))).baseHeight(5).heightRandA(2).heightRandB(2).trunkHeight(0).ignoreVines().setSapling((net.minecraftforge.common.IPlantable) BlockRegistry.blockCoconutSapling).build();
+    public static final TreeFeatureConfig COCONUT_TREE_CONFIG = (new TreeFeatureConfig.Builder(new SimpleBlockStateProvider(BlockRegistry.blockCoconutTreeLog.getDefaultState()), new SimpleBlockStateProvider(BlockRegistry.blockCoconutTreeLeaf.getDefaultState()), new BlobFoliagePlacer(2, 0))).baseHeight(4).heightRandA(2).foliageHeight(3).ignoreVines().setSapling((net.minecraftforge.common.IPlantable) BlockRegistry.blockCoconutSapling).build();
 
     @Nullable
     @Override
@@ -32,14 +36,14 @@ public class CoconutTree extends Tree {
         if (configuredfeature == null) {
             return false;
         } else {
+            Set<BlockPos> set = Sets.newHashSet();
+            Set<BlockPos> set1 = Sets.newHashSet();
+            MutableBoundingBox mutableboundingbox = MutableBoundingBox.getNewBoundingBox();
             worldIn.setBlockState(blockPosIn, Blocks.AIR.getDefaultState(), 4);
-            ((TreeFeatureConfig)configuredfeature.config).forcePlacement();
-            if (configuredfeature.place(worldIn, chunkGeneratorIn, randomIn, blockPosIn)) {
-                //todo
-                System.out.println("true");
+            (configuredfeature.config).forcePlacement();
+            if (((CoconutTreeFeature)configuredfeature.feature).place(worldIn,randomIn,blockPosIn,set,set1,mutableboundingbox,COCONUT_TREE_CONFIG)) {
                 return true;
             } else {
-                System.out.println("false");
                 worldIn.setBlockState(blockPosIn, blockStateIn, 4);
                 return false;
             }

@@ -30,5 +30,7 @@
   "watersource.test": "This item is still in Testing",
   "fluid.watersource.coconut_juice_fluid":"Coconut Juice",
   "fluid.watersource.soul_water_fluid":"Soul Water",
-  "fluid.watersource.purified_water_fluid":"Purified Water"
+  "fluid.watersource.purified_water_fluid":"Purified Water",
+
+  "tooltip.watersource.drink_unit": "Drink Unit"
 }

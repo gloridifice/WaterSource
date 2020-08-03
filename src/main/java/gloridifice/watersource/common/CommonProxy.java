@@ -2,6 +2,7 @@ package gloridifice.watersource.common;
 
 import gloridifice.watersource.common.block.tree.CoconutTree;
 import gloridifice.watersource.registry.FeatureRegistry;
+import net.minecraft.data.loot.BlockLootTables;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.biome.Biomes;
 import net.minecraft.world.gen.GenerationStage;

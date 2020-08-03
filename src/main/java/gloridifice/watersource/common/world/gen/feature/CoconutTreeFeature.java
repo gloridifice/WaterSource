@@ -11,6 +11,9 @@ import net.minecraft.dispenser.Position;
 import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MutableBoundingBox;
+import net.minecraft.world.IWorld;
+import net.minecraft.world.gen.ChunkGenerator;
+import net.minecraft.world.gen.GenerationSettings;
 import net.minecraft.world.gen.IWorldGenerationBaseReader;
 import net.minecraft.world.gen.IWorldGenerationReader;
 import net.minecraft.world.gen.feature.*;
@@ -24,10 +27,8 @@ public class CoconutTreeFeature extends AbstractTreeFeature<TreeFeatureConfig> {
         super(function);
         this.setRegistryName(name);
     }
-
-
     @Override
-    protected boolean place(IWorldGenerationReader generationReader, Random rand, BlockPos positionIn, Set<BlockPos> posSet1, Set<BlockPos> posSet2, MutableBoundingBox boundingBoxIn, TreeFeatureConfig configIn) {
+    public boolean place(IWorldGenerationReader generationReader, Random rand, BlockPos positionIn, Set<BlockPos> posSet1, Set<BlockPos> posSet2, MutableBoundingBox boundingBoxIn, TreeFeatureConfig configIn) {
         int a = rand.nextInt(4);
         int height = 7 + rand.nextInt(2);
         if (isSand(generationReader,positionIn.down(),configIn.getSapling()) && canPlace(generationReader,positionIn,height,a)){

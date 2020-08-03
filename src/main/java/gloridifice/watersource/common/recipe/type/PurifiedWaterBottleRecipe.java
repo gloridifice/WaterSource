@@ -1,6 +1,7 @@
 package gloridifice.watersource.common.recipe.type;
 
 import gloridifice.watersource.common.data.tag.ModTags;
+import gloridifice.watersource.common.item.StrainerBlockItem;
 import gloridifice.watersource.registry.BlockRegistry;
 import gloridifice.watersource.registry.ItemRegistry;
 import gloridifice.watersource.registry.RecipeSerializersRegistry;
@@ -23,7 +24,6 @@ import java.util.List;
 
 
 public class PurifiedWaterBottleRecipe extends SpecialRecipe {
-
     public PurifiedWaterBottleRecipe(ResourceLocation idIn) {
         super(idIn);
     }
@@ -63,10 +63,7 @@ public class PurifiedWaterBottleRecipe extends SpecialRecipe {
         for(int j = 0; j < inv.getSizeInventory(); ++j) {
             ItemStack itemstack = inv.getStackInSlot(j);
             if (ModTags.Block.PURIFICATION_STRAINER.contains(Block.getBlockFromItem(itemstack.getItem()))){
-                ItemStack i = itemstack.copy();
-                if (i.getDamage() + 1 < i.getItem().getMaxDamage()){
-                    i.setDamage(i.getDamage() + 1);
-                }else i = new ItemStack(BlockRegistry.itemDirtyStrainer);
+                ItemStack i = StrainerBlockItem.damageItem(itemstack.copy(),1);
                 nonnulllist.set(j,i);
             }
         }
@@ -83,7 +80,7 @@ public class PurifiedWaterBottleRecipe extends SpecialRecipe {
         return new ItemStack(ItemRegistry.itemPurifiedWaterBottle);
     }
 
-    @Override
+/*    @Override
     public NonNullList<Ingredient> getIngredients() {
         NonNullList<Ingredient> list = NonNullList.withSize(2, Ingredient.EMPTY);
         for (Block block : ModTags.Block.PURIFICATION_STRAINER.getAllElements()){
@@ -91,5 +88,5 @@ public class PurifiedWaterBottleRecipe extends SpecialRecipe {
         }
         list.set(1, Ingredient.fromStacks(PotionUtils.addPotionToItemStack(new ItemStack(Items.POTION), Potions.WATER)));
         return list;
-    }
+    }*/
 }

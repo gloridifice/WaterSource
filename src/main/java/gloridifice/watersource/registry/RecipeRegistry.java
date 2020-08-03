@@ -3,33 +3,20 @@ package gloridifice.watersource.registry;
 import gloridifice.watersource.common.item.StrainerBlockItem;
 import gloridifice.watersource.common.recipe.*;
 import gloridifice.watersource.helper.FluidHelper;
-import net.minecraft.fluid.Fluid;
 import net.minecraft.fluid.Fluids;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.potion.PotionUtils;
 import net.minecraft.potion.Potions;
-import net.minecraftforge.fluids.FluidUtil;
 import net.minecraftforge.fml.ModList;
 import roito.afterthedrizzle.common.item.ItemsRegistry;
 
-import java.util.ArrayList;
-import java.util.List;
-
 public class RecipeRegistry {
-    public static List<Fluid> canDrinkFluid = new ArrayList<>();
 
     public static void init() {
         addWaterLevel();
         addThirstItem();
         addWaterFilterRecipes();
-        addCanDrinkFluid();
-    }
-    public static void addCanDrinkFluid(){
-        canDrinkFluid.add(Fluids.WATER);
-        canDrinkFluid.add(FluidRegistry.purifiedWaterFluid.get().getStillFluid());
-        canDrinkFluid.add(FluidRegistry.soulWaterFluid.get().getStillFluid());
-        canDrinkFluid.add(FluidRegistry.coconutJuiceFluid.get().getStillFluid());
     }
     public static void addWaterLevel() {
         WaterLevelRecipeManager.add(new ItemStack(ItemRegistry.itemSoulWaterBottle), 4, 4);
@@ -61,9 +48,9 @@ public class RecipeRegistry {
     }
 
     public static void addThirstItem() {
-        ThirstItemRecipeManager.add(new ThirstNbtRecipe(PotionUtils.addPotionToItemStack(new ItemStack(Items.POTION), Potions.WATER), 2000, 0, 75));
-        ThirstItemRecipeManager.add(new ThirstFluidRecipe(FluidHelper.fillContainer(new ItemStack(ItemRegistry.itemWoodenCupDrink), Fluids.WATER), 2000,0,75));
-        ThirstItemRecipeManager.add(new ThirstFluidRecipe(FluidHelper.fillContainer(new ItemStack(ItemRegistry.itemFeatherWaterBag), Fluids.WATER), 2000,0,75));
+        ThirstRecipeManager.add(new ThirstNbtRecipe(PotionUtils.addPotionToItemStack(new ItemStack(Items.POTION), Potions.WATER), 2000, 0, 75));
+        ThirstRecipeManager.add(new ThirstFluidRecipe(FluidHelper.fillContainer(new ItemStack(ItemRegistry.itemWoodenCupDrink), Fluids.WATER), 2000,0,75));
+        ThirstRecipeManager.add(new ThirstFluidRecipe(FluidHelper.fillContainer(new ItemStack(ItemRegistry.itemFeatherWaterBag), Fluids.WATER), 2000,0,75));
     }
 
     public static void addWaterFilterRecipes() {

@@ -9,10 +9,8 @@ import net.minecraft.block.*;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.material.MaterialColor;
 import net.minecraft.item.BlockItem;
-import net.minecraft.item.Item;
 import net.minecraftforge.common.ToolType;
 import net.minecraftforge.fml.RegistryObject;
-import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 
@@ -22,7 +20,7 @@ public class BlockRegistry extends RegistryModule{
 
     public final static Block blockWaterFilter = new WaterFilterBlock("wooden_water_filter", Block.Properties.create(Material.WOOD,MaterialColor.BROWN).sound(SoundType.WOOD).hardnessAndResistance(1.0F).harvestTool(ToolType.AXE));
     public final static Block blockCoconutTreeLog = new LogBlock(MaterialColor.WOOD, Block.Properties.create(Material.WOOD,MaterialColor.BROWN).sound(SoundType.WOOD).hardnessAndResistance(2.0F)).setRegistryName("coconut_tree_log");
-    public final static Block blockCoconutTreeHead = new CoconutTreeHeadBlock("coconut_tree_head",Block.Properties.create(Material.WOOD,MaterialColor.BROWN).sound(SoundType.WOOD).tickRandomly().harvestTool(ToolType.AXE));
+    public final static Block blockCoconutTreeHead = new CoconutTreeHeadBlock("coconut_tree_head",Block.Properties.create(Material.WOOD,MaterialColor.BROWN).sound(SoundType.WOOD).tickRandomly().harvestTool(ToolType.AXE).hardnessAndResistance(2.0F));
     public final static Block blockCoconutTreeLeaf = new LeavesBlock(Block.Properties.create(Material.LEAVES).hardnessAndResistance(0.2F).tickRandomly().sound(SoundType.PLANT).notSolid()).setRegistryName("coconut_tree_leaf");
     public final static Block blockNaturalCoconut = new NaturalCoconutBlock(Block.Properties.create(Material.WOOD).harvestTool(ToolType.AXE).hardnessAndResistance(0.4F).sound(SoundType.WOOD).tickRandomly().notSolid()).setRegistryName("natural_coconut");
     public final static Block blockCoconut = new CoconutBlock(Block.Properties.create(Material.WOOD,MaterialColor.BROWN).harvestTool(ToolType.AXE).hardnessAndResistance(0.4F).sound(SoundType.WOOD).tickRandomly().notSolid(),"coconut");
@@ -55,9 +53,5 @@ public class BlockRegistry extends RegistryModule{
     public static RegistryObject<FlowingFluidBlock> blockCoconutJuiceFluid = FLUID_BLOCKS.register("coconut_juice_fluid", () -> {
         return new FlowingFluidBlock(FluidRegistry.coconutJuiceFluid, Block.Properties.create(Material.WATER).doesNotBlockMovement().hardnessAndResistance(100.0F).noDrops());
     });
-    public BlockRegistry(){
-        super();
-        BlockRegistry.FLUID_BLOCKS.register(FMLJavaModLoadingContext.get().getModEventBus());
-    }
 }
 

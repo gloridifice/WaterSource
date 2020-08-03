@@ -4,16 +4,15 @@ import net.minecraftforge.common.ForgeConfigSpec;
 
 public class ConfigRegistry {
     public static ForgeConfigSpec CLIENT_CONFIG;
-    public static ForgeConfigSpec.BooleanValue IS_FOOD_WATER_LEVEL_OPEN;
-    public static ForgeConfigSpec.BooleanValue IS_WATER_SATURATION_LEVEL_OPEN;
-    public static ForgeConfigSpec.BooleanValue IS_DEBUG_MODE_OPEN;
+    public static ForgeConfigSpec.BooleanValue OPEN_FOOD_WATER_LEVEL, OPEN_WATER_SATURATION_LEVEL, IS_DEBUG_MODE, RESET_WATER_LEVEL_IN_DEATH;
 
     static {
         ForgeConfigSpec.Builder COMMON_BUILDER = new ForgeConfigSpec.Builder();
         COMMON_BUILDER.comment("View Setting (Client)").push("view");
-        IS_WATER_SATURATION_LEVEL_OPEN = COMMON_BUILDER.comment("It decides if player can see WaterSaturationLevel. Default:false").define("enableSeeWaterSaturationLevel",false);
-        IS_FOOD_WATER_LEVEL_OPEN = COMMON_BUILDER.comment("It decides if player can see foods/drinks'WaterLevel.It can be true/false. Default:true").define("enableSeeFoodWaterLevel",true);
-        IS_DEBUG_MODE_OPEN = COMMON_BUILDER.comment("Debug.Please don't open it if you don't want useless date occupy your screen. Default:false").define("DebugMode",false);
+        OPEN_WATER_SATURATION_LEVEL = COMMON_BUILDER.comment("It decides if player can see WaterSaturationLevel. Default:false").define("enableSeeWaterSaturationLevel",false);
+        OPEN_FOOD_WATER_LEVEL = COMMON_BUILDER.comment("It decides if player can see foods/drinks'WaterLevel.It can be true/false. Default:true").define("enableSeeFoodWaterLevel",true);
+        IS_DEBUG_MODE = COMMON_BUILDER.comment("Default:false").define("DebugMode",false);
+        RESET_WATER_LEVEL_IN_DEATH = COMMON_BUILDER.comment("It decides if players' water level would reset in death. Default:true").define("resetWaterLevelInDeath",true);
         COMMON_BUILDER.pop();
         CLIENT_CONFIG = COMMON_BUILDER.build();
     }

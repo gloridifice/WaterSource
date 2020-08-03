@@ -2,10 +2,10 @@ package gloridifice.watersource.common.recipe;
 
 import net.minecraft.item.ItemStack;
 
-public class ThirstItemRecipe {
-    protected static int duration,amplifier;
-    protected static ItemStack itemStack;
-    protected static int probability;
+public class ThirstItemRecipe implements IThirstRecipe{
+    protected final int duration,amplifier;
+    protected final ItemStack itemStack;
+    protected final int probability;
     public ThirstItemRecipe(ItemStack itemStack, int duration, int amplifier, int probability) {
         this.duration = duration;
         this.amplifier = amplifier;
@@ -19,7 +19,7 @@ public class ThirstItemRecipe {
         return duration;
     }
 
-    public static int getProbability() {
+    public int getProbability() {
         return probability;
     }
 

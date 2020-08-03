@@ -1,6 +1,7 @@
 package gloridifice.watersource.common.tile;
 
 import gloridifice.watersource.client.render.tile.WaterFilterDownTER;
+import gloridifice.watersource.common.item.StrainerBlockItem;
 import gloridifice.watersource.common.recipe.WaterFilterRecipe;
 import gloridifice.watersource.common.recipe.WaterFilterRecipeManager;
 import gloridifice.watersource.registry.BlockRegistry;
@@ -130,9 +131,7 @@ public class WaterFilterUpTile extends TileEntity implements ITickableTileEntity
                             if (processTicks % 1000 == 0) {
                                 //减少滤网耐久
                                 if (itemStack.isDamageable()) {
-                                    if (itemStack.getDamage() < itemStack.getItem().getMaxDamage())
-                                        itemStack.setDamage(itemStack.getDamage() + 1);
-                                    else itemStackHandler.setStackInSlot(0, new ItemStack(BlockRegistry.itemDirtyStrainer));
+                                    itemStackHandler.setStackInSlot(0, StrainerBlockItem.damageItem(itemStack,1));
                                 }
                             }
                         });

@@ -31,7 +31,7 @@ public class WaterLevelTooltip {
     @SubscribeEvent(priority = EventPriority.LOW)
     public static void onItemTooltipEvent(ItemTooltipEvent event) {
         x = 1;
-        if (ConfigRegistry.IS_FOOD_WATER_LEVEL_OPEN.get()) {
+        if (ConfigRegistry.OPEN_FOOD_WATER_LEVEL.get()) {
             WaterLevelItemRecipe recipe = WaterLevelRecipeManager.getRecipeFromItemStack(event.getItemStack());
             if (recipe != null) {
                 StringBuilder stringBuilder = new StringBuilder(" ");
@@ -45,15 +45,14 @@ public class WaterLevelTooltip {
     }
     @SubscribeEvent
     public static void onRenderTooltipEvent(RenderTooltipEvent.PostText event) {
-        if (ConfigRegistry.IS_FOOD_WATER_LEVEL_OPEN.get()) {
+        if (ConfigRegistry.OPEN_FOOD_WATER_LEVEL.get()) {
             WaterLevelItemRecipe recipe = WaterLevelRecipeManager.getRecipeFromItemStack(event.getStack());
             if (recipe != null) {
                 event.getLines();
                 RenderSystem.pushMatrix();
-                ThirstItemRecipe recipe1 = ThirstItemRecipeManager.getRecipeFromItemStick(event.getStack());
+                IThirstRecipe recipe1 = ThirstRecipeManager.getRecipeFromItemStick(event.getStack());
                 RenderSystem.color3f(1.0F, 1.0F, 1.0F);
 
-                FontRenderer fontRenderer = event.getFontRenderer();
                 int a = 0;
                 for (int i = 0; i < event.getLines().size();i++){
                     String s = event.getLines().get(i);

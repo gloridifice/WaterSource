@@ -68,7 +68,7 @@ public class WaterLevelGui extends AbstractGui {
             }
 
             //Water Saturation Level↓
-            if (ConfigRegistry.IS_WATER_SATURATION_LEVEL_OPEN.get()) {
+            if (ConfigRegistry.OPEN_WATER_SATURATION_LEVEL.get()) {
                 if (k6 * 2 + 1 < waterSaturationLevel) {
                     this.blit(OffsetX1, OffsetY1 - 1, texU1, texV + 9, 9, 3);
                     this.blit(OffsetX1, OffsetY1 + 7, texU1 + 9, texV + 9, 9, 3);
@@ -79,7 +79,7 @@ public class WaterLevelGui extends AbstractGui {
             }
         }
         //test↓
-        if (ConfigRegistry.IS_DEBUG_MODE_OPEN.get()){
+        if (ConfigRegistry.IS_DEBUG_MODE.get()){
             this.drawString(mc.fontRenderer, String.valueOf(waterExhaustionLevel), OffsetX, OffsetY - 10, 16777215);
         }
 

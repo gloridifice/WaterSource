@@ -22,6 +22,7 @@ import net.minecraft.util.math.RayTraceContext;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextFormatting;
+import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import net.minecraftforge.fluids.FluidStack;
@@ -165,8 +166,10 @@ public class WaterBagItem extends ItemFluidContainer {
         super.addInformation(stack, worldIn, tooltip, flagIn);
         if (stack.getChildTag(FLUID_NBT_KEY) != null)
         {
-            FluidUtil.getFluidHandler(stack).ifPresent(f ->
-                    tooltip.add(f.getFluidInTank(0).getDisplayName().appendText(String.format(": %d / %dmB", f.getFluidInTank(0).getAmount(), capacity)).applyTextStyle(TextFormatting.GRAY)));
+            FluidUtil.getFluidHandler(stack).ifPresent(f ->{
+                tooltip.add(f.getFluidInTank(0).getDisplayName().appendText(String.format(": %d / %dmB", f.getFluidInTank(0).getAmount(), capacity)).applyTextStyle(TextFormatting.GRAY));
+                tooltip.add(new TranslationTextComponent("tooltip.watersource.drink_unit").appendText(" : "+ this.getUnit() + "mB").applyTextStyle(TextFormatting.GRAY));
+            });
         }
     }
 }

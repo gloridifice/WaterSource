@@ -5,6 +5,9 @@ import gloridifice.watersource.common.item.WoodenCupItem;
 import gloridifice.watersource.common.item.WaterBagItem;
 import gloridifice.watersource.common.item.WaterBottleItem;
 import gloridifice.watersource.common.item.SoulWaterBottleItem;
+import net.minecraft.block.Block;
+import net.minecraft.block.material.Material;
+import net.minecraft.item.BlockItem;
 import net.minecraft.item.BucketItem;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -42,9 +45,4 @@ public class ItemRegistry extends RegistryModule {
     public static RegistryObject<Item> itemCoconutJuiceBucket = FLUID_ITEMS.register("coconut_juice_bucket", () -> {
         return new BucketItem(FluidRegistry.coconutJuiceFluid, new Item.Properties().group(GroupRegistry.waterSourceGroup));
     });
-    public ItemRegistry() {
-        super();
-        ItemRegistry.FLUID_ITEMS.register(FMLJavaModLoadingContext.get().getModEventBus());
-    }
-
 }

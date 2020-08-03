@@ -71,7 +71,9 @@ repositories {
         name = "blamejared"
         url = "http://maven.blamejared.com/"
     }
-
+    maven {
+        url = "https://www.cursemaven.com"
+    }
     flatDir {
         dirs 'libs'
     }
@@ -82,10 +84,11 @@ dependencies {
 
     compile fg.deobf("mezz.jei:jei-${minecraft_version}:${jei_version}")
 
-    //compile fg.deobf("vazkii.autoreglib:AutoRegLib:${arl_version}")
-    //compile fg.deobf("vazkii.quark:Quark:${quark_version}")
+    compile fg.deobf("curse.maven:vanillafoodpantry-mod:2941086")
 
     compile files("libs/After the Drizzle-${atd_version}-${minecraft_version}-deobf.jar")
+    compile files("libs/AutoRegLib-1.5-41.80-deobf.jar")
+
 }
 
 jar {

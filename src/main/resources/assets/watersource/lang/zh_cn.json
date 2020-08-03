@@ -10,7 +10,7 @@
   "block.watersource.soul_strainer": "灵魂沙滤层",
   "block.watersource.dirty_strainer": "脏旧的滤层",
   "block.watersource.wooden_water_filter": "木制滤水器",
-  "block.watersource.coconut_tree_head": "椰子树头部",
+  "block.watersource.coconut_tree_head": "椰子树冠",
   "block.watersource.coconut_tree_log": "椰子木",
   "block.watersource.coconut": "椰子",
   "block.watersource.coconut_sapling": "椰子树苗",
@@ -30,5 +30,7 @@
   "watersource.test": "这个物品还在测试",
   "fluid.watersource.coconut_juice_fluid":"椰汁",
   "fluid.watersource.soul_water_fluid":"灵魂水",
-  "fluid.watersource.purified_water_fluid":"净化水"
+  "fluid.watersource.purified_water_fluid":"净化水",
+
+  "tooltip.watersource.drink_unit": "单次饮用量"
 }

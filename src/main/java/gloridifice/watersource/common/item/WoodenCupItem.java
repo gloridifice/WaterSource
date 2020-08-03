@@ -22,6 +22,7 @@ import net.minecraft.util.math.RayTraceContext;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextFormatting;
+import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import net.minecraftforge.fluids.FluidStack;
@@ -70,7 +71,7 @@ public class WoodenCupItem extends ItemFluidContainer {
     public boolean canDrink(PlayerEntity playerIn,ItemStack stack){
         canDrink = false;
         stack.getCapability(CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY).ifPresent(data -> {
-            canDrink = !data.getFluidInTank(0).isEmpty() && data.getFluidInTank(0).getAmount() < 250;
+            canDrink = !data.getFluidInTank(0).isEmpty() && data.getFluidInTank(0).getAmount() == 250;
         });
         playerIn.getCapability(WaterLevelCapability.PLAYER_WATER_LEVEL).ifPresent(data -> {
             canDrink = canDrink  && data.getWaterLevel() < 20;
@@ -96,7 +97,6 @@ public class WoodenCupItem extends ItemFluidContainer {
                     playerIn.setActiveHand(handIn);
                     return canDrink(playerIn,playerIn.getHeldItem(handIn)) ? ActionResult.resultSuccess(playerIn.getHeldItem(handIn)) : ActionResult.resultPass(playerIn.getHeldItem(handIn));
                 }
-
                 if (worldIn.getFluidState(blockpos).isTagged(FluidTags.WATER)) {
                     itemstack.getCapability(CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY).ifPresent(data ->{
                         if (data.getFluidInTank(0).isEmpty() || data.getFluidInTank(0).getFluid() == Fluids.WATER){
@@ -168,8 +168,10 @@ public class WoodenCupItem extends ItemFluidContainer {
         super.addInformation(stack, worldIn, tooltip, flagIn);
         if (stack.getChildTag(FLUID_NBT_KEY) != null)
         {
-            FluidUtil.getFluidHandler(stack).ifPresent(f ->
-                    tooltip.add(f.getFluidInTank(0).getDisplayName().appendText(String.format(": %d / %dmB", f.getFluidInTank(0).getAmount(), capacity)).applyTextStyle(TextFormatting.GRAY)));
+            FluidUtil.getFluidHandler(stack).ifPresent(f ->{
+                tooltip.add(f.getFluidInTank(0).getDisplayName().appendText(String.format(": %d / %dmB", f.getFluidInTank(0).getAmount(), capacity)).applyTextStyle(TextFormatting.GRAY));
+                tooltip.add(new TranslationTextComponent("tooltip.watersource.drink_unit").appendText(" : 250mB").applyTextStyle(TextFormatting.GRAY));
+            });
         }
     }
 

@@ -5,23 +5,13 @@ import gloridifice.watersource.common.capability.PlayerLastPosCapability;
 import gloridifice.watersource.common.capability.WaterLevelCapability;
 import gloridifice.watersource.common.network.PlayerWaterLevelMessage;
 import gloridifice.watersource.common.network.SimpleNetworkHandler;
-import gloridifice.watersource.common.recipe.ThirstItemRecipe;
-import gloridifice.watersource.common.recipe.ThirstItemRecipeManager;
-import gloridifice.watersource.common.recipe.WaterLevelItemRecipe;
-import gloridifice.watersource.common.recipe.WaterLevelRecipeManager;
+import gloridifice.watersource.common.recipe.*;
 import gloridifice.watersource.registry.EffectRegistry;
-import gloridifice.watersource.registry.ItemRegistry;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.Blocks;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.fluid.FluidState;
-import net.minecraft.fluid.Fluids;
-import net.minecraft.item.ItemStack;
 import net.minecraft.potion.EffectInstance;
-import net.minecraft.util.Hand;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.Difficulty;
 import net.minecraft.world.World;
@@ -33,20 +23,17 @@ import net.minecraftforge.event.entity.EntityJoinWorldEvent;
 import net.minecraftforge.event.entity.living.LivingEntityUseItemEvent;
 import net.minecraftforge.event.entity.living.LivingEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
-import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.event.world.BlockEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
-import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.fml.ModList;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.network.PacketDistributor;
-import org.lwjgl.system.CallbackI;
 import roito.afterthedrizzle.common.capability.CapabilityPlayerTemperature;
 import roito.afterthedrizzle.common.environment.temperature.ApparentTemperature;
 
 import java.util.Random;
+
+import static gloridifice.watersource.registry.ConfigRegistry.RESET_WATER_LEVEL_IN_DEATH;
 
 @Mod.EventBusSubscriber(modid = WaterSource.MODID)
 public class CommonEventHandler {
@@ -56,9 +43,10 @@ public class CommonEventHandler {
     public static void addCap(AttachCapabilitiesEvent<Entity> event) {
         if (event.getObject() instanceof PlayerEntity && !(event.getObject() instanceof FakePlayer)) {
             event.addCapability(new ResourceLocation(WaterSource.MODID, "player_thirst_level"), new WaterLevelCapability.Provider());
-            event.addCapability(new ResourceLocation(WaterSource.MODID,"player_last_position"), new PlayerLastPosCapability.Provider());
+            event.addCapability(new ResourceLocation(WaterSource.MODID, "player_last_position"), new PlayerLastPosCapability.Provider());
         }
     }
+
     @SubscribeEvent
     public static void onLivingEntityUseItemEventFinish(LivingEntityUseItemEvent.Finish event) {
         LivingEntity entity = event.getEntityLiving();
@@ -71,10 +59,10 @@ public class CommonEventHandler {
                     data.addWaterSaturationLevel(wRecipe.getWaterSaturationLevel());
                 });
             }
-            ThirstItemRecipe tRecipe = ThirstItemRecipeManager.getRecipeFromItemStick(event.getItem());
-            if (tRecipe != null){
-                if (rand.nextInt(100) < tRecipe.getProbability()){
-                    entity.addPotionEffect(new EffectInstance(EffectRegistry.THIRST,tRecipe.getDuration(),tRecipe.getAmplifier()));
+            IThirstRecipe tRecipe = ThirstRecipeManager.getRecipeFromItemStick(event.getItem());
+            if (tRecipe != null) {
+                if (rand.nextInt(100) < tRecipe.getProbability()) {
+                    entity.addPotionEffect(new EffectInstance(EffectRegistry.THIRST, tRecipe.getDuration(), tRecipe.getAmplifier()));
                 }
             }
         }
@@ -84,11 +72,11 @@ public class CommonEventHandler {
     public static void onJump(LivingEvent.LivingJumpEvent event) {
         Entity entity = event.getEntityLiving();
         if (entity instanceof PlayerEntity) {
-            if (WaterLevelCapability.canPlayerAddWaterExhaustionLevel((PlayerEntity)entity)){
+            if (WaterLevelCapability.canPlayerAddWaterExhaustionLevel((PlayerEntity) entity)) {
                 entity.getCapability(WaterLevelCapability.PLAYER_WATER_LEVEL).ifPresent(data -> {
-                    if (entity.isSprinting()){
-                        data.addExhaustion((PlayerEntity) entity,0.24f);
-                    }else data.addExhaustion((PlayerEntity) entity,0.14f);
+                    if (entity.isSprinting()) {
+                        data.addExhaustion((PlayerEntity) entity, 0.24f);
+                    } else data.addExhaustion((PlayerEntity) entity, 0.14f);
                 });
             }
         }
@@ -96,42 +84,46 @@ public class CommonEventHandler {
 
     @SubscribeEvent
     public static void onPlayerEventClone(PlayerEvent.Clone event) {
-        if (!(event.getPlayer() instanceof FakePlayer) && event.getPlayer() instanceof ServerPlayerEntity && !event.isWasDeath()) {//TODO 配置文件：玩家死亡后是否保存恢复水分值，默认否
-            if (event.getPlayer().getCapability(WaterLevelCapability.PLAYER_WATER_LEVEL) != null) {
-                event.getPlayer().getCapability(WaterLevelCapability.PLAYER_WATER_LEVEL).ifPresent(date -> {
-                    event.getOriginal().getCapability(WaterLevelCapability.PLAYER_WATER_LEVEL).ifPresent(t -> {
-                        date.setWaterLevel(t.getWaterLevel());
-                        date.setWaterExhaustionLevel(t.getWaterExhaustionLevel());
-                        date.setWaterSaturationLevel(t.getWaterSaturationLevel());
-                    });
+        boolean flag = false;
+        flag = !(event.getPlayer() instanceof FakePlayer) && event.getPlayer() instanceof ServerPlayerEntity;
+        //TODO 配置文件：玩家死亡后是否保存恢复水分值，默认是
+        if (RESET_WATER_LEVEL_IN_DEATH.get()) {
+            flag = flag && !event.isWasDeath();
+        }
+        if (flag && event.getPlayer().getCapability(WaterLevelCapability.PLAYER_WATER_LEVEL) != null) {
+            event.getPlayer().getCapability(WaterLevelCapability.PLAYER_WATER_LEVEL).ifPresent(date -> {
+                event.getOriginal().getCapability(WaterLevelCapability.PLAYER_WATER_LEVEL).ifPresent(t -> {
+                    date.setWaterLevel(t.getWaterLevel());
+                    date.setWaterExhaustionLevel(t.getWaterExhaustionLevel());
+                    date.setWaterSaturationLevel(t.getWaterSaturationLevel());
                 });
-                event.getPlayer().getCapability(WaterLevelCapability.PLAYER_WATER_LEVEL).ifPresent(t -> SimpleNetworkHandler.CHANNEL.send(PacketDistributor.PLAYER.with(() -> (ServerPlayerEntity) event.getPlayer()), new PlayerWaterLevelMessage(t.getWaterLevel(), t.getWaterSaturationLevel(),t.getWaterExhaustionLevel())));
-            }
-        }
-    }
-    @SubscribeEvent
-    public static void onPlayerLoggedInEvent(PlayerEvent.PlayerLoggedInEvent event){
-        if (event.getPlayer() instanceof ServerPlayerEntity && !(event.getPlayer() instanceof FakePlayer))
-        {
-            event.getPlayer().getCapability(WaterLevelCapability.PLAYER_WATER_LEVEL).ifPresent(t -> SimpleNetworkHandler.CHANNEL.send(PacketDistributor.PLAYER.with(() -> (ServerPlayerEntity) event.getPlayer()), new PlayerWaterLevelMessage(t.getWaterLevel(), t.getWaterSaturationLevel(),t.getWaterExhaustionLevel())));
-        }
-    }
-    @SubscribeEvent
-    public static void EntityJoinWorldEvent(EntityJoinWorldEvent event){
-        if (event.getEntity() instanceof ServerPlayerEntity && !(event.getEntity() instanceof FakePlayer))
-        {
-            event.getEntity().getCapability(WaterLevelCapability.PLAYER_WATER_LEVEL).ifPresent(t -> SimpleNetworkHandler.CHANNEL.send(PacketDistributor.PLAYER.with(() -> (ServerPlayerEntity) event.getEntity()), new PlayerWaterLevelMessage(t.getWaterLevel(), t.getWaterSaturationLevel(),t.getWaterExhaustionLevel())));
+            });
+            event.getPlayer().getCapability(WaterLevelCapability.PLAYER_WATER_LEVEL).ifPresent(t -> SimpleNetworkHandler.CHANNEL.send(PacketDistributor.PLAYER.with(() -> (ServerPlayerEntity) event.getPlayer()), new PlayerWaterLevelMessage(t.getWaterLevel(), t.getWaterSaturationLevel(), t.getWaterExhaustionLevel())));
         }
     }
 
     @SubscribeEvent
-    public static void onPlayerTickEvent(TickEvent.PlayerTickEvent event){
-        tick ++;
+    public static void onPlayerLoggedInEvent(PlayerEvent.PlayerLoggedInEvent event) {
+        if (event.getPlayer() instanceof ServerPlayerEntity && !(event.getPlayer() instanceof FakePlayer)) {
+            event.getPlayer().getCapability(WaterLevelCapability.PLAYER_WATER_LEVEL).ifPresent(t -> SimpleNetworkHandler.CHANNEL.send(PacketDistributor.PLAYER.with(() -> (ServerPlayerEntity) event.getPlayer()), new PlayerWaterLevelMessage(t.getWaterLevel(), t.getWaterSaturationLevel(), t.getWaterExhaustionLevel())));
+        }
+    }
+
+    @SubscribeEvent
+    public static void EntityJoinWorldEvent(EntityJoinWorldEvent event) {
+        if (event.getEntity() instanceof ServerPlayerEntity && !(event.getEntity() instanceof FakePlayer)) {
+            event.getEntity().getCapability(WaterLevelCapability.PLAYER_WATER_LEVEL).ifPresent(t -> SimpleNetworkHandler.CHANNEL.send(PacketDistributor.PLAYER.with(() -> (ServerPlayerEntity) event.getEntity()), new PlayerWaterLevelMessage(t.getWaterLevel(), t.getWaterSaturationLevel(), t.getWaterExhaustionLevel())));
+        }
+    }
+
+    @SubscribeEvent
+    public static void onPlayerTickEvent(TickEvent.PlayerTickEvent event) {
+        tick++;
         tick %= 8000;
         PlayerEntity player = event.player;
         World world = player.getEntityWorld();
-        if (player != null && WaterLevelCapability.canPlayerAddWaterExhaustionLevel(player)){
-            if (tick % 2 == 0){
+        if (player != null && WaterLevelCapability.canPlayerAddWaterExhaustionLevel(player)) {
+            if (tick % 2 == 0) {
                 player.getCapability(PlayerLastPosCapability.PLAYER_LAST_POSITION).ifPresent(data -> {
                     boolean lastOnGround = data.isLastOnGround();
                     double lastX = data.getLastX();
@@ -141,9 +133,9 @@ public class CommonEventHandler {
                         double x = Math.sqrt(Math.pow(lastX - player.getPosX(), 2) + Math.pow(lastY - player.getPosY(), 2) + Math.pow(lastZ - player.getPosZ(), 2));
                         if (x < 5) {
                             player.getCapability(WaterLevelCapability.PLAYER_WATER_LEVEL).ifPresent(dataW -> {
-                                if (player.isSprinting()){
+                                if (player.isSprinting()) {
                                     dataW.addExhaustion(player, (float) (x / 15));
-                                }else dataW.addExhaustion(player, (float) (x / 30));
+                                } else dataW.addExhaustion(player, (float) (x / 30));
                             });
                         }
                     }
@@ -153,26 +145,26 @@ public class CommonEventHandler {
                         data.setLastY(player.getPosY());
                         data.setLastZ(player.getPosZ());
                         data.setLastOnGround(true);
-                    }else data.setLastOnGround(false);
+                    } else data.setLastOnGround(false);
                 });
             }
 
-            if(tick % 10 == 0){
+            if (tick % 10 == 0) {
                 //Natural State
-                if (ModList.get().isLoaded("afterthedrizzle") && player.getCapability(CapabilityPlayerTemperature.PLAYER_TEMP) != null){
+                if (ModList.get().isLoaded("afterthedrizzle") && player.getCapability(CapabilityPlayerTemperature.PLAYER_TEMP) != null) {
                     player.getCapability(CapabilityPlayerTemperature.PLAYER_TEMP).ifPresent(d -> {
-                        if (d.getApparentTemperature() == ApparentTemperature.HOT){
+                        if (d.getApparentTemperature() == ApparentTemperature.HOT) {
                             player.getCapability(WaterLevelCapability.PLAYER_WATER_LEVEL).ifPresent(data -> {
                                 data.addExhaustion(player, 0.0075f);
                             });
                         }
-                        if (d.getApparentTemperature() == ApparentTemperature.HOT){
+                        if (d.getApparentTemperature() == ApparentTemperature.HOT) {
                             player.getCapability(WaterLevelCapability.PLAYER_WATER_LEVEL).ifPresent(data -> {
                                 data.addExhaustion(player, 0.0135f);
                             });
                         }
                     });
-                }else {
+                } else {
                     Biome biome = world.getBiome(player.getPosition());
                     if (world.getLight(player.getPosition()) == 15 && world.getDayTime() < 11000 && world.getDayTime() > 450 && !world.isRainingAt(player.getPosition())) {
                         if (biome.getDefaultTemperature() > 0.3) {
@@ -189,39 +181,40 @@ public class CommonEventHandler {
                 }
                 //Thirty State
                 EffectInstance effectInstance = player.getActivePotionEffect(EffectRegistry.THIRST);
-                if (effectInstance != null){
+                if (effectInstance != null) {
                     player.getCapability(WaterLevelCapability.PLAYER_WATER_LEVEL).ifPresent(data -> {
-                        data.addExhaustion(player,0.1f + 0.05f * effectInstance.getAmplifier());
+                        data.addExhaustion(player, 0.1f + 0.05f * effectInstance.getAmplifier());
                     });
                 }
             }
         }
         //Punishment
-        if (tick % 600 == 0 && player != null && !(player instanceof FakePlayer)){
+        if (tick % 600 == 0 && player != null && !(player instanceof FakePlayer)) {
             player.getCapability(WaterLevelCapability.PLAYER_WATER_LEVEL).ifPresent(data -> {
                 data.punishment(player);
             });
         }
         //Restore water level in Peaceful difficulty mode
-        if (tick % 150 == 0 && player != null && !(player instanceof FakePlayer)){
-            if (world.getDifficulty() == Difficulty.PEACEFUL){
+        if (tick % 150 == 0 && player != null && !(player instanceof FakePlayer)) {
+            if (world.getDifficulty() == Difficulty.PEACEFUL) {
                 player.getCapability(WaterLevelCapability.PLAYER_WATER_LEVEL).ifPresent(data -> {
                     data.restoreWaterLevel(2);
                 });
             }
         }
         //Update water between common and client - 30s
-        if (tick % 1500 == 0 && player != null && !(player instanceof FakePlayer) && !world.isRemote){
+        if (tick % 1500 == 0 && player != null && !(player instanceof FakePlayer) && !world.isRemote) {
             player.getCapability(WaterLevelCapability.PLAYER_WATER_LEVEL).ifPresent(data -> {
-                SimpleNetworkHandler.CHANNEL.send(PacketDistributor.PLAYER.with(() -> (ServerPlayerEntity) player), new PlayerWaterLevelMessage(data.getWaterLevel(), data.getWaterSaturationLevel(),data.getWaterExhaustionLevel()));
+                SimpleNetworkHandler.CHANNEL.send(PacketDistributor.PLAYER.with(() -> (ServerPlayerEntity) player), new PlayerWaterLevelMessage(data.getWaterLevel(), data.getWaterSaturationLevel(), data.getWaterExhaustionLevel()));
             });
         }
     }
+
     @SubscribeEvent
-    public static void onBlockBreakEvent(BlockEvent.BreakEvent event){
+    public static void onBlockBreakEvent(BlockEvent.BreakEvent event) {
         PlayerEntity player = event.getPlayer();
-        if (WaterLevelCapability.canPlayerAddWaterExhaustionLevel(player)){
-            player.getCapability(WaterLevelCapability.PLAYER_WATER_LEVEL).ifPresent(data -> data.addExhaustion(player,0.005f));
+        if (WaterLevelCapability.canPlayerAddWaterExhaustionLevel(player)) {
+            player.getCapability(WaterLevelCapability.PLAYER_WATER_LEVEL).ifPresent(data -> data.addExhaustion(player, 0.005f));
         }
     }
 }
