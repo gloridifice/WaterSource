@@ -2,7 +2,6 @@ package gloridifice.watersource.common.recipe.type;
 
 import gloridifice.watersource.common.data.tag.ModTags;
 import gloridifice.watersource.common.item.StrainerBlockItem;
-import gloridifice.watersource.common.item.WoodenCupItem;
 import gloridifice.watersource.helper.FluidHelper;
 import gloridifice.watersource.registry.FluidRegistry;
 import gloridifice.watersource.registry.ItemRegistry;
@@ -27,8 +26,8 @@ public class PurifiedWaterCupRecipe extends SpecialRecipe {
     protected Tag<Block> strainerTag;
     public PurifiedWaterCupRecipe(ResourceLocation idIn) {
         super(idIn);
-        this.fluid = FluidRegistry.purifiedWaterFluid.get();
-        this.strainerTag = ModTags.Block.PURIFICATION_STRAINER;
+        this.fluid = FluidRegistry.PURIFIED_WATER.get();
+        this.strainerTag = ModTags.Block.PURIFICATION_STRAINERS;
     }
 
     @Override

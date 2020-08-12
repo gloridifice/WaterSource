@@ -22,7 +22,7 @@ import java.util.Random;
 import java.util.Set;
 
 public class CoconutTree extends Tree {
-    public static final TreeFeatureConfig COCONUT_TREE_CONFIG = (new TreeFeatureConfig.Builder(new SimpleBlockStateProvider(BlockRegistry.blockCoconutTreeLog.getDefaultState()), new SimpleBlockStateProvider(BlockRegistry.blockCoconutTreeLeaf.getDefaultState()), new BlobFoliagePlacer(2, 0))).baseHeight(4).heightRandA(2).foliageHeight(3).ignoreVines().setSapling((net.minecraftforge.common.IPlantable) BlockRegistry.blockCoconutSapling).build();
+    public static final TreeFeatureConfig COCONUT_TREE_CONFIG = (new TreeFeatureConfig.Builder(new SimpleBlockStateProvider(BlockRegistry.BLOCK_COCONUT_TREE_LOG.getDefaultState()), new SimpleBlockStateProvider(BlockRegistry.BLOCK_COCONUT_TREE_LEAF.getDefaultState()), new BlobFoliagePlacer(2, 0))).baseHeight(4).heightRandA(2).foliageHeight(3).ignoreVines().setSapling((net.minecraftforge.common.IPlantable) BlockRegistry.BLOCK_COCONUT_SAPLING).build();
 
     @Nullable
     @Override

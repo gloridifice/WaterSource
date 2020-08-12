@@ -1,0 +1,7 @@
+{
+    "replace": false,
+    "values": [
+        "#watersource:purification_strainers",
+        "#watersource:soul_strainers"
+    ]
+}

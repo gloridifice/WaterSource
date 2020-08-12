@@ -5,15 +5,10 @@ import gloridifice.watersource.common.block.NaturalCoconutBlock;
 import gloridifice.watersource.common.data.tag.ModTags;
 import gloridifice.watersource.registry.BlockRegistry;
 import net.minecraft.block.BlockState;
-import net.minecraft.block.Blocks;
 import net.minecraft.block.LeavesBlock;
-import net.minecraft.dispenser.Position;
 import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MutableBoundingBox;
-import net.minecraft.world.IWorld;
-import net.minecraft.world.gen.ChunkGenerator;
-import net.minecraft.world.gen.GenerationSettings;
 import net.minecraft.world.gen.IWorldGenerationBaseReader;
 import net.minecraft.world.gen.IWorldGenerationReader;
 import net.minecraft.world.gen.feature.*;
@@ -40,10 +35,10 @@ public class CoconutTreeFeature extends AbstractTreeFeature<TreeFeatureConfig> {
             for (int i = 0; i < height/2; i++){
                 pos = positionIn.up(height/2 +i).offset(Direction.byIndex(a + 2));
                 if (i == height/2 - 1){
-                    setBlockState(generationReader, pos, BlockRegistry.blockCoconutTreeHead.getDefaultState());
+                    setBlockState(generationReader, pos, BlockRegistry.BLOCK_COCONUT_TREE_HEAD.getDefaultState());
                     for (int n = 2; n <= 5; n++){
                         if (rand.nextInt(4) == 0){
-                            placeLeaves(generationReader, pos.offset(Direction.byIndex(n)), BlockRegistry.blockNaturalCoconut.getDefaultState().with(NaturalCoconutBlock.AGE,3).with(NaturalCoconutBlock.HORIZONTAL_FACING, Direction.byIndex(n).getOpposite()));
+                            placeLeaves(generationReader, pos.offset(Direction.byIndex(n)), BlockRegistry.BLOCK_NATURAL_COCONUT.getDefaultState().with(NaturalCoconutBlock.AGE,3).with(NaturalCoconutBlock.HORIZONTAL_FACING, Direction.byIndex(n).getOpposite()));
                         }
                     }
                 }else setBlockState(generationReader, pos, configIn.trunkProvider.getBlockState(rand,pos));

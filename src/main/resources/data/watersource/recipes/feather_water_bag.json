@@ -1,0 +1,23 @@
+{
+    "type": "minecraft:crafting_shaped",
+    "group": "watersource",
+    "pattern": [
+        "yoy",
+        "x x",
+		"xxx"
+    ],
+    "key": {
+        "x": {
+            "tag": "forge:feathers"
+        },
+	    "o": {
+            "tag": "forge:ingots/iron"
+        },
+	    "y": {
+			"item": "minecraft:tripwire"
+        }
+    },
+    "result": {
+        "item": "watersource:feather_water_bag"
+    }
+}

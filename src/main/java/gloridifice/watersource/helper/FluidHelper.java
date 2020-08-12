@@ -3,6 +3,7 @@ package gloridifice.watersource.helper;
 
 import net.minecraft.fluid.Fluid;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.Items;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidUtil;
@@ -19,15 +20,16 @@ public class FluidHelper {
         return itemStack1;
     }
     public static ItemStack fillContainer(ItemStack itemStack, Fluid fluid) {
-        ItemStack itemStack1 = itemStack.copy();
-        if (!itemStack1.isEmpty() && itemStack1 != null && FluidUtil.getFluidHandler(itemStack1) != null){
+        if (fluid != null && !itemStack.isEmpty() && CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY != null && FluidUtil.getFluidHandler(itemStack) != null){
+            ItemStack itemStack1 = itemStack.copy();
             FluidUtil.getFluidHandler(itemStack1).ifPresent(data -> {
                 CompoundNBT fluidTag = new CompoundNBT();
                 new FluidStack(fluid, data.getTankCapacity(0)).writeToNBT(fluidTag);
                 itemStack1.getOrCreateTag().put(FLUID_NBT_KEY, fluidTag);
             });
+            return itemStack1;
         }
-        return itemStack1;
+        return itemStack;
     }
     public static boolean isItemStackFluidEqual(ItemStack stack1,ItemStack stack2){
         if (!stack1.isEmpty() && FluidUtil.getFluidHandler(stack1) != null && !stack2.isEmpty() && FluidUtil.getFluidHandler(stack2) != null){

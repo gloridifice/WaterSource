@@ -1,0 +1,17 @@
+{
+    "type": "minecraft:crafting_shaped",
+    "group": "watersource",
+    "pattern": [
+        "x x",
+        "x x",
+		" x "
+    ],
+    "key": {
+        "x": {
+            "tag": "minecraft:planks"
+        }
+    },
+    "result": {
+        "item": "watersource:wooden_cup"
+    }
+}

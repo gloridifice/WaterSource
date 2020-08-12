@@ -11,11 +11,8 @@ import net.minecraft.fluid.Fluid;
 import net.minecraft.fluid.Fluids;
 import net.minecraft.inventory.CraftingInventory;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
 import net.minecraft.item.crafting.IRecipeSerializer;
 import net.minecraft.item.crafting.SpecialRecipe;
-import net.minecraft.potion.PotionUtils;
-import net.minecraft.potion.Potions;
 import net.minecraft.tags.Tag;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.ResourceLocation;
@@ -23,7 +20,6 @@ import net.minecraft.world.World;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidUtil;
 import net.minecraftforge.fluids.capability.IFluidHandler;
-import org.lwjgl.system.CallbackI;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -33,8 +29,8 @@ public class PurifiedWaterBagRecipe extends SpecialRecipe {
     protected Tag<Block> strainerTag;
     public PurifiedWaterBagRecipe(ResourceLocation idIn) {
         super(idIn);
-        this.fluid = FluidRegistry.purifiedWaterFluid.get();
-        this.strainerTag = ModTags.Block.PURIFICATION_STRAINER;
+        this.fluid = FluidRegistry.PURIFIED_WATER.get();
+        this.strainerTag = ModTags.Block.PURIFICATION_STRAINERS;
     }
 
     @Override
@@ -50,7 +46,7 @@ public class PurifiedWaterBagRecipe extends SpecialRecipe {
                 strainer = itemstack.copy();
                 hasStrainer = true;
             }
-            if (itemstack.getItem() == ItemRegistry.itemFeatherWaterBag && FluidHelper.isItemStackFluidEqual(itemstack, FluidHelper.fillContainer(new ItemStack(ItemRegistry.itemWoodenCupDrink), Fluids.WATER))) {
+            if (itemstack.getItem() == ItemRegistry.itemLeatherWaterBag && FluidHelper.isItemStackFluidEqual(itemstack, FluidHelper.fillContainer(new ItemStack(ItemRegistry.itemWoodenCupDrink), Fluids.WATER))) {
                 list.add(itemstack);
                 potion = FluidUtil.getFluidHandler(itemstack).map(date -> date.getFluidInTank(0).getAmount()).orElse(0);
                 hasPotion = true;
@@ -63,7 +59,7 @@ public class PurifiedWaterBagRecipe extends SpecialRecipe {
     public ItemStack getCraftingResult(CraftingInventory inv) {
         for (int j = 0; j < inv.getSizeInventory(); ++j) {
             ItemStack itemstack = inv.getStackInSlot(j);
-            if (itemstack.getItem() == ItemRegistry.itemFeatherWaterBag && FluidHelper.isItemStackFluidEqual(itemstack, FluidHelper.fillContainer(new ItemStack(ItemRegistry.itemWoodenCupDrink), Fluids.WATER))) {
+            if (itemstack.getItem() == ItemRegistry.itemLeatherWaterBag && FluidHelper.isItemStackFluidEqual(itemstack, FluidHelper.fillContainer(new ItemStack(ItemRegistry.itemWoodenCupDrink), Fluids.WATER))) {
                 ItemStack i = itemstack.copy();
                 FluidUtil.getFluidHandler(i).ifPresent(data -> {
                     int n = data.getFluidInTank(0).getAmount();
@@ -82,7 +78,7 @@ public class PurifiedWaterBagRecipe extends SpecialRecipe {
         int n = 0;
         for (int j = 0; j < inv.getSizeInventory(); ++j) {
             ItemStack itemstack = inv.getStackInSlot(j);
-            if (itemstack.getItem() == ItemRegistry.itemFeatherWaterBag && FluidHelper.isItemStackFluidEqual(itemstack, FluidHelper.fillContainer(new ItemStack(ItemRegistry.itemWoodenCupDrink), Fluids.WATER))) {
+            if (itemstack.getItem() == ItemRegistry.itemLeatherWaterBag && FluidHelper.isItemStackFluidEqual(itemstack, FluidHelper.fillContainer(new ItemStack(ItemRegistry.itemWoodenCupDrink), Fluids.WATER))) {
                 ItemStack u = itemstack.copy();
                 n = FluidUtil.getFluidHandler(u).map(data -> data.getFluidInTank(0).getAmount()).orElse(0);
             }
@@ -109,6 +105,6 @@ public class PurifiedWaterBagRecipe extends SpecialRecipe {
 
     @Override
     public ItemStack getRecipeOutput() {
-        return FluidHelper.fillContainer(new ItemStack(ItemRegistry.itemFeatherWaterBag), this.fluid);
+        return FluidHelper.fillContainer(new ItemStack(ItemRegistry.itemLeatherWaterBag), this.fluid);
     }
 }

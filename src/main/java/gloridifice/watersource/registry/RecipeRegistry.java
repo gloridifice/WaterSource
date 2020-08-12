@@ -1,14 +1,17 @@
 package gloridifice.watersource.registry;
 
+//import enemeez.simplefarming.init.ModItems;
 import gloridifice.watersource.common.item.StrainerBlockItem;
 import gloridifice.watersource.common.recipe.*;
 import gloridifice.watersource.helper.FluidHelper;
 import net.minecraft.fluid.Fluids;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.potion.PotionUtils;
 import net.minecraft.potion.Potions;
 import net.minecraftforge.fml.ModList;
+//import org.jwaresoftware.mcmods.vfp.common.VfpObj;
 import roito.afterthedrizzle.common.item.ItemsRegistry;
 
 public class RecipeRegistry {
@@ -23,13 +26,14 @@ public class RecipeRegistry {
         WaterLevelRecipeManager.add(new ItemStack(ItemRegistry.itemPurifiedWaterBottle), 6, 8);
         WaterLevelRecipeManager.add(new ItemStack(ItemRegistry.itemCoconutJuiceBottle), 5, 7);
         WaterLevelRecipeManager.add(new WaterLevelFluidRecipe(FluidHelper.fillContainer(new ItemStack(ItemRegistry.itemWoodenCupDrink), Fluids.WATER),4,2));
-        WaterLevelRecipeManager.add(new WaterLevelFluidRecipe(FluidHelper.fillContainer(new ItemStack(ItemRegistry.itemWoodenCupDrink), FluidRegistry.purifiedWaterFluid.get()),6,8));
-        WaterLevelRecipeManager.add(new WaterLevelFluidRecipe(FluidHelper.fillContainer(new ItemStack(ItemRegistry.itemWoodenCupDrink), FluidRegistry.soulWaterFluid.get()),4,4));
-        WaterLevelRecipeManager.add(new WaterLevelFluidRecipe(FluidHelper.fillContainer(new ItemStack(ItemRegistry.itemWoodenCupDrink), FluidRegistry.coconutJuiceFluid.get()),5,7));
-        WaterLevelRecipeManager.add(new WaterLevelFluidRecipe(FluidHelper.fillContainer(new ItemStack(ItemRegistry.itemFeatherWaterBag), Fluids.WATER),4,2));
-        WaterLevelRecipeManager.add(new WaterLevelFluidRecipe(FluidHelper.fillContainer(new ItemStack(ItemRegistry.itemFeatherWaterBag), FluidRegistry.purifiedWaterFluid.get()),6,8));
-        WaterLevelRecipeManager.add(new WaterLevelFluidRecipe(FluidHelper.fillContainer(new ItemStack(ItemRegistry.itemFeatherWaterBag), FluidRegistry.soulWaterFluid.get()),4,4));
-        WaterLevelRecipeManager.add(new WaterLevelFluidRecipe(FluidHelper.fillContainer(new ItemStack(ItemRegistry.itemFeatherWaterBag), FluidRegistry.coconutJuiceFluid.get()),5,7));
+        WaterLevelRecipeManager.add(new WaterLevelFluidRecipe(FluidHelper.fillContainer(new ItemStack(ItemRegistry.itemWoodenCupDrink), FluidRegistry.PURIFIED_WATER.get()),6,8));
+        WaterLevelRecipeManager.add(new WaterLevelFluidRecipe(FluidHelper.fillContainer(new ItemStack(ItemRegistry.itemWoodenCupDrink), FluidRegistry.SOUL_WATER.get()),4,4));
+        WaterLevelRecipeManager.add(new WaterLevelFluidRecipe(FluidHelper.fillContainer(new ItemStack(ItemRegistry.itemWoodenCupDrink), FluidRegistry.COCONUT_MILK.get()),5,7));
+        WaterLevelRecipeManager.add(new WaterLevelFluidRecipe(FluidHelper.fillContainer(new ItemStack(ItemRegistry.itemLeatherWaterBag), Fluids.WATER),4,2));
+        WaterLevelRecipeManager.add(new WaterLevelFluidRecipe(FluidHelper.fillContainer(new ItemStack(ItemRegistry.itemLeatherWaterBag), FluidRegistry.PURIFIED_WATER.get()),6,8));
+        WaterLevelRecipeManager.add(new WaterLevelFluidRecipe(FluidHelper.fillContainer(new ItemStack(ItemRegistry.itemLeatherWaterBag), FluidRegistry.SOUL_WATER.get()),4,4));
+        WaterLevelRecipeManager.add(new WaterLevelFluidRecipe(FluidHelper.fillContainer(new ItemStack(ItemRegistry.itemLeatherWaterBag), FluidRegistry.COCONUT_MILK.get()),5,7));
+        WaterLevelRecipeManager.add(new ItemStack(ItemRegistry.itemCoconutPiece),2,3);
 
         WaterLevelRecipeManager.add(new ItemStack(Items.APPLE), 2, 1);
         WaterLevelRecipeManager.add(new ItemStack(Items.SWEET_BERRIES), 1, 1);
@@ -45,19 +49,43 @@ public class RecipeRegistry {
             WaterLevelRecipeManager.add(new ItemStack(ItemsRegistry.PORCELAIN_CUP_DRINK), 4, 3);
             WaterLevelRecipeManager.add(new ItemStack(ItemsRegistry.BOTTLE_DRINK), 7, 6);
         }
+        if (ModList.get().isLoaded("simplefarming")) {
+/*            WaterLevelRecipeManager.add(new ItemStack(ModItems.pear), 2, 1);
+            WaterLevelRecipeManager.add(new ItemStack(ModItems.grapes), 2, 1);
+            WaterLevelRecipeManager.add(new ItemStack(ModItems.strawberries), 2, 1);
+            WaterLevelRecipeManager.add(new ItemStack(ModItems.tiswin), 2, 1);
+            WaterLevelRecipeManager.add(new ItemStack(ModItems.tomato), 2, 0);
+            WaterLevelRecipeManager.add(new ItemStack(ModItems.blueberries), 2, 0);
+            WaterLevelRecipeManager.add(new ItemStack(ModItems.raspberries), 2, 0);
+            WaterLevelRecipeManager.add(new ItemStack(ModItems.vodka), 1, 0);
+            WaterLevelRecipeManager.add(new ItemStack(ModItems.cherries), 1, 1);
+            WaterLevelRecipeManager.add(new ItemStack(ModItems.sake), 1, 0);
+            WaterLevelRecipeManager.add(new ItemStack(ModItems.wine), 1, 0);
+            WaterLevelRecipeManager.add(new ItemStack(ModItems.cauim), 1, 0);
+            WaterLevelRecipeManager.add(new ItemStack(ModItems.whiskey), 1, 0);
+            WaterLevelRecipeManager.add(new ItemStack(ModItems.beer), 1, 0);
+            WaterLevelRecipeManager.add(new ItemStack(ModItems.cider), 1, 0);*/
+        }
+        if (ModList.get().isLoaded("vanillafoodpantry")){
+/*            WaterLevelRecipeManager.add(new ItemStack(VfpObj.Mixed_Berries_obj),4,3);
+            WaterLevelRecipeManager.add(new ItemStack(VfpObj.Tonic_Drink_obj),2,2);
+            WaterLevelRecipeManager.add(new ItemStack(VfpObj.Jungle_JuJu_Juice_obj),2,2);
+            WaterLevelRecipeManager.add(new WaterLevelFluidRecipe(VfpObj.Water_Bottle_obj,2,2));*/
+
+        }
     }
 
     public static void addThirstItem() {
         ThirstRecipeManager.add(new ThirstNbtRecipe(PotionUtils.addPotionToItemStack(new ItemStack(Items.POTION), Potions.WATER), 2000, 0, 75));
         ThirstRecipeManager.add(new ThirstFluidRecipe(FluidHelper.fillContainer(new ItemStack(ItemRegistry.itemWoodenCupDrink), Fluids.WATER), 2000,0,75));
-        ThirstRecipeManager.add(new ThirstFluidRecipe(FluidHelper.fillContainer(new ItemStack(ItemRegistry.itemFeatherWaterBag), Fluids.WATER), 2000,0,75));
+        ThirstRecipeManager.add(new ThirstFluidRecipe(FluidHelper.fillContainer(new ItemStack(ItemRegistry.itemLeatherWaterBag), Fluids.WATER), 2000,0,75));
     }
 
     public static void addWaterFilterRecipes() {
-        WaterFilterRecipeManager.add((StrainerBlockItem) BlockRegistry.itemPrimitiveStrainer, Fluids.WATER, FluidRegistry.purifiedWaterFluid.get());
-        WaterFilterRecipeManager.add((StrainerBlockItem) BlockRegistry.itemSoulStrainer, Fluids.WATER, FluidRegistry.soulWaterFluid.get());
-        WaterFilterRecipeManager.add((StrainerBlockItem) BlockRegistry.itemPaperStrainer, Fluids.WATER, FluidRegistry.purifiedWaterFluid.get());
-        WaterFilterRecipeManager.add((StrainerBlockItem) BlockRegistry.itemPaperSoulStrainer, Fluids.WATER, FluidRegistry.soulWaterFluid.get());
+        WaterFilterRecipeManager.add((StrainerBlockItem) BlockRegistry.ITEM_PRIMITIVE_STRAINER, Fluids.WATER, FluidRegistry.PURIFIED_WATER.get());
+        WaterFilterRecipeManager.add((StrainerBlockItem) BlockRegistry.ITEM_SOUL_STRAINER, Fluids.WATER, FluidRegistry.SOUL_WATER.get());
+        WaterFilterRecipeManager.add((StrainerBlockItem) BlockRegistry.ITEM_PAPER_STRAINER, Fluids.WATER, FluidRegistry.PURIFIED_WATER.get());
+        WaterFilterRecipeManager.add((StrainerBlockItem) BlockRegistry.ITEM_PAPER_SOUL_STRAINER, Fluids.WATER, FluidRegistry.SOUL_WATER.get());
         /*        for (Item item : ModTags.Item.SOUL_STRAINER.getAllElements()){
             WaterFilterRecipeManager.add(item, Fluids.WATER, FluidRegistry.purifiedWaterFluid.get());
         }*/

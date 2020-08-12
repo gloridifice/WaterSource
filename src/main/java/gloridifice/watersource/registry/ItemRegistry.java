@@ -1,20 +1,11 @@
 package gloridifice.watersource.registry;
 
 import gloridifice.watersource.WaterSource;
-import gloridifice.watersource.common.item.WoodenCupItem;
-import gloridifice.watersource.common.item.WaterBagItem;
-import gloridifice.watersource.common.item.WaterBottleItem;
-import gloridifice.watersource.common.item.SoulWaterBottleItem;
-import net.minecraft.block.Block;
-import net.minecraft.block.material.Material;
-import net.minecraft.item.BlockItem;
-import net.minecraft.item.BucketItem;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
+import gloridifice.watersource.common.item.*;
+import net.minecraft.item.*;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import net.minecraftforge.fml.RegistryObject;
-import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 
@@ -25,7 +16,7 @@ public class ItemRegistry extends RegistryModule {
     public static final DeferredRegister<Item> FLUID_ITEMS = new DeferredRegister<>(ForgeRegistries.ITEMS, WaterSource.MODID);
 
     public final static Item itemPurifiedWaterBottle = new WaterBottleItem("purified_water_bottle");
-    public final static Item itemCoconutJuiceBottle = new WaterBottleItem("coconut_juice_bottle");
+    public final static Item itemCoconutJuiceBottle = new WaterBottleItem("coconut_milk_bottle");
     public final static Item itemSoulWaterBottle = new SoulWaterBottleItem("soul_water_bottle");
     public final static Item itemWoodenCup = new WoodenCupItem("wooden_cup",new Item.Properties().group(null), 250) {
         @Override
@@ -33,16 +24,18 @@ public class ItemRegistry extends RegistryModule {
             return super.initCapabilities(new ItemStack(itemWoodenCupDrink), nbt);
         }
     };
+    public final static Item itemHalfCoconut = new ModNormalItem("half_coconut");
+    public final static Item itemCoconutPiece = new ModFoodItem("coconut_piece",new Food.Builder().hunger(2).fastToEat().saturation(3).build());
     public final static Item itemWoodenCupDrink = new WoodenCupItem("wooden_cup_drink",new Item.Properties().maxStackSize(1).group(GroupRegistry.waterSourceGroup), 250);
-    public final static Item itemFeatherWaterBag = new WaterBagItem("leather_water_bag",1500,250);
+    public final static Item itemLeatherWaterBag = new WaterBagItem("leather_water_bag",1500,250);
     //Fluids
     public static RegistryObject<Item> itemPurifiedWaterBucket = FLUID_ITEMS.register("purified_water_bucket", () -> {
-        return new BucketItem(FluidRegistry.purifiedWaterFluid, new Item.Properties().group(GroupRegistry.waterSourceGroup));
+        return new BucketItem(FluidRegistry.PURIFIED_WATER, new Item.Properties().group(GroupRegistry.waterSourceGroup));
     });
     public static RegistryObject<Item> itemSoulWaterBucket = FLUID_ITEMS.register("soul_water_bucket", () -> {
-        return new BucketItem(FluidRegistry.soulWaterFluid, new Item.Properties().group(GroupRegistry.waterSourceGroup));
+        return new BucketItem(FluidRegistry.SOUL_WATER, new Item.Properties().group(GroupRegistry.waterSourceGroup));
     });
-    public static RegistryObject<Item> itemCoconutJuiceBucket = FLUID_ITEMS.register("coconut_juice_bucket", () -> {
-        return new BucketItem(FluidRegistry.coconutJuiceFluid, new Item.Properties().group(GroupRegistry.waterSourceGroup));
+    public static RegistryObject<Item> ITEM_COCONUT_MILK_BUCKET = FLUID_ITEMS.register("coconut_milk_bucket", () -> {
+        return new BucketItem(FluidRegistry.COCONUT_MILK, new Item.Properties().group(GroupRegistry.waterSourceGroup));
     });
 }

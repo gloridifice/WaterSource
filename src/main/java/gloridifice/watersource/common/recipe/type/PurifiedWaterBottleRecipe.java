@@ -2,7 +2,6 @@ package gloridifice.watersource.common.recipe.type;
 
 import gloridifice.watersource.common.data.tag.ModTags;
 import gloridifice.watersource.common.item.StrainerBlockItem;
-import gloridifice.watersource.registry.BlockRegistry;
 import gloridifice.watersource.registry.ItemRegistry;
 import gloridifice.watersource.registry.RecipeSerializersRegistry;
 import net.minecraft.block.Block;
@@ -10,7 +9,6 @@ import net.minecraft.inventory.CraftingInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.item.crafting.IRecipeSerializer;
-import net.minecraft.item.crafting.Ingredient;
 
 import net.minecraft.item.crafting.SpecialRecipe;
 import net.minecraft.potion.PotionUtils;
@@ -34,7 +32,7 @@ public class PurifiedWaterBottleRecipe extends SpecialRecipe {
         boolean hasStrainer = false,hasPotion = false;
         for(int j = 0; j < inv.getSizeInventory(); ++j) {
             ItemStack itemstack = inv.getStackInSlot(j);
-            if (ModTags.Block.PURIFICATION_STRAINER.contains(Block.getBlockFromItem(itemstack.getItem()))){
+            if (ModTags.Block.PURIFICATION_STRAINERS.contains(Block.getBlockFromItem(itemstack.getItem()))){
                 list.add(itemstack);
                 hasStrainer = true;
             }
@@ -62,7 +60,7 @@ public class PurifiedWaterBottleRecipe extends SpecialRecipe {
         NonNullList<ItemStack> nonnulllist = NonNullList.withSize(inv.getSizeInventory(), ItemStack.EMPTY);
         for(int j = 0; j < inv.getSizeInventory(); ++j) {
             ItemStack itemstack = inv.getStackInSlot(j);
-            if (ModTags.Block.PURIFICATION_STRAINER.contains(Block.getBlockFromItem(itemstack.getItem()))){
+            if (ModTags.Block.PURIFICATION_STRAINERS.contains(Block.getBlockFromItem(itemstack.getItem()))){
                 ItemStack i = StrainerBlockItem.damageItem(itemstack.copy(),1);
                 nonnulllist.set(j,i);
             }

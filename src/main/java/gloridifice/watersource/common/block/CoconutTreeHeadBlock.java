@@ -23,7 +23,7 @@ public class CoconutTreeHeadBlock extends Block implements IGrowable {
 
     @Override
     public boolean canGrow(IBlockReader worldIn, BlockPos pos, BlockState state, boolean isClient) {
-        if (ModTags.Block.COCONUT_LOG.contains(worldIn.getBlockState(pos.down()).getBlock())) {
+        if (ModTags.Block.COCONUT_LOGS.contains(worldIn.getBlockState(pos.down()).getBlock())) {
             return true;
         }
         return false;
@@ -38,16 +38,16 @@ public class CoconutTreeHeadBlock extends Block implements IGrowable {
     public void grow(ServerWorld worldIn, Random rand, BlockPos pos, BlockState state) {
         int a = rand.nextInt(4);
         if (worldIn.isAirBlock(pos.west()) && a == 0) {
-            worldIn.setBlockState(pos.west(), BlockRegistry.blockNaturalCoconut.getDefaultState().with(NaturalCoconutBlock.AGE, 0).with(NaturalCoconutBlock.HORIZONTAL_FACING, Direction.EAST));
+            worldIn.setBlockState(pos.west(), BlockRegistry.BLOCK_NATURAL_COCONUT.getDefaultState().with(NaturalCoconutBlock.AGE, 0).with(NaturalCoconutBlock.HORIZONTAL_FACING, Direction.EAST));
         }
         if (worldIn.isAirBlock(pos.east()) && a == 1) {
-            worldIn.setBlockState(pos.east(), BlockRegistry.blockNaturalCoconut.getDefaultState().with(NaturalCoconutBlock.AGE, 0).with(NaturalCoconutBlock.HORIZONTAL_FACING, Direction.WEST));
+            worldIn.setBlockState(pos.east(), BlockRegistry.BLOCK_NATURAL_COCONUT.getDefaultState().with(NaturalCoconutBlock.AGE, 0).with(NaturalCoconutBlock.HORIZONTAL_FACING, Direction.WEST));
         }
         if (worldIn.isAirBlock(pos.south()) && a == 2) {
-            worldIn.setBlockState(pos.south(), BlockRegistry.blockNaturalCoconut.getDefaultState().with(NaturalCoconutBlock.AGE, 0).with(NaturalCoconutBlock.HORIZONTAL_FACING, Direction.NORTH));
+            worldIn.setBlockState(pos.south(), BlockRegistry.BLOCK_NATURAL_COCONUT.getDefaultState().with(NaturalCoconutBlock.AGE, 0).with(NaturalCoconutBlock.HORIZONTAL_FACING, Direction.NORTH));
         }
         if (worldIn.isAirBlock(pos.north()) && a == 3) {
-            worldIn.setBlockState(pos.north(), BlockRegistry.blockNaturalCoconut.getDefaultState().with(NaturalCoconutBlock.AGE, 0).with(NaturalCoconutBlock.HORIZONTAL_FACING, Direction.SOUTH));
+            worldIn.setBlockState(pos.north(), BlockRegistry.BLOCK_NATURAL_COCONUT.getDefaultState().with(NaturalCoconutBlock.AGE, 0).with(NaturalCoconutBlock.HORIZONTAL_FACING, Direction.SOUTH));
         }
     }
 

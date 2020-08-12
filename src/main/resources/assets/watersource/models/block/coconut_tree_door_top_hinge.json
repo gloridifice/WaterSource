@@ -1,0 +1,7 @@
+{
+    "parent": "block/door_top_rh",
+    "textures": {
+        "bottom": "watersource:block/coconut_tree_door_bottom",
+        "top": "watersource:block/coconut_tree_door_top"
+    }
+}

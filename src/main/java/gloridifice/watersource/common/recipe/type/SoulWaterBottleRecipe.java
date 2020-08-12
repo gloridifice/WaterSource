@@ -30,7 +30,7 @@ public class SoulWaterBottleRecipe extends SpecialRecipe {
         boolean hasStrainer = false,hasPotion = false;
         for(int j = 0; j < inv.getSizeInventory(); ++j) {
             ItemStack itemstack = inv.getStackInSlot(j);
-            if (ModTags.Block.SOUL_STRAINER.contains(Block.getBlockFromItem(itemstack.getItem()))){
+            if (ModTags.Block.SOUL_STRAINERS.contains(Block.getBlockFromItem(itemstack.getItem()))){
                 list.add(itemstack);
                 hasStrainer = true;
             }
@@ -51,7 +51,7 @@ public class SoulWaterBottleRecipe extends SpecialRecipe {
         NonNullList<ItemStack> nonnulllist = NonNullList.withSize(inv.getSizeInventory(), ItemStack.EMPTY);
         for(int j = 0; j < inv.getSizeInventory(); ++j) {
             ItemStack itemstack = inv.getStackInSlot(j);
-            if (ModTags.Block.SOUL_STRAINER.contains(Block.getBlockFromItem(itemstack.getItem()))){
+            if (ModTags.Block.SOUL_STRAINERS.contains(Block.getBlockFromItem(itemstack.getItem()))){
                 ItemStack i = StrainerBlockItem.damageItem(itemstack.copy(),1);
                 nonnulllist.set(j,i);
             }

@@ -9,8 +9,8 @@ import net.minecraft.util.ResourceLocation;
 public class SoulWaterCupRecipe extends PurifiedWaterCupRecipe{
     public SoulWaterCupRecipe(ResourceLocation idIn) {
         super(idIn);
-        this.fluid = FluidRegistry.soulWaterFluid.get();
-        this.strainerTag = ModTags.Block.SOUL_STRAINER;
+        this.fluid = FluidRegistry.SOUL_WATER.get();
+        this.strainerTag = ModTags.Block.SOUL_STRAINERS;
     }
     @Override
     public IRecipeSerializer<?> getSerializer() {

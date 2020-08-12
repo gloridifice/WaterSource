@@ -6,11 +6,16 @@ import gloridifice.watersource.common.capability.WaterLevelCapability;
 import gloridifice.watersource.common.network.PlayerWaterLevelMessage;
 import gloridifice.watersource.common.network.SimpleNetworkHandler;
 import gloridifice.watersource.common.recipe.*;
+import gloridifice.watersource.registry.BlockRegistry;
 import gloridifice.watersource.registry.EffectRegistry;
+import net.minecraft.block.BlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
+import net.minecraft.item.AxeItem;
+import net.minecraft.item.ItemStack;
+import net.minecraft.item.ToolItem;
 import net.minecraft.potion.EffectInstance;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.Difficulty;
@@ -23,6 +28,7 @@ import net.minecraftforge.event.entity.EntityJoinWorldEvent;
 import net.minecraftforge.event.entity.living.LivingEntityUseItemEvent;
 import net.minecraftforge.event.entity.living.LivingEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
+import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.event.world.BlockEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.ModList;
@@ -215,6 +221,15 @@ public class CommonEventHandler {
         PlayerEntity player = event.getPlayer();
         if (WaterLevelCapability.canPlayerAddWaterExhaustionLevel(player)) {
             player.getCapability(WaterLevelCapability.PLAYER_WATER_LEVEL).ifPresent(data -> data.addExhaustion(player, 0.005f));
+        }
+    }
+    @SubscribeEvent
+    public static void onPlayerRightClickBlock(PlayerInteractEvent.RightClickBlock event){
+        BlockState state = event.getWorld().getBlockState(event.getPos());
+        ItemStack heldItem = event.getItemStack();
+        if (heldItem.getItem() instanceof AxeItem && state.getBlock() == BlockRegistry.BLOCK_COCONUT_TREE_LOG){
+            event.getWorld().setBlockState(event.getPos(),BlockRegistry.BLOCK_STRIPPED_COCONUT_TREE_LOG.getDefaultState());
+            heldItem.damageItem(1, event.getPlayer(), (data) -> {data.sendBreakAnimation(event.getHand());});
         }
     }
 }

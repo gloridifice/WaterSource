@@ -12,7 +12,6 @@ import net.minecraft.block.Blocks;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.BlockItemUseContext;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.state.BooleanProperty;
@@ -168,12 +167,12 @@ public class WaterFilterBlock extends Block {
                             });
                     if (heldItem.getItem() == Items.GLASS_BOTTLE) {
                         FluidStack downFluidStack = fluidTankDown.getFluid();
-                        if (!downFluidStack.isEmpty() && downFluidStack.getFluid() == FluidRegistry.purifiedWaterFluid.get()) {
+                        if (!downFluidStack.isEmpty() && downFluidStack.getFluid() == FluidRegistry.PURIFIED_WATER.get()) {
 //                            填装水瓶
                             ItemStack itemStack = ItemStack.EMPTY;
-                            if (downFluidStack.getFluid() == FluidRegistry.purifiedWaterFluid.get()) {
+                            if (downFluidStack.getFluid() == FluidRegistry.PURIFIED_WATER.get()) {
                                 itemStack = new ItemStack(ItemRegistry.itemPurifiedWaterBottle);
-                            } else if (downFluidStack.getFluid() == FluidRegistry.soulWaterFluid.get()) {
+                            } else if (downFluidStack.getFluid() == FluidRegistry.SOUL_WATER.get()) {
                                 itemStack = new ItemStack(ItemRegistry.itemSoulWaterBottle);
                             }
                             if (!itemStack.isEmpty() && downFluidStack.getAmount() >= 250) {

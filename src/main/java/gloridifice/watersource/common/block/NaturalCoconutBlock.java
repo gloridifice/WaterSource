@@ -1,12 +1,9 @@
 package gloridifice.watersource.common.block;
 
 import gloridifice.watersource.registry.BlockRegistry;
-import gloridifice.watersource.registry.ItemRegistry;
 import net.minecraft.block.*;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.state.BooleanProperty;
 import net.minecraft.state.IntegerProperty;
 import net.minecraft.state.StateContainer;
 import net.minecraft.util.ActionResultType;
@@ -16,9 +13,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockRayTraceResult;
 import net.minecraft.util.math.shapes.ISelectionContext;
 import net.minecraft.util.math.shapes.VoxelShape;
-import net.minecraft.util.math.shapes.VoxelShapes;
 import net.minecraft.world.IBlockReader;
-import net.minecraft.world.IWorldReader;
 import net.minecraft.world.World;
 import net.minecraft.world.server.ServerWorld;
 import net.minecraft.world.storage.loot.LootContext;
@@ -50,7 +45,7 @@ public class NaturalCoconutBlock extends HorizontalBlock implements IGrowable {
     @Override
     public ActionResultType onBlockActivated(BlockState state, World worldIn, BlockPos pos, PlayerEntity player, Hand handIn, BlockRayTraceResult hit) {
         if (state.get(AGE) == 3) {
-            ItemStack itemStack = new ItemStack(BlockRegistry.itemCoconut, 3);
+            ItemStack itemStack = new ItemStack(BlockRegistry.ITEM_COCONUT, 3);
             worldIn.setBlockState(pos, state.with(AGE, 0));
             if (!player.inventory.addItemStackToInventory(itemStack)) {
                 player.dropItem(itemStack, false);
@@ -61,7 +56,7 @@ public class NaturalCoconutBlock extends HorizontalBlock implements IGrowable {
 
     @Override
     public void neighborChanged(BlockState state, World worldIn, BlockPos pos, Block blockIn, BlockPos fromPos, boolean isMoving) {
-        if (pos.offset(state.get(HORIZONTAL_FACING)) == fromPos && !worldIn.getBlockState(fromPos).isAir())
+        if (pos.offset(state.get(HORIZONTAL_FACING)) == fromPos && worldIn.getBlockState(fromPos).isAir())
         {
             spawnDrops(state,worldIn,pos);
             worldIn.setBlockState(pos, Blocks.AIR.getDefaultState());
@@ -72,7 +67,7 @@ public class NaturalCoconutBlock extends HorizontalBlock implements IGrowable {
     public List<ItemStack> getDrops(BlockState state, LootContext.Builder builder) {
         List<ItemStack> list = new ArrayList<>();
         if (state.get(AGE) == 3) {
-            list.add(new ItemStack(BlockRegistry.itemCoconut, 3));
+            list.add(new ItemStack(BlockRegistry.ITEM_COCONUT, 3));
         }
         return list;
     }

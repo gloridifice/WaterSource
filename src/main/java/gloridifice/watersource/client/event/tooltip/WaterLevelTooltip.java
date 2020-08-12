@@ -11,6 +11,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.potion.EffectInstance;
 import net.minecraft.potion.Effects;
 import net.minecraft.potion.PotionUtils;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraftforge.api.distmarker.Dist;
@@ -121,7 +122,7 @@ public class WaterLevelTooltip {
                 i++;
             }
             //for Quark
-            if (instance.getPotion().getEffect().getName() == "resilience"){
+            if (instance.getPotion().getEffect().getRegistryName().toString() == "quark:resilience"){
                 i++;
             }
         }
@@ -129,17 +130,5 @@ public class WaterLevelTooltip {
             i++;
         }
         return i;
-    }
-
-    public static int shiftTextByLines(List<String> lines, int y) {
-        for(int i = 1; i < lines.size(); i++) {
-            String s = lines.get(i);
-            s = TextFormatting.getTextWithoutFormattingCodes(s);
-            if(s != null && s.trim().isEmpty()) {
-                y += 10 * (i - 1) + 1;
-                break;
-            }
-        }
-        return y;
     }
 }

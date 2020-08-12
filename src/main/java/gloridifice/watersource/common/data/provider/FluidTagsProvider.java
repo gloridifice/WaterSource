@@ -9,6 +9,6 @@ public class FluidTagsProvider extends net.minecraft.data.FluidTagsProvider {
     }
     @Override
     protected void registerTags() {
-        getBuilder(ModTags.Fluid.COCONUT_LOG);
+        getBuilder(ModTags.Fluid.DRINKS);
     }
 }
