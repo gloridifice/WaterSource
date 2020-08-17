@@ -18,7 +18,7 @@ import net.minecraftforge.registries.ForgeRegistries;
 public class BlockRegistry extends RegistryModule{
     public static final DeferredRegister<Block> FLUID_BLOCKS = new DeferredRegister<>(ForgeRegistries.BLOCKS, WaterSource.MODID);
 
-    public final static Block BLOCK_WATER_FILTER = new WaterFilterBlock("wooden_water_filter", Block.Properties.create(Material.WOOD,MaterialColor.BROWN).sound(SoundType.WOOD).hardnessAndResistance(1.0F).harvestTool(ToolType.AXE));
+    public final static Block BLOCK_WATER_FILTER = new WaterFilterBlock("wooden_water_filter", Block.Properties.create(Material.WOOD,MaterialColor.BROWN).sound(SoundType.WOOD).hardnessAndResistance(1.0F).harvestTool(ToolType.AXE).notSolid());
     public final static Block BLOCK_COCONUT_TREE_LOG = new LogBlock(MaterialColor.WOOD, Block.Properties.create(Material.WOOD,MaterialColor.BROWN).sound(SoundType.WOOD).hardnessAndResistance(2.0F)).setRegistryName("coconut_tree_log");
     public final static Block BLOCK_COCONUT_TREE_HEAD = new CoconutTreeHeadBlock("coconut_tree_head",Block.Properties.create(Material.WOOD,MaterialColor.BROWN).sound(SoundType.WOOD).tickRandomly().harvestTool(ToolType.AXE).hardnessAndResistance(2.0F));
     public final static Block BLOCK_COCONUT_TREE_LEAF = new LeavesBlock(Block.Properties.create(Material.LEAVES).hardnessAndResistance(0.2F).tickRandomly().sound(SoundType.PLANT).notSolid()).setRegistryName("coconut_tree_leaf");

@@ -10,27 +10,27 @@ import net.minecraft.tileentity.TileEntity;
 import javax.annotation.Nullable;
 
 public class StrainerTile extends TileEntity {
-    int damage = 0;
+    CompoundNBT tag;
     public StrainerTile() { super(TileEntityTypesRegistry.STRAINER_TILE); }
 
     @Override
     public void read(CompoundNBT compound) {
         super.read(compound);
-        damage = compound.getInt("damage");
+        tag = compound.getCompound("tag");
     }
 
     @Override
     public CompoundNBT write(CompoundNBT compound) {
-        compound.put("damage", IntNBT.valueOf(damage));
+        compound.put("tag",tag);
         return super.write(compound);
     }
 
-    public void setDamage(int damage) {
-        this.damage = damage;
+    public void setTag(CompoundNBT tag) {
+        this.tag = tag;
     }
 
-    public int getDamage() {
-        return damage;
+    public CompoundNBT getTag() {
+        return tag;
     }
 
     public CompoundNBT getUpdateTag() {

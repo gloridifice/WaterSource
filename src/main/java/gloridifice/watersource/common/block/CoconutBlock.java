@@ -33,25 +33,17 @@ public class CoconutBlock extends Block implements IGrowable {
         this.setRegistryName(name);
         this.setDefaultState(this.getStateContainer().getBaseState().with(GROUND_TYPE, GroundType.ORDINARY));
     }
-
-    @Override
-    public ActionResultType onBlockActivated(BlockState state, World worldIn, BlockPos pos, PlayerEntity player, Hand handIn, BlockRayTraceResult hit) {
-        System.out.println(getLootTable());
-
-        spawnDrops(state,worldIn,pos);
-        return super.onBlockActivated(state, worldIn, pos, player, handIn, hit);
-    }
-
-
     @Nullable
     @Override
     public BlockState getStateForPlacement(BlockItemUseContext context) {
         GroundType type = GroundType.ORDINARY;
         Block block = context.getWorld().getBlockState(context.getPos().down()).getBlock();
-        if (Blocks.SAND == block) {
-            type = GroundType.SAND;
-        }else if (Blocks.RED_SAND == block){
-            type = GroundType.RED_SAND;
+        if (!context.getPlayer().isSneaking()){
+            if (Blocks.SAND == block) {
+                type = GroundType.SAND;
+            }else if (Blocks.RED_SAND == block){
+                type = GroundType.RED_SAND;
+            }
         }
         return getDefaultState().with(GROUND_TYPE, type);
     }
@@ -88,7 +80,7 @@ public class CoconutBlock extends Block implements IGrowable {
 
     @Override
     public boolean canGrow(IBlockReader worldIn, BlockPos pos, BlockState state, boolean isClient) {
-        return !(state.get(GROUND_TYPE) == GroundType.ORDINARY);
+        return state.get(GROUND_TYPE) != GroundType.ORDINARY;
     }
 
     @Override
@@ -98,7 +90,7 @@ public class CoconutBlock extends Block implements IGrowable {
 
     @Override
     public void grow(ServerWorld worldIn, Random rand, BlockPos pos, BlockState state) {
-        worldIn.setBlockState(pos, BlockRegistry.BLOCK_COCONUT_SAPLING.getDefaultState());
+        if (canGrow(worldIn,pos,state,false)) worldIn.setBlockState(pos, BlockRegistry.BLOCK_COCONUT_SAPLING.getDefaultState());
     }
 
     public void tick(BlockState state, ServerWorld worldIn, BlockPos pos, Random rand) {

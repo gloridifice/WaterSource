@@ -40,6 +40,8 @@
   "item.watersource.coconut_piece": "Coconut Piece",
 
   "watersource.test": "This item is still in Testing",
+  "watersource.misc.damage": "Damage",
+
   "fluid.watersource.coconut_milk":"Coconut Milk",
   "fluid.watersource.soul_water":"Soul Water",
   "fluid.watersource.purified_water":"Purified Water",

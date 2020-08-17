@@ -3,13 +3,17 @@ package gloridifice.watersource.common.block;
 import gloridifice.watersource.common.tile.StrainerTile;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
+import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.BlockItemUseContext;
 import net.minecraft.item.ItemStack;
 import net.minecraft.stats.Stats;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.ActionResultType;
+import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.BlockRayTraceResult;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.shapes.ISelectionContext;
 import net.minecraft.util.math.shapes.VoxelShape;
@@ -38,10 +42,16 @@ public class StrainerBlock extends Block {
             ItemStack itemStack = this.getItem(worldIn,pos,state);
             if (worldIn.getTileEntity(pos) instanceof StrainerTile){
                 StrainerTile tile = (StrainerTile) worldIn.getTileEntity(pos);
-                itemStack.setDamage(tile.getDamage());
+                itemStack.setTag(tile.getTag());
                 spawnAsEntity(worldIn,pos,itemStack);
             }
         }
+    }
+
+    @Override
+    public ActionResultType onBlockActivated(BlockState state, World worldIn, BlockPos pos, PlayerEntity player, Hand handIn, BlockRayTraceResult hit) {
+        //TODO
+        return super.onBlockActivated(state, worldIn, pos, player, handIn, hit);
     }
 
     @Override
@@ -70,7 +80,7 @@ public class StrainerBlock extends Block {
         super.onBlockPlacedBy(worldIn, pos, state, placer, stack);
         if (worldIn.getTileEntity(pos) instanceof StrainerTile){
             StrainerTile tile = (StrainerTile)worldIn.getTileEntity(pos);
-            tile.setDamage(stack.getDamage());
+            tile.setTag(stack.getTag());
         }
     }
 
@@ -79,7 +89,7 @@ public class StrainerBlock extends Block {
         ItemStack itemStack = getItem(world,pos,state).copy();
         if (world.getTileEntity(pos) instanceof StrainerTile){
             StrainerTile tile = (StrainerTile)world.getTileEntity(pos);
-            itemStack.setDamage(tile.getDamage());
+            itemStack.setTag(tile.getTag());
         }
         return itemStack;
     }

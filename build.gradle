@@ -105,7 +105,7 @@ dependencies {
 
 
     compile fg.deobf("mezz.jei:jei-${minecraft_version}:${jei_version}")
-
+    //compile fg.debof("vazkii.quark:Quark:r2.1-246.1182")
     //compile fg.deobf("curse.maven:simplefarming:3008632")
 /*    compile fg.deobf("libs:simplefarming-1.15.2-1.3.0.jar")
     compile fg.deobf("libs:Quark-r2.1-246.1182.jar")
@@ -114,7 +114,7 @@ dependencies {
 
     compile files("libs/After the Drizzle-${atd_version}-${minecraft_version}-deobf.jar")
     //compile files("libs/simplefarming-1.15.2-1.3.0-deobf.jar")
-    compile files("libs/AutoRegLib-1.5-41.80-deobf.jar")
+    //compile files("libs/AutoRegLib-1.5-41.80-deobf.jar")
 }
 
 

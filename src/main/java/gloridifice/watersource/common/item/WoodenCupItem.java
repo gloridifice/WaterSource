@@ -147,7 +147,7 @@ public class WoodenCupItem extends ItemFluidContainer {
             @SuppressWarnings("deprecation")
             public ItemStack getContainer()
             {
-                return getFluid().isEmpty() ? new ItemStack(WoodenCupItem.this.getContainerItem()) : this.container;
+                return getFluid().isEmpty() ? new ItemStack(ItemRegistry.itemWoodenCup) : this.container;
             }
 
             @Override

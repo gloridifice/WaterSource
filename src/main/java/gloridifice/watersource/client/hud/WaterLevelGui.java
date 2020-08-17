@@ -5,7 +5,6 @@ import gloridifice.watersource.WaterSource;
 import gloridifice.watersource.common.capability.WaterLevelCapability;
 import gloridifice.watersource.registry.ConfigRegistry;
 import gloridifice.watersource.registry.EffectRegistry;
-import gloridifice.watersource.registry.HUDRegistry;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.AbstractGui;
 import net.minecraft.potion.EffectInstance;
@@ -85,7 +84,7 @@ public class WaterLevelGui extends AbstractGui {
 
         RenderSystem.enableBlend();
         RenderSystem.disableAlphaTest();
-        mc.getTextureManager().bindTexture(HUDRegistry.DEFAULT);
+        mc.getTextureManager().bindTexture(HUDHandler.DEFAULT);
     }
 
     @SubscribeEvent

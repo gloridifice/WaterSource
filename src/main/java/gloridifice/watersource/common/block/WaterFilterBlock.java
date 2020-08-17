@@ -1,6 +1,8 @@
 package gloridifice.watersource.common.block;
 
 import gloridifice.watersource.common.item.StrainerBlockItem;
+import gloridifice.watersource.common.network.SimpleNetworkHandler;
+import gloridifice.watersource.common.network.WaterFilterMessage;
 import gloridifice.watersource.common.tile.WaterFilterDownTile;
 import gloridifice.watersource.common.tile.WaterFilterUpTile;
 import gloridifice.watersource.registry.FluidRegistry;
@@ -12,6 +14,7 @@ import net.minecraft.block.Blocks;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.BlockItemUseContext;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.state.BooleanProperty;
@@ -29,6 +32,7 @@ import net.minecraftforge.fluids.FluidActionResult;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidUtil;
 import net.minecraftforge.fluids.capability.IFluidHandler;
+import net.minecraftforge.fml.network.PacketDistributor;
 import net.minecraftforge.items.CapabilityItemHandler;
 
 import javax.annotation.Nullable;
@@ -69,6 +73,19 @@ public class WaterFilterBlock extends Block {
     @Override
     public void onBlockHarvested(World worldIn, BlockPos pos, BlockState state, PlayerEntity player) {
         super.onBlockHarvested(worldIn, pos, state, player);
+        TileEntity tile = worldIn.getTileEntity(pos);
+        if (tile instanceof WaterFilterUpTile){
+            ItemStack stack = tile.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY).map(data -> data.getStackInSlot(0)).orElse(ItemStack.EMPTY);
+            if (!stack.isEmpty()){
+                spawnAsEntity(worldIn,pos,stack);
+            }
+        }
+        if (tile instanceof WaterFilterDownTile){
+            ItemStack stack = worldIn.getTileEntity(pos.up()).getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY).map(data -> data.getStackInSlot(0)).orElse(ItemStack.EMPTY);
+            if (!stack.isEmpty()){
+                spawnAsEntity(worldIn,pos,stack);
+            }
+        }
         if (state.get(IS_UP)) {
             worldIn.setBlockState(pos.down(), Blocks.AIR.getDefaultState());
         } else worldIn.setBlockState(pos.up(), Blocks.AIR.getDefaultState());
@@ -102,100 +119,104 @@ public class WaterFilterBlock extends Block {
     public ActionResultType onBlockActivated(BlockState state, World worldIn, BlockPos pos, PlayerEntity player, Hand handIn, BlockRayTraceResult hit) {
         //if (!worldIn.isRemote()) {
         flag = false;
-        if (state.get(IS_UP)) {
-            WaterFilterUpTile tile = (WaterFilterUpTile) worldIn.getTileEntity(pos);
-            //WaterFilterDownTile downTile = (WaterFilterDownTile) worldIn.getTileEntity(pos.down());
-            tile.getUpTank().ifPresent(fluidTankUp -> {
-                tile.getStrainer().ifPresent(itemStackHandler -> {
-                    ItemStack itemStack = itemStackHandler.getStackInSlot(0);
-                    ItemStack heldItem = player.getHeldItem(handIn);
-                    if (!heldItem.isEmpty()) {
-                        //填装液体
-                        if (!itemStack.isEmpty()) {
-                            flag = FluidUtil.interactWithFluidHandler(player, handIn, fluidTankUp);
-                        }
-                    } else if (player.isSneaking()) {
-                        if (fluidTankUp.getFluid().isEmpty()) {
-                            //取出滤层
+        //if (!worldIn.isRemote()) {
+            if (state.get(IS_UP)) {
+                WaterFilterUpTile tile = (WaterFilterUpTile) worldIn.getTileEntity(pos);
+                //WaterFilterDownTile downTile = (WaterFilterDownTile) worldIn.getTileEntity(pos.down());
+                tile.getUpTank().ifPresent(fluidTankUp -> {
+                    tile.getStrainer().ifPresent(itemStackHandler -> {
+                        ItemStack itemStack = itemStackHandler.getStackInSlot(0);
+                        ItemStack heldItem = player.getHeldItem(handIn);
+                        if (!heldItem.isEmpty()) {
+                            //填装液体
                             if (!itemStack.isEmpty()) {
-                                if (!player.inventory.addItemStackToInventory(itemStack)) {
-                                    player.dropItem(itemStack, false);
-                                }
-                                itemStackHandler.setStackInSlot(0, ItemStack.EMPTY);
-                                flag = true;
+                                flag = FluidUtil.interactWithFluidHandler(player, handIn, fluidTankUp);
                             }
-                        } else {
-                            //清空液体
-                            fluidTankUp.setFluid(FluidStack.EMPTY);
-                            worldIn.playSound(pos.getX(), pos.getY(), pos.getZ(), SoundEvents.ENTITY_DROWNED_HURT_WATER, SoundCategory.BLOCKS, 0.3F, 1.0F, true);
-                            flag = true;
-                        }
-                    }
-
-                    if (!player.isSneaking() && !heldItem.isEmpty() && heldItem.getItem() instanceof StrainerBlockItem) {
-                        if (itemStack.isEmpty()) {
-                            //填装滤层
-                            itemStackHandler.insertItem(0, heldItem.copy(), false);
-                            if (!player.isCreative()) {
-                                ItemStack itemStack1 = heldItem.copy();
-                                itemStack1.setCount(heldItem.getCount() - 1);
-                                player.setHeldItem(handIn, itemStack1);
-                            }
-                            flag = true;
-                        } else {
-                            //替换滤层
-                            ItemStack heldItem1 = heldItem.copy();
-                            player.setHeldItem(handIn, itemStack);
-                            itemStackHandler.setStackInSlot(0, heldItem1);
-                            flag = true;
-                        }
-                    }
-                });
-            });
-        } else {
-            WaterFilterDownTile tile = (WaterFilterDownTile) worldIn.getTileEntity(pos);
-            tile.getDownTank().ifPresent(fluidTankDown -> {
-                ItemStack heldItem = player.getHeldItem(handIn);
-                if (!heldItem.isEmpty()) {
-                    player.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY)
-                            .ifPresent(playerInventory -> {
-                                FluidActionResult fluidActionResult = FluidUtil.tryFillContainerAndStow(heldItem, fluidTankDown, playerInventory, Integer.MAX_VALUE, player, true);
-                                if (fluidActionResult.isSuccess()) {
-                                    player.setHeldItem(handIn, fluidActionResult.getResult());
+                        } else if (player.isSneaking()) {
+                            if (fluidTankUp.getFluid().isEmpty()) {
+                                //取出滤层
+                                if (!itemStack.isEmpty()) {
+                                    if (!player.inventory.addItemStackToInventory(itemStack)) {
+                                        player.dropItem(itemStack, false);
+                                    }
+                                    itemStackHandler.setStackInSlot(0, ItemStack.EMPTY);
                                     flag = true;
                                 }
-                            });
-                    if (heldItem.getItem() == Items.GLASS_BOTTLE) {
-                        FluidStack downFluidStack = fluidTankDown.getFluid();
-                        if (!downFluidStack.isEmpty() && downFluidStack.getFluid() == FluidRegistry.PURIFIED_WATER.get()) {
-//                            填装水瓶
-                            ItemStack itemStack = ItemStack.EMPTY;
-                            if (downFluidStack.getFluid() == FluidRegistry.PURIFIED_WATER.get()) {
-                                itemStack = new ItemStack(ItemRegistry.itemPurifiedWaterBottle);
-                            } else if (downFluidStack.getFluid() == FluidRegistry.SOUL_WATER.get()) {
-                                itemStack = new ItemStack(ItemRegistry.itemSoulWaterBottle);
-                            }
-                            if (!itemStack.isEmpty() && downFluidStack.getAmount() >= 250) {
-                                flag = player.inventory.addItemStackToInventory(itemStack);
-                                if (!flag) {
-                                    player.dropItem(itemStack, false);
-                                }
-                                fluidTankDown.drain(250, IFluidHandler.FluidAction.EXECUTE);
-                                if (!player.isCreative()) {
-                                    heldItem.setCount(heldItem.getCount() - 1);
-                                }
-                                worldIn.playSound(pos.getX(), pos.getY(), pos.getZ(), SoundEvents.ITEM_BUCKET_EMPTY, SoundCategory.PLAYERS, 0.8F, 1.0F, true);
+                            } else {
+                                //清空液体
+                                fluidTankUp.setFluid(FluidStack.EMPTY);
+                                worldIn.playSound(pos.getX(), pos.getY(), pos.getZ(), SoundEvents.ENTITY_DROWNED_HURT_WATER, SoundCategory.BLOCKS, 0.3F, 1.0F, true);
+                                flag = true;
                             }
                         }
+
+                        if (!player.isSneaking() && !heldItem.isEmpty() && heldItem.getItem() instanceof StrainerBlockItem) {
+                            if (itemStack.isEmpty()) {
+                                //填装滤层
+                                itemStackHandler.insertItem(0, heldItem.copy(), false);
+                                if (!player.isCreative()) {
+                                    ItemStack itemStack1 = heldItem.copy();
+                                    itemStack1.setCount(heldItem.getCount() - 1);
+                                    player.setHeldItem(handIn, itemStack1);
+                                }
+                                flag = true;
+                            } else {
+                                //替换滤层
+                                ItemStack heldItem1 = heldItem.copy();
+                                player.setHeldItem(handIn, itemStack);
+                                itemStackHandler.setStackInSlot(0, heldItem1);
+                                flag = true;
+                            }
+                        }
+                        //SimpleNetworkHandler.CHANNEL.send(PacketDistributor.ALL.with(() -> null), new WaterFilterMessage(fluidTankUp.getFluid(), pos.getX(), pos.getY(), pos.getZ(),itemStackHandler.getStackInSlot(0)));
+                    });
+                });
+            } else {
+                WaterFilterDownTile tile = (WaterFilterDownTile) worldIn.getTileEntity(pos);
+                tile.getDownTank().ifPresent(fluidTankDown -> {
+                    ItemStack heldItem = player.getHeldItem(handIn);
+                    if (!heldItem.isEmpty()) {
+                        player.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY)
+                                .ifPresent(playerInventory -> {
+                                    FluidActionResult fluidActionResult = FluidUtil.tryFillContainerAndStow(heldItem, fluidTankDown, playerInventory, Integer.MAX_VALUE, player, true);
+                                    if (fluidActionResult.isSuccess()) {
+                                        player.setHeldItem(handIn, fluidActionResult.getResult());
+                                        flag = true;
+                                    }
+                                });
+                        if (heldItem.getItem() == Items.GLASS_BOTTLE) {
+                            FluidStack downFluidStack = fluidTankDown.getFluid();
+                            if (!downFluidStack.isEmpty() && downFluidStack.getFluid() == FluidRegistry.PURIFIED_WATER.get()) {
+//                            填装水瓶
+                                ItemStack itemStack = ItemStack.EMPTY;
+                                if (downFluidStack.getFluid() == FluidRegistry.PURIFIED_WATER.get()) {
+                                    itemStack = new ItemStack(ItemRegistry.itemPurifiedWaterBottle);
+                                } else if (downFluidStack.getFluid() == FluidRegistry.SOUL_WATER.get()) {
+                                    itemStack = new ItemStack(ItemRegistry.itemSoulWaterBottle);
+                                }
+                                if (!itemStack.isEmpty() && downFluidStack.getAmount() >= 250) {
+                                    flag = player.inventory.addItemStackToInventory(itemStack);
+                                    if (!flag) {
+                                        player.dropItem(itemStack, false);
+                                    }
+                                    fluidTankDown.drain(250, IFluidHandler.FluidAction.EXECUTE);
+                                    if (!player.isCreative()) {
+                                        heldItem.setCount(heldItem.getCount() - 1);
+                                    }
+                                    worldIn.playSound(pos.getX(), pos.getY(), pos.getZ(), SoundEvents.ITEM_BUCKET_EMPTY, SoundCategory.PLAYERS, 0.8F, 1.0F, true);
+                                }
+                            }
+                        }
+                    } else if (player.isSneaking() && !fluidTankDown.getFluid().isEmpty()) {
+                        //清空液体
+                        fluidTankDown.setFluid(FluidStack.EMPTY);
+                        worldIn.playSound(pos.getX(), pos.getY(), pos.getZ(), SoundEvents.ITEM_BUCKET_FILL, SoundCategory.PLAYERS, 0.6F, 1.0F, true);
+                        flag = true;
                     }
-                } else if (player.isSneaking() && !fluidTankDown.getFluid().isEmpty()) {
-                    //清空液体
-                    fluidTankDown.setFluid(FluidStack.EMPTY);
-                    worldIn.playSound(pos.getX(), pos.getY(), pos.getZ(), SoundEvents.ITEM_BUCKET_FILL, SoundCategory.PLAYERS, 0.6F, 1.0F, true);
-                    flag = true;
-                }
-            });
-        }
+                    //SimpleNetworkHandler.CHANNEL.send(PacketDistributor.ALL.with(() -> null), new WaterFilterMessage(fluidTankDown.getFluid(), pos.getX(), pos.getY(), pos.getZ(),ItemStack.EMPTY));
+                });
+            }
+        //}
         //}
         return ActionResultType.SUCCESS;
     }

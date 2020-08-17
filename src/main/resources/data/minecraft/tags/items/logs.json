@@ -2,6 +2,7 @@
   "replace": false,
   "values": [
     "watersource:coconut_tree_log",
-	 "watersource:coconut_tree_head"
+	 "watersource:coconut_tree_head",
+	 "watersource:stripped_coconut_tree_log"
   ]
 }

@@ -9,6 +9,8 @@ import gloridifice.watersource.common.recipe.*;
 import gloridifice.watersource.registry.BlockRegistry;
 import gloridifice.watersource.registry.EffectRegistry;
 import net.minecraft.block.BlockState;
+import net.minecraft.block.HorizontalBlock;
+import net.minecraft.block.RotatedPillarBlock;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
@@ -18,6 +20,8 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.ToolItem;
 import net.minecraft.potion.EffectInstance;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.SoundCategory;
+import net.minecraft.util.SoundEvents;
 import net.minecraft.world.Difficulty;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
@@ -92,7 +96,6 @@ public class CommonEventHandler {
     public static void onPlayerEventClone(PlayerEvent.Clone event) {
         boolean flag = false;
         flag = !(event.getPlayer() instanceof FakePlayer) && event.getPlayer() instanceof ServerPlayerEntity;
-        //TODO 配置文件：玩家死亡后是否保存恢复水分值，默认是
         if (RESET_WATER_LEVEL_IN_DEATH.get()) {
             flag = flag && !event.isWasDeath();
         }
@@ -227,9 +230,13 @@ public class CommonEventHandler {
     public static void onPlayerRightClickBlock(PlayerInteractEvent.RightClickBlock event){
         BlockState state = event.getWorld().getBlockState(event.getPos());
         ItemStack heldItem = event.getItemStack();
+        PlayerEntity player = event.getPlayer();
         if (heldItem.getItem() instanceof AxeItem && state.getBlock() == BlockRegistry.BLOCK_COCONUT_TREE_LOG){
-            event.getWorld().setBlockState(event.getPos(),BlockRegistry.BLOCK_STRIPPED_COCONUT_TREE_LOG.getDefaultState());
-            heldItem.damageItem(1, event.getPlayer(), (data) -> {data.sendBreakAnimation(event.getHand());});
+            event.getWorld().playSound(player,event.getPos(), SoundEvents.ITEM_AXE_STRIP, SoundCategory.BLOCKS, 1.0F, 1.0F);
+            if (!event.getWorld().isRemote()){
+                event.getWorld().setBlockState(event.getPos(),BlockRegistry.BLOCK_STRIPPED_COCONUT_TREE_LOG.getDefaultState().with(RotatedPillarBlock.AXIS,state.get(RotatedPillarBlock.AXIS)));
+                heldItem.damageItem(1, player, (data) -> {data.sendBreakAnimation(event.getHand());});
+            }
         }
     }
 }

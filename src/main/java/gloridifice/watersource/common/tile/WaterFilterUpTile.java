@@ -126,12 +126,11 @@ public class WaterFilterUpTile extends TileEntity implements ITickableTileEntity
                                         fluidTankUp.drain(10, IFluidHandler.FluidAction.EXECUTE);
                                     }
                                 });
-                            }
-
-                            if (processTicks % 1000 == 0) {
-                                //减少滤网耐久
-                                if (itemStack.isDamageable()) {
-                                    itemStackHandler.setStackInSlot(0, StrainerBlockItem.damageItem(itemStack,1));
+                                if (processTicks % 1000 == 0) {
+                                    //减少滤网耐久
+                                    if (itemStack.isDamageable()) {
+                                        itemStackHandler.setStackInSlot(0, StrainerBlockItem.damageItem(itemStack, 1));
+                                    }
                                 }
                             }
                         });
