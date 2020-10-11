@@ -1,2 +1,2 @@
 # WaterSource
-A minecraft adding a Thirst System to minecraft.
+A minecraft mod adding a Thirst System to minecraft.
