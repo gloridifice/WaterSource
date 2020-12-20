@@ -3,7 +3,6 @@ package gloridifice.watersource.client.render.tile;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.vertex.IVertexBuilder;
-import gloridifice.watersource.WaterSource;
 import gloridifice.watersource.common.item.StrainerBlockItem;
 import gloridifice.watersource.common.tile.WaterFilterUpTile;
 import net.minecraft.block.Block;
@@ -11,16 +10,11 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.BlockRendererDispatcher;
 import net.minecraft.client.renderer.IRenderTypeBuffer;
 import net.minecraft.client.renderer.RenderType;
-import net.minecraft.client.renderer.model.Material;
-import net.minecraft.client.renderer.model.ModelRenderer;
 import net.minecraft.client.renderer.texture.AtlasTexture;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.renderer.tileentity.TileEntityRenderer;
 import net.minecraft.client.renderer.tileentity.TileEntityRendererDispatcher;
-import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.client.event.TextureStitchEvent;
 import net.minecraftforge.client.model.data.EmptyModelData;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fluids.FluidStack;
 
 public class WaterFilterUpTER extends TileEntityRenderer<WaterFilterUpTile> {

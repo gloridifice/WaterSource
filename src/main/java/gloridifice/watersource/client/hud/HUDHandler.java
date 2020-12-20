@@ -3,7 +3,6 @@ package gloridifice.watersource.client.hud;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.systems.RenderSystem;
 import gloridifice.watersource.WaterSource;
-import gloridifice.watersource.client.hud.WaterLevelGui;
 import gloridifice.watersource.common.capability.WaterLevelCapability;
 import gloridifice.watersource.common.tile.WaterFilterDownTile;
 import gloridifice.watersource.common.tile.WaterFilterUpTile;
@@ -11,7 +10,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.player.ClientPlayerEntity;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.resources.I18n;
-import net.minecraft.entity.SharedMonsterAttributes;
+import net.minecraft.entity.ai.attributes.Attributes;
 import net.minecraft.item.ItemStack;
 import net.minecraft.profiler.IProfiler;
 import net.minecraft.tileentity.TileEntity;
@@ -23,7 +22,6 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.items.CapabilityItemHandler;
 
 @Mod.EventBusSubscriber(value = Dist.CLIENT, modid = WaterSource.MODID)
 public class HUDHandler {
@@ -36,7 +34,8 @@ public class HUDHandler {
         Minecraft mc = Minecraft.getInstance();
         int screenHeight = event.getWindow().getScaledHeight();
         int screenWidth = event.getWindow().getScaledWidth();
-        ClientPlayerEntity playerEntity = Minecraft.getInstance().player;
+        @SuppressWarnings("resource")
+        final ClientPlayerEntity playerEntity = Minecraft.getInstance().player;
         IProfiler profiler = mc.getProfiler();
         RayTraceResult pos = mc.objectMouseOver;
         if (event.getType() == RenderGameOverlayEvent.ElementType.FOOD){
@@ -45,7 +44,7 @@ public class HUDHandler {
                 {
                     playerEntity.getCapability(WaterLevelCapability.PLAYER_WATER_LEVEL).ifPresent(t ->
                     {
-                        WATER_LEVEL_GUI.renderWaterLevel(screenWidth,screenHeight,t,playerEntity.getAttribute(SharedMonsterAttributes.ARMOR_TOUGHNESS).getValue());
+                        WATER_LEVEL_GUI.renderWaterLevel(event.getMatrixStack(), screenWidth,screenHeight,t,playerEntity.getAttribute(Attributes.ARMOR_TOUGHNESS).getValue());
                     });
                 }
             }
@@ -55,17 +54,17 @@ public class HUDHandler {
             TileEntity tile = bpos != null ? mc.world.getTileEntity(bpos) : null;
             if (tile instanceof WaterFilterUpTile){
                 profiler.startSection("waterFilterStrainer");
-                renderWaterFilterStrainer((WaterFilterUpTile)tile);
+                renderWaterFilterStrainer(event.getMatrixStack(), (WaterFilterUpTile)tile);
                 profiler.endSection();
             }
             if (tile instanceof WaterFilterDownTile){
                 profiler.startSection("waterFilterStrainer");
-                renderWaterFilterStrainer((WaterFilterUpTile)mc.world.getTileEntity(bpos.up()));
+                renderWaterFilterStrainer(event.getMatrixStack(), (WaterFilterUpTile)mc.world.getTileEntity(bpos.up()));
                 profiler.endSection();
             }
         }
     }
-    private static void renderWaterFilterStrainer(WaterFilterUpTile tile){
+    private static void renderWaterFilterStrainer(MatrixStack matrix, WaterFilterUpTile tile){
         ItemStack stack = tile.getStrainer().map(data -> data.getStackInSlot(0)).orElse(ItemStack.EMPTY);
         if (stack.isEmpty())return;
         Minecraft mc = Minecraft.getInstance();
@@ -74,11 +73,11 @@ public class HUDHandler {
         int x = mc.getMainWindow().getScaledWidth()/2;
         int y = mc.getMainWindow().getScaledHeight()/2;
         RenderSystem.enableRescaleNormal();
-        RenderSystem.pushMatrix();
-        RenderSystem.scalef(scale,scale,1f);
+        matrix.push();
+        matrix.scale(scale, scale, 1f);
         mc.getItemRenderer().renderItemAndEffectIntoGUI(stack,(int)((float)(x - 9)/scale),(int)((float)(y - 16)/scale));
-        RenderSystem.popMatrix();
+        matrix.pop();
         String text = I18n.format("watersource.misc.damage") + (stack.getMaxDamage() - stack.getDamage()) + "/" + stack.getMaxDamage();
-        fontRenderer.drawString(text,x - fontRenderer.getStringWidth(text)/2,y + 6,0xFFFFFF);//
+        fontRenderer.drawString(matrix, text,x - fontRenderer.getStringWidth(text)/2,y + 6,0xFFFFFF);//
     }
 }

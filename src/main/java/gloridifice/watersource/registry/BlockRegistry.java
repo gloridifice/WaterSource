@@ -16,7 +16,7 @@ import net.minecraftforge.registries.ForgeRegistries;
 
 
 public class BlockRegistry extends RegistryModule{
-    public static final DeferredRegister<Block> FLUID_BLOCKS = new DeferredRegister<>(ForgeRegistries.BLOCKS, WaterSource.MODID);
+    public static final DeferredRegister<Block> FLUID_BLOCKS = DeferredRegister.create(ForgeRegistries.BLOCKS, WaterSource.MODID);
 
     public final static Block BLOCK_WATER_FILTER = new WaterFilterBlock("wooden_water_filter", Block.Properties.create(Material.WOOD,MaterialColor.BROWN).sound(SoundType.WOOD).hardnessAndResistance(1.0F).harvestTool(ToolType.AXE).notSolid());
     public final static Block BLOCK_COCONUT_TREE_LOG = new LogBlock(MaterialColor.WOOD, Block.Properties.create(Material.WOOD,MaterialColor.BROWN).sound(SoundType.WOOD).hardnessAndResistance(2.0F)).setRegistryName("coconut_tree_log");

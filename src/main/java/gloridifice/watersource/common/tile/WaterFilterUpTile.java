@@ -1,13 +1,10 @@
 package gloridifice.watersource.common.tile;
 
-import gloridifice.watersource.client.render.tile.WaterFilterDownTER;
 import gloridifice.watersource.common.item.StrainerBlockItem;
 import gloridifice.watersource.common.recipe.WaterFilterRecipe;
 import gloridifice.watersource.common.recipe.WaterFilterRecipeManager;
-import gloridifice.watersource.registry.BlockRegistry;
 import gloridifice.watersource.registry.TileEntityTypesRegistry;
 import net.minecraft.block.BlockState;
-import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.IntNBT;
@@ -16,8 +13,6 @@ import net.minecraft.network.play.server.SUpdateTileEntityPacket;
 import net.minecraft.tileentity.ITickableTileEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.Direction;
-import net.minecraft.util.math.ChunkPos;
-import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.util.INBTSerializable;
 import net.minecraftforge.common.util.LazyOptional;
@@ -30,8 +25,6 @@ import net.minecraftforge.items.ItemStackHandler;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 public class WaterFilterUpTile extends TileEntity implements ITickableTileEntity {
     LazyOptional<FluidTank> upTank = LazyOptional.of(this::createFluidHandler);
@@ -52,8 +45,8 @@ public class WaterFilterUpTile extends TileEntity implements ITickableTileEntity
     }
 
     @Override
-    public void read(CompoundNBT compound) {
-        super.read(compound);
+    public void read(BlockState state, CompoundNBT compound) {
+        super.read(state, compound);
         upTank.ifPresent(fluidTank -> {
             fluidTank.readFromNBT(compound.getCompound("upTank"));
         });
@@ -71,7 +64,7 @@ public class WaterFilterUpTile extends TileEntity implements ITickableTileEntity
 
     @Override
     public void onDataPacket(NetworkManager net, SUpdateTileEntityPacket pkt) {
-        this.read(pkt.getNbtCompound());
+        this.read(null, pkt.getNbtCompound());
     }
 
     @Nullable

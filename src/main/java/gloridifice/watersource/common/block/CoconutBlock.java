@@ -5,15 +5,11 @@ import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.block.IGrowable;
-import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.BlockItemUseContext;
 import net.minecraft.state.EnumProperty;
 import net.minecraft.state.StateContainer;
-import net.minecraft.util.ActionResultType;
-import net.minecraft.util.Hand;
 import net.minecraft.util.IStringSerializable;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.BlockRayTraceResult;
 import net.minecraft.util.math.shapes.ISelectionContext;
 import net.minecraft.util.math.shapes.VoxelShape;
 import net.minecraft.world.IBlockReader;
@@ -24,7 +20,7 @@ import javax.annotation.Nullable;
 import java.util.Random;
 
 public class CoconutBlock extends Block implements IGrowable {
-    public static final EnumProperty GROUND_TYPE = EnumProperty.create("groundtype",GroundType.class);
+    public static final EnumProperty<GroundType> GROUND_TYPE = EnumProperty.create("groundtype",GroundType.class);
     public static final VoxelShape ORDINARY_SHAPE;
     public static final VoxelShape GROWING_SHAPE;
 
@@ -57,7 +53,7 @@ public class CoconutBlock extends Block implements IGrowable {
             if (worldIn.getBlockState(fromPos).getBlock() == Blocks.RED_SAND){
                 worldIn.setBlockState(pos,this.getDefaultState().with(GROUND_TYPE,GroundType.RED_SAND));
             }
-            if (worldIn.getBlockState(fromPos).isAir()){
+            if (blockIn.isAir(state, worldIn.getBlockReader(Math.floorDiv(fromPos.getX(),  16), Math.floorDiv(fromPos.getY(), 16)), fromPos)){
                 worldIn.setBlockState(pos,this.getDefaultState().with(GROUND_TYPE,GroundType.ORDINARY));
             }
         }
@@ -93,6 +89,7 @@ public class CoconutBlock extends Block implements IGrowable {
         if (canGrow(worldIn,pos,state,false)) worldIn.setBlockState(pos, BlockRegistry.BLOCK_COCONUT_SAPLING.getDefaultState());
     }
 
+    @Override
     public void tick(BlockState state, ServerWorld worldIn, BlockPos pos, Random rand) {
         super.tick(state, worldIn, pos, rand);
         if (!worldIn.isAreaLoaded(pos, 1)) return; // Forge: prevent loading unloaded chunks when checking neighbor's light
@@ -118,6 +115,11 @@ public class CoconutBlock extends Block implements IGrowable {
 
         @Override
         public String toString() {
+            return this.getName();
+        }
+
+        @Override
+        public String getString() {
             return this.getName();
         }
     }

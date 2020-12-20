@@ -1,11 +1,7 @@
 package gloridifice.watersource.common.recipe;
 
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundNBT;
 import net.minecraftforge.fluids.FluidUtil;
-import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
-
-import static net.minecraftforge.fluids.capability.templates.FluidHandlerItemStack.FLUID_NBT_KEY;
 
 public class WaterLevelFluidRecipe extends WaterLevelItemRecipe{
     public WaterLevelFluidRecipe(ItemStack itemStack, int waterLevel, int waterSaturationLevel) {

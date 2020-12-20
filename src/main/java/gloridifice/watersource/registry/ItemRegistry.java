@@ -13,7 +13,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 public class ItemRegistry extends RegistryModule {
-    public static final DeferredRegister<Item> FLUID_ITEMS = new DeferredRegister<>(ForgeRegistries.ITEMS, WaterSource.MODID);
+    public static final DeferredRegister<Item> FLUID_ITEMS = DeferredRegister.create(ForgeRegistries.ITEMS, WaterSource.MODID);
 
     public final static Item itemPurifiedWaterBottle = new WaterBottleItem("purified_water_bottle");
     public final static Item itemCoconutJuiceBottle = new WaterBottleItem("coconut_milk_bottle");

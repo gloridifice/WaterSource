@@ -138,7 +138,7 @@ public class CommonEventHandler {
                     double lastX = data.getLastX();
                     double lastY = data.getLastY();
                     double lastZ = data.getLastZ();
-                    if (lastOnGround && player.onGround || player.isInWater()) {
+                    if (lastOnGround && player.isOnGround() || player.isInWater()) {
                         double x = Math.sqrt(Math.pow(lastX - player.getPosX(), 2) + Math.pow(lastY - player.getPosY(), 2) + Math.pow(lastZ - player.getPosZ(), 2));
                         if (x < 5) {
                             player.getCapability(WaterLevelCapability.PLAYER_WATER_LEVEL).ifPresent(dataW -> {
@@ -149,7 +149,7 @@ public class CommonEventHandler {
                         }
                     }
 
-                    if (player.onGround || player.isInWater()) {
+                    if (player.isOnGround() || player.isInWater()) {
                         data.setLastX(player.getPosX());
                         data.setLastY(player.getPosY());
                         data.setLastZ(player.getPosZ());
@@ -176,12 +176,12 @@ public class CommonEventHandler {
                 } else {
                     Biome biome = world.getBiome(player.getPosition());
                     if (world.getLight(player.getPosition()) == 15 && world.getDayTime() < 11000 && world.getDayTime() > 450 && !world.isRainingAt(player.getPosition())) {
-                        if (biome.getDefaultTemperature() > 0.3) {
+                        if (biome.getTemperature() > 0.3) {
                             player.getCapability(WaterLevelCapability.PLAYER_WATER_LEVEL).ifPresent(data -> {
                                 data.addExhaustion(player, 0.0075f);
                             });
                         }
-                        if (biome.getDefaultTemperature() > 0.9) {
+                        if (biome.getTemperature() > 0.9) {
                             player.getCapability(WaterLevelCapability.PLAYER_WATER_LEVEL).ifPresent(data -> {
                                 data.addExhaustion(player, 0.0055f);
                             });

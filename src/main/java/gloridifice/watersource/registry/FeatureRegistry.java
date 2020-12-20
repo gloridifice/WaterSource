@@ -1,10 +1,10 @@
 package gloridifice.watersource.registry;
 
 import gloridifice.watersource.common.world.gen.feature.CoconutTreeFeature;
-import net.minecraft.world.gen.feature.Feature;
-import net.minecraft.world.gen.feature.TreeFeatureConfig;
+import net.minecraft.world.gen.feature.BaseTreeFeatureConfig;
+import net.minecraft.world.gen.feature.Feature;;
 
 public class FeatureRegistry extends RegistryModule{
 
-    public static final Feature<TreeFeatureConfig> COCONUT_TREE = new CoconutTreeFeature("coconut_tree", TreeFeatureConfig::func_227338_a_);
+    public static final Feature<BaseTreeFeatureConfig> COCONUT_TREE = new CoconutTreeFeature("coconut_tree", BaseTreeFeatureConfig::func_236685_a_);
 }

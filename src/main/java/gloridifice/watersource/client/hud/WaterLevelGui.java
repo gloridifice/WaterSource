@@ -1,5 +1,6 @@
 package gloridifice.watersource.client.hud;
 
+import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.systems.RenderSystem;
 import gloridifice.watersource.WaterSource;
 import gloridifice.watersource.common.capability.WaterLevelCapability;
@@ -28,7 +29,7 @@ public class WaterLevelGui extends AbstractGui {
         this.mc = mc;
     }
 
-    public void renderWaterLevel(int screenWidth, int screenHeight, WaterLevelCapability.Data capData, double toughness) {
+    public void renderWaterLevel(MatrixStack matrix, int screenWidth, int screenHeight, WaterLevelCapability.Data capData, double toughness) {
         RenderSystem.color4f(1.0F, 1.0F, 1.0F, 1.0F);
         RenderSystem.enableAlphaTest();
         RenderSystem.enableBlend();
@@ -57,32 +58,30 @@ public class WaterLevelGui extends AbstractGui {
                 OffsetY1 = OffsetY + (tick / 2 + k6 + waterLevel) % 3 - 1;
             }
             int OffsetX1 = OffsetX - k6 * 8 - 9;
-            this.blit(OffsetX1, OffsetY1, 36 + texU2, texV, WIDTH, HEIGHT);
+            this.blit(matrix, OffsetX1, OffsetY1, 36 + texU2, texV, WIDTH, HEIGHT);
 
             if (k6 * 2 + 1 < waterLevel) {
-                this.blit(OffsetX1, OffsetY1, texU1, texV, WIDTH, HEIGHT);
-            }
-            if (k6 * 2 + 1 == waterLevel) {
-                this.blit(OffsetX1, OffsetY1, texU1 + 9, texV, WIDTH, HEIGHT);
+                this.blit(matrix, OffsetX1, OffsetY1, texU1, texV, WIDTH, HEIGHT);
+            } else if (k6 * 2 + 1 == waterLevel) {
+                this.blit(matrix, OffsetX1, OffsetY1, texU1 + 9, texV, WIDTH, HEIGHT);
             }
 
             //Water Saturation Level↓
             if (ConfigRegistry.OPEN_WATER_SATURATION_LEVEL.get()) {
                 if (k6 * 2 + 1 < waterSaturationLevel) {
-                    this.blit(OffsetX1, OffsetY1 - 1, texU1, texV + 9, 9, 3);
-                    this.blit(OffsetX1, OffsetY1 + 7, texU1 + 9, texV + 9, 9, 3);
-                }
-                if (k6 * 2 + 1 == waterSaturationLevel) {
-                    this.blit(OffsetX1, OffsetY1 - 1, texU1, texV + 9, 9, 3);
+                    this.blit(matrix, OffsetX1, OffsetY1 - 1, texU1, texV + 9, 9, 3);
+                    this.blit(matrix, OffsetX1, OffsetY1 + 7, texU1 + 9, texV + 9, 9, 3);
+                } else if (k6 * 2 + 1 == waterSaturationLevel) {
+                    this.blit(matrix, OffsetX1, OffsetY1 - 1, texU1, texV + 9, 9, 3);
                 }
             }
         }
         //test↓
         if (ConfigRegistry.IS_DEBUG_MODE.get()){
-            this.drawString(mc.fontRenderer, String.valueOf(waterExhaustionLevel), OffsetX, OffsetY - 10, 16777215);
+            WaterLevelGui.drawString(matrix, mc.fontRenderer, String.valueOf(waterExhaustionLevel), OffsetX, OffsetY - 10, 16777215);
         }
 
-        RenderSystem.enableBlend();
+        RenderSystem.enableBlend(); // TODO why not disable?
         RenderSystem.disableAlphaTest();
         mc.getTextureManager().bindTexture(HUDHandler.DEFAULT);
     }

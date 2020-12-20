@@ -13,7 +13,7 @@ import net.minecraft.inventory.CraftingInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipeSerializer;
 import net.minecraft.item.crafting.SpecialRecipe;
-import net.minecraft.tags.Tag;
+import net.minecraft.tags.ITag.INamedTag;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
@@ -26,7 +26,7 @@ import java.util.List;
 
 public class PurifiedWaterBagRecipe extends SpecialRecipe {
     protected Fluid fluid;
-    protected Tag<Block> strainerTag;
+    protected INamedTag<Block> strainerTag;
     public PurifiedWaterBagRecipe(ResourceLocation idIn) {
         super(idIn);
         this.fluid = FluidRegistry.PURIFIED_WATER.get();

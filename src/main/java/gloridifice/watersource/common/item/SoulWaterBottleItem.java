@@ -4,7 +4,6 @@ import gloridifice.watersource.registry.EffectRegistry;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
 import net.minecraft.potion.EffectInstance;
 import net.minecraft.world.World;
 

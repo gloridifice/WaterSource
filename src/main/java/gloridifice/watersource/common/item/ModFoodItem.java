@@ -1,6 +1,5 @@
 package gloridifice.watersource.common.item;
 
-import gloridifice.watersource.registry.GroupRegistry;
 import net.minecraft.item.Food;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;

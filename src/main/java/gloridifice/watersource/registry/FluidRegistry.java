@@ -15,7 +15,7 @@ public final class FluidRegistry {
     public static final ResourceLocation STILL_OIL_TEXTURE = new ResourceLocation(WaterSource.MODID,"block/fluid/water_still");
     public static final ResourceLocation FLOWING_OIL_TEXTURE = new ResourceLocation(WaterSource.MODID,"block/fluid/water_flow");
 
-    public static final DeferredRegister<Fluid> FLUIDS = new DeferredRegister<>(ForgeRegistries.FLUIDS, WaterSource.MODID);
+    public static final DeferredRegister<Fluid> FLUIDS = DeferredRegister.create(ForgeRegistries.FLUIDS, WaterSource.MODID);
     public static RegistryObject<FlowingFluid> PURIFIED_WATER = FLUIDS.register("purified_water", () -> { return new ForgeFlowingFluid.Source(FluidRegistry.PURIFIED_WATER_PROPERTIES); });
     public static RegistryObject<FlowingFluid> PURIFIED_WATER_FLOWING = FLUIDS.register("purified_water_flowing", () -> { return new ForgeFlowingFluid.Flowing(FluidRegistry.PURIFIED_WATER_PROPERTIES); });
     public static RegistryObject<FlowingFluid> SOUL_WATER = FLUIDS.register("soul_water", () -> { return new ForgeFlowingFluid.Source(FluidRegistry.SOUL_WATER_PROPERTIES); });

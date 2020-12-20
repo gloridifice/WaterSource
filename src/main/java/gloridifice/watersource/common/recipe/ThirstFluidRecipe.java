@@ -2,7 +2,6 @@ package gloridifice.watersource.common.recipe;
 
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.FluidUtil;
-import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 
 public class ThirstFluidRecipe extends ThirstItemRecipe{
     public ThirstFluidRecipe(ItemStack itemStack, int duration, int amplifier, int probability) {

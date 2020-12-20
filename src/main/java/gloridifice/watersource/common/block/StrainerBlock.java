@@ -3,10 +3,8 @@ package gloridifice.watersource.common.block;
 import gloridifice.watersource.common.tile.StrainerTile;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
-import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.BlockItemUseContext;
 import net.minecraft.item.ItemStack;
 import net.minecraft.stats.Stats;
 import net.minecraft.tileentity.TileEntity;
@@ -19,10 +17,8 @@ import net.minecraft.util.math.shapes.ISelectionContext;
 import net.minecraft.util.math.shapes.VoxelShape;
 import net.minecraft.world.IBlockReader;
 import net.minecraft.world.World;
-import net.minecraft.world.storage.loot.LootContext;
 
 import javax.annotation.Nullable;
-import java.util.List;
 
 public class StrainerBlock extends Block {
     public static final VoxelShape STRAINER_SHAPE;
@@ -59,10 +55,11 @@ public class StrainerBlock extends Block {
         return STRAINER_SHAPE;
     }
 
-    @Override
-    public boolean isNormalCube(BlockState state, IBlockReader worldIn, BlockPos pos) {
-        return false;
-    }
+// TODO find and implement replacement
+//    @Override
+//    public boolean isNormalCube(BlockState state, IBlockReader worldIn, BlockPos pos) {
+//        return false;
+//    }
 
     @Nullable
     @Override

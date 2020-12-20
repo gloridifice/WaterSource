@@ -1,8 +1,8 @@
 package gloridifice.watersource.common.tile;
 
 import gloridifice.watersource.registry.TileEntityTypesRegistry;
+import net.minecraft.block.BlockState;
 import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.nbt.IntNBT;
 import net.minecraft.network.NetworkManager;
 import net.minecraft.network.play.server.SUpdateTileEntityPacket;
 import net.minecraft.tileentity.TileEntity;
@@ -10,13 +10,14 @@ import net.minecraft.tileentity.TileEntity;
 import javax.annotation.Nullable;
 
 public class StrainerTile extends TileEntity {
-    CompoundNBT tag;
+    private CompoundNBT tag;
+
     public StrainerTile() { super(TileEntityTypesRegistry.STRAINER_TILE); }
 
     @Override
-    public void read(CompoundNBT compound) {
-        super.read(compound);
-        tag = compound.getCompound("tag");
+    public void read(BlockState state, CompoundNBT compound) {
+        super.read(state, compound);
+        tag = compound;
     }
 
     @Override
@@ -39,7 +40,7 @@ public class StrainerTile extends TileEntity {
 
     @Override
     public void onDataPacket(NetworkManager net, SUpdateTileEntityPacket pkt) {
-        this.read(pkt.getNbtCompound());
+        this.read(null, pkt.getNbtCompound());
     }
 
     @Nullable

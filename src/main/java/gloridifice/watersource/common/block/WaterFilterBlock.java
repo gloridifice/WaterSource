@@ -1,8 +1,6 @@
 package gloridifice.watersource.common.block;
 
 import gloridifice.watersource.common.item.StrainerBlockItem;
-import gloridifice.watersource.common.network.SimpleNetworkHandler;
-import gloridifice.watersource.common.network.WaterFilterMessage;
 import gloridifice.watersource.common.tile.WaterFilterDownTile;
 import gloridifice.watersource.common.tile.WaterFilterUpTile;
 import gloridifice.watersource.registry.FluidRegistry;
@@ -14,7 +12,6 @@ import net.minecraft.block.Blocks;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.BlockItemUseContext;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.state.BooleanProperty;
@@ -32,7 +29,6 @@ import net.minecraftforge.fluids.FluidActionResult;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidUtil;
 import net.minecraftforge.fluids.capability.IFluidHandler;
-import net.minecraftforge.fml.network.PacketDistributor;
 import net.minecraftforge.items.CapabilityItemHandler;
 
 import javax.annotation.Nullable;
@@ -47,20 +43,20 @@ public class WaterFilterBlock extends Block {
         this.setDefaultState(this.getStateContainer().getBaseState().with(IS_UP, false));
     }
 
-    @Override
-    @SuppressWarnings("deprecation")
-    public boolean causesSuffocation(BlockState state, IBlockReader worldIn, BlockPos pos) {
-        return false;
-    }
+// TODO Locate and use replacements
+//    @Override
+//    @SuppressWarnings("deprecation")
+//    public boolean causesSuffocation(BlockState state, IBlockReader worldIn, BlockPos pos) {
+//        return false;
+//    }
+//
+//    @Override
+//    @SuppressWarnings("deprecation")
+//    public boolean isNormalCube(BlockState state, IBlockReader worldIn, BlockPos pos) {
+//        return false;
+//    }
 
     @Override
-    @SuppressWarnings("deprecation")
-    public boolean isNormalCube(BlockState state, IBlockReader worldIn, BlockPos pos) {
-        return false;
-    }
-
-    @Override
-    @SuppressWarnings("deprecation")
     public float getAmbientOcclusionLightValue(BlockState state, IBlockReader worldIn, BlockPos pos) {
         return 1.0F;
     }

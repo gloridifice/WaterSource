@@ -1,13 +1,11 @@
 package gloridifice.watersource.common.recipe;
 
-import net.minecraft.fluid.Fluid;
 import net.minecraft.item.ItemStack;
 
 import java.util.ArrayList;
-import java.util.Objects;
 
 public class WaterLevelRecipeManager {
-    public static ArrayList<WaterLevelItemRecipe> recipes = new ArrayList();
+    public static ArrayList<WaterLevelItemRecipe> recipes = new ArrayList<>();
     public static void add(ItemStack itemStack,int waterLevel,int waterSaturationLevel){
         recipes.add(new WaterLevelItemRecipe(itemStack, waterLevel, waterSaturationLevel));
     }

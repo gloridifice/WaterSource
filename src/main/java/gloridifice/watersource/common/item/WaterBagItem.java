@@ -2,9 +2,7 @@ package gloridifice.watersource.common.item;
 
 import gloridifice.watersource.WaterSource;
 import gloridifice.watersource.common.capability.WaterLevelCapability;
-import gloridifice.watersource.helper.FluidHelper;
 import gloridifice.watersource.registry.GroupRegistry;
-import gloridifice.watersource.registry.ItemRegistry;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
@@ -13,7 +11,6 @@ import net.minecraft.fluid.Fluid;
 import net.minecraft.fluid.Fluids;
 import net.minecraft.item.*;
 import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.stats.Stats;
 import net.minecraft.tags.FluidTags;
 import net.minecraft.util.*;
 import net.minecraft.util.math.BlockPos;
@@ -144,7 +141,7 @@ public class WaterBagItem extends ItemFluidContainer {
             @Override
             public boolean isFluidValid(int tank, @Nonnull FluidStack stack)
             {
-                for (Fluid fluid : FluidTags.getCollection().getOrCreate(new ResourceLocation(WaterSource.MODID,"drink")).getAllElements()){
+                for (Fluid fluid : FluidTags.getCollection().get(new ResourceLocation(WaterSource.MODID,"drink")).getAllElements()){
                     if (fluid == stack.getFluid()){
                         return true;
                     }
@@ -167,8 +164,8 @@ public class WaterBagItem extends ItemFluidContainer {
         if (stack.getChildTag(FLUID_NBT_KEY) != null)
         {
             FluidUtil.getFluidHandler(stack).ifPresent(f ->{
-                tooltip.add(f.getFluidInTank(0).getDisplayName().appendText(String.format(": %d / %dmB", f.getFluidInTank(0).getAmount(), capacity)).applyTextStyle(TextFormatting.GRAY));
-                tooltip.add(new TranslationTextComponent("tooltip.watersource.drink_unit").appendText(" : "+ this.getUnit() + "mB").applyTextStyle(TextFormatting.GRAY));
+                tooltip.add(f.getFluidInTank(0).getDisplayName().deepCopy().appendString(String.format(": %d / %dmB", f.getFluidInTank(0).getAmount(), capacity)).mergeStyle(TextFormatting.GRAY));
+                tooltip.add(new TranslationTextComponent("tooltip.watersource.drink_unit").deepCopy().appendString(" : "+ this.getUnit() + "mB").mergeStyle(TextFormatting.GRAY));
             });
         }
     }

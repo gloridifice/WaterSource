@@ -19,12 +19,9 @@ public class CommonProxy {
         registerFireInfo();
     }
     public static void genFeature(){
-        for (Biome biome : ForgeRegistries.BIOMES) {
-            if (biome == Biomes.BEACH){
-                biome.addFeature(GenerationStage.Decoration.VEGETAL_DECORATION, FeatureRegistry.COCONUT_TREE.withConfiguration(CoconutTree.COCONUT_TREE_CONFIG).withPlacement(Placement.COUNT_EXTRA_HEIGHTMAP.configure(new AtSurfaceWithExtraConfig(0, 0.5F, 1))));
-            }
-        }
+        ForgeRegistries.BIOMES.getValue(Biomes.BEACH.getLocation()).addFeature(GenerationStage.Decoration.VEGETAL_DECORATION, FeatureRegistry.COCONUT_TREE.withConfiguration(CoconutTree.COCONUT_TREE_CONFIG).withPlacement(Placement.COUNT_EXTRA_HEIGHTMAP.configure(new AtSurfaceWithExtraConfig(0, 0.5F, 1))));
     }
+
     public static void registerFireInfo(){
         FireBlock fireblock = (FireBlock) Blocks.FIRE;
         fireblock.setFireInfo(BlockRegistry.BLOCK_COCONUT_TREE_STAIRS, 5, 20);

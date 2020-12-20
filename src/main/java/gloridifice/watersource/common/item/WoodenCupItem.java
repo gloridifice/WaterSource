@@ -129,7 +129,7 @@ public class WoodenCupItem extends ItemFluidContainer {
     public void fillItemGroup(ItemGroup group, NonNullList<ItemStack> items) {
         if (group == this.group)
         {
-            for (Fluid fluid : FluidTags.getCollection().getOrCreate(new ResourceLocation(WaterSource.MODID,"drink")).getAllElements())
+            for (Fluid fluid : FluidTags.getCollection().get(new ResourceLocation(WaterSource.MODID,"drink")).getAllElements())
             {
                 ItemStack itemStack = new ItemStack(ItemRegistry.itemWoodenCupDrink);
                 items.add(FluidHelper.fillContainer(itemStack,fluid));
@@ -144,7 +144,6 @@ public class WoodenCupItem extends ItemFluidContainer {
         {
             @Nonnull
             @Override
-            @SuppressWarnings("deprecation")
             public ItemStack getContainer()
             {
                 return getFluid().isEmpty() ? new ItemStack(ItemRegistry.itemWoodenCup) : this.container;
@@ -153,7 +152,7 @@ public class WoodenCupItem extends ItemFluidContainer {
             @Override
             public boolean isFluidValid(int tank, @Nonnull FluidStack stack)
             {
-                for (Fluid fluid : FluidTags.getCollection().getOrCreate(new ResourceLocation(WaterSource.MODID,"drink")).getAllElements()){
+                for (Fluid fluid : FluidTags.getCollection().get(new ResourceLocation(WaterSource.MODID,"drink")).getAllElements()){
                     if (fluid == stack.getFluid()){
                         return true;
                     }
@@ -169,8 +168,8 @@ public class WoodenCupItem extends ItemFluidContainer {
         if (stack.getChildTag(FLUID_NBT_KEY) != null)
         {
             FluidUtil.getFluidHandler(stack).ifPresent(f ->{
-                tooltip.add(f.getFluidInTank(0).getDisplayName().appendText(String.format(": %d / %dmB", f.getFluidInTank(0).getAmount(), capacity)).applyTextStyle(TextFormatting.GRAY));
-                tooltip.add(new TranslationTextComponent("tooltip.watersource.drink_unit").appendText(" : 250mB").applyTextStyle(TextFormatting.GRAY));
+                tooltip.add(f.getFluidInTank(0).getDisplayName().deepCopy().appendString(String.format(": %d / %dmB", f.getFluidInTank(0).getAmount(), capacity)).mergeStyle(TextFormatting.GRAY));
+                tooltip.add(new TranslationTextComponent("tooltip.watersource.drink_unit").deepCopy().appendString(" : 250mB").mergeStyle(TextFormatting.GRAY));
             });
         }
     }

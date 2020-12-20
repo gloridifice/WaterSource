@@ -4,6 +4,7 @@ import gloridifice.watersource.registry.BlockRegistry;
 import net.minecraft.block.*;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
+import net.minecraft.loot.LootContext;
 import net.minecraft.state.IntegerProperty;
 import net.minecraft.state.StateContainer;
 import net.minecraft.util.ActionResultType;
@@ -16,7 +17,6 @@ import net.minecraft.util.math.shapes.VoxelShape;
 import net.minecraft.world.IBlockReader;
 import net.minecraft.world.World;
 import net.minecraft.world.server.ServerWorld;
-import net.minecraft.world.storage.loot.LootContext;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -37,7 +37,6 @@ public class NaturalCoconutBlock extends HorizontalBlock implements IGrowable {
     }
 
     @Override
-    @SuppressWarnings("deprecation")
     public float getAmbientOcclusionLightValue(BlockState state, IBlockReader worldIn, BlockPos pos) {
         return 1.0F;
     }
@@ -56,20 +55,22 @@ public class NaturalCoconutBlock extends HorizontalBlock implements IGrowable {
 
     @Override
     public void neighborChanged(BlockState state, World worldIn, BlockPos pos, Block blockIn, BlockPos fromPos, boolean isMoving) {
-        if (pos.offset(state.get(HORIZONTAL_FACING)) == fromPos && worldIn.getBlockState(fromPos).isAir())
+        if (pos.offset(state.get(HORIZONTAL_FACING)) == fromPos && 
+                blockIn.isAir(state, worldIn.getBlockReader(Math.floorDiv(fromPos.getX(),  16), Math.floorDiv(fromPos.getY(), 16)), fromPos))
         {
             spawnDrops(state,worldIn,pos);
             worldIn.setBlockState(pos, Blocks.AIR.getDefaultState());
         }
     }
 
+    
     @Override
     public List<ItemStack> getDrops(BlockState state, LootContext.Builder builder) {
-        List<ItemStack> list = new ArrayList<>();
-        if (state.get(AGE) == 3) {
-            list.add(new ItemStack(BlockRegistry.ITEM_COCONUT, 3));
-        }
-        return list;
+      List<ItemStack> list = new ArrayList<>();
+      if (state.get(AGE) == 3) {
+          list.add(new ItemStack(BlockRegistry.ITEM_COCONUT, 3));
+      }
+      return list;
     }
 
     @Override

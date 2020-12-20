@@ -1,17 +1,16 @@
 package gloridifice.watersource.client.event.tooltip;
 
+import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.systems.RenderSystem;
 import gloridifice.watersource.WaterSource;
 import gloridifice.watersource.common.recipe.*;
 import gloridifice.watersource.registry.ConfigRegistry;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.AbstractGui;
-import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.potion.EffectInstance;
 import net.minecraft.potion.Effects;
 import net.minecraft.potion.PotionUtils;
-import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraftforge.api.distmarker.Dist;
@@ -50,13 +49,13 @@ public class WaterLevelTooltip {
             WaterLevelItemRecipe recipe = WaterLevelRecipeManager.getRecipeFromItemStack(event.getStack());
             if (recipe != null) {
                 event.getLines();
-                RenderSystem.pushMatrix();
                 IThirstRecipe recipe1 = ThirstRecipeManager.getRecipeFromItemStick(event.getStack());
-                RenderSystem.color3f(1.0F, 1.0F, 1.0F);
+                event.getMatrixStack().push();
+                RenderSystem.color3f(1.0F, 1.0F, 1.0F); // TODO port this over too
 
                 int a = 0;
                 for (int i = 0; i < event.getLines().size();i++){
-                    String s = event.getLines().get(i);
+                    String s = event.getLines().get(i).getString(); // TODO test
                     s = TextFormatting.getTextWithoutFormattingCodes(s);
                     if (s.trim().isEmpty()){
                         a = i;
@@ -77,15 +76,15 @@ public class WaterLevelTooltip {
                 Minecraft.getInstance().getTextureManager().bindTexture(OVERLAY_BAR);
                 if (recipe.getWaterLevel() % 2 == 0){
                     for(int i = 0; i < recipe.getWaterLevel()/2; i++){
-                        AbstractGui.blit(OffsetX + i * 9, OffsetY, 36 + texU2, 0, 9, 9, 256, 256);
-                        AbstractGui.blit(OffsetX + i * 9, OffsetY, texU1, 0, 9, 9, 256, 256);
+                        AbstractGui.blit(event.getMatrixStack(), OffsetX + i * 9, OffsetY, 36 + texU2, 0, 9, 9, 256, 256);
+                        AbstractGui.blit(event.getMatrixStack(), OffsetX + i * 9, OffsetY, texU1, 0, 9, 9, 256, 256);
                     }
-                }else {
-                    AbstractGui.blit(OffsetX, OffsetY, 36 + texU2, 0, 9, 9, 256, 256);
-                    AbstractGui.blit(OffsetX, OffsetY, 9 + texU1, 0, 9, 9, 256, 256);
+                }else{
+                    AbstractGui.blit(event.getMatrixStack(), OffsetX, OffsetY, 36 + texU2, 0, 9, 9, 256, 256);
+                    AbstractGui.blit(event.getMatrixStack(), OffsetX, OffsetY, 9 + texU1, 0, 9, 9, 256, 256);
                     for (int n = 1; n < (recipe.getWaterLevel() + 1)/2; n++){
-                        AbstractGui.blit(OffsetX + n * 9, OffsetY, 36 + texU2, 0, 9, 9, 256, 256);
-                        AbstractGui.blit(OffsetX + n * 9, OffsetY, texU1, 0, 9, 9, 256, 256);
+                        AbstractGui.blit(event.getMatrixStack(), OffsetX + n * 9, OffsetY, 36 + texU2, 0, 9, 9, 256, 256);
+                        AbstractGui.blit(event.getMatrixStack(), OffsetX + n * 9, OffsetY, texU1, 0, 9, 9, 256, 256);
                     }
                 }
                 //TODO:SaturationLevel
@@ -98,7 +97,7 @@ public class WaterLevelTooltip {
                 fontRenderer.drawString("x" + ((float) recipe.getWaterSaturationLevel()) / 2, (int) ((event.getX() + 41) / scale), (int) ((OffsetY + 2) / scale), 0xFFFFFF);
                 RenderSystem.scaled(1, 1, 1);
 */
-                RenderSystem.popMatrix();
+                event.getMatrixStack().pop();
             }
         }
     }

@@ -46,6 +46,7 @@ public class WaterFilterMessage implements INormalMessage {
     @Override
     public void process(Supplier<NetworkEvent.Context> context) {
         context.get().enqueueWork(() -> {
+            @SuppressWarnings("resource")
             TileEntity tileEntity = Minecraft.getInstance().player.getEntityWorld().getTileEntity(new BlockPos(x, y, z));
             tileEntity.getCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY).ifPresent(data -> {
                 data.drain(data.getTankCapacity(0), IFluidHandler.FluidAction.EXECUTE);
