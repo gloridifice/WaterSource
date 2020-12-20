@@ -9,7 +9,6 @@ import gloridifice.watersource.common.recipe.*;
 import gloridifice.watersource.registry.BlockRegistry;
 import gloridifice.watersource.registry.EffectRegistry;
 import net.minecraft.block.BlockState;
-import net.minecraft.block.HorizontalBlock;
 import net.minecraft.block.RotatedPillarBlock;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
@@ -17,7 +16,6 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.item.AxeItem;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.ToolItem;
 import net.minecraft.potion.EffectInstance;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundCategory;
@@ -38,8 +36,8 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.ModList;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.network.PacketDistributor;
-import roito.afterthedrizzle.common.capability.CapabilityPlayerTemperature;
-import roito.afterthedrizzle.common.environment.temperature.ApparentTemperature;
+//import roito.afterthedrizzle.common.capability.CapabilityPlayerTemperature;
+//import roito.afterthedrizzle.common.environment.temperature.ApparentTemperature;
 
 import java.util.Random;
 
@@ -160,19 +158,19 @@ public class CommonEventHandler {
 
             if (tick % 10 == 0) {
                 //Natural State
-                if (ModList.get().isLoaded("afterthedrizzle") && player.getCapability(CapabilityPlayerTemperature.PLAYER_TEMP) != null) {
-                    player.getCapability(CapabilityPlayerTemperature.PLAYER_TEMP).ifPresent(d -> {
-                        if (d.getApparentTemperature() == ApparentTemperature.HOT) {
-                            player.getCapability(WaterLevelCapability.PLAYER_WATER_LEVEL).ifPresent(data -> {
-                                data.addExhaustion(player, 0.0075f);
-                            });
-                        }
-                        if (d.getApparentTemperature() == ApparentTemperature.HOT) {
-                            player.getCapability(WaterLevelCapability.PLAYER_WATER_LEVEL).ifPresent(data -> {
-                                data.addExhaustion(player, 0.0135f);
-                            });
-                        }
-                    });
+                if (ModList.get().isLoaded("afterthedrizzle")/* && player.getCapability(CapabilityPlayerTemperature.PLAYER_TEMP) != null*/) {
+//                    player.getCapability(CapabilityPlayerTemperature.PLAYER_TEMP).ifPresent(d -> {
+//                        if (d.getApparentTemperature() == ApparentTemperature.HOT) {
+//                            player.getCapability(WaterLevelCapability.PLAYER_WATER_LEVEL).ifPresent(data -> {
+//                                data.addExhaustion(player, 0.0075f);
+//                            });
+//                        }
+//                        if (d.getApparentTemperature() == ApparentTemperature.HOT) {
+//                            player.getCapability(WaterLevelCapability.PLAYER_WATER_LEVEL).ifPresent(data -> {
+//                                data.addExhaustion(player, 0.0135f);
+//                            });
+//                        }
+//                    });
                 } else {
                     Biome biome = world.getBiome(player.getPosition());
                     if (world.getLight(player.getPosition()) == 15 && world.getDayTime() < 11000 && world.getDayTime() > 450 && !world.isRainingAt(player.getPosition())) {

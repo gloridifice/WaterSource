@@ -12,7 +12,7 @@ import net.minecraft.potion.PotionUtils;
 import net.minecraft.potion.Potions;
 import net.minecraftforge.fml.ModList;
 //import org.jwaresoftware.mcmods.vfp.common.VfpObj;
-import roito.afterthedrizzle.common.item.ItemsRegistry;
+//import roito.afterthedrizzle.common.item.ItemsRegistry;
 
 public class RecipeRegistry {
 
@@ -46,8 +46,8 @@ public class RecipeRegistry {
         WaterLevelRecipeManager.add(new ItemStack(Items.MUSHROOM_STEW), 2, 1);
         WaterLevelRecipeManager.add(new ItemStack(Items.MILK_BUCKET), 1, 0);
         if (ModList.get().isLoaded("afterthedrizzle")) {
-            WaterLevelRecipeManager.add(new ItemStack(ItemsRegistry.PORCELAIN_CUP_DRINK), 4, 3);
-            WaterLevelRecipeManager.add(new ItemStack(ItemsRegistry.BOTTLE_DRINK), 7, 6);
+//            WaterLevelRecipeManager.add(new ItemStack(ItemsRegistry.PORCELAIN_CUP_DRINK), 4, 3);
+//            WaterLevelRecipeManager.add(new ItemStack(ItemsRegistry.BOTTLE_DRINK), 7, 6);
         }
         if (ModList.get().isLoaded("simplefarming")) {
 /*            WaterLevelRecipeManager.add(new ItemStack(ModItems.pear), 2, 1);
