@@ -5,7 +5,6 @@ import gloridifice.watersource.common.item.StrainerBlockItem;
 import gloridifice.watersource.common.recipe.*;
 import gloridifice.watersource.helper.FluidHelper;
 import net.minecraft.fluid.Fluids;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.potion.PotionUtils;

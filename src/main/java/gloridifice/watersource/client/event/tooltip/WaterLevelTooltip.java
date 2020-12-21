@@ -1,6 +1,5 @@
 package gloridifice.watersource.client.event.tooltip;
 
-import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.systems.RenderSystem;
 import gloridifice.watersource.WaterSource;
 import gloridifice.watersource.common.recipe.*;

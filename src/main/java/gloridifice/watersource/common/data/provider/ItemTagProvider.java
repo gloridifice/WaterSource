@@ -1,14 +1,13 @@
 package gloridifice.watersource.common.data.provider;
 
-import gloridifice.watersource.WaterSource;
 import gloridifice.watersource.common.data.tag.ModTags;
 import net.minecraft.data.DataGenerator;
 import net.minecraftforge.common.data.ExistingFileHelper;
 import net.minecraftforge.common.data.ForgeItemTagsProvider;
 
 public class ItemTagProvider extends ForgeItemTagsProvider {
-    public ItemTagProvider(DataGenerator gen, ExistingFileHelper helper) {
-        super(gen, helper);
+    public ItemTagProvider(DataGenerator gen, BlockTagProvider blockProvider, ExistingFileHelper helper) {
+        super(gen, blockProvider, helper);
     }
 
     @Override

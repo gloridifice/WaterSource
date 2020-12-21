@@ -19,8 +19,9 @@ public class DataGatherHandler {
         if (event.includeServer())
         {
             gen.addProvider(new RecipeProvider(gen));
-            gen.addProvider(new ItemTagProvider(gen, event.getExistingFileHelper()));
-            gen.addProvider(new BlockTagProvider(gen, event.getExistingFileHelper()));
+            BlockTagProvider blockProvider = new BlockTagProvider(gen, event.getExistingFileHelper());
+            gen.addProvider(new ItemTagProvider(gen, blockProvider, event.getExistingFileHelper()));
+            gen.addProvider(blockProvider);
             gen.addProvider(new FluidTagsProvider(gen, event.getExistingFileHelper()));
         }
     }
