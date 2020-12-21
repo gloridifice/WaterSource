@@ -26,9 +26,4 @@ public class StrainerUsingExtension implements ICraftingCategoryExtension {
     public ResourceLocation getRegistryName() {
         return recipe.getId();
     }
-
-    @Override
-    public void drawInfo(int recipeWidth, int recipeHeight, double mouseX, double mouseY) {
-
-    }
 }
