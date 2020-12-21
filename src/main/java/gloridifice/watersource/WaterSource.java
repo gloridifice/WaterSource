@@ -1,9 +1,12 @@
 package gloridifice.watersource;
 
 import gloridifice.watersource.client.ClientProxy;
-import gloridifice.watersource.common.CommonProxy;
+import gloridifice.watersource.common.block.tree.CoconutTree;
 import gloridifice.watersource.common.network.SimpleNetworkHandler;
 import gloridifice.watersource.registry.*;
+import net.minecraft.world.biome.Biomes;
+import net.minecraft.world.gen.placement.AtSurfaceWithExtraConfig;
+import net.minecraft.world.gen.placement.Placement;
 import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.config.ModConfig;
@@ -11,6 +14,7 @@ import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLLoadCompleteEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
+import net.minecraftforge.registries.ForgeRegistries;
 
 @Mod("watersource")
 public class WaterSource {
@@ -34,7 +38,9 @@ public class WaterSource {
     {
         CapabilityRegistry.init();
         SimpleNetworkHandler.init();
-        CommonProxy.init();
+        // FIXME this is the wrong place for such registrations
+        // FIXME getFlowerFeatures might be the wrong category
+        ForgeRegistries.BIOMES.getValue(Biomes.BEACH.getLocation()).getGenerationSettings().getFlowerFeatures().add(FeatureRegistry.COCONUT_TREE.withConfiguration(CoconutTree.COCONUT_TREE_CONFIG).withPlacement(Placement.COUNT_EXTRA.configure(new AtSurfaceWithExtraConfig(0, 0.5F, 1))));
         RegisterManager.clearAll();
     }
     public void clientSetup(FMLClientSetupEvent event){
