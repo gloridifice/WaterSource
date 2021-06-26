@@ -1,0 +1,6 @@
+{
+    "parent": "block/pressure_plate_down",
+    "textures": {
+        "texture": "watersource:block/coconut_tree_planks"
+    }
+}

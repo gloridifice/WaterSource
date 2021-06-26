@@ -1,0 +1,5 @@
+{
+    "variants": {
+        "":  { "model": "watersource:block/soul_strainer" }
+    }
+}

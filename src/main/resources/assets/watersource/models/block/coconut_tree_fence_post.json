@@ -1,0 +1,6 @@
+{
+    "parent": "block/fence_post",
+    "textures": {
+        "texture": "watersource:block/coconut_tree_planks"
+    }
+}

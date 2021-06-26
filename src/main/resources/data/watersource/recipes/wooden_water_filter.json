@@ -1,0 +1,23 @@
+{
+    "type": "minecraft:crafting_shaped",
+    "group": "watersource",
+    "pattern": [
+        "yzy",
+        "xxx",
+		"yzy"
+    ],
+    "key": {
+        "x": {
+            "tag": "minecraft:planks"
+        },
+		"y": {
+            "tag": "minecraft:logs"
+        },
+		"z": {
+            "tag": "forge:glass"
+        }
+    },
+    "result": {
+        "item": "watersource:wooden_water_filter"
+    }
+}
