@@ -8,6 +8,7 @@ import gloridifice.watersource.common.network.SimpleNetworkHandler;
 import gloridifice.watersource.common.recipe.*;
 import gloridifice.watersource.registry.BlockRegistry;
 import gloridifice.watersource.registry.EffectRegistry;
+import gloridifice.watersource.registry.RecipeSerializersRegistry;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.RotatedPillarBlock;
 import net.minecraft.entity.Entity;
@@ -43,10 +44,12 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.network.PacketDistributor;
+import net.minecraftforge.registries.ForgeRegistries;
 
 import java.util.Random;
 
 import static gloridifice.watersource.registry.ConfigRegistry.RESET_WATER_LEVEL_IN_DEATH;
+import static gloridifice.watersource.registry.RecipeSerializersRegistry.THIRST_ITEM_RECIPE_SERIALIZER;
 
 @Mod.EventBusSubscriber(modid = WaterSource.MODID)
 public class CommonEventHandler {
@@ -66,7 +69,8 @@ public class CommonEventHandler {
         if (entity instanceof PlayerEntity && !(entity instanceof FakePlayer)) {
             Random rand = new Random();
             WaterLevelItemRecipe wRecipe = WaterLevelRecipeManager.getRecipeFromItemStack(event.getItem());
-            IThirstRecipe tRecipe = ThirstRecipeManager.getRecipeFromItemStick(event.getItem());
+
+            IThirstRecipe tRecipe = ThirstItemRecipe.getRecipeFromItem(entity.world, event.getItem());
             if (wRecipe != null) {
                 entity.getCapability(WaterLevelCapability.PLAYER_WATER_LEVEL).ifPresent(data -> {
                     data.addWaterLevel(wRecipe.getWaterLevel());

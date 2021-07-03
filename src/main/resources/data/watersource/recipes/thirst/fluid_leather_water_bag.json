@@ -1,0 +1,10 @@
+{
+    "type": "watersource:thirst_fluid",
+    "ingredient": {
+        "item": "watersource:leather_water_bag"
+    },
+	"fluid": "minecraft:water",
+	"duration": 2000,
+	"amplifier": 0,
+	"probability": 75
+}

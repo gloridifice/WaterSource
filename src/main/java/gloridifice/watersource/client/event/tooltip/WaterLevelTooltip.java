@@ -50,12 +50,13 @@ public class WaterLevelTooltip {
         tick ++;
         tick %= 2000;
         if (ConfigRegistry.OPEN_FOOD_WATER_LEVEL.get()) {
+            Minecraft mc = Minecraft.getInstance();
             WaterLevelItemRecipe wRecipe = WaterLevelRecipeManager.getRecipeFromItemStack(event.getStack());
             if (wRecipe != null) {
                 event.getLines();
                 RenderSystem.pushMatrix();
                 RenderSystem.enableBlend();
-                IThirstRecipe tRecipe = ThirstRecipeManager.getRecipeFromItemStick(event.getStack());
+                IThirstRecipe tRecipe = ThirstItemRecipe.getRecipeFromItem(mc.world, event.getStack());
                 RenderSystem.color3f(1.0F, 1.0F, 1.0F);
 
                 int a = 0;

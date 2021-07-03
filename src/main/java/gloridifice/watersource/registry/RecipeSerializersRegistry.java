@@ -1,7 +1,9 @@
 package gloridifice.watersource.registry;
 
 import gloridifice.watersource.WaterSource;
+import gloridifice.watersource.common.recipe.ThirstFluidRecipe;
 import gloridifice.watersource.common.recipe.ThirstItemRecipe;
+import gloridifice.watersource.common.recipe.ThirstNBTRecipe;
 import gloridifice.watersource.common.recipe.serializer.ThirstItemRecipeSerializer;
 import gloridifice.watersource.common.recipe.type.*;
 import net.minecraft.item.crafting.IRecipeSerializer;
@@ -20,5 +22,8 @@ public class RecipeSerializersRegistry {
     public final static RegistryObject<SpecialRecipeSerializer<SoulWaterBagRecipe>> CRAFTING_SOUL_WATER_BAG = RECIPE_SERIALIZERS.register("crafting_soul_water_bag", () -> new SpecialRecipeSerializer<>(SoulWaterBagRecipe::new));
     public final static RegistryObject<SpecialRecipeSerializer<SoulWaterCupRecipe>> CRAFTING_SOUL_WATER_CUP = RECIPE_SERIALIZERS.register("crafting_soul_water_cup", () -> new SpecialRecipeSerializer<>(SoulWaterCupRecipe::new));
 
-    //public final static RegistryObject<ThirstItemRecipeSerializer<ThirstItemRecipe>> THIRST_ITEM_RECIPE_SERIALIZER = RECIPE_SERIALIZERS.register("thirst_item",() -> new ThirstItemRecipeSerializer<>(ThirstItemRecipe::new,1,1,1));
+    public final static RegistryObject<ThirstItemRecipeSerializer<ThirstItemRecipe>> THIRST_ITEM_RECIPE_SERIALIZER = RECIPE_SERIALIZERS.register("thirst_item",() -> new ThirstItemRecipeSerializer<>(ThirstItemRecipe::new,2000,0,75));
+    public final static RegistryObject<ThirstItemRecipeSerializer<ThirstFluidRecipe>> THIRST_FLUID_RECIPE_SERIALIZER = RECIPE_SERIALIZERS.register("thirst_fluid",() -> new ThirstItemRecipeSerializer<>(ThirstFluidRecipe::new,2000,0,75));
+    public final static RegistryObject<ThirstItemRecipeSerializer<ThirstNBTRecipe>> THIRST_NBT_RECIPE_SERIALIZER = RECIPE_SERIALIZERS.register("thirst_nbt",() -> new ThirstItemRecipeSerializer<>(ThirstNBTRecipe::new,2000,0,75));
+
 }

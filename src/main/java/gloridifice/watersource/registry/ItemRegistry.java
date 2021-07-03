@@ -26,6 +26,7 @@ public class ItemRegistry extends RegistryModule {
     };
     public final static Item itemHalfCoconut = new ModNormalItem("half_coconut");
     public final static Item itemCoconutPiece = new ModFoodItem("coconut_piece",new Food.Builder().hunger(2).fastToEat().saturation(3).build());
+    public final static Item itemCoconutChicken = new ModFoodItem("coconut_chicken",new Food.Builder().hunger(8).saturation(6).build());
     public final static Item itemWoodenCupDrink = new WoodenCupItem("wooden_cup_drink",new Item.Properties().maxStackSize(1).group(GroupRegistry.waterSourceGroup), 250);
     public final static Item itemLeatherWaterBag = new WaterBagItem("leather_water_bag",1500,250);
     //Fluids

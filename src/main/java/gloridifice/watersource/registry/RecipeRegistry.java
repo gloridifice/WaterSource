@@ -18,7 +18,7 @@ public class RecipeRegistry {
 
     public static void init() {
         addWaterLevel();
-        addThirstItem();
+        //addThirstItem();
         addWaterFilterRecipes();
     }
     public static void addWaterLevel() {
@@ -133,7 +133,7 @@ public class RecipeRegistry {
         }
     }
 
-    public static void addThirstItem() {
+/*    public static void addThirstItem() {
         ThirstRecipeManager.add(new ThirstNbtRecipe(PotionUtils.addPotionToItemStack(new ItemStack(Items.POTION), Potions.WATER), 2000, 0, 75));
         ThirstRecipeManager.add(new ThirstFluidRecipe(FluidHelper.fillContainer(new ItemStack(ItemRegistry.itemWoodenCupDrink), Fluids.WATER), 2000,0,75));
         ThirstRecipeManager.add(new ThirstFluidRecipe(FluidHelper.fillContainer(new ItemStack(ItemRegistry.itemLeatherWaterBag), Fluids.WATER), 2000,0,75));
@@ -141,7 +141,7 @@ public class RecipeRegistry {
             addThirstByName("vanillafoodpantry","bottle_water",1800,0,75);
             addThirstByName("vanillafoodpantry","bottle_swamp_water",2200,0,75);
         }
-    }
+    }*/
 
     public static void addWaterFilterRecipes() {
         WaterFilterRecipeManager.add((StrainerBlockItem) BlockRegistry.ITEM_PRIMITIVE_STRAINER, Fluids.WATER, FluidRegistry.PURIFIED_WATER.get());
@@ -155,7 +155,7 @@ public class RecipeRegistry {
     private static void addWaterLevelByName(String modid, String name, int waterLevel, int saturation){
         WaterLevelRecipeManager.add(new ItemStack(ForgeRegistries.ITEMS.getValue(new ResourceLocation(modid,name))),waterLevel,saturation);
     }
-    private static void addThirstByName(String modid, String name, int duration, int amplifier,int probability){
+/*    private static void addThirstByName(String modid, String name, int duration, int amplifier,int probability){
         ThirstRecipeManager.add(new ItemStack(ForgeRegistries.ITEMS.getValue(new ResourceLocation(modid,name))),duration,amplifier,probability);
-    }
+    }*/
 }
