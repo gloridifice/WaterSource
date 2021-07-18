@@ -4,9 +4,9 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import gloridifice.watersource.common.recipe.ThirstItemRecipe;
+import gloridifice.watersource.common.recipe.WaterLevelItemRecipe;
 import gloridifice.watersource.helper.FluidHelper;
 import net.minecraft.fluid.Fluid;
-import net.minecraft.fluid.Fluids;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipeSerializer;
 import net.minecraft.item.crafting.Ingredient;
@@ -21,15 +21,13 @@ import net.minecraftforge.registries.ForgeRegistryEntry;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ThirstItemRecipeSerializer<T extends ThirstItemRecipe> extends ForgeRegistryEntry<IRecipeSerializer<?>> implements IRecipeSerializer<T>{
-    private final int duration,amplifier,probability;
-    private final IFactory<T> factory;
-
-    public ThirstItemRecipeSerializer(IFactory<T> factory, int duration,int amplifier,int probability)
+public class WaterLevelRecipeSerializer<T extends WaterLevelItemRecipe> extends ForgeRegistryEntry<IRecipeSerializer<?>> implements IRecipeSerializer<T>{
+    private final int waterLevel, waterSaturationLevel;
+    private final WaterLevelRecipeSerializer.IFactory<T> factory;
+    public WaterLevelRecipeSerializer(WaterLevelRecipeSerializer.IFactory<T> factory, int waterLevel, int waterSaturationLevel)
     {
-        this.probability = probability;
-        this.duration = duration;
-        this.amplifier = amplifier;
+        this.waterLevel = waterLevel;
+        this.waterSaturationLevel = waterSaturationLevel;
         this.factory = factory;
     }
 
@@ -54,34 +52,30 @@ public class ThirstItemRecipeSerializer<T extends ThirstItemRecipe> extends Forg
             list.add(FluidHelper.fillContainer(stack, fluid));
         }
         Ingredient ingredient1 = Ingredient.fromStacks(list.stream());
-        int i = JSONUtils.getInt(json, "duration", 2000);
-        int j = JSONUtils.getInt(json, "amplifier", 0);
-        int k = JSONUtils.getInt(json, "probability", 75);
-        return this.factory.create(recipeId, group, ingredient1, i, j, k);
+        int i = JSONUtils.getInt(json, "waterLevel", 2);
+        int j = JSONUtils.getInt(json, "waterSaturationLevel", 2);
+        return this.factory.create(recipeId, group, ingredient1, i, j);
     }
 
     @Override
     public T read(ResourceLocation resourceLocation, PacketBuffer packetBuffer) {
         String group = packetBuffer.readString(32767);
         Ingredient ingredient = Ingredient.read(packetBuffer);
-        int du = packetBuffer.readVarInt();
-        int am = packetBuffer.readVarInt();
-        int pr = packetBuffer.readVarInt();
+        int wa = packetBuffer.readVarInt();
+        int waS = packetBuffer.readVarInt();
 
-        return this.factory.create(resourceLocation,group,ingredient,du,am,pr);
+        return this.factory.create(resourceLocation,group,ingredient,wa,waS);
     }
 
     public void write(PacketBuffer buffer, T recipe)
     {
         buffer.writeString(recipe.getGroup());
         recipe.getIngredient().write(buffer);
-        buffer.writeVarInt(recipe.getDuration());
-        buffer.writeVarInt(recipe.getAmplifier());
-        buffer.writeVarInt(recipe.getProbability());
+        buffer.writeVarInt(recipe.getWaterLevel());
+        buffer.writeVarInt(recipe.getWaterSaturationLevel());
     }
-    public interface IFactory<T extends ThirstItemRecipe>
+    public interface IFactory<T extends WaterLevelItemRecipe>
     {
-        T create(ResourceLocation resourceLocation, String group, Ingredient ingredient, int duration,int amplifier,int probability);
+        T create(ResourceLocation resourceLocation, String group, Ingredient ingredient, int waterLevel,int waterSaturationLevel);
     }
-
 }

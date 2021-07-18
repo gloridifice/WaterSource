@@ -68,7 +68,7 @@ public class CommonEventHandler {
         LivingEntity entity = event.getEntityLiving();
         if (entity instanceof PlayerEntity && !(entity instanceof FakePlayer)) {
             Random rand = new Random();
-            WaterLevelItemRecipe wRecipe = WaterLevelRecipeManager.getRecipeFromItemStack(event.getItem());
+            WaterLevelItemRecipe wRecipe = WaterLevelItemRecipe.getRecipeFromItem(entity.getEntityWorld(), event.getItem());
 
             IThirstRecipe tRecipe = ThirstItemRecipe.getRecipeFromItem(entity.world, event.getItem());
             if (wRecipe != null) {

@@ -15,7 +15,7 @@ public class BiomeLoadEventHandler {
     public static void onBiomeLoading(BiomeLoadingEvent event) {
         if (event.getCategory() == Biome.Category.BEACH) {
             BiomeGenerationSettingsBuilder settings = event.getGeneration();
-            settings.withFeature(GenerationStage.Decoration.VEGETAL_DECORATION, ConfiguredFeatureRegistry.COCONUT_TREE);
+            settings.withFeature(GenerationStage.Decoration.VEGETAL_DECORATION, ConfiguredFeatureRegistry.COCONUT_TREE_PLACEMENT);
         }
     }
 }

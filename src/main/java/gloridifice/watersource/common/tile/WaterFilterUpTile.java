@@ -4,7 +4,6 @@ package gloridifice.watersource.common.tile;
 import gloridifice.watersource.WaterSource;
 import gloridifice.watersource.common.item.StrainerBlockItem;
 import gloridifice.watersource.common.recipe.WaterFilterRecipe;
-import gloridifice.watersource.common.recipe.WaterFilterRecipeManager;
 import gloridifice.watersource.registry.ParticleRegistry;
 import gloridifice.watersource.registry.TileEntityTypesRegistry;
 import net.minecraft.block.Block;
@@ -15,16 +14,11 @@ import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.IntNBT;
 import net.minecraft.network.NetworkManager;
 import net.minecraft.network.play.server.SUpdateTileEntityPacket;
-import net.minecraft.particles.BasicParticleType;
-import net.minecraft.particles.ParticleTypes;
-import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.tileentity.ITickableTileEntity;
-import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.Direction;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.registry.Registry;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.util.INBTSerializable;
 import net.minecraftforge.common.util.LazyOptional;
@@ -143,7 +137,7 @@ public class WaterFilterUpTile extends ModNormalTile implements ITickableTileEnt
                         ItemStack strainerStack = strainerHandler.getStackInSlot(0);
                         int speed = propsHandler.getStackInSlot(0).getItem() == Items.HEART_OF_THE_SEA ? 20 : 10;
                         upTank.ifPresent(fluidTankUp -> {
-                            WaterFilterRecipe recipe = WaterFilterRecipeManager.getRecipeFromInput(strainerStack, fluidTankUp.getFluid().getFluid());
+                            WaterFilterRecipe recipe = WaterFilterRecipe.getRecipeFromInput(this.world, strainerStack, fluidTankUp.getFluid().getFluid());
                             downTile.getDownTank().ifPresent(fluidTankDown -> {
                             if (recipe != null && fluidTankDown.getFluid().getAmount() < fluidTankDown.getCapacity()) {
                                 flag = true;

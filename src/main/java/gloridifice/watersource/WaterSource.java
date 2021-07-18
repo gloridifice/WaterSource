@@ -26,7 +26,6 @@ public class WaterSource {
         new TileEntityTypesRegistry();
         FMLJavaModLoadingContext.get().getModEventBus().addListener(this::setup);
         FMLJavaModLoadingContext.get().getModEventBus().addListener(this::clientSetup);
-        FMLJavaModLoadingContext.get().getModEventBus().addListener(this::serverSetupEvent);
         RecipeSerializersRegistry.RECIPE_SERIALIZERS.register(FMLJavaModLoadingContext.get().getModEventBus());
         ModLoadingContext.get().registerConfig(ModConfig.Type.CLIENT,ConfigRegistry.CLIENT_CONFIG);
         ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON,ConfigRegistry.COMMON_CONFIG);
@@ -44,8 +43,5 @@ public class WaterSource {
         ClientProxy.init();
         TileEntityRenderRegistry.regTileEntityRender();
         ColorRegistry.init();
-    }
-    public void serverSetupEvent(FMLLoadCompleteEvent event){
-        RecipeRegistry.init();
     }
 }

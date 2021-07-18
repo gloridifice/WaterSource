@@ -3,10 +3,14 @@
   "group": "coconut",
   "ingredients": [
   {
-    "item": "watersource:coconut_piece",
-	"item": "watersource:coconut_piece",
+    "item": "watersource:coconut_piece"
+	},
+	{
+	"item": "watersource:coconut_piece"
+	},
+	{
 	"item":"minecraft:chicken"
-}
+	}
   ],
   "result": {
     "item": "watersource:coconut_chicken"

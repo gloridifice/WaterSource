@@ -5,10 +5,14 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.world.gen.Heightmap;
 import net.minecraft.world.gen.blockstateprovider.BlockStateProvider;
+import net.minecraft.world.gen.feature.ConfiguredFeature;
+import net.minecraft.world.gen.feature.DecoratedFeatureConfig;
 import net.minecraft.world.gen.feature.IFeatureConfig;
+import net.minecraft.world.gen.placement.ConfiguredPlacement;
 import net.minecraft.world.gen.treedecorator.TreeDecorator;
 
 import java.util.List;
+import java.util.function.Supplier;
 
 public class CoconutTreeFeatureConfig implements IFeatureConfig {
     public static final Codec<CoconutTreeFeatureConfig> CODEC = RecordCodecBuilder.create((p_236683_0_) -> {

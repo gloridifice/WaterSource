@@ -1,32 +1,19 @@
 package gloridifice.watersource.common.block.tree;
 
-import com.google.common.collect.Sets;
 import gloridifice.watersource.common.world.gen.config.CoconutTreeFeatureConfig;
-import gloridifice.watersource.common.world.gen.feature.CoconutTreeFeature;
-import gloridifice.watersource.registry.BlockRegistry;
 import gloridifice.watersource.registry.ConfiguredFeatureRegistry;
-import gloridifice.watersource.registry.FeatureRegistry;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.block.trees.Tree;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.MutableBoundingBox;
-import net.minecraft.world.IWorld;
 import net.minecraft.world.gen.ChunkGenerator;
-import net.minecraft.world.gen.blockstateprovider.SimpleBlockStateProvider;
 import net.minecraft.world.gen.feature.BaseTreeFeatureConfig;
 import net.minecraft.world.gen.feature.ConfiguredFeature;
-import net.minecraft.world.gen.feature.FeatureSpread;
-import net.minecraft.world.gen.feature.TwoLayerFeature;
-import net.minecraft.world.gen.foliageplacer.BlobFoliagePlacer;
-import net.minecraft.world.gen.trunkplacer.StraightTrunkPlacer;
 import net.minecraft.world.server.ServerWorld;
-import net.minecraftforge.common.IPlantable;
 
 
 import javax.annotation.Nullable;
 import java.util.Random;
-import java.util.Set;
 
 public class CoconutTree extends Tree {
     @Nullable
@@ -47,7 +34,10 @@ public class CoconutTree extends Tree {
             return false;
         } else {
             worldIn.setBlockState(blockPosIn, Blocks.AIR.getDefaultState(), 4);
-            (configuredfeature.config).forcePlacement();
+            System.out.println(configuredfeature.getClass() + " / " +configuredfeature.config.getClass() + " / " + configuredfeature.feature.getClass());
+            //todo
+            System.out.println(blockPosIn);
+            System.out.println(configuredfeature.getClass());
             if (configuredfeature.generate(worldIn, chunkGeneratorIn, randomIn, blockPosIn)) {
                 return true;
             } else {

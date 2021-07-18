@@ -3,12 +3,14 @@ package gloridifice.watersource.common.world.gen.feature;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.Dynamic;
 import gloridifice.watersource.WaterSource;
+import gloridifice.watersource.common.block.CoconutSaplingBlock;
 import gloridifice.watersource.common.block.NaturalCoconutBlock;
 import gloridifice.watersource.common.world.gen.config.CoconutTreeFeatureConfig;
 import gloridifice.watersource.registry.BlockRegistry;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.block.LeavesBlock;
+import net.minecraft.block.SaplingBlock;
 import net.minecraft.block.material.Material;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.util.Direction;
@@ -33,9 +35,10 @@ public class CoconutTreeFeature extends Feature<CoconutTreeFeatureConfig> {
 
     @Override
     public boolean generate(ISeedReader iSeedReader, ChunkGenerator chunkGenerator, Random rand, BlockPos positionIn, CoconutTreeFeatureConfig configIn) {
+        System.out.println(positionIn);//todo test
         int a = rand.nextInt(4);
         int height = 7 + rand.nextInt(2);
-        if (isSand(iSeedReader,positionIn.down(),(IPlantable) configIn.saplingProvider.getBlockState(rand,positionIn).getBlock()) && canPlace(iSeedReader,positionIn,height,a)){
+        if (isSand(iSeedReader,positionIn.down()) && canPlace(iSeedReader,positionIn,height,a)){
             BlockPos pos = positionIn;
             for (int i = 0 ; i < height/2; i++){
                 pos = positionIn.up(i);
@@ -77,13 +80,13 @@ public class CoconutTreeFeature extends Feature<CoconutTreeFeatureConfig> {
 
 
 
-    protected static boolean isSand(IWorldGenerationBaseReader reader, BlockPos pos, net.minecraftforge.common.IPlantable sapling) {
-        if (!(reader instanceof net.minecraft.world.IBlockReader) || sapling == null)
+    protected static boolean isSand(IWorldGenerationBaseReader reader, BlockPos pos) {
+        if (!(reader instanceof net.minecraft.world.IBlockReader))
             //todo 自定义生长方块
             return reader.hasBlockState(pos, (data) -> {
                 return BlockTags.getCollection().get(new ResourceLocation(WaterSource.MODID,"coconut_soil")).contains(data.getBlock());
             });
-        return reader.hasBlockState(pos, state -> state.canSustainPlant((net.minecraft.world.IBlockReader)reader, pos, Direction.UP, sapling));
+        return reader.hasBlockState(pos, state -> state.canSustainPlant((net.minecraft.world.IBlockReader)reader, pos, Direction.UP, (CoconutSaplingBlock) BlockRegistry.BLOCK_COCONUT_SAPLING));
     }
     protected boolean placeLeaves(IWorldGenerationReader generationReader, BlockPos pos, BlockState blockState){
         if (isAirOrLeavesAt(generationReader,pos)){

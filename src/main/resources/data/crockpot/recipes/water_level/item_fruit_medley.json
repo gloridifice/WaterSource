@@ -1,0 +1,8 @@
+{
+    "type": "watersource:water_level_item",
+    "ingredient": {
+        "item": "crockpot:fruit_medley"
+    },
+	"waterLevel": 2,
+	"waterSaturationLevel": 2
+}

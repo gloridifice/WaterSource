@@ -26,6 +26,10 @@ import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.items.CapabilityItemHandler;
+import org.lwjgl.opengl.GL11;
+import org.lwjgl.opengl.GL14;
+
+import static org.lwjgl.opengl.GL11.GL_POLYGON;
 
 @Mod.EventBusSubscriber(value = Dist.CLIENT, modid = WaterSource.MODID)
 public class WaterFilterStrainerHUD extends AbstractGui {
@@ -59,13 +63,13 @@ public class WaterFilterStrainerHUD extends AbstractGui {
         FontRenderer fontRenderer = mc.fontRenderer;
 
         float scale = 1.3f;
-        int x = mc.getMainWindow().getScaledWidth()/2;
+        int x = 10;
         int y = mc.getMainWindow().getScaledHeight()/2;
         RenderSystem.pushMatrix();
         RenderSystem.enableRescaleNormal();
         RenderSystem.scalef(scale,scale,1f);
         RenderSystem.enableBlend();
-        mc.getItemRenderer().renderItemIntoGUI(stack,(int)((float)(x - 10)/scale),(int)((float)(y - 16)/scale));
+        mc.getItemRenderer().renderItemIntoGUI(stack, x,(int)((float)(y - 16)/scale));
         RenderSystem.popMatrix();
 
         RenderSystem.pushMatrix();
@@ -75,7 +79,7 @@ public class WaterFilterStrainerHUD extends AbstractGui {
         String text = I18n.format("watersource.misc.damage") + (stack.getMaxDamage() - stack.getDamage()) + "/" + stack.getMaxDamage();
         if (stack.getItem() == BlockRegistry.ITEM_DIRTY_STRAINER)
             text = I18n.format("watersource.misc.dirty_strainer");
-        fontRenderer.drawString(matrixStack,text,x - fontRenderer.getStringWidth(text)/2,y + 6,0xFFFFFF);
+        fontRenderer.drawString(matrixStack,text,x + 4,y + 6,0xFFFFFF);
         RenderSystem.popMatrix();
     }
 }

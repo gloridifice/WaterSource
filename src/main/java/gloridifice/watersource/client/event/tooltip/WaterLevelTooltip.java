@@ -34,7 +34,8 @@ public class WaterLevelTooltip {
     public static void onItemTooltipEvent(ItemTooltipEvent event) {
         x = 1;
         if (ConfigRegistry.OPEN_FOOD_WATER_LEVEL.get()) {
-            WaterLevelItemRecipe recipe = WaterLevelRecipeManager.getRecipeFromItemStack(event.getItemStack());
+            Minecraft mc = Minecraft.getInstance();
+            WaterLevelItemRecipe recipe = WaterLevelItemRecipe.getRecipeFromItem(mc.world, event.getItemStack());
             if (recipe != null) {
                 StringBuilder stringBuilder = new StringBuilder(" ");
                 for (int i = 0;i < recipe.getWaterLevel()/2 ;i++) stringBuilder.append("  ");
@@ -51,7 +52,7 @@ public class WaterLevelTooltip {
         tick %= 2000;
         if (ConfigRegistry.OPEN_FOOD_WATER_LEVEL.get()) {
             Minecraft mc = Minecraft.getInstance();
-            WaterLevelItemRecipe wRecipe = WaterLevelRecipeManager.getRecipeFromItemStack(event.getStack());
+            WaterLevelItemRecipe wRecipe = WaterLevelItemRecipe.getRecipeFromItem(mc.world, event.getStack());
             if (wRecipe != null) {
                 event.getLines();
                 RenderSystem.pushMatrix();

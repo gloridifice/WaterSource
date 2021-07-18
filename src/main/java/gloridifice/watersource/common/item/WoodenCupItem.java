@@ -15,6 +15,8 @@ import net.minecraft.item.UseAction;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.stats.Stats;
 import net.minecraft.tags.FluidTags;
+import net.minecraft.tags.ITag;
+import net.minecraft.tags.ITagCollection;
 import net.minecraft.util.*;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockRayTraceResult;
@@ -130,7 +132,9 @@ public class WoodenCupItem extends ItemFluidContainer {
     public void fillItemGroup(ItemGroup group, NonNullList<ItemStack> items) {
         if (group == this.group)
         {
-            for (Fluid fluid : FluidTags.getCollection().get(new ResourceLocation(WaterSource.MODID,"drink")).getAllElements())
+            ITag<Fluid> tag = FluidTags.getCollection().get(new ResourceLocation(WaterSource.MODID,"drink"));
+            if (tag == null) return;
+            for (Fluid fluid : tag.getAllElements())
             {
                 ItemStack itemStack = new ItemStack(ItemRegistry.itemWoodenCupDrink);
                 items.add(FluidHelper.fillContainer(itemStack,fluid));

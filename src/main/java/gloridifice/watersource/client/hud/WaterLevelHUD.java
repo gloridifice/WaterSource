@@ -46,6 +46,9 @@ public class WaterLevelHUD extends AbstractGui {
         if (ModList.get().isLoaded("toughnessbar") && toughness != 0){
             OffsetY -= 10;
         }
+        if (ModList.get().isLoaded("elenaidodge2")){
+            OffsetY -= 10;
+        }
         int OffsetY1 = OffsetY;
         int texU = 0;
         int texV = 0;

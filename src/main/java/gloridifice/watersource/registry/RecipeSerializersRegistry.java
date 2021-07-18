@@ -1,11 +1,12 @@
 package gloridifice.watersource.registry;
 
 import gloridifice.watersource.WaterSource;
-import gloridifice.watersource.common.recipe.ThirstFluidRecipe;
-import gloridifice.watersource.common.recipe.ThirstItemRecipe;
-import gloridifice.watersource.common.recipe.ThirstNBTRecipe;
+import gloridifice.watersource.common.recipe.*;
 import gloridifice.watersource.common.recipe.serializer.ThirstItemRecipeSerializer;
+import gloridifice.watersource.common.recipe.serializer.WaterFilterRecipeSerializer;
+import gloridifice.watersource.common.recipe.serializer.WaterLevelRecipeSerializer;
 import gloridifice.watersource.common.recipe.type.*;
+import net.minecraft.fluid.Fluids;
 import net.minecraft.item.crafting.IRecipeSerializer;
 import net.minecraft.item.crafting.SpecialRecipeSerializer;
 import net.minecraftforge.fml.RegistryObject;
@@ -26,4 +27,9 @@ public class RecipeSerializersRegistry {
     public final static RegistryObject<ThirstItemRecipeSerializer<ThirstFluidRecipe>> THIRST_FLUID_RECIPE_SERIALIZER = RECIPE_SERIALIZERS.register("thirst_fluid",() -> new ThirstItemRecipeSerializer<>(ThirstFluidRecipe::new,2000,0,75));
     public final static RegistryObject<ThirstItemRecipeSerializer<ThirstNBTRecipe>> THIRST_NBT_RECIPE_SERIALIZER = RECIPE_SERIALIZERS.register("thirst_nbt",() -> new ThirstItemRecipeSerializer<>(ThirstNBTRecipe::new,2000,0,75));
 
+    public final static RegistryObject<WaterLevelRecipeSerializer<WaterLevelItemRecipe>> WATER_LEVEL_ITEM_RECIPE_SERIALIZER = RECIPE_SERIALIZERS.register("water_level_item",() -> new WaterLevelRecipeSerializer<>(WaterLevelItemRecipe::new,2,2));
+    public final static RegistryObject<WaterLevelRecipeSerializer<WaterLevelFluidRecipe>> WATER_LEVEL_FLUID_RECIPE_SERIALIZER = RECIPE_SERIALIZERS.register("water_level_fluid",() -> new WaterLevelRecipeSerializer<>(WaterLevelFluidRecipe::new,2,2));
+    public final static RegistryObject<WaterLevelRecipeSerializer<WaterLevelNBTRecipe>> WATER_LEVEL_NBT_RECIPE_SERIALIZER = RECIPE_SERIALIZERS.register("water_level_nbt",() -> new WaterLevelRecipeSerializer<>(WaterLevelNBTRecipe::new,2,2));
+
+    public final static RegistryObject<WaterFilterRecipeSerializer<WaterFilterRecipe>> WATER_FILTER_RECIPE_SERIALIZER = RECIPE_SERIALIZERS.register("water_filter",() -> new WaterFilterRecipeSerializer<>(WaterFilterRecipe::new, Fluids.EMPTY, Fluids.EMPTY));
 }

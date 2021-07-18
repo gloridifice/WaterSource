@@ -12,11 +12,12 @@ import net.minecraft.world.World;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ThirstItemRecipe implements IThirstRecipe{
-    protected final int duration,amplifier,probability;
+public class ThirstItemRecipe implements IThirstRecipe {
+    protected final int duration, amplifier, probability;
     protected final ResourceLocation id;
     protected final String group;
     protected final Ingredient ingredient;
+
     public ThirstItemRecipe(ResourceLocation idIn, String groupIn, Ingredient ingredient, int duration, int amplifier, int probability) {
         this.id = idIn;
         this.group = groupIn;
@@ -25,6 +26,7 @@ public class ThirstItemRecipe implements IThirstRecipe{
         this.ingredient = ingredient;
         this.probability = probability;
     }
+
     public int getAmplifier() {
         return amplifier;
     }
@@ -40,9 +42,10 @@ public class ThirstItemRecipe implements IThirstRecipe{
     public Ingredient getIngredient() {
         return ingredient;
     }
-    public boolean conform(ItemStack i){
-        for (ItemStack stack : ingredient.getMatchingStacks()){
-            if (stack.isItemEqual(i)){
+
+    public boolean conform(ItemStack i) {
+        for (ItemStack stack : ingredient.getMatchingStacks()) {
+            if (stack.isItemEqual(i)) {
                 return true;
             }
         }
@@ -89,12 +92,15 @@ public class ThirstItemRecipe implements IThirstRecipe{
         return this.group;
     }
 
-    public static ThirstItemRecipe getRecipeFromItem(World world, ItemStack itemStack){
+    public static ThirstItemRecipe getRecipeFromItem(World world, ItemStack itemStack) {
         List<ThirstItemRecipe> list = new ArrayList<>();
-        list.addAll(world.getRecipeManager().getRecipesForType(NormalRecipeTypes.THIRST_ITEM_RECIPE));
-        list.addAll(world.getRecipeManager().getRecipesForType(NormalRecipeTypes.THIRST_FLUID_RECIPE));
-        for (ThirstItemRecipe recipe : list){
-            if (recipe.conform(itemStack)){
+        if (world != null) {
+            list.addAll(world.getRecipeManager().getRecipesForType(NormalRecipeTypes.THIRST_ITEM_RECIPE));
+            list.addAll(world.getRecipeManager().getRecipesForType(NormalRecipeTypes.THIRST_FLUID_RECIPE));
+            list.addAll(world.getRecipeManager().getRecipesForType(NormalRecipeTypes.THIRST_NBT_RECIPE));
+        }
+        for (ThirstItemRecipe recipe : list) {
+            if (recipe.conform(itemStack)) {
                 return recipe;
             }
         }

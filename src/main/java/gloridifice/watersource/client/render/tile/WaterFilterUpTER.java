@@ -22,6 +22,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.vector.Quaternion;
+import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraftforge.client.event.TextureStitchEvent;
 import net.minecraftforge.client.model.data.EmptyModelData;
@@ -110,37 +111,35 @@ public class WaterFilterUpTER extends TileEntityRenderer<WaterFilterUpTile> {
                 add(buffer, matrixStackIn, 0.125f, 0.126f, 0.875f, still.getMaxU(), still.getMinV(), colorRGBA);
                 add(buffer, matrixStackIn, 0.875f, 0.126f, 0.875f, still.getMaxU(), still.getMaxV(), colorRGBA);
                 add(buffer, matrixStackIn, 0.875f, 0.126f, 0.125f, still.getMinU(), still.getMaxV(), colorRGBA);*/
-                Direction direction = getDirection(player.getPosition(),tileEntityIn.getPos());
+                Vector3d vector3d = new Vector3d(player.getPosition().getX() - tileEntityIn.getPos().getX(), player.getPosition().getY() - tileEntityIn.getPos().getY(),player.getPosition().getZ() - tileEntityIn.getPos().getZ());
+                Direction direction = Direction.getFacingFromVector(vector3d.x,vector3d.y,vector3d.z);
                 FontRenderer fontRenderer = this.renderDispatcher.fontRenderer;
                 String s = fluidTankUp.getFluidAmount() + "mB/" + fluidTankUp.getCapacity() + "mB";
                 matrixStackIn.push();
                 switch (direction){
+                    case SOUTH:
+                        matrixStackIn.translate(0.1,0.25,1.05);
+                        break;
                     case NORTH:
-                        matrixStackIn.rotate(new Quaternion(0,180,0,false));
+                        matrixStackIn.rotate(new Quaternion(0,180,0,true));
+                        matrixStackIn.translate(-0.9,0.25,0.1);
                         break;
                     case EAST:
-                        matrixStackIn.rotate(new Quaternion(0,90,0,false));
+                        matrixStackIn.rotate(new Quaternion(0,90,0,true));
+                        matrixStackIn.translate(-0.9,0.25,1.05);
                         break;
                     case WEST:
-                        matrixStackIn.rotate(new Quaternion(0,270,0,false));
+                        matrixStackIn.rotate(new Quaternion(0,270,0,true));
+                        matrixStackIn.translate(0.1,0.25,0.05);
                         break;
                 }
-                matrixStackIn.translate(0.1,0.25,1);
+
                 matrixStackIn.scale(0.010416667F, -0.010416667F, 0.010416667F);
-                fontRenderer.renderString(s,0F,0F,0xFFFFFF,false,matrixStackIn.getLast().getMatrix(),bufferIn,false,0,combinedLightIn);
+                fontRenderer.renderString(s,0F,0F,0xFFFFFF,false,matrixStackIn.getLast().getMatrix(), bufferIn,false,0, combinedLightIn);
                 matrixStackIn.pop();
             }
         });
         //GlStateManager.enableCull();
-    }
-    private Direction getDirection(BlockPos centerPos, BlockPos posB){
-        int dx = centerPos.getX() - posB.getX();
-        int dz = centerPos.getZ() - posB.getZ();
-        if (Math.abs(dx) > Math.abs(dz)){
-            return dx > 0 ? Direction.EAST : Direction.WEST;
-        }else {
-            return dz > 0 ? Direction.SOUTH : Direction.NORTH;
-        }
     }
     private void add(IVertexBuilder renderer, MatrixStack stack, float x, float y, float z, float u, float v) {
         renderer.pos(stack.getLast().getMatrix(), x, y, z)

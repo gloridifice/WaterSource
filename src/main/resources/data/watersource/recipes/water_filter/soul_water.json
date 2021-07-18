@@ -1,0 +1,8 @@
+{
+    "type": "watersource:water_filter",
+    "strainerIngredient": {
+        "tag": "watersource:soul_strainers"
+    },
+	"inputFluid": "minecraft:water",
+	"outputFluid": "watersource:soul_water"
+}
