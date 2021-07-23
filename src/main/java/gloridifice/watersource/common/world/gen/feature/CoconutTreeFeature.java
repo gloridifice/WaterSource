@@ -78,8 +78,6 @@ public class CoconutTreeFeature extends Feature<CoconutTreeFeatureConfig> {
         }else return false;
     }
 
-
-
     protected static boolean isSand(IWorldGenerationBaseReader reader, BlockPos pos) {
         if (!(reader instanceof net.minecraft.world.IBlockReader))
             //todo 自定义生长方块
@@ -88,12 +86,14 @@ public class CoconutTreeFeature extends Feature<CoconutTreeFeatureConfig> {
             });
         return reader.hasBlockState(pos, state -> state.canSustainPlant((net.minecraft.world.IBlockReader)reader, pos, Direction.UP, (CoconutSaplingBlock) BlockRegistry.BLOCK_COCONUT_SAPLING));
     }
+
     protected boolean placeLeaves(IWorldGenerationReader generationReader, BlockPos pos, BlockState blockState){
         if (isAirOrLeavesAt(generationReader,pos)){
             setBlockState(generationReader,pos,blockState);
             return true;
         }else return false;
     }
+
     protected boolean canPlace(IWorldGenerationBaseReader generationReader, BlockPos positionIn, int height, int randA) {
         boolean flag = true;
         BlockPos pos;
@@ -111,23 +111,23 @@ public class CoconutTreeFeature extends Feature<CoconutTreeFeatureConfig> {
         }
         return flag;
     }
+
     private static boolean isWaterAt(IWorldGenerationBaseReader p_236416_0_, BlockPos p_236416_1_) {
-        return p_236416_0_.hasBlockState(p_236416_1_, (p_236413_0_) -> {
-            return p_236413_0_.isIn(Blocks.WATER);
-        });
+        return p_236416_0_.hasBlockState(p_236416_1_, (p_236413_0_) -> p_236413_0_.matchesBlock(Blocks.WATER));
     }
+
     private static boolean isTallPlantAt(IWorldGenerationBaseReader p_236419_0_, BlockPos p_236419_1_) {
         return p_236419_0_.hasBlockState(p_236419_1_, (p_236406_0_) -> {
             Material lvt_1_1_ = p_236406_0_.getMaterial();
             return lvt_1_1_ == Material.TALL_PLANTS;
         });
     }
+
     public static boolean isReplaceableAt(IWorldGenerationBaseReader p_236404_0_, BlockPos p_236404_1_) {
         return isAirOrLeavesAt(p_236404_0_, p_236404_1_) || isTallPlantAt(p_236404_0_, p_236404_1_) || isWaterAt(p_236404_0_, p_236404_1_);
     }
+
     public static boolean isAirOrLeavesAt(IWorldGenerationBaseReader p_236412_0_, BlockPos p_236412_1_) {
-        return p_236412_0_.hasBlockState(p_236412_1_, (p_236411_0_) -> {
-            return p_236411_0_.isAir() || p_236411_0_.isIn(BlockTags.LEAVES);
-        });
+        return p_236412_0_.hasBlockState(p_236412_1_, (p_236411_0_) -> p_236411_0_.isAir() || p_236411_0_.isIn(BlockTags.LEAVES));
     }
 }
