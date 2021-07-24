@@ -43,7 +43,7 @@ public class WaterLevelRecipeSerializer<T extends WaterLevelItemRecipe> extends 
         try {
             compoundNBT = JsonToNBT.getTagFromJson(nbt);
         } catch (CommandSyntaxException e) {
-            System.out.println("No NBT.");
+//            System.out.println("No NBT.");
         }
         Fluid fluid = ForgeRegistries.FLUIDS.getValue(new ResourceLocation(fluidName));
         List<ItemStack> list = new ArrayList();

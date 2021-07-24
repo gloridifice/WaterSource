@@ -1,7 +1,7 @@
 {
     "type": "watersource:water_level_item",
     "ingredient": {
-        "item": "minecraft:enchated_golden_apple"
+        "item": "minecraft:enchanted_golden_apple"
     },
 	"waterLevel": 2,
 	"waterSaturationLevel": 16
