@@ -17,7 +17,7 @@ public class ThirstNBTRecipe extends ThirstItemRecipe{
     @Override
     public boolean conform(ItemStack i) {
         for (ItemStack stack : ingredient.getMatchingStacks()){
-            if (stack.isItemEqual(i) && !stack.getTag().isEmpty() && !i.getTag().isEmpty() && stack.getTag().equals(i.getTag())){
+            if (stack.isItemEqual(i) && stack.getTag() != null && i.getTag() != null && stack.getTag().equals(i.getTag())){
                 return true;
             }
         }

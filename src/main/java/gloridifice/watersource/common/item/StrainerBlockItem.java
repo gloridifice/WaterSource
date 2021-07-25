@@ -25,7 +25,6 @@ public class StrainerBlockItem extends ModNormalBlockItem {
         Random random = new Random();
         ItemStack i = stack.copy();
         int randInt = 0;
-        //todo test
         for (int a = 0; a < damage; a++){
             if (list.containsKey(Enchantments.UNBREAKING)){
                 randInt = random.nextInt(list.get(Enchantments.UNBREAKING) + 1);

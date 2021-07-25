@@ -188,7 +188,7 @@ public class WaterFilterBlock extends Block {
                             });
                     if (heldItem.getItem() == Items.GLASS_BOTTLE) {
                         FluidStack downFluidStack = fluidTankDown.getFluid();
-                        if (!downFluidStack.isEmpty() && downFluidStack.getFluid() == FluidRegistry.PURIFIED_WATER.get()) {
+                        if (!downFluidStack.isEmpty() && (downFluidStack.getFluid() == FluidRegistry.PURIFIED_WATER.get() || downFluidStack.getFluid() == FluidRegistry.SOUL_WATER.get())) {
 //                            填装水瓶
                             ItemStack itemStack = ItemStack.EMPTY;
                             if (downFluidStack.getFluid() == FluidRegistry.PURIFIED_WATER.get()) {

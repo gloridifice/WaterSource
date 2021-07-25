@@ -35,7 +35,6 @@ public class CoconutTreeFeature extends Feature<CoconutTreeFeatureConfig> {
 
     @Override
     public boolean generate(ISeedReader iSeedReader, ChunkGenerator chunkGenerator, Random rand, BlockPos positionIn, CoconutTreeFeatureConfig configIn) {
-        System.out.println(positionIn);//todo test
         int a = rand.nextInt(4);
         int height = 7 + rand.nextInt(2);
         if (isSand(iSeedReader,positionIn.down()) && canPlace(iSeedReader,positionIn,height,a)){
@@ -80,7 +79,6 @@ public class CoconutTreeFeature extends Feature<CoconutTreeFeatureConfig> {
 
     protected static boolean isSand(IWorldGenerationBaseReader reader, BlockPos pos) {
         if (!(reader instanceof net.minecraft.world.IBlockReader))
-            //todo 自定义生长方块
             return reader.hasBlockState(pos, (data) -> {
                 return BlockTags.getCollection().get(new ResourceLocation(WaterSource.MODID,"coconut_soil")).contains(data.getBlock());
             });

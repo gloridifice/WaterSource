@@ -48,12 +48,6 @@ public class StrainerBlock extends Block {
     }
 
     @Override
-    public ActionResultType onBlockActivated(BlockState state, World worldIn, BlockPos pos, PlayerEntity player, Hand handIn, BlockRayTraceResult hit) {
-        //TODO
-        return super.onBlockActivated(state, worldIn, pos, player, handIn, hit);
-    }
-
-    @Override
     public VoxelShape getShape(BlockState state, IBlockReader worldIn, BlockPos pos, ISelectionContext context) {
         return STRAINER_SHAPE;
     }

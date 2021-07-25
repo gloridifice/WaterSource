@@ -34,10 +34,6 @@ public class CoconutTree extends Tree {
             return false;
         } else {
             worldIn.setBlockState(blockPosIn, Blocks.AIR.getDefaultState(), 4);
-            System.out.println(configuredfeature.getClass() + " / " +configuredfeature.config.getClass() + " / " + configuredfeature.feature.getClass());
-            //todo
-            System.out.println(blockPosIn);
-            System.out.println(configuredfeature.getClass());
             if (configuredfeature.generate(worldIn, chunkGeneratorIn, randomIn, blockPosIn)) {
                 return true;
             } else {

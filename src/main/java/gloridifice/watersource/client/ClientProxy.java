@@ -22,6 +22,7 @@ public class ClientProxy {
         registerCutoutType(BlockRegistry.BLOCK_NATURAL_COCONUT);
         registerCutoutType(BlockRegistry.BLOCK_COCONUT_TREE_DOOR);
         registerCutoutType(BlockRegistry.BLOCK_COCONUT_TREE_TRAPDOOR);
+        registerCutoutType(BlockRegistry.BLOCK_STONE_RAIN_COLLECTOR);
 
 /*
         RenderTypeLookup.setRenderLayer(FluidRegistry.purifiedWaterFluid.get(),RenderType.getTranslucent());

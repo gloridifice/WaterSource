@@ -42,7 +42,7 @@ public class HUDHandler {
         }
         if (pos != null && event.getType() == RenderGameOverlayEvent.ElementType.TEXT){
             BlockPos bpos = pos.getType() == RayTraceResult.Type.BLOCK ? ((BlockRayTraceResult) pos).getPos() : null;
-            WATER_FILTER_STRAINER_HUD.render(event.getMatrixStack(),bpos);
+            WATER_FILTER_STRAINER_HUD.render(event.getMatrixStack(), bpos);
         }
     }
 }

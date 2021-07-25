@@ -32,6 +32,7 @@ public class WaterLevelHUD extends AbstractGui {
 
     public void render(MatrixStack matrixStack,int screenWidth, int screenHeight, WaterLevelCapability.Data capData, double toughness) {
         Minecraft.getInstance().getRenderPartialTicks();
+        matrixStack.push();
         RenderSystem.color4f(1.0F, 1.0F, 1.0F, 1.0F);
         RenderSystem.enableAlphaTest();
         RenderSystem.enableBlend();
@@ -91,6 +92,7 @@ public class WaterLevelHUD extends AbstractGui {
         RenderSystem.enableBlend();
         RenderSystem.disableAlphaTest();
         mc.getTextureManager().bindTexture(HUDHandler.DEFAULT);
+        matrixStack.pop();
     }
 
     @SubscribeEvent
