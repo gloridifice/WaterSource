@@ -5,9 +5,7 @@ import net.minecraft.util.registry.Registry;
 import net.minecraft.util.registry.WorldGenRegistries;
 import net.minecraft.world.gen.blockstateprovider.SimpleBlockStateProvider;
 import net.minecraft.world.gen.feature.*;
-import net.minecraft.world.gen.foliageplacer.BlobFoliagePlacer;
 import net.minecraft.world.gen.placement.*;
-import net.minecraft.world.gen.trunkplacer.StraightTrunkPlacer;
 
 public class ConfiguredFeatureRegistry {
     public static ConfiguredFeature<CoconutTreeFeatureConfig, ?> COCONUT_TREE = (ConfiguredFeature<CoconutTreeFeatureConfig, ?>) register("coconut_tree",FeatureRegistry.COCONUT_TREE

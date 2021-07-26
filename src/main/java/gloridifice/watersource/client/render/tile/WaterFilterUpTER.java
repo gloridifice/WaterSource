@@ -41,6 +41,7 @@ public class WaterFilterUpTER extends TileEntityRenderer<WaterFilterUpTile> {
         Minecraft mc = Minecraft.getInstance();
         PlayerEntity player = mc.player;
         //Render strainer
+        mc.world.getGameTime();
         int tick = tileEntityIn.getProcessTicks();
         tileEntityIn.getProps().ifPresent(itemStackHandler -> {
             //todo 
@@ -66,7 +67,7 @@ public class WaterFilterUpTER extends TileEntityRenderer<WaterFilterUpTile> {
             }
             matrixStackIn.pop();
         });
-        IVertexBuilder buffer = bufferIn.getBuffer(RenderType.getTranslucent());
+        IVertexBuilder buffer = bufferIn.getBuffer(RenderType.getTranslucentNoCrumbling());
 
         tileEntityIn.getUpTank().ifPresent(fluidTankUp -> {
             if (!fluidTankUp.isEmpty()) {
@@ -111,6 +112,7 @@ public class WaterFilterUpTER extends TileEntityRenderer<WaterFilterUpTile> {
                 add(buffer, matrixStackIn, 0.125f, 0.126f, 0.875f, still.getMaxU(), still.getMinV(), colorRGBA);
                 add(buffer, matrixStackIn, 0.875f, 0.126f, 0.875f, still.getMaxU(), still.getMaxV(), colorRGBA);
                 add(buffer, matrixStackIn, 0.875f, 0.126f, 0.125f, still.getMinU(), still.getMaxV(), colorRGBA);*/
+                //渲染容量文字
                 Vector3d vector3d = new Vector3d(player.getPosition().getX() - tileEntityIn.getPos().getX(), player.getPosition().getY() - tileEntityIn.getPos().getY(),player.getPosition().getZ() - tileEntityIn.getPos().getZ());
                 Direction direction = Direction.getFacingFromVector(vector3d.x,vector3d.y,vector3d.z);
                 FontRenderer fontRenderer = this.renderDispatcher.fontRenderer;

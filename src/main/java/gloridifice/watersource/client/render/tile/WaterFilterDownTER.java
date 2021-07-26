@@ -27,7 +27,7 @@ public class WaterFilterDownTER extends TileEntityRenderer<WaterFilterDownTile> 
     @Override
     public void render(WaterFilterDownTile tileEntityIn, float partialTicks, MatrixStack matrixStackIn, IRenderTypeBuffer bufferIn, int combinedLightIn, int combinedOverlayIn) {
         Minecraft mc = Minecraft.getInstance();
-        IVertexBuilder buffer = bufferIn.getBuffer(RenderType.getTranslucent());
+        IVertexBuilder buffer = bufferIn.getBuffer(RenderType.getTranslucentNoCrumbling());
         PlayerEntity player = mc.player;
         tileEntityIn.getDownTank().ifPresent(fluidTankDown -> {
             if (!fluidTankDown.isEmpty()) {
