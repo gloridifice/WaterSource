@@ -2,6 +2,7 @@ package gloridifice.watersource.common.tile;
 
 import gloridifice.watersource.registry.TileEntityTypesRegistry;
 import net.minecraft.block.BlockState;
+import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.IntNBT;
 import net.minecraft.network.NetworkManager;
@@ -11,7 +12,7 @@ import net.minecraft.tileentity.TileEntity;
 import javax.annotation.Nullable;
 
 public class StrainerTile extends ModNormalTile {
-    CompoundNBT tag;
+    CompoundNBT tag = new CompoundNBT();
     public StrainerTile() { super(TileEntityTypesRegistry.STRAINER_TILE); }
 
     @Override
@@ -22,7 +23,7 @@ public class StrainerTile extends ModNormalTile {
 
     @Override
     public CompoundNBT write(CompoundNBT compound) {
-        compound.put("tag",tag);
+        compound.put("tag", tag);
         return super.write(compound);
     }
 

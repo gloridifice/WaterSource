@@ -37,6 +37,43 @@ public class WaterFilterUpTile extends ModNormalTile implements ITickableTileEnt
     LazyOptional<FluidTank> upTank = LazyOptional.of(this::createFluidHandler);
     LazyOptional<ItemStackHandler> strainer = LazyOptional.of(this::createStrainerItemStackHandler);
     LazyOptional<ItemStackHandler> props = LazyOptional.of(this::createPropsItemStackHandler);
+
+    double cacheTimeEnter, cacheTimeExit = 0;
+    boolean previousIsIn = false;
+    boolean isLeftAnimeEnd = true;
+
+    public double getCacheTimeEnter() {
+        return cacheTimeEnter;
+    }
+
+    public void setCacheTimeEnter(double cacheTimeEnter) {
+        this.cacheTimeEnter = cacheTimeEnter;
+    }
+
+    public double getCacheTimeExit() {
+        return cacheTimeExit;
+    }
+
+    public void setCacheTimeExit(double cacheTimeExit) {
+        this.cacheTimeExit = cacheTimeExit;
+    }
+
+    public boolean isPreviousIsIn() {
+        return previousIsIn;
+    }
+
+    public void setPreviousIsIn(boolean previousIsIn) {
+        this.previousIsIn = previousIsIn;
+    }
+
+    public boolean isLeftAnimeEnd() {
+        return isLeftAnimeEnd;
+    }
+
+    public void setLeftAnimeEnd(boolean leftAnimeEnd) {
+        isLeftAnimeEnd = leftAnimeEnd;
+    }
+
     final int capacity;
 
     private int processTicks = 0;

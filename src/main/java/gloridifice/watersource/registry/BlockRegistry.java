@@ -42,7 +42,7 @@ public class BlockRegistry extends RegistryModule{
     public static final Block BLOCK_COCONUT_TREE_FENCE = new FenceBlock(Block.Properties.from(BLOCK_COCONUT_TREE_PLANKS)).setRegistryName("coconut_tree_fence");
     public static final Block BLOCK_COCONUT_TREE_FENCE_GATE = new FenceGateBlock(Block.Properties.from(BLOCK_COCONUT_TREE_PLANKS)).setRegistryName("coconut_tree_fence_gate");
     public static final Block BLOCK_COCONUT_TREE_PRESSURE_PLATE = new ModPressurePlateBlock("coconut_tree_pressure_plate", PressurePlateBlock.Sensitivity.EVERYTHING,Block.Properties.from(BLOCK_COCONUT_TREE_PLANKS));
-    public static final Block BLOCK_STONE_RAIN_COLLECTOR = new FluidTankBlock("stone_rain_collector", Block.Properties.create(Material.ROCK).harvestTool(ToolType.PICKAXE).harvestLevel(1).hardnessAndResistance(3.5F).notSolid());
+    public static final Block BLOCK_STONE_RAIN_COLLECTOR = new RainCollectorBlock("stone_rain_collector", Block.Properties.create(Material.ROCK).harvestTool(ToolType.PICKAXE).harvestLevel(1).hardnessAndResistance(3.5F).notSolid());
 
     public final static BlockItem ITEM_NATURAL_COCONUT = new ModNormalBlockItem(BLOCK_NATURAL_COCONUT);
     public final static BlockItem ITEM_COCONUT = new ModNormalBlockItem(BLOCK_COCONUT);

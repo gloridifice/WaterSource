@@ -15,8 +15,8 @@ import net.minecraft.world.IBlockReader;
 import net.minecraft.world.World;
 import net.minecraftforge.fluids.FluidUtil;
 
-public class FluidTankBlock extends Block {
-    public FluidTankBlock(String name, Properties properties) {
+public class RainCollectorBlock extends Block {
+    public RainCollectorBlock(String name, Properties properties) {
         super(properties);
         this.setRegistryName(name);
     }
@@ -42,6 +42,6 @@ public class FluidTankBlock extends Block {
                 flag = FluidUtil.interactWithFluidHandler(player, hand, fluidTankUp);
             }
         });
-        return flag ? ActionResultType.SUCCESS : ActionResultType.FAIL;
+        return flag ? ActionResultType.SUCCESS : ActionResultType.PASS;
     }
 }

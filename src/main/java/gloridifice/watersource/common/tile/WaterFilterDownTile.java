@@ -17,10 +17,47 @@ import javax.annotation.Nullable;
 
 public class WaterFilterDownTile extends ModNormalTile {
     LazyOptional<FluidTank> downTank = LazyOptional.of(this::createFluidHandler);
+
+    double cacheTimeEnter, cacheTimeExit = 0;
+    boolean previousIsIn = false;
+    boolean isLeftAnimeEnd = true;
+
     final int capacity;
     public WaterFilterDownTile(int capacity) {
         super(TileEntityTypesRegistry.WATER_FILTER_DOWN_TILE);
         this.capacity = capacity;
+    }
+
+    public double getCacheTimeEnter() {
+        return cacheTimeEnter;
+    }
+
+    public void setCacheTimeEnter(double cacheTimeEnter) {
+        this.cacheTimeEnter = cacheTimeEnter;
+    }
+
+    public double getCacheTimeExit() {
+        return cacheTimeExit;
+    }
+
+    public void setCacheTimeExit(double cacheTimeExit) {
+        this.cacheTimeExit = cacheTimeExit;
+    }
+
+    public boolean isPreviousIsIn() {
+        return previousIsIn;
+    }
+
+    public void setPreviousIsIn(boolean previousIsIn) {
+        this.previousIsIn = previousIsIn;
+    }
+
+    public boolean isLeftAnimeEnd() {
+        return isLeftAnimeEnd;
+    }
+
+    public void setLeftAnimeEnd(boolean leftAnimeEnd) {
+        isLeftAnimeEnd = leftAnimeEnd;
     }
 
     public LazyOptional<FluidTank> getDownTank() {

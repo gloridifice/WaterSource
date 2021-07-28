@@ -1,7 +1,8 @@
 {
 	"credit": "Made with Blockbench",
 	"textures": {
-		"0": "watersource:block/stone_rain_collector"
+		"0": "watersource:block/stone_rain_collector",
+		"particle": "watersource:block/stone_rain_collector"
 	},
 	"elements": [
 		{

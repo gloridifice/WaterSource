@@ -215,7 +215,7 @@ public class CommonEventHandler {
                 }
             });
         }
-        //Restore water level in Peaceful difficulty mode - 3s
+        //Restore water.json level in Peaceful difficulty mode - 3s
         if (tick % 150 == 0 && player != null && !(player instanceof FakePlayer)) {
             if (world.getDifficulty() == Difficulty.PEACEFUL) {
                 player.getCapability(WaterLevelCapability.PLAYER_WATER_LEVEL).ifPresent(data -> {
@@ -223,7 +223,7 @@ public class CommonEventHandler {
                 });
             }
         }
-        //Update water between server and client - 30s
+        //Update water.json between server and client - 30s
         if (tick % 1500 == 0 && player != null && !(player instanceof FakePlayer) && !world.isRemote) {
             player.getCapability(WaterLevelCapability.PLAYER_WATER_LEVEL).ifPresent(data -> {
                 SimpleNetworkHandler.CHANNEL.send(PacketDistributor.PLAYER.with(() -> (ServerPlayerEntity) player), new PlayerWaterLevelMessage(data.getWaterLevel(), data.getWaterSaturationLevel(), data.getWaterExhaustionLevel()));

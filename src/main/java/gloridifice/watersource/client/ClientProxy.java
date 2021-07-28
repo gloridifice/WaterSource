@@ -1,9 +1,11 @@
 package gloridifice.watersource.client;
 
 import gloridifice.watersource.registry.BlockRegistry;
+import gloridifice.watersource.registry.FluidRegistry;
 import net.minecraft.block.Block;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.RenderTypeLookup;
+import net.minecraft.fluid.Fluid;
 
 
 public class ClientProxy {
@@ -24,6 +26,12 @@ public class ClientProxy {
         registerCutoutType(BlockRegistry.BLOCK_COCONUT_TREE_TRAPDOOR);
         registerCutoutType(BlockRegistry.BLOCK_STONE_RAIN_COLLECTOR);
 
+/*        registerTranslucentMovingType(FluidRegistry.SOUL_WATER.get());
+        registerTranslucentMovingType(FluidRegistry.SOUL_WATER_FLOWING.get());
+        registerTranslucentMovingType(FluidRegistry.PURIFIED_WATER.get());
+        registerTranslucentMovingType(FluidRegistry.PURIFIED_WATER_FLOWING.get());
+        registerTranslucentMovingType(FluidRegistry.COCONUT_MILK.get());
+        registerTranslucentMovingType(FluidRegistry.COCONUT_MILK_FLOWING.get());*/
 /*
         RenderTypeLookup.setRenderLayer(FluidRegistry.purifiedWaterFluid.get(),RenderType.getTranslucent());
         RenderTypeLookup.setRenderLayer(FluidRegistry.purifiedWaterFluidFlowing.get(),RenderType.getTranslucent());
@@ -34,9 +42,13 @@ public class ClientProxy {
     {
         RenderTypeLookup.setRenderLayer(block, RenderType.getCutout());
     }
-    private static void registerTranslucentType(Block block)
+    private static void registerTranslucentMovingType(Block block)
     {
-        RenderTypeLookup.setRenderLayer(block, RenderType.getTranslucent());
+        RenderTypeLookup.setRenderLayer(block, RenderType.getTranslucentMovingBlock());
+    }
+    private static void registerTranslucentMovingType(Fluid fluid)
+    {
+        RenderTypeLookup.setRenderLayer(fluid, RenderType.getTranslucent());
     }
     private static void registerCutoutMippedType(Block block)
     {

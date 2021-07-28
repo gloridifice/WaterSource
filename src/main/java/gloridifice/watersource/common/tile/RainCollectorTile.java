@@ -101,7 +101,7 @@ public class RainCollectorTile extends ModNormalTile implements ITickableTileEnt
         processTicks++;
         processTicks %= 2000;
         if (getWorld().isRaining()){
-            if (processTicks % 5 == 0){
+            if (processTicks % 5 == 0 && world.isRainingAt(pos)){
                 tank.ifPresent(tank -> {tank.fill(new FluidStack(Fluids.WATER,1), IFluidHandler.FluidAction.EXECUTE);});
             }
         }

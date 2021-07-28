@@ -3,7 +3,6 @@ package gloridifice.watersource.client.render.tile;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.vertex.IVertexBuilder;
-import gloridifice.watersource.WaterSource;
 import gloridifice.watersource.common.item.StrainerBlockItem;
 import gloridifice.watersource.common.tile.WaterFilterUpTile;
 import net.minecraft.block.Block;
@@ -20,13 +19,9 @@ import net.minecraft.client.renderer.tileentity.TileEntityRendererDispatcher;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Direction;
-import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.vector.Quaternion;
 import net.minecraft.util.math.vector.Vector3d;
-import net.minecraft.util.text.TranslationTextComponent;
-import net.minecraftforge.client.event.TextureStitchEvent;
 import net.minecraftforge.client.model.data.EmptyModelData;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 
@@ -34,36 +29,35 @@ public class WaterFilterUpTER extends TileEntityRenderer<WaterFilterUpTile> {
     public WaterFilterUpTER(TileEntityRendererDispatcher rendererDispatcherIn) {
         super(rendererDispatcherIn);
     }
-
-
     @Override
     public void render(WaterFilterUpTile tileEntityIn, float partialTicks, MatrixStack matrixStackIn, IRenderTypeBuffer bufferIn, int combinedLightIn, int combinedOverlayIn) {
         Minecraft mc = Minecraft.getInstance();
         PlayerEntity player = mc.player;
         //Render strainer
-        mc.world.getGameTime();
+        long gameTime = mc.world.getGameTime();
+        double animationTime = (double) gameTime + (double) partialTicks;
         int tick = tileEntityIn.getProcessTicks();
         tileEntityIn.getProps().ifPresent(itemStackHandler -> {
             //todo 
-            if (itemStackHandler.getStackInSlot(0).isEmpty())return;
+            if (itemStackHandler.getStackInSlot(0).isEmpty()) return;
             float speed = 0;
-            if (tileEntityIn.getStrainer().map(data -> data.getStackInSlot(0)).orElse(ItemStack.EMPTY).isEmpty()){
+            if (tileEntityIn.getStrainer().map(data -> data.getStackInSlot(0)).orElse(ItemStack.EMPTY).isEmpty()) {
                 if (!tileEntityIn.getCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY).map(data -> data.getFluidInTank(0).isEmpty()).orElse(true))
-                speed = 10f;
+                    speed = 10f;
             }
             matrixStackIn.push();
-            matrixStackIn.translate(0.5,0.4 + Math.sin((float)tick / (20f - speed/2f))/13f,0.5);
-            matrixStackIn.rotate(new Quaternion(0f, (float) tick/(30f - speed) ,0f,false));
-            mc.getItemRenderer().renderItem(itemStackHandler.getStackInSlot(0), ItemCameraTransforms.TransformType.GROUND,combinedLightIn,combinedOverlayIn,matrixStackIn,bufferIn);
+            matrixStackIn.translate(0.5, 0.4 + Math.sin((float) tick / (20f - speed / 2f)) / 13f, 0.5);
+            matrixStackIn.rotate(new Quaternion(0f, (float) tick / (30f - speed), 0f, false));
+            mc.getItemRenderer().renderItem(itemStackHandler.getStackInSlot(0), ItemCameraTransforms.TransformType.GROUND, combinedLightIn, combinedOverlayIn, matrixStackIn, bufferIn);
             matrixStackIn.pop();
         });
         tileEntityIn.getStrainer().ifPresent(itemStackHandler -> {
             matrixStackIn.push();
-            matrixStackIn.translate(0,-0.125,0);
-            if (!itemStackHandler.getStackInSlot(0).isEmpty() && itemStackHandler.getStackInSlot(0).getItem() instanceof StrainerBlockItem){
+            matrixStackIn.translate(0, -0.125, 0);
+            if (!itemStackHandler.getStackInSlot(0).isEmpty() && itemStackHandler.getStackInSlot(0).getItem() instanceof StrainerBlockItem) {
                 Block block = Block.getBlockFromItem(itemStackHandler.getStackInSlot(0).getItem());
                 BlockRendererDispatcher rendererDispatcher = mc.getBlockRendererDispatcher();
-                rendererDispatcher.renderBlock(block.getDefaultState(),matrixStackIn,bufferIn,60,combinedOverlayIn, EmptyModelData.INSTANCE);
+                rendererDispatcher.renderBlock(block.getDefaultState(), matrixStackIn, bufferIn, 60, combinedOverlayIn, EmptyModelData.INSTANCE);
             }
             matrixStackIn.pop();
         });
@@ -113,36 +107,67 @@ public class WaterFilterUpTER extends TileEntityRenderer<WaterFilterUpTile> {
                 add(buffer, matrixStackIn, 0.875f, 0.126f, 0.875f, still.getMaxU(), still.getMaxV(), colorRGBA);
                 add(buffer, matrixStackIn, 0.875f, 0.126f, 0.125f, still.getMinU(), still.getMaxV(), colorRGBA);*/
                 //渲染容量文字
-                Vector3d vector3d = new Vector3d(player.getPosition().getX() - tileEntityIn.getPos().getX(), player.getPosition().getY() - tileEntityIn.getPos().getY(),player.getPosition().getZ() - tileEntityIn.getPos().getZ());
-                Direction direction = Direction.getFacingFromVector(vector3d.x,vector3d.y,vector3d.z);
+                Vector3d vector3d = new Vector3d(player.getPosition().getX() - tileEntityIn.getPos().getX(), player.getPosition().getY() - tileEntityIn.getPos().getY(), player.getPosition().getZ() - tileEntityIn.getPos().getZ());
+                Direction direction = Direction.getFacingFromVector(vector3d.x, vector3d.y, vector3d.z);
+                //flag检测
+                double cacheTimeEnter = tileEntityIn.getCacheTimeEnter();
+                double cacheTimeExit = tileEntityIn.getCacheTimeExit();
+                boolean previousIsIn = tileEntityIn.isPreviousIsIn();
+                boolean isLeftAnimeEnd = tileEntityIn.isLeftAnimeEnd();
+
+                boolean isIn = vector3d.length() <= 6;
+                if (!previousIsIn && isIn) {
+                    cacheTimeEnter = animationTime;
+                } else if (!isIn && previousIsIn) {
+                    cacheTimeExit = animationTime;
+                    isLeftAnimeEnd = false;
+                }
+                //动画实现
                 FontRenderer fontRenderer = this.renderDispatcher.fontRenderer;
                 String s = fluidTankUp.getFluidAmount() + "mB/" + fluidTankUp.getCapacity() + "mB";
                 matrixStackIn.push();
-                switch (direction){
+                double animeTime = 0.5d;//单位秒
+                double needTicks = animeTime * 20;
+                double ra = 0d;
+                if (animationTime - cacheTimeEnter <= needTicks) {
+                    ra += Math.sin(3.1415d / (2d * needTicks) * (animationTime - cacheTimeEnter));
+                } else ra += 1d;
+                if (animationTime - cacheTimeExit <= needTicks) {
+                    ra -= Math.sin(3.1415d / (2d * needTicks) * (animationTime - cacheTimeExit));
+                } else if (isLeftAnimeEnd && !isIn) ra -= 1d;
+                if (Math.abs(animationTime - cacheTimeExit - needTicks) <= 0.5d) isLeftAnimeEnd = true;
+                double a = (double) mc.fontRenderer.getStringWidth(s)/ 200 * ra;
+                switch (direction) {
                     case SOUTH:
-                        matrixStackIn.translate(0.1,0.25,1.05);
+                        matrixStackIn.translate(0.5 - a, 0.25, 1.05);
                         break;
                     case NORTH:
-                        matrixStackIn.rotate(new Quaternion(0,180,0,true));
-                        matrixStackIn.translate(-0.9,0.25,0.1);
+                        matrixStackIn.rotate(new Quaternion(0, 180, 0, true));
+                        matrixStackIn.translate(-0.5 - a, 0.25, 0.1);
                         break;
                     case EAST:
-                        matrixStackIn.rotate(new Quaternion(0,90,0,true));
-                        matrixStackIn.translate(-0.9,0.25,1.05);
+                        matrixStackIn.rotate(new Quaternion(0, 90, 0, true));
+                        matrixStackIn.translate(-0.5 - a, 0.25, 1.05);
                         break;
                     case WEST:
-                        matrixStackIn.rotate(new Quaternion(0,270,0,true));
-                        matrixStackIn.translate(0.1,0.25,0.05);
+                        matrixStackIn.rotate(new Quaternion(0, 270, 0, true));
+                        matrixStackIn.translate(0.5 - a, 0.25, 0.05);
                         break;
                 }
-
-                matrixStackIn.scale(0.010416667F, -0.010416667F, 0.010416667F);
-                fontRenderer.renderString(s,0F,0F,0xFFFFFF,false,matrixStackIn.getLast().getMatrix(), bufferIn,false,0, combinedLightIn);
+                matrixStackIn.scale(0.010416667F * (float) ra, -0.010416667F * (float) ra, 0.010416667F * (float) ra);
+                fontRenderer.renderString(s, 0F, 0F, 0xFFFFFF, false, matrixStackIn.getLast().getMatrix(), bufferIn, false, 0, combinedLightIn);
                 matrixStackIn.pop();
+                previousIsIn = vector3d.length() <= 6;
+
+                tileEntityIn.setCacheTimeEnter(cacheTimeEnter);
+                tileEntityIn.setCacheTimeExit(cacheTimeExit);
+                tileEntityIn.setLeftAnimeEnd(isLeftAnimeEnd);
+                tileEntityIn.setPreviousIsIn(previousIsIn);
             }
         });
         //GlStateManager.enableCull();
     }
+
     private void add(IVertexBuilder renderer, MatrixStack stack, float x, float y, float z, float u, float v) {
         renderer.pos(stack.getLast().getMatrix(), x, y, z)
                 .color(1.0f, 1.0f, 1.0f, 1.0f)
@@ -163,6 +188,7 @@ public class WaterFilterUpTER extends TileEntityRenderer<WaterFilterUpTile> {
                 .normal(0, 0, 0)
                 .endVertex();
     }
+
     private void add(IVertexBuilder renderer, MatrixStack stack, float x, float y, float z, float u, float v, float colorR, float colorG, float colorB, float alpha) {
         renderer.pos(stack.getLast().getMatrix(), x, y, z)
                 .color(colorR, colorG, colorB, alpha)
