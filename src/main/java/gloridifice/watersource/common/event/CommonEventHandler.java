@@ -74,7 +74,7 @@ public class CommonEventHandler {
             if (wRecipe != null) {
                 entity.getCapability(WaterLevelCapability.PLAYER_WATER_LEVEL).ifPresent(data -> {
                     data.addWaterLevel(wRecipe.getWaterLevel());
-                    if(tRecipe == null){
+                    if (tRecipe == null) {
                         data.addWaterSaturationLevel(wRecipe.getWaterSaturationLevel());
                     }
                 });
@@ -183,19 +183,25 @@ public class CommonEventHandler {
                         }
                     });
                 } else {*/
-                    Biome biome = world.getBiome(player.getPosition());
-                    if (world.getLight(player.getPosition()) == 15 && world.getDayTime() < 11000 && world.getDayTime() > 450 && !world.isRainingAt(player.getPosition())) {
-                        if (biome.getTemperature() > 0.3) {
-                            player.getCapability(WaterLevelCapability.PLAYER_WATER_LEVEL).ifPresent(data -> {
-                                data.addExhaustion(player, 0.0075f);
-                            });
-                        }
-                        if (biome.getTemperature() > 0.9) {
-                            player.getCapability(WaterLevelCapability.PLAYER_WATER_LEVEL).ifPresent(data -> {
-                                data.addExhaustion(player, 0.0055f);
-                            });
-                        }
+                EffectInstance effectInstance1 = player.getActivePotionEffect(EffectRegistry.WATER_RESTORING);
+                if (effectInstance1 != null) {
+                    player.getCapability(WaterLevelCapability.PLAYER_WATER_LEVEL).ifPresent(data -> {
+                        data.restoreWaterLevel(1);
+                    });
+                }
+                Biome biome = world.getBiome(player.getPosition());
+                if (world.getLight(player.getPosition()) == 15 && world.getDayTime() < 11000 && world.getDayTime() > 450 && !world.isRainingAt(player.getPosition())) {
+                    if (biome.getTemperature() > 0.3) {
+                        player.getCapability(WaterLevelCapability.PLAYER_WATER_LEVEL).ifPresent(data -> {
+                            data.addExhaustion(player, 0.0075f);
+                        });
                     }
+                    if (biome.getTemperature() > 0.9) {
+                        player.getCapability(WaterLevelCapability.PLAYER_WATER_LEVEL).ifPresent(data -> {
+                            data.addExhaustion(player, 0.0055f);
+                        });
+                    }
+                }
                 //}
                 //Thirty State
                 EffectInstance effectInstance = player.getActivePotionEffect(EffectRegistry.THIRST);
@@ -209,7 +215,7 @@ public class CommonEventHandler {
         //Punishment/Reward - 5s
         if (tick % 250 == 0 && player != null && !(player instanceof FakePlayer)) {
             player.getCapability(WaterLevelCapability.PLAYER_WATER_LEVEL).ifPresent(data -> {
-                if (!player.isCreative()){
+                if (!player.isCreative()) {
                     data.punishment(player);
                     data.award(player);
                 }
@@ -238,28 +244,34 @@ public class CommonEventHandler {
             player.getCapability(WaterLevelCapability.PLAYER_WATER_LEVEL).ifPresent(data -> data.addExhaustion(player, 0.005f));
         }
     }
+
     @SubscribeEvent
-    public static void onPlayerRightClickBlock(PlayerInteractEvent.RightClickBlock event){
+    public static void onPlayerRightClickBlock(PlayerInteractEvent.RightClickBlock event) {
         BlockState state = event.getWorld().getBlockState(event.getPos());
         ItemStack heldItem = event.getItemStack();
         PlayerEntity player = event.getPlayer();
-        if (heldItem.getItem() instanceof AxeItem && state.getBlock() == BlockRegistry.BLOCK_COCONUT_TREE_LOG){
-            event.getWorld().playSound(player,event.getPos(), SoundEvents.ITEM_AXE_STRIP, SoundCategory.BLOCKS, 1.0F, 1.0F);
-            if (!event.getWorld().isRemote()){
-                event.getWorld().setBlockState(event.getPos(),BlockRegistry.BLOCK_STRIPPED_COCONUT_TREE_LOG.getDefaultState().with(RotatedPillarBlock.AXIS,state.get(RotatedPillarBlock.AXIS)));
-                heldItem.damageItem(1, player, (data) -> {data.sendBreakAnimation(event.getHand());});
+        if (heldItem.getItem() instanceof AxeItem && state.getBlock() == BlockRegistry.BLOCK_COCONUT_TREE_LOG) {
+            event.getWorld().playSound(player, event.getPos(), SoundEvents.ITEM_AXE_STRIP, SoundCategory.BLOCKS, 1.0F, 1.0F);
+            if (!event.getWorld().isRemote()) {
+                event.getWorld().setBlockState(event.getPos(), BlockRegistry.BLOCK_STRIPPED_COCONUT_TREE_LOG.getDefaultState().with(RotatedPillarBlock.AXIS, state.get(RotatedPillarBlock.AXIS)));
+                heldItem.damageItem(1, player, (data) -> {
+                    data.sendBreakAnimation(event.getHand());
+                });
             }
         }
     }
+
     @SubscribeEvent
-    public static void onLivingAttacked(LivingAttackEvent event){
+    public static void onLivingAttacked(LivingAttackEvent event) {
         EffectInstance effectInstance = event.getEntityLiving().getActivePotionEffect(EffectRegistry.ACCOMPANYING_SOUL);
-        if (effectInstance != null){
-            if (event.getEntityLiving().getEntityWorld().getDimensionKey() == World.THE_NETHER){
+        if (effectInstance != null) {
+            if (event.getEntityLiving().getEntityWorld().getDimensionKey() == World.THE_NETHER) {
                 event.getEntityLiving().heal(event.getAmount() * (0.25f + (float) effectInstance.getAmplifier() * 0.06f));
-            }else event.getEntityLiving().heal(event.getAmount() * (0.2f + (float) effectInstance.getAmplifier() * 0.05f));
+            } else
+                event.getEntityLiving().heal(event.getAmount() * (0.2f + (float) effectInstance.getAmplifier() * 0.05f));
         }
     }
+
     @SubscribeEvent
     public static void getVanillaFurnaceFuelValue(FurnaceFuelBurnTimeEvent event) {
         if (event.getItemStack().getItem() == BlockRegistry.ITEM_DIRTY_STRAINER) {
