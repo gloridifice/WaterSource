@@ -1,6 +1,7 @@
 {
   "effect.watersource.thirst": "Thirst",
   "effect.watersource.accompanying_soul": "Soul Buddy",
+  "effect.watersource.water_restoring": "Water Restoring",
   "death.attack.byThirst": "%s turned into Dried %s.",
   "itemGroup.watersource_group": "Water Source",
 

@@ -3,6 +3,7 @@
   "effect.watersource.accompanying_soul": "魂鬼隨行",
   "death.attack.byThirst": "%s 變成了%s幹。",
   "itemGroup.watersource_group": "水源",
+  "effect.watersource.water_restoring": "自然补水",
 
   "block.watersource.primitive_strainer": "原始濾層",
   "block.watersource.paper_strainer": "紙濾層",

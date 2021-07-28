@@ -1,6 +1,7 @@
 {
   "effect.watersource.thirst": "口渴",
   "effect.watersource.accompanying_soul": "魂鬼随行",
+  "effect.watersource.water_restoring": "自然补水",
   "death.attack.byThirst": "%s 变成了%s干。",
   "itemGroup.watersource_group": "水源",
 
