@@ -20,8 +20,7 @@ public final class SimpleNetworkHandler {
     }
 
     private static <T extends INormalMessage> void registerMessage(int index, Class<T> messageType, Function<PacketBuffer, T> decoder) {
-        CHANNEL.registerMessage(index, messageType, INormalMessage::toBytes, decoder, (message, context) ->
-        {
+        CHANNEL.registerMessage(index, messageType, INormalMessage::toBytes, decoder, (message, context) -> {
             message.process(context);
             context.get().setPacketHandled(true);
         });

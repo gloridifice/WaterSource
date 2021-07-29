@@ -14,31 +14,29 @@ import javax.annotation.Nullable;
 public class PlayerLastPosCapability {
     @CapabilityInject(PlayerLastPosCapability.Data.class)
     public static Capability<PlayerLastPosCapability.Data> PLAYER_LAST_POSITION;
-    public static class Storage implements Capability.IStorage<PlayerLastPosCapability.Data>
-    {
+
+    public static class Storage implements Capability.IStorage<PlayerLastPosCapability.Data> {
         @Override
-        public INBT writeNBT(Capability<PlayerLastPosCapability.Data> capability, PlayerLastPosCapability.Data instance, Direction side)
-        {
+        public INBT writeNBT(Capability<PlayerLastPosCapability.Data> capability, PlayerLastPosCapability.Data instance, Direction side) {
             CompoundNBT compound = new CompoundNBT();
             compound.putDouble("LastX", instance.getLastX());
             compound.putDouble("LastY", instance.getLastY());
             compound.putDouble("LastZ", instance.getLastZ());
-            compound.putBoolean("LastOnGround",instance.isLastOnGround());
+            compound.putBoolean("LastOnGround", instance.isLastOnGround());
             return compound;
         }
 
         @Override
-        public void readNBT(Capability<PlayerLastPosCapability.Data> capability, PlayerLastPosCapability.Data instance, Direction side, INBT nbt)
-        {
+        public void readNBT(Capability<PlayerLastPosCapability.Data> capability, PlayerLastPosCapability.Data instance, Direction side, INBT nbt) {
             instance.setLastX(((CompoundNBT) nbt).getInt("LastX"));
             instance.setLastY(((CompoundNBT) nbt).getInt("LastY"));
             instance.setLastZ(((CompoundNBT) nbt).getFloat("LastZ"));
             instance.setLastOnGround(((CompoundNBT) nbt).getBoolean("LastOnGround"));
         }
     }
-    public static class Data
-    {
-        private double lastX,lastY,lastZ;
+
+    public static class Data {
+        private double lastX, lastY, lastZ;
         private boolean lastOnGround;
 
         public double getLastX() {
@@ -73,30 +71,25 @@ public class PlayerLastPosCapability {
             this.lastOnGround = lastOnGround;
         }
     }
-    public static class Provider implements ICapabilitySerializable<INBT>
-    {
+
+    public static class Provider implements ICapabilitySerializable<INBT> {
         private PlayerLastPosCapability.Data playerLastPosition = new PlayerLastPosCapability.Data();
         private Capability.IStorage<PlayerLastPosCapability.Data> storage = PLAYER_LAST_POSITION.getStorage();
 
         @Nonnull
         @Override
-        public <T> LazyOptional<T> getCapability(@Nonnull Capability<T> cap, @Nullable Direction side)
-        {
-            if (cap.equals(PLAYER_LAST_POSITION))
-                return LazyOptional.of(() -> playerLastPosition).cast();
-            else
-                return LazyOptional.empty();
+        public <T> LazyOptional<T> getCapability(@Nonnull Capability<T> cap, @Nullable Direction side) {
+            if (cap.equals(PLAYER_LAST_POSITION)) return LazyOptional.of(() -> playerLastPosition).cast();
+            else return LazyOptional.empty();
         }
 
         @Override
-        public INBT serializeNBT()
-        {
+        public INBT serializeNBT() {
             return storage.writeNBT(PLAYER_LAST_POSITION, playerLastPosition, null);
         }
 
         @Override
-        public void deserializeNBT(INBT nbt)
-        {
+        public void deserializeNBT(INBT nbt) {
             storage.readNBT(PLAYER_LAST_POSITION, playerLastPosition, null, nbt);
         }
     }

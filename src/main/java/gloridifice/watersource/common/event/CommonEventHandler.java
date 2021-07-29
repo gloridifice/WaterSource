@@ -5,10 +5,11 @@ import gloridifice.watersource.common.capability.PlayerLastPosCapability;
 import gloridifice.watersource.common.capability.WaterLevelCapability;
 import gloridifice.watersource.common.network.PlayerWaterLevelMessage;
 import gloridifice.watersource.common.network.SimpleNetworkHandler;
-import gloridifice.watersource.common.recipe.*;
+import gloridifice.watersource.common.recipe.IThirstRecipe;
+import gloridifice.watersource.common.recipe.ThirstItemRecipe;
+import gloridifice.watersource.common.recipe.WaterLevelItemRecipe;
 import gloridifice.watersource.registry.BlockRegistry;
 import gloridifice.watersource.registry.EffectRegistry;
-import gloridifice.watersource.registry.RecipeSerializersRegistry;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.RotatedPillarBlock;
 import net.minecraft.entity.Entity;
@@ -16,17 +17,12 @@ import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.item.AxeItem;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.potion.EffectInstance;
-import net.minecraft.tags.ITag;
-import net.minecraft.tags.ItemTags;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.SoundEvents;
 import net.minecraft.world.Difficulty;
-import net.minecraft.world.Dimension;
-import net.minecraft.world.DimensionType;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
 import net.minecraftforge.common.util.FakePlayer;
@@ -41,15 +37,12 @@ import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.event.furnace.FurnaceFuelBurnTimeEvent;
 import net.minecraftforge.event.world.BlockEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
-
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.network.PacketDistributor;
-import net.minecraftforge.registries.ForgeRegistries;
 
 import java.util.Random;
 
 import static gloridifice.watersource.registry.ConfigRegistry.RESET_WATER_LEVEL_IN_DEATH;
-import static gloridifice.watersource.registry.RecipeSerializersRegistry.THIRST_ITEM_RECIPE_SERIALIZER;
 
 @Mod.EventBusSubscriber(modid = WaterSource.MODID)
 public class CommonEventHandler {
@@ -95,7 +88,8 @@ public class CommonEventHandler {
                 entity.getCapability(WaterLevelCapability.PLAYER_WATER_LEVEL).ifPresent(data -> {
                     if (entity.isSprinting()) {
                         data.addExhaustion((PlayerEntity) entity, 0.24f);
-                    } else data.addExhaustion((PlayerEntity) entity, 0.14f);
+                    }
+                    else data.addExhaustion((PlayerEntity) entity, 0.14f);
                 });
             }
         }
@@ -153,7 +147,8 @@ public class CommonEventHandler {
                             player.getCapability(WaterLevelCapability.PLAYER_WATER_LEVEL).ifPresent(dataW -> {
                                 if (player.isSprinting()) {
                                     dataW.addExhaustion(player, (float) (x / 15));
-                                } else dataW.addExhaustion(player, (float) (x / 30));
+                                }
+                                else dataW.addExhaustion(player, (float) (x / 30));
                             });
                         }
                     }
@@ -163,7 +158,8 @@ public class CommonEventHandler {
                         data.setLastY(player.getPosY());
                         data.setLastZ(player.getPosZ());
                         data.setLastOnGround(true);
-                    } else data.setLastOnGround(false);
+                    }
+                    else data.setLastOnGround(false);
                 });
             }
 
@@ -267,7 +263,8 @@ public class CommonEventHandler {
         if (effectInstance != null) {
             if (event.getEntityLiving().getEntityWorld().getDimensionKey() == World.THE_NETHER) {
                 event.getEntityLiving().heal(event.getAmount() * (0.25f + (float) effectInstance.getAmplifier() * 0.06f));
-            } else
+            }
+            else
                 event.getEntityLiving().heal(event.getAmount() * (0.2f + (float) effectInstance.getAmplifier() * 0.05f));
         }
     }

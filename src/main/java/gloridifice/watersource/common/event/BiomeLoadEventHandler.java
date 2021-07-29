@@ -9,7 +9,7 @@ import net.minecraftforge.event.world.BiomeLoadingEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
-@Mod.EventBusSubscriber(modid= WaterSource.MODID, bus= Mod.EventBusSubscriber.Bus.FORGE)
+@Mod.EventBusSubscriber(modid = WaterSource.MODID, bus = Mod.EventBusSubscriber.Bus.FORGE)
 public class BiomeLoadEventHandler {
     @SubscribeEvent
     public static void onBiomeLoading(BiomeLoadingEvent event) {

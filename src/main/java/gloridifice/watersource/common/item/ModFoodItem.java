@@ -1,6 +1,5 @@
 package gloridifice.watersource.common.item;
 
-import gloridifice.watersource.registry.GroupRegistry;
 import net.minecraft.item.Food;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
@@ -15,7 +14,7 @@ public class ModFoodItem extends ModNormalItem {
     @Override
     public void fillItemGroup(ItemGroup group, NonNullList<ItemStack> items) {
         super.fillItemGroup(group, items);
-        if (group == ItemGroup.FOOD){
+        if (group == ItemGroup.FOOD) {
             items.add(new ItemStack(this));
         }
     }

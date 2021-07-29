@@ -32,9 +32,10 @@ public class RainCollectorBlock extends Block {
     }
 
     boolean flag = false;
+
     @Override
     public ActionResultType onBlockActivated(BlockState blockState, World world, BlockPos blockPos, PlayerEntity player, Hand hand, BlockRayTraceResult blockRayTraceResult) {
-        RainCollectorTile tile = (RainCollectorTile)world.getTileEntity(blockPos);
+        RainCollectorTile tile = (RainCollectorTile) world.getTileEntity(blockPos);
         tile.getTank().ifPresent(fluidTankUp -> {
             ItemStack heldItem = player.getHeldItem(hand);
             if (!heldItem.isEmpty()) {

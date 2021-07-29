@@ -7,8 +7,8 @@ import net.minecraftforge.fml.network.NetworkEvent;
 
 import java.util.function.Supplier;
 
-public class PlayerWaterLevelMessage implements INormalMessage{
-    int waterLevel,waterSaturationLevel;
+public class PlayerWaterLevelMessage implements INormalMessage {
+    int waterLevel, waterSaturationLevel;
     float waterExhaustionLevel;
 
     public PlayerWaterLevelMessage(int waterLevel, int waterSaturationLevel, float waterExhaustionLevel) {
@@ -16,7 +16,8 @@ public class PlayerWaterLevelMessage implements INormalMessage{
         this.waterSaturationLevel = waterSaturationLevel;
         this.waterExhaustionLevel = waterExhaustionLevel;
     }
-    public PlayerWaterLevelMessage(PacketBuffer buf){
+
+    public PlayerWaterLevelMessage(PacketBuffer buf) {
         waterLevel = buf.readInt();
         waterSaturationLevel = buf.readInt();
         waterExhaustionLevel = buf.readFloat();

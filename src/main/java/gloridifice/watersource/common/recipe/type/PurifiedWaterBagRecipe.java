@@ -32,10 +32,11 @@ import java.util.List;
 public class PurifiedWaterBagRecipe extends SpecialRecipe {
     protected Fluid fluid;
     protected ResourceLocation strainerTag;
+
     public PurifiedWaterBagRecipe(ResourceLocation idIn) {
         super(idIn);
         this.fluid = FluidRegistry.PURIFIED_WATER.get();
-        this.strainerTag = new ResourceLocation(WaterSource.MODID,"purification_strainers");
+        this.strainerTag = new ResourceLocation(WaterSource.MODID, "purification_strainers");
     }
 
     @Override
@@ -93,7 +94,7 @@ public class PurifiedWaterBagRecipe extends SpecialRecipe {
             ItemStack itemstack = inv.getStackInSlot(j);
             ITag<Item> tag = ItemTags.getCollection().get(strainerTag);
             if (!itemstack.isEmpty() && tag != null && tag.contains(itemstack.getItem())) {
-                nonnulllist.set(j, StrainerBlockItem.damageItem(itemstack.copy(),n / 250));
+                nonnulllist.set(j, StrainerBlockItem.damageItem(itemstack.copy(), n / 250));
             }
         }
         return nonnulllist;
@@ -113,6 +114,7 @@ public class PurifiedWaterBagRecipe extends SpecialRecipe {
     public ItemStack getRecipeOutput() {
         return FluidHelper.fillContainer(new ItemStack(ItemRegistry.itemLeatherWaterBag), this.fluid);
     }
+
     @Override
     public NonNullList<Ingredient> getIngredients() {
         NonNullList<Ingredient> list = NonNullList.create();

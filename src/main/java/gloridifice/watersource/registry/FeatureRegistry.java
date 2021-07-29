@@ -13,8 +13,8 @@ import net.minecraftforge.fml.common.Mod;
 import java.util.HashSet;
 import java.util.Set;
 
-@Mod.EventBusSubscriber(bus=Mod.EventBusSubscriber.Bus.MOD)
-public class FeatureRegistry{
+@Mod.EventBusSubscriber(bus = Mod.EventBusSubscriber.Bus.MOD)
+public class FeatureRegistry {
     private static Set<Feature<?>> FEATURES = new HashSet<>();
     public static final Feature<CoconutTreeFeatureConfig> COCONUT_TREE = register("coconut_tree", new CoconutTreeFeature(CoconutTreeFeatureConfig.CODEC));
 
@@ -24,8 +24,9 @@ public class FeatureRegistry{
         FEATURES.add(feature);
         return feature;
     }
+
     @SubscribeEvent
-    public static void register (RegistryEvent.Register<Feature<?>> event) {
+    public static void register(RegistryEvent.Register<Feature<?>> event) {
         event.getRegistry().registerAll(FEATURES.toArray(new Feature[0]));
     }
 }

@@ -16,16 +16,16 @@ import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 
 
-public class BlockRegistry extends RegistryModule{
+public class BlockRegistry extends RegistryModule {
     public static final DeferredRegister<Block> FLUID_BLOCKS = DeferredRegister.create(ForgeRegistries.BLOCKS, WaterSource.MODID);
 
-    public final static Block BLOCK_WOODEN_WATER_FILTER = new WaterFilterBlock("wooden_water_filter", Block.Properties.create(Material.WOOD,MaterialColor.BROWN).sound(SoundType.WOOD).hardnessAndResistance(1.0F).harvestTool(ToolType.AXE).notSolid());
-    public final static Block BLOCK_IRON_WATER_FILTER = new RedstoneWaterFilterBlock("iron_water_filter", Block.Properties.create(Material.IRON,MaterialColor.GRAY).sound(SoundType.STONE).hardnessAndResistance(2.2F).harvestTool(ToolType.PICKAXE).notSolid());
+    public final static Block BLOCK_WOODEN_WATER_FILTER = new WaterFilterBlock("wooden_water_filter", Block.Properties.create(Material.WOOD, MaterialColor.BROWN).sound(SoundType.WOOD).hardnessAndResistance(1.0F).harvestTool(ToolType.AXE).notSolid());
+    public final static Block BLOCK_IRON_WATER_FILTER = new RedstoneWaterFilterBlock("iron_water_filter", Block.Properties.create(Material.IRON, MaterialColor.GRAY).sound(SoundType.STONE).hardnessAndResistance(2.2F).harvestTool(ToolType.PICKAXE).notSolid());
     public final static Block BLOCK_COCONUT_TREE_LOG = createLogBlock(MaterialColor.WOOD, MaterialColor.OBSIDIAN).setRegistryName("coconut_tree_log");
-    public final static Block BLOCK_COCONUT_TREE_HEAD = new CoconutTreeHeadBlock("coconut_tree_head",Block.Properties.create(Material.WOOD,MaterialColor.BROWN).sound(SoundType.WOOD).tickRandomly().harvestTool(ToolType.AXE).hardnessAndResistance(2.0F));
+    public final static Block BLOCK_COCONUT_TREE_HEAD = new CoconutTreeHeadBlock("coconut_tree_head", Block.Properties.create(Material.WOOD, MaterialColor.BROWN).sound(SoundType.WOOD).tickRandomly().harvestTool(ToolType.AXE).hardnessAndResistance(2.0F));
     public final static Block BLOCK_COCONUT_TREE_LEAF = new LeavesBlock(Block.Properties.create(Material.LEAVES).hardnessAndResistance(0.2F).tickRandomly().sound(SoundType.PLANT).notSolid()).setRegistryName("coconut_tree_leaf");
     public final static Block BLOCK_NATURAL_COCONUT = new NaturalCoconutBlock(Block.Properties.create(Material.WOOD).harvestTool(ToolType.AXE).hardnessAndResistance(0.4F).sound(SoundType.WOOD).tickRandomly().notSolid()).setRegistryName("natural_coconut");
-    public final static Block BLOCK_COCONUT = new CoconutBlock(Block.Properties.create(Material.WOOD,MaterialColor.BROWN).harvestTool(ToolType.AXE).hardnessAndResistance(0.4F).sound(SoundType.WOOD).tickRandomly().notSolid(),"coconut");
+    public final static Block BLOCK_COCONUT = new CoconutBlock(Block.Properties.create(Material.WOOD, MaterialColor.BROWN).harvestTool(ToolType.AXE).hardnessAndResistance(0.4F).sound(SoundType.WOOD).tickRandomly().notSolid(), "coconut");
     public final static Block BLOCK_COCONUT_SAPLING = new CoconutSaplingBlock(new CoconutTree(), Block.Properties.create(Material.PLANTS).sound(SoundType.PLANT).tickRandomly()).setRegistryName("coconut_sapling");
     public final static Block BLOCK_PRIMITIVE_STRAINER = new StrainerBlock("primitive_strainer", Block.Properties.create(Material.WOOL).sound(SoundType.CLOTH).notSolid().hardnessAndResistance(0.6f));
     public final static Block BLOCK_PAPER_STRAINER = new StrainerBlock("paper_strainer", Block.Properties.create(Material.WOOL).sound(SoundType.CLOTH).notSolid().hardnessAndResistance(0.4f));
@@ -33,15 +33,15 @@ public class BlockRegistry extends RegistryModule{
     public final static Block BLOCK_PAPER_SOUL_STRAINER = new StrainerBlock("paper_soul_strainer", Block.Properties.create(Material.WOOL).sound(SoundType.CLOTH).notSolid().hardnessAndResistance(0.4f));
     public final static Block BLOCK_SOUL_STRAINER = new StrainerBlock("soul_strainer", Block.Properties.create(Material.WOOL).sound(SoundType.CLOTH).notSolid().hardnessAndResistance(0.6f));
     public static final Block BLOCK_COCONUT_TREE_PLANKS = new Block(Block.Properties.create(Material.WOOD, MaterialColor.WOOD).hardnessAndResistance(2.0F, 3.0F).sound(SoundType.WOOD)).setRegistryName("coconut_tree_planks");
-    public static final Block BLOCK_COCONUT_TREE_DOOR = new CoconutTreeDoorBlock("coconut_tree_door",Block.Properties.create(Material.WOOD, MaterialColor.WOOD).hardnessAndResistance(3.0F).sound(SoundType.WOOD).notSolid());
-    public static final Block BLOCK_COCONUT_TREE_TRAPDOOR = new CoconutTreeTrapdoor("coconut_tree_trapdoor",Block.Properties.create(Material.WOOD, MaterialColor.WOOD).hardnessAndResistance(3.0F).sound(SoundType.WOOD).notSolid());
+    public static final Block BLOCK_COCONUT_TREE_DOOR = new CoconutTreeDoorBlock("coconut_tree_door", Block.Properties.create(Material.WOOD, MaterialColor.WOOD).hardnessAndResistance(3.0F).sound(SoundType.WOOD).notSolid());
+    public static final Block BLOCK_COCONUT_TREE_TRAPDOOR = new CoconutTreeTrapdoor("coconut_tree_trapdoor", Block.Properties.create(Material.WOOD, MaterialColor.WOOD).hardnessAndResistance(3.0F).sound(SoundType.WOOD).notSolid());
     public static final Block BLOCK_COCONUT_TREE_STAIRS = new StairsBlock(() -> BLOCK_COCONUT_TREE_PLANKS.getDefaultState(), Block.Properties.from(BLOCK_COCONUT_TREE_PLANKS)).setRegistryName("coconut_tree_stairs");
     public static final Block BLOCK_STRIPPED_COCONUT_TREE_LOG = createLogBlock(MaterialColor.WOOD, MaterialColor.OBSIDIAN).setRegistryName("stripped_coconut_tree_log");
-    public static final Block BLOCK_COCONUT_TREE_BUTTON = new ModButtonBlock("coconut_tree_button",Block.Properties.create(Material.MISCELLANEOUS).doesNotBlockMovement().hardnessAndResistance(0.5F).sound(SoundType.WOOD));
+    public static final Block BLOCK_COCONUT_TREE_BUTTON = new ModButtonBlock("coconut_tree_button", Block.Properties.create(Material.MISCELLANEOUS).doesNotBlockMovement().hardnessAndResistance(0.5F).sound(SoundType.WOOD));
     public static final Block BLOCK_COCONUT_TREE_SLAB = new SlabBlock(Block.Properties.from(BLOCK_COCONUT_TREE_PLANKS)).setRegistryName("coconut_tree_slab");
     public static final Block BLOCK_COCONUT_TREE_FENCE = new FenceBlock(Block.Properties.from(BLOCK_COCONUT_TREE_PLANKS)).setRegistryName("coconut_tree_fence");
     public static final Block BLOCK_COCONUT_TREE_FENCE_GATE = new FenceGateBlock(Block.Properties.from(BLOCK_COCONUT_TREE_PLANKS)).setRegistryName("coconut_tree_fence_gate");
-    public static final Block BLOCK_COCONUT_TREE_PRESSURE_PLATE = new ModPressurePlateBlock("coconut_tree_pressure_plate", PressurePlateBlock.Sensitivity.EVERYTHING,Block.Properties.from(BLOCK_COCONUT_TREE_PLANKS));
+    public static final Block BLOCK_COCONUT_TREE_PRESSURE_PLATE = new ModPressurePlateBlock("coconut_tree_pressure_plate", PressurePlateBlock.Sensitivity.EVERYTHING, Block.Properties.from(BLOCK_COCONUT_TREE_PLANKS));
     public static final Block BLOCK_STONE_RAIN_COLLECTOR = new RainCollectorBlock("stone_rain_collector", Block.Properties.create(Material.ROCK).harvestTool(ToolType.PICKAXE).harvestLevel(1).hardnessAndResistance(3.5F).notSolid());
 
     public final static BlockItem ITEM_NATURAL_COCONUT = new ModNormalBlockItem(BLOCK_NATURAL_COCONUT);
@@ -78,6 +78,7 @@ public class BlockRegistry extends RegistryModule{
     public static RegistryObject<FlowingFluidBlock> BLOCK_COCONUT_JUICE_FLUID = FLUID_BLOCKS.register("coconut_milk_fluid", () -> {
         return new FlowingFluidBlock(FluidRegistry.COCONUT_MILK, Block.Properties.create(Material.WATER).doesNotBlockMovement().hardnessAndResistance(100.0F).noDrops());
     });
+
     private static RotatedPillarBlock createLogBlock(MaterialColor materialColor0, MaterialColor materialColor1) {
         return new RotatedPillarBlock(AbstractBlock.Properties.create(Material.WOOD, (p_lambda$createLogBlock$36_2_) -> {
             return p_lambda$createLogBlock$36_2_.get(RotatedPillarBlock.AXIS) == Direction.Axis.Y ? materialColor0 : materialColor1;

@@ -30,7 +30,7 @@ public class WaterLevelHUD extends AbstractGui {
 
     }
 
-    public void render(MatrixStack matrixStack,int screenWidth, int screenHeight, WaterLevelCapability.Data capData, double toughness) {
+    public void render(MatrixStack matrixStack, int screenWidth, int screenHeight, WaterLevelCapability.Data capData, double toughness) {
         Minecraft.getInstance().getRenderPartialTicks();
         matrixStack.push();
         RenderSystem.color4f(1.0F, 1.0F, 1.0F, 1.0F);
@@ -44,10 +44,10 @@ public class WaterLevelHUD extends AbstractGui {
         float waterExhaustionLevel = capData.getWaterExhaustionLevel();
         int OffsetX = screenWidth / 2 + 91;
         int OffsetY = screenHeight - 50;
-        if (ModList.get().isLoaded("toughnessbar") && toughness != 0){
+        if (ModList.get().isLoaded("toughnessbar") && toughness != 0) {
             OffsetY -= 10;
         }
-        if (ModList.get().isLoaded("elenaidodge2")){
+        if (ModList.get().isLoaded("elenaidodge2")) {
             OffsetY -= 10;
         }
         int OffsetY1 = OffsetY;
@@ -85,7 +85,7 @@ public class WaterLevelHUD extends AbstractGui {
             }
         }
         //test↓
-        if (ConfigRegistry.IS_DEBUG_MODE.get()){
+        if (ConfigRegistry.IS_DEBUG_MODE.get()) {
             this.drawString(matrixStack, mc.fontRenderer, String.valueOf(waterExhaustionLevel), OffsetX, OffsetY - 10, 16777215);
         }
 

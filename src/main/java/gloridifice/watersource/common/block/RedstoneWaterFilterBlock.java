@@ -18,14 +18,17 @@ public class RedstoneWaterFilterBlock extends WaterFilterBlock {
     public RedstoneWaterFilterBlock(String name, Properties properties) {
         super(name, properties);
     }
+
     @Override
     public boolean shouldCheckWeakPower(BlockState state, IWorldReader world, BlockPos pos, Direction side) {
         return true;
     }
+
     @Override
     public boolean hasComparatorInputOverride(BlockState state) {
         return true;
     }
+
     @Override
     public int getComparatorInputOverride(BlockState blockState, World worldIn, BlockPos pos) {
         /*弱充能逻辑
@@ -33,15 +36,15 @@ public class RedstoneWaterFilterBlock extends WaterFilterBlock {
          * 当有液体时，+2点弱充能
          * 当液体满时，额外+4点弱充能*/
         AtomicInteger power = new AtomicInteger();
-        if (blockState.get(IS_UP)){
+        if (blockState.get(IS_UP)) {
             TileEntity tile = worldIn.getTileEntity(pos);
-            if (tile.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY).map(data -> !data.getStackInSlot(0).isEmpty() && data.getStackInSlot(0).getItem() != BlockRegistry.ITEM_DIRTY_STRAINER).orElse(false)){
+            if (tile.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY).map(data -> !data.getStackInSlot(0).isEmpty() && data.getStackInSlot(0).getItem() != BlockRegistry.ITEM_DIRTY_STRAINER).orElse(false)) {
                 power.addAndGet(5);
             }
             tile.getCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY).ifPresent(data -> {
-                if (!data.getFluidInTank(0).isEmpty()){
+                if (!data.getFluidInTank(0).isEmpty()) {
                     power.addAndGet(2);
-                    if (data.getFluidInTank(0).getAmount() == data.getTankCapacity(0)){
+                    if (data.getFluidInTank(0).getAmount() == data.getTankCapacity(0)) {
                         power.addAndGet(2);
 
                     }

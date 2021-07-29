@@ -7,12 +7,9 @@ import net.minecraftforge.fluids.FluidUtil;
 public class CupItemColor implements IItemColor {
     @Override
     public int getColor(ItemStack itemStack, int tintIndex) {
-        if (tintIndex == 1)
-        {
-            int color = FluidUtil.getFluidHandler(itemStack).map(h ->
-                    h.getFluidInTank(0).getFluid().getAttributes().getColor()).orElse(-1);
-            if (color == 0)
-            {
+        if (tintIndex == 1) {
+            int color = FluidUtil.getFluidHandler(itemStack).map(h -> h.getFluidInTank(0).getFluid().getAttributes().getColor()).orElse(-1);
+            if (color == 0) {
                 return -1;
             }
             return color;

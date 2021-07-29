@@ -1,7 +1,6 @@
 package gloridifice.watersource.client;
 
 import gloridifice.watersource.registry.BlockRegistry;
-import gloridifice.watersource.registry.FluidRegistry;
 import net.minecraft.block.Block;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.RenderTypeLookup;
@@ -9,11 +8,11 @@ import net.minecraft.fluid.Fluid;
 
 
 public class ClientProxy {
-    public static void init(){
+    public static void init() {
         registerRenderType();
     }
-    public static void registerRenderType()
-    {
+
+    public static void registerRenderType() {
         registerCutoutType(BlockRegistry.BLOCK_WOODEN_WATER_FILTER);
         registerCutoutType(BlockRegistry.BLOCK_IRON_WATER_FILTER);
         registerCutoutType(BlockRegistry.BLOCK_COCONUT_TREE_HEAD);
@@ -38,20 +37,19 @@ public class ClientProxy {
 */
     }
 
-    private static void registerCutoutType(Block block)
-    {
+    private static void registerCutoutType(Block block) {
         RenderTypeLookup.setRenderLayer(block, RenderType.getCutout());
     }
-    private static void registerTranslucentMovingType(Block block)
-    {
+
+    private static void registerTranslucentMovingType(Block block) {
         RenderTypeLookup.setRenderLayer(block, RenderType.getTranslucentMovingBlock());
     }
-    private static void registerTranslucentMovingType(Fluid fluid)
-    {
+
+    private static void registerTranslucentMovingType(Fluid fluid) {
         RenderTypeLookup.setRenderLayer(fluid, RenderType.getTranslucent());
     }
-    private static void registerCutoutMippedType(Block block)
-    {
+
+    private static void registerCutoutMippedType(Block block) {
         RenderTypeLookup.setRenderLayer(block, RenderType.getCutoutMipped());
     }
 }

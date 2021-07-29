@@ -29,6 +29,7 @@ public class WaterFilterUpTER extends TileEntityRenderer<WaterFilterUpTile> {
     public WaterFilterUpTER(TileEntityRendererDispatcher rendererDispatcherIn) {
         super(rendererDispatcherIn);
     }
+
     @Override
     public void render(WaterFilterUpTile tileEntityIn, float partialTicks, MatrixStack matrixStackIn, IRenderTypeBuffer bufferIn, int combinedLightIn, int combinedOverlayIn) {
         Minecraft mc = Minecraft.getInstance();
@@ -118,7 +119,8 @@ public class WaterFilterUpTER extends TileEntityRenderer<WaterFilterUpTile> {
                 boolean isIn = vector3d.length() <= 6;
                 if (!previousIsIn && isIn) {
                     cacheTimeEnter = animationTime;
-                } else if (!isIn && previousIsIn) {
+                }
+                else if (!isIn && previousIsIn) {
                     cacheTimeExit = animationTime;
                     isLeftAnimeEnd = false;
                 }
@@ -131,12 +133,14 @@ public class WaterFilterUpTER extends TileEntityRenderer<WaterFilterUpTile> {
                 double ra = 0d;
                 if (animationTime - cacheTimeEnter <= needTicks) {
                     ra += Math.sin(3.1415d / (2d * needTicks) * (animationTime - cacheTimeEnter));
-                } else ra += 1d;
+                }
+                else ra += 1d;
                 if (animationTime - cacheTimeExit <= needTicks) {
                     ra -= Math.sin(3.1415d / (2d * needTicks) * (animationTime - cacheTimeExit));
-                } else if (isLeftAnimeEnd && !isIn) ra -= 1d;
+                }
+                else if (isLeftAnimeEnd && !isIn) ra -= 1d;
                 if (Math.abs(animationTime - cacheTimeExit - needTicks) <= 0.5d) isLeftAnimeEnd = true;
-                double a = (double) mc.fontRenderer.getStringWidth(s)/ 200 * ra;
+                double a = (double) mc.fontRenderer.getStringWidth(s) / 200 * ra;
                 switch (direction) {
                     case SOUTH:
                         matrixStackIn.translate(0.5 - a, 0.25, 1.05);
@@ -169,33 +173,18 @@ public class WaterFilterUpTER extends TileEntityRenderer<WaterFilterUpTile> {
     }
 
     private void add(IVertexBuilder renderer, MatrixStack stack, float x, float y, float z, float u, float v) {
-        renderer.pos(stack.getLast().getMatrix(), x, y, z)
-                .color(1.0f, 1.0f, 1.0f, 1.0f)
-                .tex(u, v)
-                .lightmap(0, 240)
-                .normal(1, 0, 0)
-                .endVertex();
+        renderer.pos(stack.getLast().getMatrix(), x, y, z).color(1.0f, 1.0f, 1.0f, 1.0f).tex(u, v).lightmap(0, 240).normal(1, 0, 0).endVertex();
     }
 
     private void add(IVertexBuilder renderer, MatrixStack stack, float x, float y, float z, float u, float v, int RGBA, float alpha) {
         float red = ((RGBA >> 16) & 0xFF) / 255f;
         float green = ((RGBA >> 8) & 0xFF) / 255f;
         float blue = ((RGBA >> 0) & 0xFF) / 255f;
-        renderer.pos(stack.getLast().getMatrix(), x, y, z)
-                .color(red, green, blue, alpha)
-                .tex(u, v)
-                .lightmap(0, 240)
-                .normal(0, 0, 0)
-                .endVertex();
+        renderer.pos(stack.getLast().getMatrix(), x, y, z).color(red, green, blue, alpha).tex(u, v).lightmap(0, 240).normal(0, 0, 0).endVertex();
     }
 
     private void add(IVertexBuilder renderer, MatrixStack stack, float x, float y, float z, float u, float v, float colorR, float colorG, float colorB, float alpha) {
-        renderer.pos(stack.getLast().getMatrix(), x, y, z)
-                .color(colorR, colorG, colorB, alpha)
-                .tex(u, v)
-                .lightmap(0, 240)
-                .normal(1, 0, 0)
-                .endVertex();
+        renderer.pos(stack.getLast().getMatrix(), x, y, z).color(colorR, colorG, colorB, alpha).tex(u, v).lightmap(0, 240).normal(1, 0, 0).endVertex();
     }
 
 }

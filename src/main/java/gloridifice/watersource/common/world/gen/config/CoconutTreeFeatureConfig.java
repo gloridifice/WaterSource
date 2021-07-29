@@ -5,14 +5,10 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.world.gen.Heightmap;
 import net.minecraft.world.gen.blockstateprovider.BlockStateProvider;
-import net.minecraft.world.gen.feature.ConfiguredFeature;
-import net.minecraft.world.gen.feature.DecoratedFeatureConfig;
 import net.minecraft.world.gen.feature.IFeatureConfig;
-import net.minecraft.world.gen.placement.ConfiguredPlacement;
 import net.minecraft.world.gen.treedecorator.TreeDecorator;
 
 import java.util.List;
-import java.util.function.Supplier;
 
 public class CoconutTreeFeatureConfig implements IFeatureConfig {
     public static final Codec<CoconutTreeFeatureConfig> CODEC = RecordCodecBuilder.create((p_236683_0_) -> {
@@ -43,6 +39,7 @@ public class CoconutTreeFeatureConfig implements IFeatureConfig {
         this.decorators = decorators;
         this.heightmap = p_i232020_9_;
     }
+
     public void forcePlacement() {
         this.forcePlacement = true;
     }
@@ -50,6 +47,7 @@ public class CoconutTreeFeatureConfig implements IFeatureConfig {
     public CoconutTreeFeatureConfig configureDecorators(List<TreeDecorator> p_236685_1_) {
         return new CoconutTreeFeatureConfig(this.trunkProvider, this.leavesProvider, this.saplingProvider, p_236685_1_, this.heightmap);
     }
+
     public static class Builder {
         public final BlockStateProvider trunkProvider;
         public final BlockStateProvider leavesProvider;

@@ -23,10 +23,12 @@ public class RainCollectorTile extends ModNormalTile implements ITickableTileEnt
     LazyOptional<FluidTank> tank = LazyOptional.of(this::createFluidHandler);
     public int capacity;
     private int processTicks = 0;
+
     public RainCollectorTile(int capability) {
         super(TileEntityTypesRegistry.RAIN_COLLECTOR);
         this.capacity = capability;
     }
+
     @Override
     public void read(BlockState blockState, CompoundNBT compound) {
         super.read(blockState, compound);
@@ -44,7 +46,7 @@ public class RainCollectorTile extends ModNormalTile implements ITickableTileEnt
 
     @Override
     public void onDataPacket(NetworkManager net, SUpdateTileEntityPacket pkt) {
-        this.read(world.getBlockState(pkt.getPos()),pkt.getNbtCompound());
+        this.read(world.getBlockState(pkt.getPos()), pkt.getNbtCompound());
     }
 
     @Nullable
@@ -100,9 +102,11 @@ public class RainCollectorTile extends ModNormalTile implements ITickableTileEnt
     public void tick() {
         processTicks++;
         processTicks %= 2000;
-        if (getWorld().isRaining()){
-            if (processTicks % 5 == 0 && world.isRainingAt(pos)){
-                tank.ifPresent(tank -> {tank.fill(new FluidStack(Fluids.WATER,1), IFluidHandler.FluidAction.EXECUTE);});
+        if (getWorld().isRaining()) {
+            if (processTicks % 5 == 0 && world.isRainingAt(pos)) {
+                tank.ifPresent(tank -> {
+                    tank.fill(new FluidStack(Fluids.WATER, 1), IFluidHandler.FluidAction.EXECUTE);
+                });
             }
         }
     }

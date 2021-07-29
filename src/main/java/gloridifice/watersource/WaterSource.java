@@ -9,16 +9,15 @@ import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.config.ModConfig;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
-import net.minecraftforge.fml.event.lifecycle.FMLLoadCompleteEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
-
 
 
 @Mod("watersource")
 public class WaterSource {
     public static final String MODID = "watersource";
     public static final String NETWORK_VERSION = "1.0";
-    public WaterSource(){
+
+    public WaterSource() {
         new BlockRegistry();
         new ItemRegistry();
         new FluidRegistry();
@@ -27,19 +26,20 @@ public class WaterSource {
         FMLJavaModLoadingContext.get().getModEventBus().addListener(this::setup);
         FMLJavaModLoadingContext.get().getModEventBus().addListener(this::clientSetup);
         RecipeSerializersRegistry.RECIPE_SERIALIZERS.register(FMLJavaModLoadingContext.get().getModEventBus());
-        ModLoadingContext.get().registerConfig(ModConfig.Type.CLIENT,ConfigRegistry.CLIENT_CONFIG);
-        ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON,ConfigRegistry.COMMON_CONFIG);
+        ModLoadingContext.get().registerConfig(ModConfig.Type.CLIENT, ConfigRegistry.CLIENT_CONFIG);
+        ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, ConfigRegistry.COMMON_CONFIG);
         BlockRegistry.FLUID_BLOCKS.register(FMLJavaModLoadingContext.get().getModEventBus());
         ItemRegistry.FLUID_ITEMS.register(FMLJavaModLoadingContext.get().getModEventBus());
     }
-    public void setup(FMLCommonSetupEvent event)
-    {
+
+    public void setup(FMLCommonSetupEvent event) {
         CapabilityRegistry.init();
         SimpleNetworkHandler.init();
         CommonProxy.init();
         RegisterManager.clearAll();
     }
-    public void clientSetup(FMLClientSetupEvent event){
+
+    public void clientSetup(FMLClientSetupEvent event) {
         ClientProxy.init();
         TileEntityRenderRegistry.regTileEntityRender();
         ColorRegistry.init();

@@ -2,7 +2,10 @@ package gloridifice.watersource.registry;
 
 import gloridifice.watersource.WaterSource;
 import gloridifice.watersource.common.item.*;
-import net.minecraft.item.*;
+import net.minecraft.item.BucketItem;
+import net.minecraft.item.Food;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import net.minecraftforge.fml.RegistryObject;
@@ -18,17 +21,17 @@ public class ItemRegistry extends RegistryModule {
     public final static Item itemPurifiedWaterBottle = new WaterBottleItem("purified_water_bottle");
     public final static Item itemCoconutJuiceBottle = new WaterBottleItem("coconut_milk_bottle");
     public final static Item itemSoulWaterBottle = new SoulWaterBottleItem("soul_water_bottle");
-    public final static Item itemWoodenCup = new WoodenCupItem("wooden_cup",new Item.Properties().group(null), 250) {
+    public final static Item itemWoodenCup = new WoodenCupItem("wooden_cup", new Item.Properties().group(null), 250) {
         @Override
         public ICapabilityProvider initCapabilities(@Nonnull ItemStack stack, @Nullable CompoundNBT nbt) {
             return super.initCapabilities(new ItemStack(itemWoodenCupDrink), nbt);
         }
     };
     public final static Item itemHalfCoconut = new ModNormalItem("half_coconut");
-    public final static Item itemCoconutPiece = new ModFoodItem("coconut_piece",new Food.Builder().hunger(2).fastToEat().saturation(1.5f).build());
-    public final static Item itemCoconutChicken = new ModFoodItem("coconut_chicken",new Food.Builder().hunger(8).saturation(1.25f).build());
-    public final static Item itemWoodenCupDrink = new WoodenCupItem("wooden_cup_drink",new Item.Properties().maxStackSize(1).group(GroupRegistry.waterSourceGroup), 250);
-    public final static Item itemLeatherWaterBag = new WaterBagItem("leather_water_bag",1500,250);
+    public final static Item itemCoconutPiece = new ModFoodItem("coconut_piece", new Food.Builder().hunger(2).fastToEat().saturation(1.5f).build());
+    public final static Item itemCoconutChicken = new ModFoodItem("coconut_chicken", new Food.Builder().hunger(8).saturation(1.25f).build());
+    public final static Item itemWoodenCupDrink = new WoodenCupItem("wooden_cup_drink", new Item.Properties().maxStackSize(1).group(GroupRegistry.waterSourceGroup), 250);
+    public final static Item itemLeatherWaterBag = new WaterBagItem("leather_water_bag", 1500, 250);
     //Fluids
     public static RegistryObject<Item> itemPurifiedWaterBucket = FLUID_ITEMS.register("purified_water_bucket", () -> {
         return new BucketItem(FluidRegistry.PURIFIED_WATER, new Item.Properties().group(GroupRegistry.waterSourceGroup));

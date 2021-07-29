@@ -23,6 +23,7 @@ public class WaterFilterDownTile extends ModNormalTile {
     boolean isLeftAnimeEnd = true;
 
     final int capacity;
+
     public WaterFilterDownTile(int capacity) {
         super(TileEntityTypesRegistry.WATER_FILTER_DOWN_TILE);
         this.capacity = capacity;
@@ -71,7 +72,7 @@ public class WaterFilterDownTile extends ModNormalTile {
 
     @Override
     public void onDataPacket(NetworkManager net, SUpdateTileEntityPacket pkt) {
-        this.read(world.getBlockState(pkt.getPos()),pkt.getNbtCompound());
+        this.read(world.getBlockState(pkt.getPos()), pkt.getNbtCompound());
     }
 
     @Nullable
@@ -83,18 +84,14 @@ public class WaterFilterDownTile extends ModNormalTile {
     }
 
     @Override
-    public void read(BlockState blockState,CompoundNBT compound) {
-        super.read(blockState,compound);
-        downTank.ifPresent(fluidTank -> {
-            fluidTank.readFromNBT(compound.getCompound("downTank"));
-        });
+    public void read(BlockState blockState, CompoundNBT compound) {
+        super.read(blockState, compound);
+        downTank.ifPresent(fluidTank -> fluidTank.readFromNBT(compound.getCompound("downTank")));
     }
 
     @Override
     public CompoundNBT write(CompoundNBT compound) {
-        downTank.ifPresent(fluidTank -> {
-            compound.put("downTank", fluidTank.writeToNBT(new CompoundNBT()));
-        });
+        downTank.ifPresent(fluidTank -> compound.put("downTank", fluidTank.writeToNBT(new CompoundNBT())));
         return super.write(compound);
     }
 

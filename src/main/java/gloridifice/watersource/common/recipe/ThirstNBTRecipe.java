@@ -9,15 +9,15 @@ import net.minecraft.util.ResourceLocation;
 
 import static gloridifice.watersource.common.recipe.NormalRecipeTypes.THIRST_NBT_RECIPE;
 
-public class ThirstNBTRecipe extends ThirstItemRecipe{
+public class ThirstNBTRecipe extends ThirstItemRecipe {
     public ThirstNBTRecipe(ResourceLocation idIn, String groupIn, Ingredient ingredient, int duration, int amplifier, int probability) {
         super(idIn, groupIn, ingredient, duration, amplifier, probability);
     }
 
     @Override
     public boolean conform(ItemStack i) {
-        for (ItemStack stack : ingredient.getMatchingStacks()){
-            if (stack.isItemEqual(i) && stack.getTag() != null && i.getTag() != null && stack.getTag().equals(i.getTag())){
+        for (ItemStack stack : ingredient.getMatchingStacks()) {
+            if (stack.isItemEqual(i) && stack.getTag() != null && i.getTag() != null && stack.getTag().equals(i.getTag())) {
                 return true;
             }
         }

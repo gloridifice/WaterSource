@@ -71,11 +71,6 @@ public class RainCollectorTER extends TileEntityRenderer<RainCollectorTile> {
         float red = ((RGBA >> 16) & 0xFF) / 255f;
         float green = ((RGBA >> 8) & 0xFF) / 255f;
         float blue = ((RGBA >> 0) & 0xFF) / 255f;
-        renderer.pos(stack.getLast().getMatrix(), x, y, z)
-                .color(red, green, blue, alpha)
-                .tex(u, v)
-                .lightmap(0, 240)
-                .normal(0, 0, 0)
-                .endVertex();
+        renderer.pos(stack.getLast().getMatrix(), x, y, z).color(red, green, blue, alpha).tex(u, v).lightmap(0, 240).normal(0, 0, 0).endVertex();
     }
 }

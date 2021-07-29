@@ -1,7 +1,6 @@
 package gloridifice.watersource.common.block;
 
 
-
 import gloridifice.watersource.WaterSource;
 import gloridifice.watersource.registry.BlockRegistry;
 import net.minecraft.block.Block;
@@ -26,7 +25,7 @@ public class CoconutTreeHeadBlock extends Block implements IGrowable {
 
     @Override
     public boolean canGrow(IBlockReader worldIn, BlockPos pos, BlockState state, boolean isClient) {
-        if (BlockTags.getCollection().get(new ResourceLocation(WaterSource.MODID,"coconut_tree_logs")).contains(worldIn.getBlockState(pos.down()).getBlock())) {
+        if (BlockTags.getCollection().get(new ResourceLocation(WaterSource.MODID, "coconut_tree_logs")).contains(worldIn.getBlockState(pos.down()).getBlock())) {
             return true;
         }
         return false;
@@ -60,7 +59,7 @@ public class CoconutTreeHeadBlock extends Block implements IGrowable {
             if (!worldIn.isAreaLoaded(pos, 1))
                 return; // Forge: prevent loading unloaded chunks when checking neighbor's light
             if (net.minecraftforge.common.ForgeHooks.onCropsGrowPre(worldIn, pos, state, rand.nextInt(26) == 0)) {
-                grow(worldIn,rand,pos,state);
+                grow(worldIn, rand, pos, state);
                 net.minecraftforge.common.ForgeHooks.onCropsGrowPost(worldIn, pos, state);
             }
         }

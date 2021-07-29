@@ -16,6 +16,7 @@ public class ClientEventHandler {
             RenderSystem.translated(0, translateY, 0);
         }
     }
+
     @SubscribeEvent
     public static void onAirRenderPost(RenderGameOverlayEvent.Post event) {
         if (event.getType() == RenderGameOverlayEvent.ElementType.AIR) {

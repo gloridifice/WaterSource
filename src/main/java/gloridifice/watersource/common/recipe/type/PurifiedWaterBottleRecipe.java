@@ -4,17 +4,14 @@ import gloridifice.watersource.WaterSource;
 import gloridifice.watersource.common.item.StrainerBlockItem;
 import gloridifice.watersource.registry.ItemRegistry;
 import gloridifice.watersource.registry.RecipeSerializersRegistry;
-import net.minecraft.block.Block;
 import net.minecraft.inventory.CraftingInventory;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.item.crafting.IRecipeSerializer;
-
 import net.minecraft.item.crafting.SpecialRecipe;
 import net.minecraft.potion.PotionUtils;
 import net.minecraft.potion.Potions;
-import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.ITag;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.util.NonNullList;
@@ -32,16 +29,16 @@ public class PurifiedWaterBottleRecipe extends SpecialRecipe {
 
     @Override
     public boolean matches(CraftingInventory inv, World worldIn) {
-        ITag<Item> tag = ItemTags.getCollection().get(new ResourceLocation(WaterSource.MODID,"purification_strainers"));
+        ITag<Item> tag = ItemTags.getCollection().get(new ResourceLocation(WaterSource.MODID, "purification_strainers"));
         List<ItemStack> list = new ArrayList<>();
-        boolean hasStrainer = false,hasPotion = false;
-        for(int j = 0; j < inv.getSizeInventory(); ++j) {
+        boolean hasStrainer = false, hasPotion = false;
+        for (int j = 0; j < inv.getSizeInventory(); ++j) {
             ItemStack itemstack = inv.getStackInSlot(j);
-            if (tag != null && tag.contains(itemstack.getItem())){
+            if (tag != null && tag.contains(itemstack.getItem())) {
                 list.add(itemstack);
                 hasStrainer = true;
             }
-            if (itemstack.isItemEqual(new ItemStack(Items.POTION)) && ItemStack.areItemStackTagsEqual(PotionUtils.addPotionToItemStack(new ItemStack(Items.POTION), Potions.WATER),itemstack)){
+            if (itemstack.isItemEqual(new ItemStack(Items.POTION)) && ItemStack.areItemStackTagsEqual(PotionUtils.addPotionToItemStack(new ItemStack(Items.POTION), Potions.WATER), itemstack)) {
                 list.add(itemstack);
                 hasPotion = true;
             }
@@ -63,12 +60,12 @@ public class PurifiedWaterBottleRecipe extends SpecialRecipe {
     @Override
     public NonNullList<ItemStack> getRemainingItems(CraftingInventory inv) {
         NonNullList<ItemStack> nonnulllist = NonNullList.withSize(inv.getSizeInventory(), ItemStack.EMPTY);
-        for(int j = 0; j < inv.getSizeInventory(); ++j) {
+        for (int j = 0; j < inv.getSizeInventory(); ++j) {
             ItemStack itemstack = inv.getStackInSlot(j);
-            ITag<Item> tag = ItemTags.getCollection().get(new ResourceLocation(WaterSource.MODID,"purification_strainers"));
-            if (!itemstack.isEmpty() && tag != null && tag.contains(itemstack.getItem())){
-                ItemStack i = StrainerBlockItem.damageItem(itemstack.copy(),1);
-                nonnulllist.set(j,i);
+            ITag<Item> tag = ItemTags.getCollection().get(new ResourceLocation(WaterSource.MODID, "purification_strainers"));
+            if (!itemstack.isEmpty() && tag != null && tag.contains(itemstack.getItem())) {
+                ItemStack i = StrainerBlockItem.damageItem(itemstack.copy(), 1);
+                nonnulllist.set(j, i);
             }
         }
         return nonnulllist;

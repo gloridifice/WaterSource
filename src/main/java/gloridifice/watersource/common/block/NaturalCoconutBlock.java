@@ -51,16 +51,16 @@ public class NaturalCoconutBlock extends HorizontalBlock implements IGrowable {
                 player.dropItem(itemStack, false);
             }
             return ActionResultType.SUCCESS;
-        } else return ActionResultType.PASS;
+        }
+        else return ActionResultType.PASS;
     }
 
 
     @Override
     public void neighborChanged(BlockState state, World worldIn, BlockPos pos, Block blockIn, BlockPos fromPos, boolean isMoving) {
-        if (pos.offset(state.get(HORIZONTAL_FACING)).equals(fromPos) && worldIn.getBlockState(fromPos).isAir())
-        {
+        if (pos.offset(state.get(HORIZONTAL_FACING)).equals(fromPos) && worldIn.getBlockState(fromPos).isAir()) {
             System.out.println(1);
-            spawnDrops(state,worldIn,pos);
+            spawnDrops(state, worldIn, pos);
             worldIn.setBlockState(pos, Blocks.AIR.getDefaultState());
         }
     }

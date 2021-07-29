@@ -6,7 +6,6 @@ import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import gloridifice.watersource.common.recipe.ThirstItemRecipe;
 import gloridifice.watersource.helper.FluidHelper;
 import net.minecraft.fluid.Fluid;
-import net.minecraft.fluid.Fluids;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipeSerializer;
 import net.minecraft.item.crafting.Ingredient;
@@ -21,35 +20,34 @@ import net.minecraftforge.registries.ForgeRegistryEntry;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ThirstItemRecipeSerializer<T extends ThirstItemRecipe> extends ForgeRegistryEntry<IRecipeSerializer<?>> implements IRecipeSerializer<T>{
-    private final int duration,amplifier,probability;
+public class ThirstItemRecipeSerializer<T extends ThirstItemRecipe> extends ForgeRegistryEntry<IRecipeSerializer<?>> implements IRecipeSerializer<T> {
+    private final int duration, amplifier, probability;
     private final IFactory<T> factory;
 
-    public ThirstItemRecipeSerializer(IFactory<T> factory, int duration,int amplifier,int probability)
-    {
+    public ThirstItemRecipeSerializer(IFactory<T> factory, int duration, int amplifier, int probability) {
         this.probability = probability;
         this.duration = duration;
         this.amplifier = amplifier;
         this.factory = factory;
     }
 
-    public T read(ResourceLocation recipeId, JsonObject json)
-    {
+    public T read(ResourceLocation recipeId, JsonObject json) {
         String group = JSONUtils.getString(json, "group", "");
         JsonElement jsonelement = JSONUtils.isJsonArray(json, "ingredient") ? JSONUtils.getJsonArray(json, "ingredient") : JSONUtils.getJsonObject(json, "ingredient");
         Ingredient ingredient = Ingredient.deserialize(jsonelement);
-        String fluidName  = JSONUtils.getString(json,"fluid", "");
-        String nbt = JSONUtils.getString(json,"nbt","");
+        String fluidName = JSONUtils.getString(json, "fluid", "");
+        String nbt = JSONUtils.getString(json, "nbt", "");
 
         CompoundNBT compoundNBT = null;
         try {
             compoundNBT = JsonToNBT.getTagFromJson(nbt);
-        } catch (CommandSyntaxException e) {
+        }
+        catch (CommandSyntaxException e) {
             System.out.println("No NBT.");
         }
         Fluid fluid = ForgeRegistries.FLUIDS.getValue(new ResourceLocation(fluidName));
         List<ItemStack> list = new ArrayList();
-        for(ItemStack stack : ingredient.getMatchingStacks()){
+        for (ItemStack stack : ingredient.getMatchingStacks()) {
             if (compoundNBT != null) stack.setTag(compoundNBT);
             list.add(FluidHelper.fillContainer(stack, fluid));
         }
@@ -68,20 +66,19 @@ public class ThirstItemRecipeSerializer<T extends ThirstItemRecipe> extends Forg
         int am = packetBuffer.readVarInt();
         int pr = packetBuffer.readVarInt();
 
-        return this.factory.create(resourceLocation,group,ingredient,du,am,pr);
+        return this.factory.create(resourceLocation, group, ingredient, du, am, pr);
     }
 
-    public void write(PacketBuffer buffer, T recipe)
-    {
+    public void write(PacketBuffer buffer, T recipe) {
         buffer.writeString(recipe.getGroup());
         recipe.getIngredient().write(buffer);
         buffer.writeVarInt(recipe.getDuration());
         buffer.writeVarInt(recipe.getAmplifier());
         buffer.writeVarInt(recipe.getProbability());
     }
-    public interface IFactory<T extends ThirstItemRecipe>
-    {
-        T create(ResourceLocation resourceLocation, String group, Ingredient ingredient, int duration,int amplifier,int probability);
+
+    public interface IFactory<T extends ThirstItemRecipe> {
+        T create(ResourceLocation resourceLocation, String group, Ingredient ingredient, int duration, int amplifier, int probability);
     }
 
 }

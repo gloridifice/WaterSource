@@ -4,7 +4,6 @@ import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.vertex.IVertexBuilder;
 import gloridifice.watersource.common.tile.WaterFilterDownTile;
-import gloridifice.watersource.common.tile.WaterFilterUpTile;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.renderer.IRenderTypeBuffer;
@@ -23,6 +22,7 @@ public class WaterFilterDownTER extends TileEntityRenderer<WaterFilterDownTile> 
     public WaterFilterDownTER(TileEntityRendererDispatcher rendererDispatcherIn) {
         super(rendererDispatcherIn);
     }
+
     @Override
     public void render(WaterFilterDownTile tileEntityIn, float partialTicks, MatrixStack matrixStackIn, IRenderTypeBuffer bufferIn, int combinedLightIn, int combinedOverlayIn) {
         Minecraft mc = Minecraft.getInstance();
@@ -40,30 +40,30 @@ public class WaterFilterDownTER extends TileEntityRenderer<WaterFilterDownTile> 
                 float vHeight = (still.getMaxV() - still.getMinV()) * (1f - (float) fluidStackDown.getAmount() / (float) fluidTankDown.getCapacity());
                 matrixStackIn.push();
                 GlStateManager.disableCull();
-                add(buffer, matrixStackIn, 0.125f, 0.125f + height, 0.125f, still.getMinU(), still.getMinV(), colorRGB,1.0f);
-                add(buffer, matrixStackIn, 0.125f, 0.125f + height, 0.875f, still.getMaxU(), still.getMinV(), colorRGB,1.0f);
-                add(buffer, matrixStackIn, 0.875f, 0.125f + height, 0.875f, still.getMaxU(), still.getMaxV(), colorRGB,1.0f);
-                add(buffer, matrixStackIn, 0.875f, 0.125f + height, 0.125f, still.getMinU(), still.getMaxV(), colorRGB,1.0f);
+                add(buffer, matrixStackIn, 0.125f, 0.125f + height, 0.125f, still.getMinU(), still.getMinV(), colorRGB, 1.0f);
+                add(buffer, matrixStackIn, 0.125f, 0.125f + height, 0.875f, still.getMaxU(), still.getMinV(), colorRGB, 1.0f);
+                add(buffer, matrixStackIn, 0.875f, 0.125f + height, 0.875f, still.getMaxU(), still.getMaxV(), colorRGB, 1.0f);
+                add(buffer, matrixStackIn, 0.875f, 0.125f + height, 0.125f, still.getMinU(), still.getMaxV(), colorRGB, 1.0f);
 
-                add(buffer, matrixStackIn, 0.875f, 0.125f + height, 0.125f, still.getMinU(), still.getMinV() + vHeight, colorRGB,1.0f);
-                add(buffer, matrixStackIn, 0.875f, 0.125f + height, 0.875f, still.getMaxU(), still.getMinV() + vHeight, colorRGB,1.0f);
-                add(buffer, matrixStackIn, 0.875f, 0.125f, 0.875f, still.getMaxU(), still.getMaxV(), colorRGB,1.0f);
-                add(buffer, matrixStackIn, 0.875f, 0.125f, 0.125f, still.getMinU(), still.getMaxV(), colorRGB,1.0f);
+                add(buffer, matrixStackIn, 0.875f, 0.125f + height, 0.125f, still.getMinU(), still.getMinV() + vHeight, colorRGB, 1.0f);
+                add(buffer, matrixStackIn, 0.875f, 0.125f + height, 0.875f, still.getMaxU(), still.getMinV() + vHeight, colorRGB, 1.0f);
+                add(buffer, matrixStackIn, 0.875f, 0.125f, 0.875f, still.getMaxU(), still.getMaxV(), colorRGB, 1.0f);
+                add(buffer, matrixStackIn, 0.875f, 0.125f, 0.125f, still.getMinU(), still.getMaxV(), colorRGB, 1.0f);
 
-                add(buffer, matrixStackIn, 0.125f, 0.125f, 0.125f, still.getMinU(), still.getMinV(), colorRGB,1.0f);
-                add(buffer, matrixStackIn, 0.125f, 0.125f, 0.875f, still.getMaxU(), still.getMinV(), colorRGB,1.0f);
-                add(buffer, matrixStackIn, 0.125f, 0.125f + height, 0.875f, still.getMaxU(), still.getMaxV() - vHeight, colorRGB,1.0f);
-                add(buffer, matrixStackIn, 0.125f, 0.125f + height, 0.125f, still.getMinU(), still.getMaxV() - vHeight, colorRGB,1.0f);
+                add(buffer, matrixStackIn, 0.125f, 0.125f, 0.125f, still.getMinU(), still.getMinV(), colorRGB, 1.0f);
+                add(buffer, matrixStackIn, 0.125f, 0.125f, 0.875f, still.getMaxU(), still.getMinV(), colorRGB, 1.0f);
+                add(buffer, matrixStackIn, 0.125f, 0.125f + height, 0.875f, still.getMaxU(), still.getMaxV() - vHeight, colorRGB, 1.0f);
+                add(buffer, matrixStackIn, 0.125f, 0.125f + height, 0.125f, still.getMinU(), still.getMaxV() - vHeight, colorRGB, 1.0f);
 
-                add(buffer, matrixStackIn, 0.125f, 0.125f + height, 0.125f, still.getMinU(), still.getMinV() + vHeight, colorRGB,1.0f);
-                add(buffer, matrixStackIn, 0.875f, 0.125f + height, 0.125f, still.getMaxU(), still.getMinV() + vHeight, colorRGB,1.0f);
-                add(buffer, matrixStackIn, 0.875f, 0.125f, 0.125f, still.getMaxU(), still.getMaxV(), colorRGB,1.0f);
-                add(buffer, matrixStackIn, 0.125f, 0.125f, 0.125f, still.getMinU(), still.getMaxV(), colorRGB,1.0f);
+                add(buffer, matrixStackIn, 0.125f, 0.125f + height, 0.125f, still.getMinU(), still.getMinV() + vHeight, colorRGB, 1.0f);
+                add(buffer, matrixStackIn, 0.875f, 0.125f + height, 0.125f, still.getMaxU(), still.getMinV() + vHeight, colorRGB, 1.0f);
+                add(buffer, matrixStackIn, 0.875f, 0.125f, 0.125f, still.getMaxU(), still.getMaxV(), colorRGB, 1.0f);
+                add(buffer, matrixStackIn, 0.125f, 0.125f, 0.125f, still.getMinU(), still.getMaxV(), colorRGB, 1.0f);
 
-                add(buffer, matrixStackIn, 0.125f, 0.125f, 0.875f, still.getMinU(), still.getMinV() + vHeight, colorRGB,1.0f);
-                add(buffer, matrixStackIn, 0.875f, 0.125f, 0.875f, still.getMaxU(), still.getMinV() + vHeight, colorRGB,1.0f);
-                add(buffer, matrixStackIn, 0.875f, 0.125f + height, 0.875f, still.getMaxU(), still.getMaxV(), colorRGB,1.0f);
-                add(buffer, matrixStackIn, 0.125f, 0.125f + height, 0.875f, still.getMinU(), still.getMaxV(), colorRGB,1.0f);
+                add(buffer, matrixStackIn, 0.125f, 0.125f, 0.875f, still.getMinU(), still.getMinV() + vHeight, colorRGB, 1.0f);
+                add(buffer, matrixStackIn, 0.875f, 0.125f, 0.875f, still.getMaxU(), still.getMinV() + vHeight, colorRGB, 1.0f);
+                add(buffer, matrixStackIn, 0.875f, 0.125f + height, 0.875f, still.getMaxU(), still.getMaxV(), colorRGB, 1.0f);
+                add(buffer, matrixStackIn, 0.125f, 0.125f + height, 0.875f, still.getMinU(), still.getMaxV(), colorRGB, 1.0f);
                 GlStateManager.enableCull();
                 matrixStackIn.pop();
 /*                add(buffer, matrixStackIn, 0.125f, 0.125f, 0.125f, still.getMinU(), still.getMinV(), colorRGBA);
@@ -81,7 +81,8 @@ public class WaterFilterDownTER extends TileEntityRenderer<WaterFilterDownTile> 
                 boolean isIn = vector3d.length() <= 6;
                 if (!previousIsIn && isIn) {
                     cacheTimeEnter = animationTime;
-                } else if (!isIn && previousIsIn) {
+                }
+                else if (!isIn && previousIsIn) {
                     cacheTimeExit = animationTime;
                     isLeftAnimeEnd = false;
                 }
@@ -94,13 +95,15 @@ public class WaterFilterDownTER extends TileEntityRenderer<WaterFilterDownTile> 
                 double ra = 0d;
                 if (animationTime - cacheTimeEnter <= needTicks) {
                     ra += Math.sin(3.1415d / (2d * needTicks) * (animationTime - cacheTimeEnter));
-                } else ra += 1d;
+                }
+                else ra += 1d;
                 if (animationTime - cacheTimeExit <= needTicks) {
                     ra -= Math.sin(3.1415d / (2d * needTicks) * (animationTime - cacheTimeExit));
-                } else if (isLeftAnimeEnd && !isIn) ra -= 1d;
+                }
+                else if (isLeftAnimeEnd && !isIn) ra -= 1d;
                 if (Math.abs(animationTime - cacheTimeExit - needTicks) <= 0.5d) isLeftAnimeEnd = true;
 
-                double a = (double) mc.fontRenderer.getStringWidth(s)/ 200 * ra;
+                double a = (double) mc.fontRenderer.getStringWidth(s) / 200 * ra;
                 switch (direction) {
                     case SOUTH:
                         matrixStackIn.translate(0.5 - a, 0.25, 1.05);
@@ -133,31 +136,17 @@ public class WaterFilterDownTER extends TileEntityRenderer<WaterFilterDownTile> 
     }
 
     private void add(IVertexBuilder renderer, MatrixStack stack, float x, float y, float z, float u, float v) {
-        renderer.pos(stack.getLast().getMatrix(), x, y, z)
-                .color(1.0f, 1.0f, 1.0f, 1.0f)
-                .tex(u, v)
-                .lightmap(0, 240)
-                .normal(1, 0, 0)
-                .endVertex();
+        renderer.pos(stack.getLast().getMatrix(), x, y, z).color(1.0f, 1.0f, 1.0f, 1.0f).tex(u, v).lightmap(0, 240).normal(1, 0, 0).endVertex();
     }
 
     private void add(IVertexBuilder renderer, MatrixStack stack, float x, float y, float z, float u, float v, int RGB, float alpha) {
         float red = ((RGB >> 16) & 0xFF) / 255f;
         float green = ((RGB >> 8) & 0xFF) / 255f;
-        float blue = ((RGB >> 0) & 0xFF) / 255f;
-        renderer.pos(stack.getLast().getMatrix(), x, y, z)
-                .color(red, green, blue, alpha)
-                .tex(u, v)
-                .lightmap(0, 240)
-                .normal(1, 0, 0)
-                .endVertex();
+        float blue = (RGB & 0xFF) / 255f;
+        renderer.pos(stack.getLast().getMatrix(), x, y, z).color(red, green, blue, alpha).tex(u, v).lightmap(0, 240).normal(1, 0, 0).endVertex();
     }
+
     private void add(IVertexBuilder renderer, MatrixStack stack, float x, float y, float z, float u, float v, float colorR, float colorG, float colorB, float alpha) {
-        renderer.pos(stack.getLast().getMatrix(), x, y, z)
-                .color(colorR, colorG, colorB, alpha)
-                .tex(u, v)
-                .lightmap(0, 240)
-                .normal(1, 0, 0)
-                .endVertex();
+        renderer.pos(stack.getLast().getMatrix(), x, y, z).color(colorR, colorG, colorB, alpha).tex(u, v).lightmap(0, 240).normal(1, 0, 0).endVertex();
     }
 }

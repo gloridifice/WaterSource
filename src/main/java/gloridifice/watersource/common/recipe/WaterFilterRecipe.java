@@ -21,6 +21,7 @@ public class WaterFilterRecipe implements IRecipe<IInventory> {
     protected final Fluid inputFluid, outputFluid;
     protected final ResourceLocation id;
     protected final String group;
+
     public WaterFilterRecipe(ResourceLocation idIn, String groupIn, Ingredient strainerIngredient, Fluid inputFluid, Fluid outputFluid) {
         this.id = idIn;
         this.group = groupIn;
@@ -75,12 +76,13 @@ public class WaterFilterRecipe implements IRecipe<IInventory> {
     public IRecipeType<?> getType() {
         return WATER_FILTER_RECIPE;
     }
-    public static WaterFilterRecipe getRecipeFromInput(World world, ItemStack strainer,Fluid fluidInput){
+
+    public static WaterFilterRecipe getRecipeFromInput(World world, ItemStack strainer, Fluid fluidInput) {
         List<WaterFilterRecipe> list = new ArrayList<>();
         list.addAll(world.getRecipeManager().getRecipesForType(WATER_FILTER_RECIPE));
-        for (WaterFilterRecipe recipe : list){
-            if (recipe.inputFluid.isEquivalentTo(fluidInput)){
-                for (ItemStack itemStack : recipe.getStrainerIngredient().getMatchingStacks()){
+        for (WaterFilterRecipe recipe : list) {
+            if (recipe.inputFluid.isEquivalentTo(fluidInput)) {
+                for (ItemStack itemStack : recipe.getStrainerIngredient().getMatchingStacks()) {
                     if (itemStack.isItemEqual(strainer)) return recipe;
                 }
             }

@@ -12,53 +12,40 @@ import net.minecraft.world.gen.feature.Feature;
 
 import java.lang.reflect.Field;
 
-public class RegistryModule
-{
-    public RegistryModule()
-    {
-        for (Field field : getClass().getFields())
-        {
-            try
-            {
+public class RegistryModule {
+    public RegistryModule() {
+        for (Field field : getClass().getFields()) {
+            try {
                 Object o = field.get(null);
-                if (o instanceof Item)
-                {
+                if (o instanceof Item) {
                     RegisterManager.ITEMS.add((Item) o);
                 }
-                else if (o instanceof Block)
-                {
+                else if (o instanceof Block) {
                     RegisterManager.BLOCKS.add((Block) o);
                 }
-                else if (o instanceof TileEntityType<?>)
-                {
+                else if (o instanceof TileEntityType<?>) {
                     RegisterManager.TILE_ENTITY_TYPES.add((TileEntityType<?>) o);
                 }
-                else if (o instanceof ContainerType<?>)
-                {
+                else if (o instanceof ContainerType<?>) {
                     RegisterManager.CONTAINER_TYPES.add((ContainerType<?>) o);
                 }
-                else if (o instanceof EntityType<?>)
-                {
+                else if (o instanceof EntityType<?>) {
                     RegisterManager.ENTITY_TYPES.add((EntityType<?>) o);
                 }
-                else if (o instanceof Effect)
-                {
+                else if (o instanceof Effect) {
                     RegisterManager.EFFECTS.add((Effect) o);
                 }
-                else if (o instanceof Feature<?>)
-                {
+                else if (o instanceof Feature<?>) {
                     RegisterManager.FEATURES.add((Feature<?>) o);
                 }
-                else if (o instanceof SoundEvent)
-                {
+                else if (o instanceof SoundEvent) {
                     RegisterManager.SOUNDS.add((SoundEvent) o);
                 }
-                else if (o instanceof ParticleType<?>){
+                else if (o instanceof ParticleType<?>) {
                     RegisterManager.PARTICLES.add((ParticleType<?>) o);
                 }
             }
-            catch (Exception ignored)
-            {
+            catch (Exception ignored) {
             }
         }
     }

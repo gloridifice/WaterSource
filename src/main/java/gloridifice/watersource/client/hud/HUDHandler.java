@@ -22,25 +22,23 @@ public class HUDHandler {
     private final static WaterFilterStrainerHUD WATER_FILTER_STRAINER_HUD = new WaterFilterStrainerHUD(Minecraft.getInstance());
 
     @SubscribeEvent(receiveCanceled = true)
-    public static void onRenderGameOverlayEvent(RenderGameOverlayEvent.Post event){
+    public static void onRenderGameOverlayEvent(RenderGameOverlayEvent.Post event) {
         Minecraft mc = Minecraft.getInstance();
         int screenHeight = event.getWindow().getScaledHeight();
         int screenWidth = event.getWindow().getScaledWidth();
         ClientPlayerEntity playerEntity = Minecraft.getInstance().player;
 
         RayTraceResult pos = mc.objectMouseOver;
-        if (event.getType() == RenderGameOverlayEvent.ElementType.FOOD){
-            if (playerEntity != null && !playerEntity.isCreative() && !playerEntity.isSpectator() && !Minecraft.getInstance().gameSettings.hideGUI){
-                if (!playerEntity.isSpectator())
-                {
-                    playerEntity.getCapability(WaterLevelCapability.PLAYER_WATER_LEVEL).ifPresent(t ->
-                    {
-                        WATER_LEVEL_HUD.render(event.getMatrixStack(),screenWidth,screenHeight,t,playerEntity.getAttribute(ARMOR_TOUGHNESS).getValue());
+        if (event.getType() == RenderGameOverlayEvent.ElementType.FOOD) {
+            if (playerEntity != null && !playerEntity.isCreative() && !playerEntity.isSpectator() && !Minecraft.getInstance().gameSettings.hideGUI) {
+                if (!playerEntity.isSpectator()) {
+                    playerEntity.getCapability(WaterLevelCapability.PLAYER_WATER_LEVEL).ifPresent(t -> {
+                        WATER_LEVEL_HUD.render(event.getMatrixStack(), screenWidth, screenHeight, t, playerEntity.getAttribute(ARMOR_TOUGHNESS).getValue());
                     });
                 }
             }
         }
-        if (pos != null && event.getType() == RenderGameOverlayEvent.ElementType.TEXT){
+        if (pos != null && event.getType() == RenderGameOverlayEvent.ElementType.TEXT) {
             BlockPos bpos = pos.getType() == RayTraceResult.Type.BLOCK ? ((BlockRayTraceResult) pos).getPos() : null;
             WATER_FILTER_STRAINER_HUD.render(event.getMatrixStack(), bpos);
         }

@@ -6,7 +6,8 @@ import net.minecraft.client.renderer.color.IItemColor;
 
 public class ColorRegistry {
     public static final IItemColor CUP_ITEM = new CupItemColor();
-    public static void init(){
-        Minecraft.getInstance().getItemColors().register(CUP_ITEM,ItemRegistry.itemWoodenCupDrink);
+
+    public static void init() {
+        Minecraft.getInstance().getItemColors().register(CUP_ITEM, ItemRegistry.itemWoodenCupDrink);
     }
 }

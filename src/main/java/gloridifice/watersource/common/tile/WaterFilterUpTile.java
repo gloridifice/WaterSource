@@ -16,6 +16,7 @@ import net.minecraft.network.NetworkManager;
 import net.minecraft.network.play.server.SUpdateTileEntityPacket;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.tileentity.ITickableTileEntity;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.Direction;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
@@ -102,15 +103,9 @@ public class WaterFilterUpTile extends ModNormalTile implements ITickableTileEnt
     @Override
     public void read(BlockState blockState, CompoundNBT compound) {
         super.read(blockState, compound);
-        upTank.ifPresent(fluidTank -> {
-            fluidTank.readFromNBT(compound.getCompound("upTank"));
-        });
-        strainer.ifPresent(itemStackHandler -> {
-            itemStackHandler.deserializeNBT(compound.getCompound("strainer"));
-        });
-        props.ifPresent(itemStackHandler -> {
-            itemStackHandler.deserializeNBT(compound.getCompound("props"));
-        });
+        upTank.ifPresent(fluidTank -> fluidTank.readFromNBT(compound.getCompound("upTank")));
+        strainer.ifPresent(itemStackHandler -> itemStackHandler.deserializeNBT(compound.getCompound("strainer")));
+        props.ifPresent(itemStackHandler -> itemStackHandler.deserializeNBT(compound.getCompound("props")));
         processTicks = ((IntNBT) compound.get("processTicks")).getInt();
 
     }
@@ -122,7 +117,7 @@ public class WaterFilterUpTile extends ModNormalTile implements ITickableTileEnt
 
     @Override
     public void onDataPacket(NetworkManager net, SUpdateTileEntityPacket pkt) {
-        this.read(world.getBlockState(pkt.getPos()),pkt.getNbtCompound());
+        this.read(world.getBlockState(pkt.getPos()), pkt.getNbtCompound());
     }
 
     @Nullable
@@ -136,15 +131,9 @@ public class WaterFilterUpTile extends ModNormalTile implements ITickableTileEnt
 
     @Override
     public CompoundNBT write(CompoundNBT compound) {
-        upTank.ifPresent(fluidTank -> {
-            compound.put("upTank", fluidTank.writeToNBT(new CompoundNBT()));
-        });
-        strainer.ifPresent(itemStackHandler -> {
-            compound.put("strainer", ((INBTSerializable<CompoundNBT>) itemStackHandler).serializeNBT());
-        });
-        props.ifPresent(itemStackHandler -> {
-            compound.put("props", ((INBTSerializable<CompoundNBT>) itemStackHandler).serializeNBT());
-        });
+        upTank.ifPresent(fluidTank -> compound.put("upTank", fluidTank.writeToNBT(new CompoundNBT())));
+        strainer.ifPresent(itemStackHandler -> compound.put("strainer", ((INBTSerializable<CompoundNBT>) itemStackHandler).serializeNBT()));
+        props.ifPresent(itemStackHandler -> compound.put("props", ((INBTSerializable<CompoundNBT>) itemStackHandler).serializeNBT()));
         compound.put("processTicks", IntNBT.valueOf(processTicks));
         return super.write(compound);
     }
@@ -162,100 +151,106 @@ public class WaterFilterUpTile extends ModNormalTile implements ITickableTileEnt
         }
         return super.getCapability(cap, side);
     }
+
     boolean flag;
+
     @Override
     public void tick() {
         processTicks %= 8000;
         processTicks++;
         if (processTicks % 50 == 0) {
-            WaterFilterDownTile downTile = (WaterFilterDownTile) world.getTileEntity(pos.down());
-            strainer.ifPresent(strainerHandler -> {
-                props.ifPresent(propsHandler -> {
-                        ItemStack strainerStack = strainerHandler.getStackInSlot(0);
-                        int speed = propsHandler.getStackInSlot(0).getItem() == Items.HEART_OF_THE_SEA ? 20 : 10;
-                        upTank.ifPresent(fluidTankUp -> {
-                            WaterFilterRecipe recipe = WaterFilterRecipe.getRecipeFromInput(this.world, strainerStack, fluidTankUp.getFluid().getFluid());
-                            downTile.getDownTank().ifPresent(fluidTankDown -> {
+            TileEntity downTile = world.getTileEntity(pos.down());
+            if (downTile instanceof WaterFilterDownTile) {
+                strainer.ifPresent(strainerHandler -> props.ifPresent(propsHandler -> {
+                    ItemStack strainerStack = strainerHandler.getStackInSlot(0);
+                    int speed = propsHandler.getStackInSlot(0).getItem() == Items.HEART_OF_THE_SEA ? 20 : 10;
+                    upTank.ifPresent(fluidTankUp -> {
+                        WaterFilterRecipe recipe = WaterFilterRecipe.getRecipeFromInput(this.world, strainerStack, fluidTankUp.getFluid().getFluid());
+                        ((WaterFilterDownTile) downTile).getDownTank().ifPresent(fluidTankDown -> {
                             if (recipe != null && fluidTankDown.getFluid().getAmount() < fluidTankDown.getCapacity()) {
                                 flag = true;
-                                    if (fluidTankDown.isEmpty() || fluidTankDown.getFluid().getFluid().isEquivalentTo(recipe.getOutputFluid())) {
-                                        fluidTankDown.fill(new FluidStack(recipe.getOutputFluid(), speed), IFluidHandler.FluidAction.EXECUTE);
-                                        fluidTankUp.drain(speed, IFluidHandler.FluidAction.EXECUTE);
-                                    }
-                                if (processTicks % 10000/speed == 0) {
+                                if (fluidTankDown.isEmpty() || fluidTankDown.getFluid().getFluid().isEquivalentTo(recipe.getOutputFluid())) {
+                                    fluidTankDown.fill(new FluidStack(recipe.getOutputFluid(), speed), IFluidHandler.FluidAction.EXECUTE);
+                                    fluidTankUp.drain(speed, IFluidHandler.FluidAction.EXECUTE);
+                                }
+                                if (processTicks % 10000 / speed == 0) {
                                     //减少滤网耐久
                                     if (strainerStack.isDamageable()) {
                                         strainerHandler.setStackInSlot(0, StrainerBlockItem.damageItem(strainerStack, 1));
                                     }
                                 }
-                            }else flag = false;
-                        });});
+                            }
+                            else flag = false;
+                        });
                     });
-            });
+                }));
+            }
         }
 /*        if (flag){
             this.addParticles();
         }*/
     }
 
-    private void addParticles(){
+    private void addParticles() {
         BlockPos pos = this.getPos();
         Random random = new Random();
 
-        this.getWorld().addOptionalParticle(ParticleRegistry.FLUID_WATER,true,0.125D + (double) pos.getX()+ random.nextDouble() * 0.75D,(double)pos.getY(),0.125D + (double) pos.getZ()+ random.nextDouble() * 0.75D,0D,-0.2D,0D);
+        this.getWorld().addOptionalParticle(ParticleRegistry.FLUID_WATER, true, 0.125D + (double) pos.getX() + random.nextDouble() * 0.75D, (double) pos.getY(), 0.125D + (double) pos.getZ() + random.nextDouble() * 0.75D, 0D, -0.2D, 0D);
     }
+
     private ItemStackHandler createStrainerItemStackHandler() {
-        return new ItemStackHandler(1){
+        return new ItemStackHandler(1) {
             @Override
             protected void onContentsChanged(int slot) {
                 WaterFilterUpTile.this.refresh();
                 WaterFilterUpTile.this.markDirty();
                 super.onContentsChanged(slot);
             }
+
             @Override
             public boolean isItemValid(int slot, ItemStack stack) {
-                return ItemTags.getCollection().get(new ResourceLocation(WaterSource.MODID,"strainers")).contains(stack.getItem());
+                return ItemTags.getCollection().get(new ResourceLocation(WaterSource.MODID, "strainers")).contains(stack.getItem());
             }
 
             @Override
             public ItemStack insertItem(int slot, ItemStack stack, boolean simulate) {
-                if (stack.isEmpty())
-                    return ItemStack.EMPTY;
+                if (stack.isEmpty()) return ItemStack.EMPTY;
 
-                if (!isItemValid(slot, stack))
-                    return stack;
+                if (!isItemValid(slot, stack)) return stack;
 
                 validateSlotIndex(slot);
 
                 ItemStack existing = this.stacks.get(slot);
 
                 if (simulate) {
-                    if (!existing.isEmpty())
-                    {
-                        Block.spawnAsEntity(world,pos,existing);
-                        extractItem(slot,existing.getCount() + 1,false);
+                    if (!existing.isEmpty()) {
+                        Block.spawnAsEntity(world, pos, existing);
+                        extractItem(slot, existing.getCount() + 1, false);
                     }
-                    this.stacks.set(slot,stack);
+                    this.stacks.set(slot, stack);
                 }
                 onContentsChanged(slot);
                 return ItemStack.EMPTY;
             }
         };
     }
-    private ItemStackHandler createPropsItemStackHandler(){
-        return new ItemStackHandler(1){
+
+    private ItemStackHandler createPropsItemStackHandler() {
+        return new ItemStackHandler(1) {
             @Override
             protected void onContentsChanged(int slot) {
                 WaterFilterUpTile.this.refresh();
                 WaterFilterUpTile.this.markDirty();
                 super.onContentsChanged(slot);
             }
+
             @Override
             public boolean isItemValid(int slot, ItemStack stack) {
                 return stack.getItem() == Items.HEART_OF_THE_SEA;
             }
         };
     }
+
     private FluidTank createFluidHandler() {
         return new FluidTank(capacity) {
             @Override

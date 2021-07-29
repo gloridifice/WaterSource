@@ -8,7 +8,7 @@
     ],
     "key": {
         "x": {
-            "tag": "minecraft:stone"
+            "item": "minecraft:stone"
         },
         "t": {
             "tag": "forge:cobblestone"

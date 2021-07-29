@@ -11,13 +11,12 @@ import net.minecraft.world.gen.feature.BaseTreeFeatureConfig;
 import net.minecraft.world.gen.feature.ConfiguredFeature;
 import net.minecraft.world.server.ServerWorld;
 
-
 import javax.annotation.Nullable;
 import java.util.Random;
 
 public class CoconutTree extends Tree {
     @Nullable
-    protected ConfiguredFeature<CoconutTreeFeatureConfig, ?> getCoconutTreeFeatureConfig (){
+    protected ConfiguredFeature<CoconutTreeFeatureConfig, ?> getCoconutTreeFeatureConfig() {
         return ConfiguredFeatureRegistry.COCONUT_TREE;
     }
 
@@ -32,11 +31,13 @@ public class CoconutTree extends Tree {
         ConfiguredFeature<CoconutTreeFeatureConfig, ?> configuredfeature = this.getCoconutTreeFeatureConfig();
         if (configuredfeature == null) {
             return false;
-        } else {
+        }
+        else {
             worldIn.setBlockState(blockPosIn, Blocks.AIR.getDefaultState(), 4);
             if (configuredfeature.generate(worldIn, chunkGeneratorIn, randomIn, blockPosIn)) {
                 return true;
-            } else {
+            }
+            else {
                 worldIn.setBlockState(blockPosIn, blockStateIn, 4);
                 return false;
             }

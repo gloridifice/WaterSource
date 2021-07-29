@@ -3,10 +3,7 @@ package gloridifice.watersource.common.recipe.type;
 import gloridifice.watersource.WaterSource;
 import gloridifice.watersource.registry.FluidRegistry;
 import gloridifice.watersource.registry.RecipeSerializersRegistry;
-import net.minecraft.item.Item;
 import net.minecraft.item.crafting.IRecipeSerializer;
-import net.minecraft.tags.BlockTags;
-import net.minecraft.tags.ItemTags;
 import net.minecraft.util.ResourceLocation;
 
 
@@ -14,8 +11,9 @@ public class SoulWaterBagRecipe extends PurifiedWaterBagRecipe {
     public SoulWaterBagRecipe(ResourceLocation idIn) {
         super(idIn);
         this.fluid = FluidRegistry.SOUL_WATER.get();
-        this.strainerTag = new ResourceLocation(WaterSource.MODID,"soul_strainers");
+        this.strainerTag = new ResourceLocation(WaterSource.MODID, "soul_strainers");
     }
+
     @Override
     public IRecipeSerializer<?> getSerializer() {
         return RecipeSerializersRegistry.CRAFTING_SOUL_WATER_BAG.get();

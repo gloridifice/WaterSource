@@ -2,23 +2,15 @@ package gloridifice.watersource.common.recipe.serializer;
 
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import gloridifice.watersource.common.recipe.WaterFilterRecipe;
-import gloridifice.watersource.helper.FluidHelper;
 import net.minecraft.fluid.Fluid;
-import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipeSerializer;
 import net.minecraft.item.crafting.Ingredient;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.nbt.JsonToNBT;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.JSONUtils;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.ForgeRegistryEntry;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class WaterFilterRecipeSerializer<T extends WaterFilterRecipe> extends ForgeRegistryEntry<IRecipeSerializer<?>> implements IRecipeSerializer<T> {
     private final WaterFilterRecipeSerializer.IFactory<T> factory;

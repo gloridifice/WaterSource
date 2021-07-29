@@ -13,9 +13,9 @@ public class RecipeProvider extends ForgeRecipeProvider {
     public RecipeProvider(DataGenerator generatorIn) {
         super(generatorIn);
     }
+
     @Override
-    protected void registerRecipes(Consumer<IFinishedRecipe> consumer)
-    {
+    protected void registerRecipes(Consumer<IFinishedRecipe> consumer) {
         CustomRecipeBuilder.customRecipe(RecipeSerializersRegistry.CRAFTING_PURIFIED_WATER_BOTTLE.get()).build(consumer, WaterSource.MODID + ":" + "purified_water_bottle");
         CustomRecipeBuilder.customRecipe(RecipeSerializersRegistry.CRAFTING_SOUL_WATER_BOTTLE.get()).build(consumer, WaterSource.MODID + ":" + "soul_water_bottle");
         CustomRecipeBuilder.customRecipe(RecipeSerializersRegistry.CRAFTING_PURIFIED_WATER_BAG.get()).build(consumer, WaterSource.MODID + ":" + "purified_water_bag");
