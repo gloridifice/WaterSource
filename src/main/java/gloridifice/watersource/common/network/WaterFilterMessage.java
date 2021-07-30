@@ -8,6 +8,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidHandler;
+import net.minecraftforge.fml.network.NetworkDirection;
 import net.minecraftforge.fml.network.NetworkEvent;
 import net.minecraftforge.items.CapabilityItemHandler;
 
@@ -45,18 +46,20 @@ public class WaterFilterMessage implements INormalMessage {
 
     @Override
     public void process(Supplier<NetworkEvent.Context> context) {
-        context.get().enqueueWork(() -> {
-            TileEntity tileEntity = Minecraft.getInstance().player.getEntityWorld().getTileEntity(new BlockPos(x, y, z));
-            tileEntity.getCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY).ifPresent(data -> {
-                data.drain(data.getTankCapacity(0), IFluidHandler.FluidAction.EXECUTE);
-                data.fill(fluid, IFluidHandler.FluidAction.EXECUTE);
-            });
-            if (!strainer.isEmpty()) {
-                tileEntity.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY).ifPresent(data -> {
-                    data.extractItem(0, 64, false);
-                    data.insertItem(0, strainer, false);
+        if (context.get().getDirection() == NetworkDirection.PLAY_TO_CLIENT) {
+            context.get().enqueueWork(() -> {
+                TileEntity tileEntity = Minecraft.getInstance().player.getEntityWorld().getTileEntity(new BlockPos(x, y, z));
+                tileEntity.getCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY).ifPresent(data -> {
+                    data.drain(data.getTankCapacity(0), IFluidHandler.FluidAction.EXECUTE);
+                    data.fill(fluid, IFluidHandler.FluidAction.EXECUTE);
                 });
-            }
-        });
+                if (!strainer.isEmpty()) {
+                    tileEntity.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY).ifPresent(data -> {
+                        data.extractItem(0, 64, false);
+                        data.insertItem(0, strainer, false);
+                    });
+                }
+            });
+        }
     }
 }

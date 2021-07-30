@@ -3,6 +3,7 @@ package gloridifice.watersource.common.network;
 import gloridifice.watersource.common.capability.WaterLevelCapability;
 import net.minecraft.client.Minecraft;
 import net.minecraft.network.PacketBuffer;
+import net.minecraftforge.fml.network.NetworkDirection;
 import net.minecraftforge.fml.network.NetworkEvent;
 
 import java.util.function.Supplier;
@@ -32,10 +33,12 @@ public class PlayerWaterLevelMessage implements INormalMessage {
 
     @Override
     public void process(Supplier<NetworkEvent.Context> context) {
-        context.get().enqueueWork(() -> Minecraft.getInstance().player.getCapability(WaterLevelCapability.PLAYER_WATER_LEVEL).ifPresent(date -> {
-            date.setWaterSaturationLevel(waterSaturationLevel);
-            date.setWaterLevel(waterLevel);
-            date.setWaterExhaustionLevel(waterExhaustionLevel);
-        }));
+        if (context.get().getDirection() == NetworkDirection.PLAY_TO_CLIENT) {
+            context.get().enqueueWork(() -> Minecraft.getInstance().player.getCapability(WaterLevelCapability.PLAYER_WATER_LEVEL).ifPresent(date -> {
+                date.setWaterSaturationLevel(waterSaturationLevel);
+                date.setWaterLevel(waterLevel);
+                date.setWaterExhaustionLevel(waterExhaustionLevel);
+            }));
+        }
     }
 }
