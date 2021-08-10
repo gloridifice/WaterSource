@@ -2,6 +2,7 @@ package gloridifice.watersource.common.item;
 
 import gloridifice.watersource.WaterSource;
 import gloridifice.watersource.common.capability.WaterLevelCapability;
+import gloridifice.watersource.helper.FluidHelper;
 import gloridifice.watersource.registry.GroupRegistry;
 import gloridifice.watersource.registry.ItemRegistry;
 import net.minecraft.client.util.ITooltipFlag;
@@ -10,20 +11,16 @@ import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.fluid.Fluid;
 import net.minecraft.fluid.Fluids;
-import net.minecraft.item.ItemGroup;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.UseAction;
+import net.minecraft.item.*;
 import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.stats.Stats;
 import net.minecraft.tags.FluidTags;
 import net.minecraft.util.*;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockRayTraceResult;
 import net.minecraft.util.math.RayTraceContext;
 import net.minecraft.util.math.RayTraceResult;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TextComponent;
-import net.minecraft.util.text.TextFormatting;
-import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraft.util.text.*;
 import net.minecraft.world.World;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import net.minecraftforge.fluids.FluidStack;
@@ -43,21 +40,17 @@ public class WaterBagItem extends ItemFluidContainer {
     boolean canDrink = false;
     boolean canFill = false;
     final int unit;
-
     public WaterBagItem(String name, int capacity, int unit) {
         super(new Properties().maxStackSize(1).setNoRepair().maxDamage(capacity).group(GroupRegistry.waterSourceGroup), capacity);
         this.unit = unit;
         this.setRegistryName(name);
     }
-
     public int getUseDuration(ItemStack stack) {
         return canDrink ? 40 : 0;
     }
-
     public UseAction getUseAction(ItemStack stack) {
         return canDrink ? UseAction.DRINK : UseAction.NONE;
     }
-
     @Override
     public ItemStack onItemUseFinish(ItemStack stack, World worldIn, LivingEntity entityLiving) {
         stack.getCapability(CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY).ifPresent(data -> {
@@ -66,14 +59,12 @@ public class WaterBagItem extends ItemFluidContainer {
         updateDamage(stack);
         return stack;
     }
-
-    public void updateDamage(ItemStack stack) {
-        stack.getCapability(CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY).ifPresent(data -> {
+    public void updateDamage(ItemStack stack){
+        stack.getCapability(CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY).ifPresent(data ->{
             int i = this.capacity - data.getFluidInTank(0).getAmount() >= 0 ? this.capacity - data.getFluidInTank(0).getAmount() : 0;
             stack.setDamage(i);
         });
     }
-
     public int getUnit() {
         return unit;
     }
@@ -83,39 +74,34 @@ public class WaterBagItem extends ItemFluidContainer {
         super.inventoryTick(stack, worldIn, entityIn, itemSlot, isSelected);
         updateDamage(stack);
     }
-
     public ActionResult<ItemStack> onItemRightClick(World worldIn, PlayerEntity playerIn, Hand handIn) {
         canFill = false;
         RayTraceResult raytraceresult = rayTrace(worldIn, playerIn, RayTraceContext.FluidMode.SOURCE_ONLY);
         ItemStack itemstack = playerIn.getHeldItem(handIn);
         if (raytraceresult.getType() == RayTraceResult.Type.MISS) {
             playerIn.setActiveHand(handIn);
-            return canDrink(playerIn, playerIn.getHeldItem(handIn)) ? ActionResult.resultSuccess(playerIn.getHeldItem(handIn)) : ActionResult.resultPass(playerIn.getHeldItem(handIn));
-        }
-        else {
+            return canDrink(playerIn,playerIn.getHeldItem(handIn)) ? ActionResult.resultSuccess(playerIn.getHeldItem(handIn)) : ActionResult.resultFail(playerIn.getHeldItem(handIn));
+        } else {
             if (raytraceresult.getType() == RayTraceResult.Type.BLOCK) {
-                BlockPos blockpos = ((BlockRayTraceResult) raytraceresult).getPos();
-                if (!worldIn.isBlockModifiable(playerIn, blockpos)) {
-                    playerIn.setActiveHand(handIn);
-                    return canDrink(playerIn, playerIn.getHeldItem(handIn)) ? ActionResult.resultSuccess(playerIn.getHeldItem(handIn)) : ActionResult.resultPass(playerIn.getHeldItem(handIn));
-                }
-
+                BlockPos blockpos = ((BlockRayTraceResult)raytraceresult).getPos();
                 if (worldIn.getFluidState(blockpos).isTagged(FluidTags.WATER)) {
-                    itemstack.getCapability(CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY).ifPresent(data -> {
-                        if (data.getFluidInTank(0).isEmpty() || data.getFluidInTank(0).getFluid() == Fluids.WATER) {
+                    itemstack.getCapability(CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY).ifPresent(data ->{
+                        if (data.getFluidInTank(0).isEmpty() || data.getFluidInTank(0).getFluid() == Fluids.WATER){
                             canFill = true;
                         }
                     });
-                    if (canFill) {
+                    if (canFill){
                         worldIn.playSound(playerIn, playerIn.getPosX(), playerIn.getPosY(), playerIn.getPosZ(), SoundEvents.ITEM_BOTTLE_FILL, SoundCategory.NEUTRAL, 1.0F, 1.0F);
                         itemstack.getCapability(CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY).ifPresent(data -> {
-                            data.fill(new FluidStack(Fluids.WATER, data.getTankCapacity(0)), IFluidHandler.FluidAction.EXECUTE);
+                            data.fill(new FluidStack(Fluids.WATER,data.getTankCapacity(0)), IFluidHandler.FluidAction.EXECUTE);
                         });
                         return ActionResult.resultSuccess(itemstack);
                     }
                 }
+                playerIn.setActiveHand(handIn);
+                return canDrink(playerIn,playerIn.getHeldItem(handIn)) ? ActionResult.resultSuccess(playerIn.getHeldItem(handIn)) : ActionResult.resultFail(playerIn.getHeldItem(handIn));
             }
-            return ActionResult.resultPass(itemstack);
+            return ActionResult.resultFail(itemstack);
         }
     }
 
@@ -128,34 +114,37 @@ public class WaterBagItem extends ItemFluidContainer {
         }
     }
 
-    public boolean canDrink(PlayerEntity playerIn, ItemStack stack) {
+    public boolean canDrink(PlayerEntity playerIn, ItemStack stack){
         canDrink = false;
-        if (this.getDamage(stack) <= this.getMaxDamage(stack) - getUnit()) {
+        if (this.getDamage(stack) <= this.getMaxDamage(stack) - getUnit()){
             playerIn.getCapability(WaterLevelCapability.PLAYER_WATER_LEVEL).ifPresent(data -> {
                 canDrink = data.getWaterLevel() < 20;
             });
         }
         return canDrink;
     }
-
     public SoundEvent getDrinkSound() {
         return SoundEvents.ENTITY_GENERIC_DRINK;
     }
 
     @Override
-    public ICapabilityProvider initCapabilities(@Nonnull ItemStack stack, @Nullable CompoundNBT nbt) {
-        return new FluidHandlerItemStack(stack, capacity) {
+    public ICapabilityProvider initCapabilities(@Nonnull ItemStack stack, @Nullable CompoundNBT nbt)
+    {
+        return new FluidHandlerItemStack(stack, capacity)
+        {
             @Nonnull
             @Override
             @SuppressWarnings("deprecation")
-            public ItemStack getContainer() {
+            public ItemStack getContainer()
+            {
                 return getFluid().isEmpty() ? new ItemStack(ItemRegistry.itemLeatherWaterBag) : this.container;
             }
 
             @Override
-            public boolean isFluidValid(int tank, @Nonnull FluidStack stack) {
-                for (Fluid fluid : FluidTags.getCollection().get(new ResourceLocation(WaterSource.MODID, "drink")).getAllElements()) {
-                    if (fluid == stack.getFluid()) {
+            public boolean isFluidValid(int tank, @Nonnull FluidStack stack)
+            {
+                for (Fluid fluid : FluidTags.getCollection().get(new ResourceLocation(WaterSource.MODID,"drink")).getAllElements()){
+                    if (fluid == stack.getFluid()){
                         return true;
                     }
                 }
@@ -174,10 +163,11 @@ public class WaterBagItem extends ItemFluidContainer {
     @Override
     public void addInformation(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
         super.addInformation(stack, worldIn, tooltip, flagIn);
-        if (stack.getChildTag(FLUID_NBT_KEY) != null) {
-            FluidUtil.getFluidHandler(stack).ifPresent(f -> {
-                tooltip.add(((TextComponent) f.getFluidInTank(0).getDisplayName()).appendString(String.format(": %d / %dmB", f.getFluidInTank(0).getAmount(), capacity)).mergeStyle(TextFormatting.GRAY));
-                tooltip.add(new TranslationTextComponent("tooltip.watersource.drink_unit").appendString(" : " + this.getUnit() + "mB").mergeStyle(TextFormatting.GRAY));
+        if (stack.getChildTag(FLUID_NBT_KEY) != null)
+        {
+            FluidUtil.getFluidHandler(stack).ifPresent(f ->{
+                tooltip.add(((TextComponent)f.getFluidInTank(0).getDisplayName()).appendString(String.format(": %d / %dmB", f.getFluidInTank(0).getAmount(), capacity)).mergeStyle(TextFormatting.GRAY));
+                tooltip.add(new TranslationTextComponent("tooltip.watersource.drink_unit").appendString(" : "+ this.getUnit() + "mB").mergeStyle(TextFormatting.GRAY));
             });
         }
     }
