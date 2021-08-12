@@ -24,7 +24,7 @@ public class ClientProxy {
         registerCutoutType(BlockRegistry.BLOCK_COCONUT_TREE_DOOR);
         registerCutoutType(BlockRegistry.BLOCK_COCONUT_TREE_TRAPDOOR);
         registerCutoutType(BlockRegistry.BLOCK_STONE_RAIN_COLLECTOR);
-        registerCutoutType(BlockRegistry.BLOCK_WATER_DISPENSER);
+        //registerCutoutType(BlockRegistry.BLOCK_WATER_DISPENSER);
 
 /*        registerTranslucentMovingType(FluidRegistry.SOUL_WATER.get());
         registerTranslucentMovingType(FluidRegistry.SOUL_WATER_FLOWING.get());
