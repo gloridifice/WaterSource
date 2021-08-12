@@ -115,11 +115,9 @@ public class WaterLevelCapability {
             }
         }
 
-        public void restoreWaterLevel(int restore) {
-            if (waterLevel + restore < 20) {
-                waterLevel += restore;
-            }
-            else waterLevel = 20;
+        public void restoreWater(int restore) {
+            this.waterLevel = Math.min(waterLevel + restore, 20);
+            if (this.waterLevel == 20) this.waterSaturationLevel = Math.min(waterLevel + restore, 20);
         }
 
         public void award(PlayerEntity player) {

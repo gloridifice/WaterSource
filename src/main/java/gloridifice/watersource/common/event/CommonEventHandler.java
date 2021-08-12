@@ -179,12 +179,14 @@ public class CommonEventHandler {
                         }
                     });
                 } else {*/
+                //WaterRestoring effect
                 EffectInstance effectInstance1 = player.getActivePotionEffect(EffectRegistry.WATER_RESTORING);
                 if (effectInstance1 != null) {
                     player.getCapability(WaterLevelCapability.PLAYER_WATER_LEVEL).ifPresent(data -> {
-                        data.restoreWaterLevel(1);
+                        data.restoreWater(1);
                     });
                 }
+
                 Biome biome = world.getBiome(player.getPosition());
                 if (world.getLight(player.getPosition()) == 15 && world.getDayTime() < 11000 && world.getDayTime() > 450 && !world.isRainingAt(player.getPosition())) {
                     if (biome.getTemperature() > 0.3) {
@@ -221,7 +223,7 @@ public class CommonEventHandler {
         if (tick % 150 == 0 && player != null && !(player instanceof FakePlayer)) {
             if (world.getDifficulty() == Difficulty.PEACEFUL) {
                 player.getCapability(WaterLevelCapability.PLAYER_WATER_LEVEL).ifPresent(data -> {
-                    data.restoreWaterLevel(2);
+                    data.restoreWater(2);
                 });
             }
         }

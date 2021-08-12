@@ -7,4 +7,5 @@ public class WaterDispenserBlock extends Block {
         super(properties);
         this.setRegistryName(name);
     }
+
 }
