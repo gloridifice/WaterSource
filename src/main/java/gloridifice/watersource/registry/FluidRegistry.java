@@ -35,9 +35,12 @@ public final class FluidRegistry {
         return new ForgeFlowingFluid.Flowing(FluidRegistry.COCONUT_MILK_PROPERTIES);
     });
 
-    public static ForgeFlowingFluid.Properties PURIFIED_WATER_PROPERTIES = new ForgeFlowingFluid.Properties(PURIFIED_WATER, PURIFIED_WATER_FLOWING, FluidAttributes.builder(STILL_OIL_TEXTURE, FLOWING_OIL_TEXTURE).color(0x3ABDFF).density(6).viscosity(12)).bucket(ItemRegistry.itemPurifiedWaterBucket).block(BlockRegistry.BLOCK_PURIFIED_WATER_FLUID).slopeFindDistance(3).explosionResistance(100F);
-    public static ForgeFlowingFluid.Properties SOUL_WATER_PROPERTIES = new ForgeFlowingFluid.Properties(SOUL_WATER, SOUL_WATER_FLOWING, FluidAttributes.builder(STILL_OIL_TEXTURE, FLOWING_OIL_TEXTURE).color(0x876D5F).density(12).viscosity(25)).bucket(ItemRegistry.itemSoulWaterBucket).block(BlockRegistry.BLOCK_SOUL_WATER_FLUID).slopeFindDistance(3).explosionResistance(100F);
-    public static ForgeFlowingFluid.Properties COCONUT_MILK_PROPERTIES = new ForgeFlowingFluid.Properties(COCONUT_MILK, COCONUT_MILK_FLOWING, FluidAttributes.builder(STILL_OIL_TEXTURE, FLOWING_OIL_TEXTURE).color(0xEAE8E1).density(8).viscosity(12)).bucket(ItemRegistry.ITEM_COCONUT_MILK_BUCKET).block(BlockRegistry.BLOCK_COCONUT_JUICE_FLUID).slopeFindDistance(3).explosionResistance(100F);
+    public static ForgeFlowingFluid.Properties PURIFIED_WATER_PROPERTIES =
+            new ForgeFlowingFluid.Properties(PURIFIED_WATER, PURIFIED_WATER_FLOWING, FluidAttributes.builder(STILL_OIL_TEXTURE, FLOWING_OIL_TEXTURE)
+            .color(0x3ABDFF).density(6).viscosity(1000)).bucket(ItemRegistry.itemPurifiedWaterBucket).block(BlockRegistry.BLOCK_PURIFIED_WATER_FLUID)
+                    .slopeFindDistance(3).explosionResistance(100F);
+    public static ForgeFlowingFluid.Properties SOUL_WATER_PROPERTIES = new ForgeFlowingFluid.Properties(SOUL_WATER, SOUL_WATER_FLOWING, FluidAttributes.builder(STILL_OIL_TEXTURE, FLOWING_OIL_TEXTURE).color(0x876D5F).density(12).viscosity(1000)).bucket(ItemRegistry.itemSoulWaterBucket).block(BlockRegistry.BLOCK_SOUL_WATER_FLUID).slopeFindDistance(3).explosionResistance(100F);
+    public static ForgeFlowingFluid.Properties COCONUT_MILK_PROPERTIES = new ForgeFlowingFluid.Properties(COCONUT_MILK, COCONUT_MILK_FLOWING, FluidAttributes.builder(STILL_OIL_TEXTURE, FLOWING_OIL_TEXTURE).color(0xEAE8E1).density(8).viscosity(1000)).bucket(ItemRegistry.ITEM_COCONUT_MILK_BUCKET).block(BlockRegistry.BLOCK_COCONUT_JUICE_FLUID).slopeFindDistance(3).explosionResistance(100F);
 
     public FluidRegistry() {
         FLUIDS.register(FMLJavaModLoadingContext.get().getModEventBus());
