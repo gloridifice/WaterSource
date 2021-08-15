@@ -1,0 +1,57 @@
+{
+  "effect.watersource.thirst": "Sede",
+  "effect.watersource.accompanying_soul": "Soul Buddy",*
+  "effect.watersource.water_restoring": "Water Restoring",*
+  "death.attack.byThirst": "%s turned into Dried %s.",*
+  "itemGroup.watersource_group": "Fonte de água",
+
+  "block.watersource.primitive_strainer": "Primitive Strainer",*
+  "block.watersource.paper_strainer": "Paper Strainer",*
+  "block.watersource.paper_soul_strainer": "Paper Soul Strainer",*
+  "block.watersource.soul_strainer": "Soul Strainer",*
+  "block.watersource.dirty_strainer": "Dirty Strainer",*
+  "block.watersource.wooden_water_filter": "Wooden Water Filter",*
+  "block.watersource.iron_water_filter": "Redstone Water Filter",*
+  "block.watersource.coconut_tree_head": "Estipe de coqueiro",*
+  "block.watersource.coconut_tree_log": "Tronco de coqueiro",
+  "block.watersource.coconut": "Coco",
+  "block.watersource.coconut_sapling": "Muda de coqueiro",
+  "block.watersource.natural_coconut": "Natural Coconut",
+  "block.watersource.coconut_tree_leaf": "Folhas de coqueiro",
+  "block.watersource.coconut_tree_planks": "Tábuas de coqueiro",
+  "block.watersource.coconut_tree_door": "Porta de coqueiro",
+  "block.watersource.coconut_tree_trapdoor": "Alçapão de coqueiro",
+  "block.watersource.coconut_tree_stairs": "Escadas de coqueiro",
+  "block.watersource.stripped_coconut_tree_log": "Tronco de coqueiro descascado",
+  "block.watersource.coconut_tree_button": "Botão de coqueiro",
+  "block.watersource.coconut_tree_slab": "Laje de coqueiro",
+  "block.watersource.coconut_tree_fence": "Cerca de coqueiro",
+  "block.watersource.coconut_tree_fence_gate": "Portão de coqueiro",
+  "block.watersource.coconut_tree_pressure_plate": "Placa de pressão de coqueiro",
+  "item.watersource.coconut_chicken": "Coconut Chicken",*
+  "block.watersource.stone_rain_collector": "Stone Rain Collector",*
+
+  "item.watersource.purified_water_bottle": "Frasco de água purificada",
+  "item.watersource.soul_water_bottle": "Frasco de água das almas",*
+  "item.watersource.coconut_milk_bottle": "Frasco de leite de coco",
+  "item.watersource.wooden_cup": "Copo de madeira",
+  "item.watersource.wooden_cup_drink": "Copo de madeira cheio",
+  "item.watersource.purified_water_bucket": "Balde de água purificada",
+  "item.watersource.soul_water_bucket": "Soul Water Bucket",*
+  "item.watersource.coconut_milk_bucket": "Balde de leite de coco",
+  "item.watersource.leather_water_bag": "Leather Water Bag",*
+  "item.watersource.half_coconut": "Meio coco",
+  "item.watersource.coconut_piece": "Pedaço de coco",
+
+  "watersource.test": "Este item está em fase de testes",
+  "watersource.misc.damage": "Dano",
+  "watersource.misc.dirty_strainer": "SUJA",
+  "watersource.info.press.sneak": "Pressione SHIFT para mais informações.",
+  "watersource.info.redstone_water_filter": "The up part can be detected by Redstone Comparator: has strainer +5 power, has liquid +2 power, the liquid is full + 4 power.",*
+
+  "fluid.watersource.coconut_milk": "Leite de coco",
+  "fluid.watersource.soul_water": "Água das almas",*
+  "fluid.watersource.purified_water": "Água purificada",
+
+  "tooltip.watersource.drink_unit": "Drink Unit"
+}
