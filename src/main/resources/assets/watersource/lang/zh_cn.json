@@ -5,6 +5,8 @@
   "death.attack.byThirst": "%s 变成了%s干。",
   "itemGroup.watersource_group": "水源",
 
+  "jei.info.watersource.water_filter": "滤水器",
+
   "block.watersource.primitive_strainer": "原始滤层",
   "block.watersource.paper_strainer": "纸滤层",
   "block.watersource.paper_soul_strainer": "纸灵魂沙滤层",

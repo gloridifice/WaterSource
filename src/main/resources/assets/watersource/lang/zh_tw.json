@@ -5,6 +5,8 @@
   "itemGroup.watersource_group": "水源",
   "effect.watersource.water_restoring": "自然补水",
 
+  "jei.info.watersource.water_filter": "濾水器",
+
   "block.watersource.primitive_strainer": "原始濾層",
   "block.watersource.paper_strainer": "紙濾層",
   "block.watersource.paper_soul_strainer": "紙靈魂沙濾層",

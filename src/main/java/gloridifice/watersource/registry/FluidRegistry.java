@@ -12,8 +12,8 @@ import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 
 public final class FluidRegistry {
-    public static final ResourceLocation STILL_OIL_TEXTURE = new ResourceLocation(WaterSource.MODID, "block/fluid/water_still");
-    public static final ResourceLocation FLOWING_OIL_TEXTURE = new ResourceLocation(WaterSource.MODID, "block/fluid/water_flow");
+    public static final ResourceLocation STILL_FLUID_TEXTURE = new ResourceLocation(WaterSource.MODID, "block/fluid/water_still");
+    public static final ResourceLocation FLOWING_FLUID_TEXTURE = new ResourceLocation(WaterSource.MODID, "block/fluid/water_flow");
 
     public static final DeferredRegister<Fluid> FLUIDS = DeferredRegister.create(ForgeRegistries.FLUIDS, WaterSource.MODID);
     public static RegistryObject<FlowingFluid> PURIFIED_WATER = FLUIDS.register("purified_water", () -> {
@@ -36,11 +36,11 @@ public final class FluidRegistry {
     });
 
     public static ForgeFlowingFluid.Properties PURIFIED_WATER_PROPERTIES =
-            new ForgeFlowingFluid.Properties(PURIFIED_WATER, PURIFIED_WATER_FLOWING, FluidAttributes.builder(STILL_OIL_TEXTURE, FLOWING_OIL_TEXTURE)
-            .color(0x3ABDFF).density(6).viscosity(1000)).bucket(ItemRegistry.itemPurifiedWaterBucket).block(BlockRegistry.BLOCK_PURIFIED_WATER_FLUID)
+            new ForgeFlowingFluid.Properties(PURIFIED_WATER, PURIFIED_WATER_FLOWING, FluidAttributes.builder(STILL_FLUID_TEXTURE, FLOWING_FLUID_TEXTURE)
+                    .color(0x3ABDFF).viscosity(1000)).bucket(ItemRegistry.itemPurifiedWaterBucket).block(BlockRegistry.BLOCK_PURIFIED_WATER_FLUID)
                     .slopeFindDistance(3).explosionResistance(100F);
-    public static ForgeFlowingFluid.Properties SOUL_WATER_PROPERTIES = new ForgeFlowingFluid.Properties(SOUL_WATER, SOUL_WATER_FLOWING, FluidAttributes.builder(STILL_OIL_TEXTURE, FLOWING_OIL_TEXTURE).color(0x876D5F).density(12).viscosity(1000)).bucket(ItemRegistry.itemSoulWaterBucket).block(BlockRegistry.BLOCK_SOUL_WATER_FLUID).slopeFindDistance(3).explosionResistance(100F);
-    public static ForgeFlowingFluid.Properties COCONUT_MILK_PROPERTIES = new ForgeFlowingFluid.Properties(COCONUT_MILK, COCONUT_MILK_FLOWING, FluidAttributes.builder(STILL_OIL_TEXTURE, FLOWING_OIL_TEXTURE).color(0xEAE8E1).density(8).viscosity(1000)).bucket(ItemRegistry.ITEM_COCONUT_MILK_BUCKET).block(BlockRegistry.BLOCK_COCONUT_JUICE_FLUID).slopeFindDistance(3).explosionResistance(100F);
+    public static ForgeFlowingFluid.Properties SOUL_WATER_PROPERTIES = new ForgeFlowingFluid.Properties(SOUL_WATER, SOUL_WATER_FLOWING, FluidAttributes.builder(STILL_FLUID_TEXTURE, FLOWING_FLUID_TEXTURE).color(0x876D5F).viscosity(1000)).bucket(ItemRegistry.itemSoulWaterBucket).block(BlockRegistry.BLOCK_SOUL_WATER_FLUID).slopeFindDistance(3).explosionResistance(100F);
+    public static ForgeFlowingFluid.Properties COCONUT_MILK_PROPERTIES = new ForgeFlowingFluid.Properties(COCONUT_MILK, COCONUT_MILK_FLOWING, FluidAttributes.builder(STILL_FLUID_TEXTURE, FLOWING_FLUID_TEXTURE).color(0xEAE8E1).viscosity(1000)).bucket(ItemRegistry.ITEM_COCONUT_MILK_BUCKET).block(BlockRegistry.BLOCK_COCONUT_JUICE_FLUID).slopeFindDistance(3).explosionResistance(100F);
 
     public FluidRegistry() {
         FLUIDS.register(FMLJavaModLoadingContext.get().getModEventBus());

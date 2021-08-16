@@ -5,6 +5,8 @@
   "death.attack.byThirst": "%s turned into Dried %s.",
   "itemGroup.watersource_group": "Water Source",
 
+  "jei.info.watersource.water_filter": "Water Filter",
+
   "block.watersource.primitive_strainer": "Primitive Strainer",
   "block.watersource.paper_strainer": "Paper Strainer",
   "block.watersource.paper_soul_strainer": "Paper Soul Strainer",
