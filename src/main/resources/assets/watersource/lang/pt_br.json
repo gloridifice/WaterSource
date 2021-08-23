@@ -6,13 +6,13 @@
   "itemGroup.watersource_group": "Fonte de água",
 
   "block.watersource.primitive_strainer": "Primitive Strainer",*
-  "block.watersource.paper_strainer": "Paper Strainer",*
+  "block.watersource.paper_strainer": "Coador de papel",*
   "block.watersource.paper_soul_strainer": "Paper Soul Strainer",*
   "block.watersource.soul_strainer": "Soul Strainer",*
-  "block.watersource.dirty_strainer": "Dirty Strainer",*
-  "block.watersource.wooden_water_filter": "Wooden Water Filter",*
-  "block.watersource.iron_water_filter": "Redstone Water Filter",*
-  "block.watersource.coconut_tree_head": "Estipe de coqueiro",*
+  "block.watersource.dirty_strainer": "Coador sujo",
+  "block.watersource.wooden_water_filter": "Filtro d'água de madeira",
+  "block.watersource.iron_water_filter": "Filtro d'água de redstone",
+  "block.watersource.coconut_tree_head": "Coroa de coqueiro",*
   "block.watersource.coconut_tree_log": "Tronco de coqueiro",
   "block.watersource.coconut": "Coco",
   "block.watersource.coconut_sapling": "Muda de coqueiro",
@@ -39,7 +39,7 @@
   "item.watersource.purified_water_bucket": "Balde de água purificada",
   "item.watersource.soul_water_bucket": "Soul Water Bucket",*
   "item.watersource.coconut_milk_bucket": "Balde de leite de coco",
-  "item.watersource.leather_water_bag": "Leather Water Bag",*
+  "item.watersource.leather_water_bag": "Cantio d'água de couro",
   "item.watersource.half_coconut": "Meio coco",
   "item.watersource.coconut_piece": "Pedaço de coco",
 
@@ -47,7 +47,7 @@
   "watersource.misc.damage": "Dano",
   "watersource.misc.dirty_strainer": "SUJA",
   "watersource.info.press.sneak": "Pressione SHIFT para mais informações.",
-  "watersource.info.redstone_water_filter": "The up part can be detected by Redstone Comparator: has strainer +5 power, has liquid +2 power, the liquid is full + 4 power.",*
+  "watersource.info.redstone_water_filter": "A parte superior pode ser detectada pou um comparador de redstone: has strainer +5 power, has liquid +2 power, the liquid is full + 4 power.",*
 
   "fluid.watersource.coconut_milk": "Leite de coco",
   "fluid.watersource.soul_water": "Água das almas",*
