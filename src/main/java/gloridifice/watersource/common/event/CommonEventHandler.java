@@ -3,6 +3,7 @@ package gloridifice.watersource.common.event;
 import gloridifice.watersource.WaterSource;
 import gloridifice.watersource.common.capability.PlayerLastPosCapability;
 import gloridifice.watersource.common.capability.WaterLevelCapability;
+import gloridifice.watersource.common.network.DrinkWaterMessage;
 import gloridifice.watersource.common.network.PlayerWaterLevelMessage;
 import gloridifice.watersource.common.network.SimpleNetworkHandler;
 import gloridifice.watersource.common.recipe.IThirstRecipe;
@@ -10,25 +11,24 @@ import gloridifice.watersource.common.recipe.ThirstItemRecipe;
 import gloridifice.watersource.common.recipe.WaterLevelItemRecipe;
 import gloridifice.watersource.registry.BlockRegistry;
 import gloridifice.watersource.registry.EffectRegistry;
-import gloridifice.watersource.registry.FluidRegistry;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.RotatedPillarBlock;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
+import net.minecraft.fluid.Fluids;
 import net.minecraft.item.AxeItem;
 import net.minecraft.item.ItemStack;
 import net.minecraft.potion.EffectInstance;
-import net.minecraft.util.Hand;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.SoundCategory;
-import net.minecraft.util.SoundEvents;
+import net.minecraft.potion.Effects;
+import net.minecraft.util.*;
+import net.minecraft.util.math.*;
+import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.Difficulty;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
 import net.minecraftforge.common.util.FakePlayer;
-import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.event.AttachCapabilitiesEvent;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
@@ -40,12 +40,11 @@ import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.event.furnace.FurnaceFuelBurnTimeEvent;
 import net.minecraftforge.event.world.BlockEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
-import net.minecraftforge.fluids.capability.IFluidHandlerItem;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.network.PacketDistributor;
 
 import java.util.Random;
+import java.util.UUID;
 
 import static gloridifice.watersource.registry.ConfigRegistry.RESET_WATER_LEVEL_IN_DEATH;
 
@@ -93,8 +92,7 @@ public class CommonEventHandler {
                 entity.getCapability(WaterLevelCapability.PLAYER_WATER_LEVEL).ifPresent(data -> {
                     if (entity.isSprinting()) {
                         data.addExhaustion((PlayerEntity) entity, 0.24f);
-                    }
-                    else data.addExhaustion((PlayerEntity) entity, 0.14f);
+                    } else data.addExhaustion((PlayerEntity) entity, 0.14f);
                 });
             }
         }
@@ -152,8 +150,7 @@ public class CommonEventHandler {
                             player.getCapability(WaterLevelCapability.PLAYER_WATER_LEVEL).ifPresent(dataW -> {
                                 if (player.isSprinting()) {
                                     dataW.addExhaustion(player, (float) (x / 15));
-                                }
-                                else dataW.addExhaustion(player, (float) (x / 30));
+                                } else dataW.addExhaustion(player, (float) (x / 30));
                             });
                         }
                     }
@@ -163,8 +160,7 @@ public class CommonEventHandler {
                         data.setLastY(player.getPosY());
                         data.setLastZ(player.getPosZ());
                         data.setLastOnGround(true);
-                    }
-                    else data.setLastOnGround(false);
+                    } else data.setLastOnGround(false);
                 });
             }
 
@@ -224,7 +220,7 @@ public class CommonEventHandler {
                 }
             });
         }
-        //Restore water.json level in Peaceful difficulty mode - 3s
+        //Restore water level in Peaceful difficulty mode - 3s
         if (tick % 150 == 0 && player != null && !(player instanceof FakePlayer)) {
             if (world.getDifficulty() == Difficulty.PEACEFUL) {
                 player.getCapability(WaterLevelCapability.PLAYER_WATER_LEVEL).ifPresent(data -> {
@@ -232,7 +228,7 @@ public class CommonEventHandler {
                 });
             }
         }
-        //Update water.json between server and client - 30s
+        //Update water between server and client - 30s
         if (tick % 1500 == 0 && player != null && !(player instanceof FakePlayer) && !world.isRemote) {
             player.getCapability(WaterLevelCapability.PLAYER_WATER_LEVEL).ifPresent(data -> {
                 SimpleNetworkHandler.CHANNEL.send(PacketDistributor.PLAYER.with(() -> (ServerPlayerEntity) player), new PlayerWaterLevelMessage(data.getWaterLevel(), data.getWaterSaturationLevel(), data.getWaterExhaustionLevel()));
@@ -253,6 +249,7 @@ public class CommonEventHandler {
         BlockState state = event.getWorld().getBlockState(event.getPos());
         ItemStack heldItem = event.getItemStack();
         PlayerEntity player = event.getPlayer();
+        //砍椰树树皮
         if (heldItem.getItem() instanceof AxeItem && state.getBlock() == BlockRegistry.BLOCK_COCONUT_TREE_LOG) {
             event.getWorld().playSound(player, event.getPos(), SoundEvents.ITEM_AXE_STRIP, SoundCategory.BLOCKS, 1.0F, 1.0F);
             if (!event.getWorld().isRemote()) {
@@ -262,16 +259,30 @@ public class CommonEventHandler {
                 });
             }
         }
+        //右键水方块喝水 0
+        if (heldItem.isEmpty() && event.getWorld().getFluidState(event.getHitVec().getPos().offset(event.getFace())).getFluid() == Fluids.WATER && player.isSneaking()) {
+            drinkWater(player);
+        }
     }
-
+    @SubscribeEvent
+    public static void onPlayerRightClickEmpty(PlayerInteractEvent.RightClickEmpty event) {
+        PlayerEntity player = event.getPlayer();
+        World world = event.getWorld();
+        //右键水方块喝水 1
+        BlockRayTraceResult result = rayTrace(event.getWorld(),event.getPlayer(), RayTraceContext.FluidMode.SOURCE_ONLY);
+        if (player.isSneaking() && result.getType() == RayTraceResult.Type.BLOCK && world.getFluidState(result.getPos()).getFluid() == Fluids.WATER)
+        {
+            world.playSound(player, player.getPosition(), SoundEvents.ENTITY_GENERIC_DRINK, SoundCategory.PLAYERS, 0.4f, 1.0f);
+            SimpleNetworkHandler.CHANNEL.sendToServer(new DrinkWaterMessage());
+        }
+    }
     @SubscribeEvent
     public static void onLivingAttacked(LivingAttackEvent event) {
         EffectInstance effectInstance = event.getEntityLiving().getActivePotionEffect(EffectRegistry.ACCOMPANYING_SOUL);
         if (effectInstance != null) {
             if (event.getEntityLiving().getEntityWorld().getDimensionKey() == World.THE_NETHER) {
                 event.getEntityLiving().heal(event.getAmount() * (0.25f + (float) effectInstance.getAmplifier() * 0.06f));
-            }
-            else
+            } else
                 event.getEntityLiving().heal(event.getAmount() * (0.2f + (float) effectInstance.getAmplifier() * 0.05f));
         }
     }
@@ -286,5 +297,36 @@ public class CommonEventHandler {
             // 这个事件可以取消。取消意味着后续的 Event listener 将不会收到这个事件，进而
             // 无法修改燃烧时间。
         }
+    }
+    public static void drinkWater(PlayerEntity player){
+        World world = player.getEntityWorld();
+        player.getCapability(WaterLevelCapability.PLAYER_WATER_LEVEL).ifPresent(data -> {
+            data.addWaterLevel(1);
+            world.playSound(player, player.getPosition(), SoundEvents.ENTITY_GENERIC_DRINK, SoundCategory.PLAYERS, 0.4f, 1.0f);
+            //0.05中毒，0.8口渴；
+            if (!world.isRemote()) {
+                Random random = new Random();
+                double d1 = random.nextDouble();
+                double d2 = random.nextDouble();
+                if (d1 <= 0.05D) player.addPotionEffect(new EffectInstance(Effects.POISON, 300, 0));
+                if (d2 <= 0.8D) player.addPotionEffect(new EffectInstance(EffectRegistry.THIRST, 1600, 0));
+            }
+        });
+    }
+
+    //摘自原版Item.class
+    private static BlockRayTraceResult rayTrace(World worldIn, PlayerEntity player, RayTraceContext.FluidMode fluidMode) {
+        float f = player.rotationPitch;
+        float f1 = player.rotationYaw;
+        Vector3d vector3d = player.getEyePosition(1.0F);
+        float f2 = MathHelper.cos(-f1 * ((float)Math.PI / 180F) - (float)Math.PI);
+        float f3 = MathHelper.sin(-f1 * ((float)Math.PI / 180F) - (float)Math.PI);
+        float f4 = -MathHelper.cos(-f * ((float)Math.PI / 180F));
+        float f5 = MathHelper.sin(-f * ((float)Math.PI / 180F));
+        float f6 = f3 * f4;
+        float f7 = f2 * f4;
+        double d0 = player.getAttribute(net.minecraftforge.common.ForgeMod.REACH_DISTANCE.get()).getValue();;
+        Vector3d vector3d1 = vector3d.add((double)f6 * d0, (double)f5 * d0, (double)f7 * d0);
+        return worldIn.rayTraceBlocks(new RayTraceContext(vector3d, vector3d1, RayTraceContext.BlockMode.OUTLINE, fluidMode, player));
     }
 }

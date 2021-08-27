@@ -4,6 +4,7 @@
   "death.attack.byThirst": "%s 變成了%s幹。",
   "itemGroup.watersource_group": "水源",
   "effect.watersource.water_restoring": "自然补水",
+  "info.watersource.everlastingstrainer": "永遠不會損壞。",
 
   "jei.info.watersource.water_filter": "濾水器",
 
@@ -12,6 +13,8 @@
   "block.watersource.paper_soul_strainer": "紙靈魂沙濾層",
   "block.watersource.soul_strainer": "靈魂沙濾層",
   "block.watersource.dirty_strainer": "臟舊的濾層",
+  "block.watersource.everlasting_strainer": "永恒濾層",
+  "block.watersource.everlasting_soul_strainer": "永恒靈魂沙濾層",
   "block.watersource.wooden_water_filter": "木制濾水器",
   "block.watersource.iron_water_filter": "紅石濾水器",
   "block.watersource.coconut_tree_head": "椰樹冠",

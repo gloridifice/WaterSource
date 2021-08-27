@@ -1,5 +1,6 @@
 package gloridifice.watersource.common.capability;
 
+import gloridifice.watersource.registry.ConfigRegistry;
 import gloridifice.watersource.registry.EffectRegistry;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.CompoundNBT;
@@ -68,11 +69,12 @@ public class WaterLevelCapability {
         }
 
         public void addExhaustion(PlayerEntity player, float add) {
+            float finalValue = (float) ((double) add * ConfigRegistry.WATER_REDUCING_RATE.get());
             EffectInstance effect = player.getActivePotionEffect(EffectRegistry.THIRST);
             if (effect != null) {
-                addExhaustion(add * (6 + effect.getAmplifier()) / 2);
+                addExhaustion(finalValue * (4 + effect.getAmplifier()) / 2);
             }
-            else addExhaustion(add);
+            else addExhaustion(finalValue);
         }
 
         public void setWaterLevel(int temp) {
@@ -119,7 +121,6 @@ public class WaterLevelCapability {
             this.waterLevel = Math.min(waterLevel + restore, 20);
             if (this.waterLevel == 20) this.waterSaturationLevel = Math.min(waterLevel + restore, 20);
         }
-
         public void award(PlayerEntity player) {
             if (player.world.getGameRules().getBoolean(GameRules.NATURAL_REGENERATION) && getWaterLevel() > 17 && player.getFoodStats().getFoodLevel() > 10 && player.getHealth() < player.getMaxHealth()) {
                 player.heal(1);

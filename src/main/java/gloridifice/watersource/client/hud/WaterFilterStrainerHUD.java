@@ -47,6 +47,7 @@ public class WaterFilterStrainerHUD extends AbstractGui {
     }
 
     private void renderWaterFilterStrainer(MatrixStack matrixStack, TileEntity tile) {
+        if (tile == null) return;
         ItemStack stack = tile.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY).map(data -> data.getStackInSlot(0)).orElse(ItemStack.EMPTY);
         if (stack.isEmpty()) return;
         Minecraft mc = Minecraft.getInstance();

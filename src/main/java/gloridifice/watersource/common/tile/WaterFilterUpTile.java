@@ -158,12 +158,12 @@ public class WaterFilterUpTile extends ModNormalTile implements ITickableTileEnt
     public void tick() {
         processTicks %= 8000;
         processTicks++;
-        if (processTicks % 50 == 0) {
+        if (processTicks % 20 == 0) {
             TileEntity downTile = world.getTileEntity(pos.down());
             if (downTile instanceof WaterFilterDownTile) {
                 strainer.ifPresent(strainerHandler -> props.ifPresent(propsHandler -> {
                     ItemStack strainerStack = strainerHandler.getStackInSlot(0);
-                    int speed = propsHandler.getStackInSlot(0).getItem() == Items.HEART_OF_THE_SEA ? 20 : 10;
+                    int speed = propsHandler.getStackInSlot(0).getItem() == Items.HEART_OF_THE_SEA ? 25 : 10;
                     upTank.ifPresent(fluidTankUp -> {
                         WaterFilterRecipe recipe = WaterFilterRecipe.getRecipeFromInput(this.world, strainerStack, fluidTankUp.getFluid().getFluid());
                         ((WaterFilterDownTile) downTile).getDownTank().ifPresent(fluidTankDown -> {

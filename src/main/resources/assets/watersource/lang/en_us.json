@@ -4,6 +4,7 @@
   "effect.watersource.water_restoring": "Water Restoring",
   "death.attack.byThirst": "%s turned into Dried %s.",
   "itemGroup.watersource_group": "Water Source",
+  "info.watersource.everlastingstrainer": "Never damaged.",
 
   "jei.info.watersource.water_filter": "Water Filter",
 
@@ -12,6 +13,9 @@
   "block.watersource.paper_soul_strainer": "Paper Soul Strainer",
   "block.watersource.soul_strainer": "Soul Strainer",
   "block.watersource.dirty_strainer": "Dirty Strainer",
+  "block.watersource.everlasting_strainer": "Everlasting Strainer",
+  "block.watersource.everlasting_soul_strainer": "Everlasting Soul Strainer",
+
   "block.watersource.wooden_water_filter": "Wooden Water Filter",
   "block.watersource.iron_water_filter": "Redstone Water Filter",
   "block.watersource.coconut_tree_head": "Coconut Tree Head",

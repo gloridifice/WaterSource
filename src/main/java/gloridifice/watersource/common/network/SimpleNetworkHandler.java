@@ -17,6 +17,7 @@ public final class SimpleNetworkHandler {
         int id = 0;
         registerMessage(id++, PlayerWaterLevelMessage.class, PlayerWaterLevelMessage::new);
         registerMessage(id++, WaterFilterMessage.class, WaterFilterMessage::new);
+        registerMessage(id++, DrinkWaterMessage.class, DrinkWaterMessage::new);
     }
 
     private static <T extends INormalMessage> void registerMessage(int index, Class<T> messageType, Function<PacketBuffer, T> decoder) {

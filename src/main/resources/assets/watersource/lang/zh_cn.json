@@ -4,7 +4,7 @@
   "effect.watersource.water_restoring": "自然补水",
   "death.attack.byThirst": "%s变成了%s干。",
   "itemGroup.watersource_group": "水源",
-
+  "info.watersource.everlastingstrainer": "永远不会损坏。",
   "jei.info.watersource.water_filter": "滤水器",
 
   "block.watersource.primitive_strainer": "原始滤层",
@@ -12,6 +12,9 @@
   "block.watersource.paper_soul_strainer": "纸灵魂沙滤层",
   "block.watersource.soul_strainer": "灵魂沙滤层",
   "block.watersource.dirty_strainer": "脏旧的滤层",
+  "block.watersource.everlasting_strainer": "永恒滤层",
+  "block.watersource.everlasting_soul_strainer": "永恒灵魂沙滤层",
+
   "block.watersource.wooden_water_filter": "木制滤水器",
   "block.watersource.iron_water_filter": "红石滤水器",
   "block.watersource.coconut_tree_head": "椰树树冠",

@@ -3,6 +3,7 @@ package gloridifice.watersource.registry;
 import gloridifice.watersource.WaterSource;
 import gloridifice.watersource.common.block.*;
 import gloridifice.watersource.common.block.tree.CoconutTree;
+import gloridifice.watersource.common.item.EverlastingStrainerBlockItem;
 import gloridifice.watersource.common.item.ModNormalBlockItem;
 import gloridifice.watersource.common.item.StrainerBlockItem;
 import net.minecraft.block.*;
@@ -27,11 +28,15 @@ public class BlockRegistry extends RegistryModule {
     public final static Block BLOCK_NATURAL_COCONUT = new NaturalCoconutBlock(Block.Properties.create(Material.WOOD).harvestTool(ToolType.AXE).hardnessAndResistance(0.4F).sound(SoundType.WOOD).tickRandomly().notSolid()).setRegistryName("natural_coconut");
     public final static Block BLOCK_COCONUT = new CoconutBlock(Block.Properties.create(Material.WOOD, MaterialColor.BROWN).harvestTool(ToolType.AXE).hardnessAndResistance(0.4F).sound(SoundType.WOOD).tickRandomly().notSolid(), "coconut");
     public final static Block BLOCK_COCONUT_SAPLING = new CoconutSaplingBlock(new CoconutTree(), Block.Properties.create(Material.PLANTS).sound(SoundType.PLANT).tickRandomly()).setRegistryName("coconut_sapling");
+    //strainers
     public final static Block BLOCK_PRIMITIVE_STRAINER = new StrainerBlock("primitive_strainer", Block.Properties.create(Material.WOOL).sound(SoundType.CLOTH).notSolid().hardnessAndResistance(0.6f));
     public final static Block BLOCK_PAPER_STRAINER = new StrainerBlock("paper_strainer", Block.Properties.create(Material.WOOL).sound(SoundType.CLOTH).notSolid().hardnessAndResistance(0.4f));
     public final static Block BLOCK_DIRTY_STRAINER = new StrainerBlock("dirty_strainer", Block.Properties.create(Material.WOOL).sound(SoundType.CLOTH).notSolid().hardnessAndResistance(0.6f));
     public final static Block BLOCK_PAPER_SOUL_STRAINER = new StrainerBlock("paper_soul_strainer", Block.Properties.create(Material.WOOL).sound(SoundType.CLOTH).notSolid().hardnessAndResistance(0.4f));
     public final static Block BLOCK_SOUL_STRAINER = new StrainerBlock("soul_strainer", Block.Properties.create(Material.WOOL).sound(SoundType.CLOTH).notSolid().hardnessAndResistance(0.6f));
+    public final static Block BLOCK_EVERLASTING_STRAINER = new StrainerBlock("everlasting_strainer", Block.Properties.create(Material.WOOL).sound(SoundType.CLOTH).notSolid().hardnessAndResistance(0.6f));
+    public final static Block BLOCK_EVERLASTING_SOUL_STRAINER = new StrainerBlock("everlasting_soul_strainer", Block.Properties.create(Material.WOOL).sound(SoundType.CLOTH).notSolid().hardnessAndResistance(0.6f));
+
     public static final Block BLOCK_COCONUT_TREE_PLANKS = new Block(Block.Properties.create(Material.WOOD, MaterialColor.WOOD).hardnessAndResistance(2.0F, 3.0F).sound(SoundType.WOOD)).setRegistryName("coconut_tree_planks");
     public static final Block BLOCK_COCONUT_TREE_DOOR = new CoconutTreeDoorBlock("coconut_tree_door", Block.Properties.create(Material.WOOD, MaterialColor.WOOD).hardnessAndResistance(3.0F).sound(SoundType.WOOD).notSolid());
     public static final Block BLOCK_COCONUT_TREE_TRAPDOOR = new CoconutTreeTrapdoor("coconut_tree_trapdoor", Block.Properties.create(Material.WOOD, MaterialColor.WOOD).hardnessAndResistance(3.0F).sound(SoundType.WOOD).notSolid());
@@ -58,6 +63,9 @@ public class BlockRegistry extends RegistryModule {
     public final static BlockItem ITEM_SOUL_STRAINER = new StrainerBlockItem(BLOCK_SOUL_STRAINER, 25);
     public final static BlockItem ITEM_PAPER_SOUL_STRAINER = new StrainerBlockItem(BLOCK_PAPER_SOUL_STRAINER, 16);
     public final static BlockItem ITEM_DIRTY_STRAINER = new StrainerBlockItem(BLOCK_DIRTY_STRAINER);
+    public final static BlockItem ITEM_EVERLASTING_STRAINER = new EverlastingStrainerBlockItem(BLOCK_EVERLASTING_STRAINER);
+    public final static BlockItem ITEM_EVERLASTING_SOUL_STRAINER = new EverlastingStrainerBlockItem(BLOCK_EVERLASTING_SOUL_STRAINER);
+
     public final static BlockItem ITEM_COCONUT_TREE_PLANKS = new ModNormalBlockItem(BLOCK_COCONUT_TREE_PLANKS);
     public final static BlockItem ITEM_COCONUT_TREE_DOOR = new ModNormalBlockItem(BLOCK_COCONUT_TREE_DOOR);
     public final static BlockItem ITEM_COCONUT_TREE_TRAPDOOR = new ModNormalBlockItem(BLOCK_COCONUT_TREE_TRAPDOOR);
