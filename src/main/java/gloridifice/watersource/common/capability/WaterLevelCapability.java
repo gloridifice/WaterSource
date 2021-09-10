@@ -72,7 +72,7 @@ public class WaterLevelCapability {
             float finalValue = (float) ((double) add * ConfigRegistry.WATER_REDUCING_RATE.get());
             EffectInstance effect = player.getActivePotionEffect(EffectRegistry.THIRST);
             if (effect != null) {
-                addExhaustion(finalValue * (4 + effect.getAmplifier()) / 2);
+                addExhaustion(finalValue * (3 + effect.getAmplifier()) / 2F);
             }
             else addExhaustion(finalValue);
         }

@@ -1,6 +1,7 @@
 package gloridifice.watersource.common.recipe;
 
 import gloridifice.watersource.WaterSource;
+import gloridifice.watersource.common.recipe.type.PurifiedWaterCookingRecipe;
 import net.minecraft.item.crafting.IRecipeType;
 
 public class NormalRecipeTypes {
@@ -13,5 +14,6 @@ public class NormalRecipeTypes {
     public static final IRecipeType<WaterLevelItemRecipe> WATER_LEVEL_NBT_RECIPE = IRecipeType.register(WaterSource.MODID + ":water_level_nbt");
 
     public static final IRecipeType<WaterFilterRecipe> WATER_FILTER_RECIPE = IRecipeType.register(WaterSource.MODID + ":water_filter");
+    public static final IRecipeType<PurifiedWaterCookingRecipe> PURIFIED_WATER_COOKING_RECIPE = IRecipeType.register(WaterSource.MODID + ":purified_water_cooking");
 
 }

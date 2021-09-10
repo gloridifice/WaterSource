@@ -7,8 +7,9 @@ import gloridifice.watersource.common.recipe.serializer.WaterFilterRecipeSeriali
 import gloridifice.watersource.common.recipe.serializer.WaterLevelRecipeSerializer;
 import gloridifice.watersource.common.recipe.type.*;
 import net.minecraft.fluid.Fluids;
-import net.minecraft.item.crafting.IRecipeSerializer;
-import net.minecraft.item.crafting.SpecialRecipeSerializer;
+import net.minecraft.item.ItemStack;
+import net.minecraft.item.crafting.*;
+import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.RegistryObject;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
@@ -32,4 +33,6 @@ public class RecipeSerializersRegistry {
     public final static RegistryObject<WaterLevelRecipeSerializer<WaterLevelNBTRecipe>> WATER_LEVEL_NBT_RECIPE_SERIALIZER = RECIPE_SERIALIZERS.register("water_level_nbt", () -> new WaterLevelRecipeSerializer<>(WaterLevelNBTRecipe::new, 2, 2));
 
     public final static RegistryObject<WaterFilterRecipeSerializer<WaterFilterRecipe>> WATER_FILTER_RECIPE_SERIALIZER = RECIPE_SERIALIZERS.register("water_filter", () -> new WaterFilterRecipeSerializer<>(WaterFilterRecipe::new, Fluids.EMPTY, Fluids.EMPTY));
+
+    //public final static RegistryObject<CookingRecipeSerializer<PurifiedWaterCookingRecipe>> PURIFIED_WATER_COOKING_RECIPE_SERIALIZER = RECIPE_SERIALIZERS.register("purified_water_cooking", () -> new CookingRecipeSerializer(FurnaceRecipe::new, 1));
 }

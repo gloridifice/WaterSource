@@ -46,7 +46,7 @@ import net.minecraftforge.fml.network.PacketDistributor;
 import java.util.Random;
 import java.util.UUID;
 
-import static gloridifice.watersource.registry.ConfigRegistry.RESET_WATER_LEVEL_IN_DEATH;
+import static gloridifice.watersource.registry.ConfigRegistry.*;
 
 @Mod.EventBusSubscriber(modid = WaterSource.MODID)
 public class CommonEventHandler {
@@ -202,11 +202,11 @@ public class CommonEventHandler {
                     }
                 }
                 //}
-                //Thirty State
+                //在口渴下凭空降低水分值
                 EffectInstance effectInstance = player.getActivePotionEffect(EffectRegistry.THIRST);
                 if (effectInstance != null) {
                     player.getCapability(WaterLevelCapability.PLAYER_WATER_LEVEL).ifPresent(data -> {
-                        data.addExhaustion(player, 0.1f + 0.05f * effectInstance.getAmplifier());
+                        data.addExhaustion(player, 0.03f + 0.01f * effectInstance.getAmplifier());
                     });
                 }
             }
@@ -308,8 +308,8 @@ public class CommonEventHandler {
                 Random random = new Random();
                 double d1 = random.nextDouble();
                 double d2 = random.nextDouble();
-                if (d1 <= 0.05D) player.addPotionEffect(new EffectInstance(Effects.POISON, 300, 0));
-                if (d2 <= 0.8D) player.addPotionEffect(new EffectInstance(EffectRegistry.THIRST, 1600, 0));
+                if (d1 <= POISON_DEBUFF_PROBABILITY.get()) player.addPotionEffect(new EffectInstance(Effects.POISON, POISON_DEBUFF_DURATION.get(), 0));
+                if (d2 <= THIRST_DEBUFF_PROBABILITY.get()) player.addPotionEffect(new EffectInstance(EffectRegistry.THIRST, THIRST_DEBUFF_DURATION.get(), 0));
             }
         });
     }
