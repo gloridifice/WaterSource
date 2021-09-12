@@ -1,0 +1,10 @@
+{
+    "type": "watersource:thirst_fluid",
+    "ingredient": {
+        "item": "watersource:wooden_cup_drink"
+    },
+	"fluid": "minecraft:water",
+	"duration": 1600,
+	"amplifier": 0,
+	"probability": 75
+}

@@ -1,0 +1,21 @@
+{
+    "type": "minecraft:crafting_shaped",
+    "group": "watersource",
+    "pattern": [
+        "x x",
+        "x x",
+		"xtx"
+    ],
+    "key": {
+        "x": {
+            "item": "minecraft:stone"
+        },
+        "t": {
+            "tag": "forge:cobblestone"
+        }
+    },
+    "result": {
+        "item": "watersource:stone_rain_collector",
+		"count":1
+    }
+}

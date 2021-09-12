@@ -1,0 +1,8 @@
+{
+    "type": "watersource:water_level_item",
+    "ingredient": {
+        "item": "watersource:coconut_piece"
+    },
+	"waterLevel": 2,
+	"waterSaturationLevel": 2
+}

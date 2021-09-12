@@ -1,0 +1,8 @@
+{
+    "parent": "block/slab",
+    "textures": {
+        "bottom": "watersource:block/coconut_tree_planks",
+        "top": "watersource:block/coconut_tree_planks",
+        "side": "watersource:block/coconut_tree_planks"
+    }
+}

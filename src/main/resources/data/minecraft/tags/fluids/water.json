@@ -1,0 +1,11 @@
+{
+  "replace": false,
+  "values": [
+    "watersource:purified_water",
+    "watersource:soul_water",
+    "watersource:purified_water_flowing",
+    "watersource:soul_water_flowing",
+    "watersource:coconut_milk",
+    "watersource:coconut_milk_flowing"
+  ]
+}

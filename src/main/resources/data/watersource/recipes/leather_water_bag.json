@@ -1,0 +1,23 @@
+{
+    "type": "minecraft:crafting_shaped",
+    "group": "watersource",
+    "pattern": [
+        "yoy",
+        "x x",
+		"xxx"
+    ],
+    "key": {
+        "x": {
+            "tag": "forge:leather"
+        },
+	    "o": {
+            "tag": "forge:ingots/iron"
+        },
+	    "y": {
+			"tag": "forge:string"
+        }
+    },
+    "result": {
+        "item": "watersource:leather_water_bag"
+    }
+}

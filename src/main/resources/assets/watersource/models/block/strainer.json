@@ -1,0 +1,22 @@
+{
+	"credit": "Made with Blockbench",
+	"textures": {
+		"0": "watersource:block/primitive_strainer",
+		"particle": "watersource:block/primitive_strainer"
+	},
+	"elements": [
+		{
+			"from": [4, 0, 4],
+			"to": [12, 4, 12],
+			"rotation": {"angle": 0, "axis": "y", "origin": [12, 8, 12]},
+			"faces": {
+				"north": {"uv": [4, 0, 12, 4], "rotation": 180, "texture": "#0"},
+				"east": {"uv": [12, 4, 16, 12], "rotation": 90, "texture": "#0"},
+				"south": {"uv": [4, 12, 12, 16], "texture": "#0"},
+				"west": {"uv": [0, 4, 4, 12], "rotation": 270, "texture": "#0"},
+				"up": {"uv": [4, 4, 12, 12], "texture": "#0"},
+				"down": {"uv": [12, 4, 4, 12], "texture": "#0"}
+			}
+		}
+	]
+}

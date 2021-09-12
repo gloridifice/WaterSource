@@ -1,0 +1,15 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "group": "coconut",
+  "ingredients": [
+  {
+    "item": "watersource:half_coconut"
+},
+  {
+    "item": "minecraft:glass_bottle"
+}
+  ],
+  "result": {
+    "item": "watersource:coconut_milk_bottle"
+  }
+}

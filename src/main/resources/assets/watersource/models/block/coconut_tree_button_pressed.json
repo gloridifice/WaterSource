@@ -1,0 +1,6 @@
+{
+    "parent": "block/button_pressed",
+    "textures": {
+        "texture": "watersource:block/coconut_tree_planks"
+    }
+}

@@ -1,0 +1,12 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "group": "wooden_button",
+  "ingredients": [
+    {
+      "item": "watersource:coconut_tree_planks"
+    }
+  ],
+  "result": {
+    "item": "watersource:coconut_tree_button"
+  }
+}
