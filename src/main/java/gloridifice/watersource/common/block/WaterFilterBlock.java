@@ -141,7 +141,7 @@ public class WaterFilterBlock extends Block {
                             else {
                                 //清空液体
                                 fluidTankUp.setFluid(FluidStack.EMPTY);
-                                worldIn.playSound(pos.getX(), pos.getY(), pos.getZ(), SoundEvents.ENTITY_DROWNED_HURT_WATER, SoundCategory.BLOCKS, 0.3F, 1.0F, true);
+                                worldIn.playSound(pos.getX(), pos.getY(), pos.getZ(), SoundEvents.ITEM_BUCKET_EMPTY, SoundCategory.BLOCKS, 0.3F, 1.0F, true);
                                 flag = true;
                             }
                         }

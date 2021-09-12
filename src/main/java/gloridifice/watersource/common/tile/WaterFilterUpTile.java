@@ -42,6 +42,7 @@ public class WaterFilterUpTile extends ModNormalTile implements ITickableTileEnt
     double cacheTimeEnter, cacheTimeExit = 0;
     boolean previousIsIn = false;
     boolean isLeftAnimeEnd = true;
+    private int heightAmount = 0;
 
     public double getCacheTimeEnter() {
         return cacheTimeEnter;
@@ -265,5 +266,30 @@ public class WaterFilterUpTile extends ModNormalTile implements ITickableTileEnt
                 return !stack.getFluid().getAttributes().isLighterThanAir() && stack.getFluid().getAttributes().getTemperature() < 500;
             }
         };
+    }
+    public int getFluidAmount()
+    {
+        return this.upTank.orElse(null).getFluidAmount();
+    }
+
+    private void updateHeight()
+    {
+        if (this.getWorld() != null && this.getWorld().isRemote)
+        {
+            if (heightAmount > this.getFluidAmount())
+            {
+                heightAmount -= Math.max(1, (heightAmount - this.getFluidAmount()));
+            }
+            else if (heightAmount < this.getFluidAmount())
+            {
+                heightAmount += Math.max(1, (this.getFluidAmount() - heightAmount));
+            }
+        }
+    }
+
+    public float getHeight()
+    {
+        updateHeight();
+        return 0.75F * this.heightAmount / capacity;
     }
 }

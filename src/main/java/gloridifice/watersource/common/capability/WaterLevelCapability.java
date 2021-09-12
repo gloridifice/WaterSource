@@ -144,28 +144,30 @@ public class WaterLevelCapability {
         }
 
         public void punishment(PlayerEntity player) {
+            int weAmp = ConfigRegistry.WEAKNESS_EFFECT_AMPLIFIER.get();
+            int slAmp = ConfigRegistry.WEAKNESS_EFFECT_AMPLIFIER.get();
             if (getWaterLevel() <= 6) {
                 switch (player.getEntityWorld().getDifficulty()) {
                     case PEACEFUL:
                         break;
                     case EASY:
-                        if (player.getActivePotionEffect(Effects.WEAKNESS) == null || player.getActivePotionEffect(Effects.WEAKNESS).getDuration() <= 100)
-                            player.addPotionEffect(new EffectInstance(Effects.WEAKNESS, 400, 0, false, false));
-                        if (player.getActivePotionEffect(Effects.SLOWNESS) == null || player.getActivePotionEffect(Effects.SLOWNESS).getDuration() <= 100)
-                            player.addPotionEffect(new EffectInstance(Effects.SLOWNESS, 400, 0, false, false));
+                        if (weAmp > -1 && (player.getActivePotionEffect(Effects.WEAKNESS) == null || player.getActivePotionEffect(Effects.WEAKNESS).getDuration() <= 100))
+                            player.addPotionEffect(new EffectInstance(Effects.WEAKNESS, 400, weAmp, false, false));
+                        if (slAmp > -1 && (player.getActivePotionEffect(Effects.SLOWNESS) == null || player.getActivePotionEffect(Effects.SLOWNESS).getDuration() <= 100))
+                            player.addPotionEffect(new EffectInstance(Effects.SLOWNESS, 400, slAmp, false, false));
                         break;
                     default:
-                        if (player.getActivePotionEffect(Effects.WEAKNESS) == null || player.getActivePotionEffect(Effects.WEAKNESS).getDuration() <= 100)
-                            player.addPotionEffect(new EffectInstance(Effects.WEAKNESS, 400, 1, false, false));
-                        if (player.getActivePotionEffect(Effects.SLOWNESS) == null || player.getActivePotionEffect(Effects.SLOWNESS).getDuration() <= 100)
-                            player.addPotionEffect(new EffectInstance(Effects.SLOWNESS, 400, 0, false, false));
+                        if (weAmp > -1 && (player.getActivePotionEffect(Effects.WEAKNESS) == null || player.getActivePotionEffect(Effects.WEAKNESS).getDuration() <= 100))
+                            player.addPotionEffect(new EffectInstance(Effects.WEAKNESS, 400, weAmp + 1, false, false));
+                        if (slAmp > -1 && (player.getActivePotionEffect(Effects.SLOWNESS) == null || player.getActivePotionEffect(Effects.SLOWNESS).getDuration() <= 100))
+                            player.addPotionEffect(new EffectInstance(Effects.SLOWNESS, 400, slAmp, false, false));
                         break;
                 }
             }
             int i = 0;
             if (player.getEntityWorld().getDifficulty() != Difficulty.HARD) i = 1;
             if (getWaterLevel() == 0 && player.getHealth() > i) {
-                if (!player.getEntityWorld().isRemote) {
+                if (!player.getEntityWorld().isRemote()) {
                     player.attackEntityFrom(new DamageSource("byThirst"), 1.0f);
                 }
                 else

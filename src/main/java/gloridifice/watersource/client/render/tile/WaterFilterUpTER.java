@@ -39,7 +39,6 @@ public class WaterFilterUpTER extends TileEntityRenderer<WaterFilterUpTile> {
         double animationTime = (double) gameTime + (double) partialTicks;
         int tick = tileEntityIn.getProcessTicks();
         tileEntityIn.getProps().ifPresent(itemStackHandler -> {
-            //todo 
             if (itemStackHandler.getStackInSlot(0).isEmpty()) return;
             float speed = 0;
             if (tileEntityIn.getStrainer().map(data -> data.getStackInSlot(0)).orElse(ItemStack.EMPTY).isEmpty()) {
@@ -62,8 +61,9 @@ public class WaterFilterUpTER extends TileEntityRenderer<WaterFilterUpTile> {
             }
             matrixStackIn.pop();
         });
-        IVertexBuilder buffer = bufferIn.getBuffer(RenderType.getTranslucentNoCrumbling());
 
+        //render fluid
+        IVertexBuilder buffer = bufferIn.getBuffer(RenderType.getTranslucentNoCrumbling());
         tileEntityIn.getUpTank().ifPresent(fluidTankUp -> {
             if (!fluidTankUp.isEmpty()) {
 
@@ -71,7 +71,7 @@ public class WaterFilterUpTER extends TileEntityRenderer<WaterFilterUpTile> {
                 TextureAtlasSprite still = mc.getAtlasSpriteGetter(AtlasTexture.LOCATION_BLOCKS_TEXTURE).apply(fluidStackUp.getFluid().getAttributes().getStillTexture());
                 int colorRGB = fluidStackUp.getFluid().getAttributes().getColor();
                 float alpha = 1.0f;
-                float height = (float) fluidStackUp.getAmount() / (float) fluidTankUp.getCapacity() * 0.75f;
+                float height = tileEntityIn.getHeight();
                 float vHeight = (still.getMaxV() - still.getMinV()) * (1f - (float) fluidStackUp.getAmount() / (float) fluidTankUp.getCapacity());
                 matrixStackIn.push();
                 //GlStateManager.disableCull();

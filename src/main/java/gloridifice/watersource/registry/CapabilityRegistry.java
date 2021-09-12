@@ -9,5 +9,4 @@ public class CapabilityRegistry {
         CapabilityManager.INSTANCE.register(WaterLevelCapability.Data.class, new WaterLevelCapability.Storage(), WaterLevelCapability.Data::new);
         CapabilityManager.INSTANCE.register(PlayerLastPosCapability.Data.class, new PlayerLastPosCapability.Storage(), PlayerLastPosCapability.Data::new);
     }
-
 }
