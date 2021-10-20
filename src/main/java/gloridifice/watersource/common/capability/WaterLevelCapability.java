@@ -27,7 +27,7 @@ import static net.minecraft.world.Difficulty.PEACEFUL;
 public class WaterLevelCapability {
     @CapabilityInject(Data.class)
     public static Capability<Data> PLAYER_WATER_LEVEL;
-
+    public static DamageSource BY_THIRST=(new DamageSource("byThirst")).setDamageBypassesArmor().setDifficultyScaled();
     public static boolean canPlayerAddWaterExhaustionLevel(PlayerEntity player) {
         return !(player instanceof FakePlayer) && !player.isCreative() && !player.isSpectator() && player.getCapability(WaterLevelCapability.PLAYER_WATER_LEVEL) != null && player.getEntityWorld().getDifficulty() != PEACEFUL;
     }
@@ -168,7 +168,7 @@ public class WaterLevelCapability {
             if (player.getEntityWorld().getDifficulty() != Difficulty.HARD) i = 1;
             if (getWaterLevel() == 0 && player.getHealth() > i) {
                 if (!player.getEntityWorld().isRemote()) {
-                    player.attackEntityFrom(new DamageSource("byThirst"), 1.0f);
+                    player.attackEntityFrom(BY_THIRST, 1.0f);
                 }
                 else
                     player.getEntityWorld().playSound(player, player.getPosition(), SoundEvents.ENTITY_GUARDIAN_ATTACK, SoundCategory.PLAYERS, 1.0F, 1.0F);
