@@ -1,0 +1,24 @@
+{
+    "parent": "watersource:strainer",
+    "display": {
+        "icon": {
+            "item": "watersource:everlasting_strainer"
+        },
+        "title": {
+            "translate": "advancements.watersource.everlasting_strainer.title"
+        },
+        "description": {
+            "translate": "advancements.watersource.everlasting_strainer.description"
+        }
+    },
+    "criteria": {
+        "water": {
+            "trigger": "minecraft:inventory_changed",
+            "conditions":{
+                "items":[
+                    {"tag":"watersource:everlasting_strainers"}
+                ]
+            }
+        }
+    }
+}

@@ -1,0 +1,6 @@
+{
+    "variants": {
+        "up=false":  { "model": "watersource:block/water_dispenser_down" },
+        "up=true": { "model": "watersource:block/water_diapenser_up"}
+    }
+}

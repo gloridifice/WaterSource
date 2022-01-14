@@ -1,0 +1,15 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "group": "strainer",
+  "ingredients": [
+    {
+      "item": "watersource:paper_strainer"
+    },
+    {
+      "tag": "forge:nether_stars"
+    }
+  ],
+  "result": {
+    "item": "watersource:everlasting_strainer"
+  }
+}

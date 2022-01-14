@@ -1,0 +1,24 @@
+{
+    "parent": "watersource:root",
+    "display": {
+        "icon": {
+            "item": "watersource:coconut"
+        },
+        "title": {
+            "translate": "advancements.watersource.coconut.title"
+        },
+        "description": {
+            "translate": "advancements.watersource.coconut.description"
+        }
+    },
+    "criteria": {
+        "water": {
+            "trigger": "minecraft:inventory_changed",
+            "conditions":{
+                "items":[
+                    {"items":["watersource:coconut"]}
+                ]
+            }
+        }
+    }
+}

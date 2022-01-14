@@ -1,0 +1,14 @@
+{
+    "type": "watersource:water_level_item",
+    "conditions": [
+        {
+            "type": "forge:mod_loaded",
+            "modid": "crockpot"
+        }
+    ],
+    "ingredient": {
+        "item": "crockpot:milk_bottle"
+    },
+	"waterLevel": 1,
+	"waterSaturationLevel": 1
+}

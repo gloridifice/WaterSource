@@ -1,0 +1,8 @@
+{
+    "type": "watersource:water_filter",
+    "strainerIngredient": {
+        "tag": "watersource:purification_strainers"
+    },
+	"inputFluid": "minecraft:water",
+	"outputFluid": "watersource:purified_water"
+}

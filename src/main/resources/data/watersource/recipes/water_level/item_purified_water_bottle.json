@@ -1,0 +1,8 @@
+{
+    "type": "watersource:water_level_item",
+    "ingredient": {
+        "item": "watersource:purified_water_bottle"
+    },
+	"waterLevel": 5,
+	"waterSaturationLevel": 7
+}

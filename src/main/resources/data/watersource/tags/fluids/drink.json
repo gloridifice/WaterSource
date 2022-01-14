@@ -1,0 +1,9 @@
+{
+    "replace": false,
+    "values": [
+	"minecraft:water",
+    "watersource:purified_water",
+	"watersource:coconut_juice",
+    "watersource:soul_water"
+    ]
+}

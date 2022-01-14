@@ -1,0 +1,9 @@
+{
+    "type": "watersource:water_level_fluid",
+    "ingredient": {
+        "item": "watersource:fluid_bottle"
+    },
+	"fluid": "watersource:soul_water",
+	"waterLevel": 4,
+	"waterSaturationLevel": 3
+}

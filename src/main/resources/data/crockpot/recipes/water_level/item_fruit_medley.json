@@ -1,0 +1,14 @@
+{
+    "type": "watersource:water_level_item",
+    "conditions": [
+        {
+            "type": "forge:mod_loaded",
+            "modid": "crockpot"
+        }
+    ],
+    "ingredient": {
+        "item": "crockpot:fruit_medley"
+    },
+	"waterLevel": 2,
+	"waterSaturationLevel": 2
+}

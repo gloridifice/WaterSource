@@ -1,0 +1,7 @@
+{
+    "variants": {
+        "type=bottom": { "model": "watersource:block/palm_tree_slab" },
+        "type=top": { "model": "watersource:block/palm_tree_slab_top" },
+        "type=double": { "model": "watersource:block/palm_tree_planks" }
+    }
+}

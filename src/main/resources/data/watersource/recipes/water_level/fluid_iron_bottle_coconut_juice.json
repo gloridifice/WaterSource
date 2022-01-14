@@ -1,0 +1,9 @@
+{
+    "type": "watersource:water_level_fluid",
+    "ingredient": {
+        "item": "watersource:iron_bottle"
+    },
+	"fluid": "watersource:coconut_juice",
+	"waterLevel": 4,
+	"waterSaturationLevel": 6
+}

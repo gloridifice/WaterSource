@@ -1,0 +1,24 @@
+{
+    "parent": "watersource:root",
+    "display": {
+        "icon": {
+            "item": "watersource:primitive_strainer"
+        },
+        "title": {
+            "translate": "advancements.watersource.strainer.title"
+        },
+        "description": {
+            "translate": "advancements.watersource.strainer.description"
+        }
+    },
+    "criteria": {
+        "water": {
+            "trigger": "minecraft:inventory_changed",
+            "conditions":{
+                "items":[
+                    {"tag":"watersource:strainers"}
+                ]
+            }
+        }
+    }
+}

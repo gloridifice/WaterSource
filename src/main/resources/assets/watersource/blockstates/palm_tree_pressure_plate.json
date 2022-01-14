@@ -1,0 +1,6 @@
+{
+    "variants": {
+        "powered=false": { "model": "watersource:block/palm_tree_pressure_plate" },
+        "powered=true": { "model": "watersource:block/palm_tree_pressure_plate_down" }
+    }
+}
