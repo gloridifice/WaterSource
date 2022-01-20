@@ -1,8 +1,10 @@
 package gloridifice.watersource.common.recipe.type;
 
 import gloridifice.watersource.common.item.StrainerBlockItem;
+import gloridifice.watersource.registry.ItemRegistry;
 import gloridifice.watersource.registry.RecipeSerializersRegistry;
 import net.minecraft.core.NonNullList;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.tags.Tag;
@@ -18,26 +20,30 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.level.material.Fluids;
 import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fluids.FluidUtil;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidHandlerItem;
 
 public class StrainerFilterRecipe extends CustomRecipe {
-    public Tag<Item> strainerTag;
+    public Tag.Named<Item> strainerTag;
     public Fluid inPutFluid;
     public Fluid outPutFluid;
     public Item containerItem;
 
     public StrainerFilterRecipe(ResourceLocation name, String strainerTag, Fluid inPutFluid, Fluid outPutFluid, Item containerItem) {
         super(name);
-        this.strainerTag = ItemTags.bind(strainerTag);
+        if (strainerTag.isBlank()) this.strainerTag = null;
+        else this.strainerTag = ItemTags.bind(strainerTag);
         this.inPutFluid = inPutFluid;
         this.outPutFluid = outPutFluid;
         this.containerItem = containerItem;
+
     }
 
     @Override
     public boolean matches(CraftingContainer container, Level level) {
+        if (strainerTag == null) return false;
         int matches = 0;
         ItemStack containerItem = ItemStack.EMPTY;
         ItemStack strainer = ItemStack.EMPTY;
@@ -53,6 +59,7 @@ public class StrainerFilterRecipe extends CustomRecipe {
             }
         }
         boolean f = !strainer.isEmpty() && !containerItem.isEmpty() && matches == 2;
+
         if (f) {
             int consume;
             int possess;
@@ -63,7 +70,7 @@ public class StrainerFilterRecipe extends CustomRecipe {
                 fluid = fluidHandlerItem.getFluidInTank(0).getFluid();
             } else {
                 consume = 1;
-                if (PotionUtils.getPotion(containerItem) == Potions.WATER){
+                if (PotionUtils.getPotion(containerItem) == Potions.WATER) {
                     fluid = Fluids.WATER;
                 } else return false;
             }
@@ -89,16 +96,39 @@ public class StrainerFilterRecipe extends CustomRecipe {
 
             }
         }
+        if (this.containerItem == Items.POTION) {
+            containerItem = new ItemStack(ItemRegistry.FLUID_BOTTLE);
+            ItemStack result = containerItem.copy();
+            IFluidHandlerItem resultFluidHandlerItem = FluidUtil.getFluidHandler(result).orElse(null);
+            if (resultFluidHandlerItem != null) {
+                resultFluidHandlerItem.fill(new FluidStack(outPutFluid, 250), IFluidHandler.FluidAction.EXECUTE);
+            }
+            return result;
+        }
         boolean f = !strainer.isEmpty() && !containerItem.isEmpty();
         if (f) {
             IFluidHandlerItem fluidHandlerItem = containerItem.getCapability(CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY).orElse(null);
+            if (fluidHandlerItem != null) {
+                FluidStack outFluidStack = new FluidStack(outPutFluid, fluidHandlerItem.getFluidInTank(0).getAmount());
+                ItemStack result = containerItem.copy();
 
-            ItemStack result = containerItem.copy();
-            IFluidHandlerItem resultFluidHandlerItem = result.getCapability(CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY).orElse(null);
-            resultFluidHandlerItem.drain(resultFluidHandlerItem.getTankCapacity(0), IFluidHandler.FluidAction.EXECUTE);
-            resultFluidHandlerItem.fill(new FluidStack(outPutFluid, fluidHandlerItem.getFluidInTank(0).getAmount()), IFluidHandler.FluidAction.EXECUTE);
+                IFluidHandlerItem resultFluidHandlerItem = FluidUtil.getFluidHandler(result).orElse(null);
+                if (resultFluidHandlerItem != null) {
+                    resultFluidHandlerItem.drain(resultFluidHandlerItem.getTankCapacity(0), IFluidHandler.FluidAction.EXECUTE);
+                    resultFluidHandlerItem.fill(outFluidStack, IFluidHandler.FluidAction.EXECUTE);
 
-            return result;
+                    CompoundTag fluidTag = new CompoundTag();
+                    outFluidStack.writeToNBT(fluidTag);
+                    if (result.getTag() == null) {
+                        result.setTag(new CompoundTag());
+                        result.getTag().put("Fluid", fluidTag);
+                    } else if (!result.getTag().hasUUID("Fluid")) {
+                        result.getTag().put("Fluid", fluidTag);
+                    }
+
+                    return result;
+                }
+            }
         }
         return new ItemStack(this.containerItem);
     }
@@ -121,9 +151,12 @@ public class StrainerFilterRecipe extends CustomRecipe {
         }
         boolean f = !strainer.isEmpty() && !containerItem.isEmpty();
         if (f) {
+            int consume = 1;
             ItemStack strainer1 = strainer.copy();
             IFluidHandlerItem fluidHandlerItem = containerItem.getCapability(CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY).orElse(null);
-            int consume = fluidHandlerItem.getFluidInTank(0).getAmount() / 250;
+            if (this.containerItem != Items.POTION && fluidHandlerItem != null) {
+                consume = fluidHandlerItem.getFluidInTank(0).getAmount() / 250;
+            }
             nonnulllist.set(strainerPos, StrainerBlockItem.hurt(strainer1, consume));
         }
         return nonnulllist;

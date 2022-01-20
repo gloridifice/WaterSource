@@ -106,16 +106,14 @@ public class WaterFilterUpTER implements BlockEntityRenderer<WaterFilterUpBlockE
                 RenderHelper.addVertex(buffer, matrixStackIn, 0.125f, 0.126f, 0.875f, still.getU1(), still.getV0(), colorRGBA);
                 RenderHelper.addVertex(buffer, matrixStackIn, 0.875f, 0.126f, 0.875f, still.getU1(), still.getV1(), colorRGBA);
                 RenderHelper.addVertex(buffer, matrixStackIn, 0.875f, 0.126f, 0.125f, still.getU0(), still.getV1(), colorRGBA);*/
-                //渲染容量文字
+                //render capacity text
                 Vec3i vec3i = new Vec3i(player.getPosition(0f).x() - blockEntity.getBlockPos().getX(), player.getPosition(0f).y() - blockEntity.getBlockPos().getY(), player.getPosition(0f).z() - blockEntity.getBlockPos().getZ());
                 Direction direction = Direction.getNearest(vec3i.getX(), vec3i.getY(), vec3i.getZ());
-                //flag检测
+                //flag update
                 double cacheTimeEnter = blockEntity.getCacheTimeEnter();
                 double cacheTimeExit = blockEntity.getCacheTimeExit();
                 boolean previousIsIn = blockEntity.isPreviousIsIn();
                 boolean isLeftAnimeEnd = blockEntity.isLeftAnimeEnd();
-
-
 
                 boolean isIn = vec3i.distSqr(new Vec3i(0,0,0)) <= 6;
                 if (!previousIsIn && isIn) {
@@ -125,7 +123,7 @@ public class WaterFilterUpTER implements BlockEntityRenderer<WaterFilterUpBlockE
                     cacheTimeExit = animationTime;
                     isLeftAnimeEnd = false;
                 }
-                //动画实现
+                //animation
                 
                 //Font font = this.renderDispatcher.fontRenderer;
                 Font font = mc.font;

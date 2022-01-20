@@ -1,9 +1,0 @@
-{
-    "type": "watersource:water_level_fluid",
-    "ingredient": {
-        "item": "watersource:leather_water_bag"
-    },
-	"fluid": "watersource:purified_water",
-	"waterLevel": 5,
-	"waterSaturationLevel": 6
-}

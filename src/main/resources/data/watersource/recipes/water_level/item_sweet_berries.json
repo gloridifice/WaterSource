@@ -1,8 +1,8 @@
 {
-    "type": "watersource:water_level_item",
+    "type": "watersource:water_level",
     "ingredient": {
         "item": "minecraft:sweet_berries"
     },
-	"waterLevel": 1,
-	"waterSaturationLevel": 0
+	"water_level": 1,
+	"water_saturation_level": 0
 }

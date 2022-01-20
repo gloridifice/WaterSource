@@ -136,7 +136,7 @@ public class WaterFilterUpBlockEntity extends ModNormalBlockEntity {
         LazyOptional<ItemStackHandler> strainer = blockEntity.getStrainer();
         LazyOptional<ItemStackHandler> props = blockEntity.getProps();
         LazyOptional<FluidTank> upTank = blockEntity.getUpTank();
-        blockEntity.setProcessTicks(blockEntity.getProcessTicks() % 8000);
+        blockEntity.setProcessTicks(blockEntity.getProcessTicks() % 10000);
         blockEntity.setProcessTicks(blockEntity.getProcessTicks() + 1);
         if (blockEntity.getProcessTicks() % 20 == 0) {
             BlockEntity downTile = level.getBlockEntity(blockPos.below());
@@ -152,7 +152,7 @@ public class WaterFilterUpBlockEntity extends ModNormalBlockEntity {
                                     fluidTankDown.fill(new FluidStack(recipe.getOutputFluid(), speed), IFluidHandler.FluidAction.EXECUTE);
                                     fluidTankUp.drain(speed, IFluidHandler.FluidAction.EXECUTE);
                                 }
-                                if (blockEntity.getProcessTicks() % 10000 / speed == 0) {
+                                if (blockEntity.getProcessTicks() % 500 == 0) {
                                     //减少滤网耐久
                                     if (strainerStack.isDamageableItem()) {
                                         strainerHandler.setStackInSlot(0, StrainerBlockItem.hurt(strainerStack, 1));

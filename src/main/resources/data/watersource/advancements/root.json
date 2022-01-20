@@ -1,7 +1,7 @@
 {
     "display": {
         "icon": {
-            "item": "watersource:purified_water_bottle"
+            "item": "watersource:paper_strainer"
         },
         "title": {
             "translate": "advancements.watersource.root.title"

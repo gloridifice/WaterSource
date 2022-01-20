@@ -1,0 +1,16 @@
+{
+    "name": "Soul Strainers",
+    "icon": "watersource:soul_strainer",
+    "category": "watersource:filter",
+    "pages": [
+        {
+            "type": "patchouli:crafting",
+            "recipe":"watersource:soul_strainer",
+            "text": "Same as $(l:filter/purification_strainers)$(#0094FF)Purifacation Strainers$(). Soul Stainers can be crafted with containers filled with Water and output Soul Water containers."
+        },
+        {
+            "type": "patchouli:crafting",
+            "recipe":"watersource:paper_soul_strainer"
+        }
+    ]
+}

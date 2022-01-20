@@ -20,13 +20,13 @@ import net.minecraftforge.registries.ForgeRegistries;
 public class BlockRegistry extends RegistryModule {
     public static final DeferredRegister<Block> FLUID_BLOCKS = DeferredRegister.create(ForgeRegistries.BLOCKS, WaterSource.MODID);
 
-    public final static Block WOODEN_WATER_FILTER = new WaterFilterBlock("wooden_water_filter", Block.Properties.of(Material.WOOD, MaterialColor.COLOR_BROWN).sound(SoundType.WOOD).strength(1.0F, 3.0f).noOcclusion().requiresCorrectToolForDrops());
+    public final static Block WOODEN_WATER_FILTER = new WaterFilterBlock("wooden_water_filter", Block.Properties.of(Material.WOOD, MaterialColor.COLOR_BROWN).sound(SoundType.WOOD).strength(1.0F, 3.0f).noOcclusion());
     public final static Block IRON_WATER_FILTER = new RedstoneWaterFilterBlock("iron_water_filter", Block.Properties.of(Material.METAL, MaterialColor.COLOR_GRAY).sound(SoundType.STONE).strength(2.2F, 3.0f).noOcclusion().requiresCorrectToolForDrops());
     public final static Block PALM_TREE_LOG = log(MaterialColor.WOOD, MaterialColor.WOOD).setRegistryName("palm_tree_log");
-    public final static Block PALM_TREE_HEAD = new PalmTreeHeadBlock("palm_tree_head", Block.Properties.of(Material.WOOD, MaterialColor.COLOR_BROWN).sound(SoundType.WOOD).requiresCorrectToolForDrops().strength(2.0f, 3.0f).randomTicks());
-    public final static Block PALM_TREE_LEAF = new LeavesBlock(Block.Properties.of(Material.LEAVES).strength(0.2F).randomTicks().sound(SoundType.CROP).noOcclusion()).setRegistryName("palm_tree_leaf");//todo
-    public final static Block BLOCK_NATURAL_COCONUT = new NaturalCoconutBlock("natural_coconut", Block.Properties.of(Material.WOOD).requiresCorrectToolForDrops().strength(0.4F).sound(SoundType.WOOD).randomTicks().noOcclusion());
-    public final static Block BLOCK_COCONUT = new CoconutBlock(Block.Properties.of(Material.WOOD, MaterialColor.COLOR_BROWN).requiresCorrectToolForDrops().strength(0.4F).sound(SoundType.WOOD).randomTicks().noOcclusion(), "coconut");
+    public final static Block PALM_TREE_HEAD = new PalmTreeHeadBlock("palm_tree_head", Block.Properties.of(Material.WOOD, MaterialColor.COLOR_BROWN).sound(SoundType.WOOD).strength(2.0f, 3.0f).randomTicks());
+    public final static Block PALM_TREE_LEAF = new LeavesBlock(Block.Properties.of(Material.LEAVES).strength(0.2F).randomTicks().sound(SoundType.CROP).requiresCorrectToolForDrops().noOcclusion()).setRegistryName("palm_tree_leaf");//todo
+    public final static Block BLOCK_NATURAL_COCONUT = new NaturalCoconutBlock("natural_coconut", Block.Properties.of(Material.WOOD).strength(0.4F).sound(SoundType.WOOD).randomTicks().noOcclusion());
+    public final static Block BLOCK_COCONUT = new CoconutBlock(Block.Properties.of(Material.WOOD, MaterialColor.COLOR_BROWN).strength(0.4F).sound(SoundType.WOOD).randomTicks().noOcclusion(), "coconut");
     public final static Block BLOCK_COCONUT_SAPLING = new PalmTreeSaplingBlock(new CoconutTreeGrower(), Block.Properties.of(Material.PLANT).sound(SoundType.CROP).randomTicks().noCollission()).setRegistryName("palm_tree_sapling");
     //strainers
     public final static Block PRIMITIVE_STRAINER = new StrainerBlock("primitive_strainer", Block.Properties.of(Material.WOOL).sound(SoundType.WOOL).noOcclusion().strength(0.6f));

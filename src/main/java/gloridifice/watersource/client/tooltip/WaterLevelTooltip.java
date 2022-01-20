@@ -5,8 +5,9 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.datafixers.util.Either;
 import gloridifice.watersource.WaterSource;
 import gloridifice.watersource.client.hud.WaterLevelHUD;
-import gloridifice.watersource.common.recipe.ThirstItemRecipe;
-import gloridifice.watersource.common.recipe.WaterLevelItemRecipe;
+import gloridifice.watersource.common.recipe.ModRecipeManager;
+import gloridifice.watersource.common.recipe.ThirstRecipe;
+import gloridifice.watersource.common.recipe.WaterLevelAndEffectRecipe;
 import gloridifice.watersource.registry.ConfigRegistry;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
@@ -15,18 +16,20 @@ import net.minecraft.client.gui.screens.inventory.tooltip.ClientTooltipComponent
 import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.client.renderer.entity.ItemRenderer;
 
-import net.minecraft.network.chat.TextComponent;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.tags.ItemTags;
+import net.minecraft.tags.Tag;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.inventory.tooltip.TooltipComponent;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.alchemy.PotionUtils;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.RenderTooltipEvent;
-import net.minecraftforge.event.entity.player.ItemTooltipEvent;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fluids.FluidUtil;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.registries.ForgeRegistries;
 
@@ -41,12 +44,16 @@ public class WaterLevelTooltip {
         x = 1;
         if (ConfigRegistry.OPEN_FOOD_WATER_LEVEL.get()) {
             Minecraft mc = Minecraft.getInstance();
-            WaterLevelItemRecipe recipe = WaterLevelItemRecipe.getRecipeFromItem(mc.level, event.getItemStack());
-            if (recipe != null) {
-                int max = Math.max(recipe.getWaterLevel(), recipe.getWaterSaturationLevel());
-                int width = (int) Math.ceil((double) max / 2) * 9 + 1;
-                //if (max > 8) width = 28;
-                event.getTooltipElements().add(x, Either.right(new WaterLevelComponent(event.getItemStack(), width, 10)));
+            ItemStack stack= event.getItemStack();
+            if (mc.level != null){
+                WaterLevelAndEffectRecipe recipe = ModRecipeManager.getWERecipeFromItem(mc.level, stack);
+                Tag<Item> dItemTag = ItemTags.bind(WaterSource.MODID + ":drinkable_containers");
+                if (recipe != null && (event.getItemStack().is(dItemTag) || !FluidUtil.getFluidHandler(stack).isPresent())) {
+                    int max = Math.max(recipe.getWaterLevel(), recipe.getWaterSaturationLevel());
+                    int width = (int) Math.ceil((double) max / 2) * 9 + 1;
+                    //if (max > 8) width = 28;
+                    event.getTooltipElements().add(x, Either.right(new WaterLevelComponent(event.getItemStack(), width, 10)));
+                }
             }
         }
     }
@@ -108,8 +115,8 @@ public class WaterLevelTooltip {
             tick++;
             tick %= 10000;
             Minecraft mc = Minecraft.getInstance();
-            WaterLevelItemRecipe wlRecipe = WaterLevelItemRecipe.getRecipeFromItem(mc.level, itemStack);
-            ThirstItemRecipe tRecipe = ThirstItemRecipe.getRecipeFromItem(mc.level, itemStack);
+            WaterLevelAndEffectRecipe wlRecipe = ModRecipeManager.getWERecipeFromItem(mc.level, itemStack);
+            ThirstRecipe tRecipe = ModRecipeManager.getThirstRecipeFromItem(mc.level, itemStack);
             if (wlRecipe != null) {
                 int max = Math.max(wlRecipe.getWaterLevel(), wlRecipe.getWaterSaturationLevel());
                 //if (max <= 8) {
@@ -123,7 +130,7 @@ public class WaterLevelTooltip {
                     //render balls' outlines
                     for (int i = 0; i < maxBalls; i++) {
                         int x = tooltipX + i * 9 - 1;
-                        int y = tooltipY;
+                        int y = tooltipY - 1;
                         int u = 36;
                         int v = 0;
                         if (tRecipe != null) {
@@ -134,7 +141,7 @@ public class WaterLevelTooltip {
                     //render water level balls
                     for (int i = 0; i < wlBalls; i++) {
                         int x = tooltipX + i * 9 - 1;
-                        int y = tooltipY;
+                        int y = tooltipY - 1;
                         int u = 0;
                         int v = 18;
                         if (i == wlBalls - 1 && wlRecipe.getWaterLevel() % 2 != 0) {
@@ -149,7 +156,7 @@ public class WaterLevelTooltip {
                     if (tRecipe == null) {
                         for (int i = 0; i < wlRecipe.getWaterSaturationLevel(); i++) {
                             int x = tooltipX + (int) ((double) i / 2) * 9 - 1;
-                            int y = tooltipY - 1;
+                            int y = tooltipY - 2;
                             int u = 0;
                             int v = 9;
                             if ((i + 1) % 2 == 0) {

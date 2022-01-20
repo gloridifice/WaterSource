@@ -26,7 +26,7 @@ public class DrinkWaterMessage implements INormalMessage{
     @Override
     public void process(Supplier<NetworkEvent.Context> context) {
         Player player = context.get().getSender();
-        CommonEventHandler.drinkWater(player);
+        CommonEventHandler.drinkWaterBlock(player);
         player.getCapability(CapabilityRegistry.PLAYER_WATER_LEVEL).ifPresent(data -> {
             SimpleNetworkHandler.CHANNEL.send(PacketDistributor.PLAYER.with(() -> (ServerPlayer) player), new PlayerWaterLevelMessage(data.getWaterLevel(), data.getWaterSaturationLevel(), data.getWaterExhaustionLevel()));
         });

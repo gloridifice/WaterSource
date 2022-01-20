@@ -1,0 +1,12 @@
+{
+    "name": "Wooden Cup",
+    "icon": "watersource:wooden_cup",
+    "category": "watersource:container",
+    "pages": [
+        {
+            "type": "patchouli:crafting",
+            "recipe": "watersource:wooden_cup",
+            "text": "Wooden Cup can fill 250mB fluid. Player can drink it once."
+        }
+    ]
+}

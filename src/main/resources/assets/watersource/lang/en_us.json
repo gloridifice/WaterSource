@@ -61,7 +61,7 @@
   "watersource.misc.damage": "Damage",
   "watersource.misc.dirty_strainer": "DIRTY",
   "watersource.info.press.sneak": "Press key \"Sneak\" to show more information.",
-  "watersource.info.redstone_water_filter": "The up part can be detected by Redstone Comparator: has strainer +5 power, has liquid +2 power, the liquid is full + 4 power.",
+  "watersource.info.redstone_water_filter": "The upper part can be detected by Redstone Comparator: has strainer +5 power, has liquid +2 power, the liquid is full + 4 power.",
 
   "fluid.watersource.coconut_jucie":"Coconut Juice",
   "fluid.watersource.soul_water":"Soul Water",

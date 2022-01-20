@@ -54,6 +54,8 @@ public class WaterFilterBlock extends BaseEntityBlock {
         this.setRegistryName(name);
     }
 
+
+
     @Override
     public RenderShape getRenderShape(BlockState state) {
         return RenderShape.MODEL;
@@ -117,6 +119,24 @@ public class WaterFilterBlock extends BaseEntityBlock {
                 if (!strainerStack.isEmpty()) {
                     flag = FluidUtil.interactWithFluidHandler(player, interactionHand, fluidTankUp);
                 }
+                if (ItemTags.getAllTags().getTag(new ResourceLocation(WaterSource.MODID, "strainers")).contains(heldItem.getItem())) {
+                    if (strainerStack.isEmpty()) {
+                        //install strainer
+                        strainerHandler.insertItem(0, heldItem.copy(), true);
+                        if (!player.isCreative()) {
+                            ItemStack itemStack1 = heldItem.copy();
+                            itemStack1.setCount(heldItem.getCount() - 1);
+                            player.setItemInHand(interactionHand, itemStack1);
+                        }
+                    } else {
+                        //replace strainer
+                        ItemStack heldItem1 = heldItem.copy();
+                        player.setItemInHand(interactionHand, strainerStack);
+                        strainerHandler.setStackInSlot(0, heldItem1);
+                    }
+                    flag = true;
+                }
+                if (heldItem.getItem() == Items.HEART_OF_THE_SEA) player.setItemInHand(interactionHand, propsHandler.insertItem(0, heldItem.copy(), false));
             } else if (player.getPose() == Pose.CROUCHING) {
                 if (fluidTankUp.getFluid().isEmpty()) {
                     //take out strainer
@@ -137,25 +157,6 @@ public class WaterFilterBlock extends BaseEntityBlock {
                     player.playSound(SoundEvents.BUCKET_EMPTY, 0.6F, 1.0F);
                 }
                 flag = true;
-            }else {
-                if (ItemTags.getAllTags().getTag(new ResourceLocation(WaterSource.MODID, "strainers")).contains(heldItem.getItem())) {
-                    if (strainerStack.isEmpty()) {
-                        //install strainer
-                        strainerHandler.insertItem(0, heldItem.copy(), true);
-                        if (!player.isCreative()) {
-                            ItemStack itemStack1 = heldItem.copy();
-                            itemStack1.setCount(heldItem.getCount() - 1);
-                            player.setItemInHand(interactionHand, itemStack1);
-                        }
-                    } else {
-                        //replace strainer
-                        ItemStack heldItem1 = heldItem.copy();
-                        player.setItemInHand(interactionHand, strainerStack);
-                        strainerHandler.setStackInSlot(0, heldItem1);
-                    }
-                    flag = true;
-                }
-                if (heldItem.getItem() == Items.HEART_OF_THE_SEA) player.setItemInHand(interactionHand, propsHandler.insertItem(0, heldItem.copy(), false));
             }
         } else {//down
             WaterFilterDownBlockEntity tile = (WaterFilterDownBlockEntity) level.getBlockEntity(pos);

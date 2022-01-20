@@ -8,7 +8,7 @@ import net.minecraft.world.item.crafting.Recipe;
 public interface IThirstRecipe extends Recipe<Inventory> {
     boolean conform(ItemStack stack);
 
-    int getProbability();
+    float getProbability();
 
     int getDuration();
 

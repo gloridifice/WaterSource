@@ -39,6 +39,7 @@ import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidHandlerItem;
 import net.minecraftforge.fluids.capability.ItemFluidContainer;
 import net.minecraftforge.fluids.capability.templates.FluidHandlerItemStack;
+import org.jetbrains.annotations.NotNull;
 import org.lwjgl.system.CallbackI;
 
 import javax.annotation.Nonnull;
@@ -58,8 +59,6 @@ public class DrinkContainerItem extends ItemFluidContainer {
     @Override
     public InteractionResultHolder<ItemStack> use(Level level, Player player, InteractionHand hand) {
         ItemStack stack = player.getItemInHand(hand);
-
-        System.out.println(stack.getTag());
 
         BlockHitResult blockhitresult = getPlayerPOVHitResult(level, player, ClipContext.Fluid.SOURCE_ONLY);
         BlockPos pos = blockhitresult.getBlockPos();
@@ -100,17 +99,18 @@ public class DrinkContainerItem extends ItemFluidContainer {
         IFluidHandler handler = itemStack.getCapability(CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY).orElse(null);
         handler.drain(250, IFluidHandler.FluidAction.EXECUTE);
         if (livingEntity instanceof Player player) {
-            if (handler.getFluidInTank(0).isEmpty()) {
-                if (itemStack.getCount() == 1) return getContainerItem(itemStack);
-                else {
-                    if (!player.getInventory().add(getContainerItem(itemStack))) {
-                        player.drop(getContainerItem(itemStack), false);
-                    }
-                    itemStack.shrink(1);
-                    return itemStack;
+            if (itemStack.getCount() == 1){
+                if (handler.getFluidInTank(0).isEmpty()) {
+                    return getContainerItem(itemStack);
+                }else {
+                    upDateDamage(itemStack);
                 }
-            } else {
-                upDateDamage(itemStack);
+            }else {
+                if (!player.getInventory().add(getContainerItem(itemStack))) {
+                    player.drop(getContainerItem(itemStack), false);
+                }
+                itemStack.shrink(1);
+                return itemStack;
             }
         }
         return itemStack;
@@ -132,6 +132,7 @@ public class DrinkContainerItem extends ItemFluidContainer {
     }
 
     public boolean canDrink(Player playerIn, ItemStack stack) {
+        if (playerIn.isOnFire()) return true;
         canDrink = false;
         IFluidHandlerItem fluidHandlerItem = stack.getCapability(CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY).orElse(null);
         canDrink = !fluidHandlerItem.getFluidInTank(0).isEmpty() && fluidHandlerItem.getFluidInTank(0).getAmount() >= 250;
@@ -143,14 +144,7 @@ public class DrinkContainerItem extends ItemFluidContainer {
 
     @Override
     public ICapabilityProvider initCapabilities(@Nonnull ItemStack stack, @Nullable CompoundTag nbt) {
-        return new FluidHandlerItemStack(stack, capacity) {
-            @Nonnull
-            @Override
-            @SuppressWarnings("deprecation")
-            public ItemStack getContainer() {
-                return getFluid().isEmpty() ? new ItemStack(ItemRegistry.WOODEN_CUP) : this.container;
-            }
-
+        return new FluidHandlerItemStack.SwapEmpty(stack, stack.getContainerItem(),this.capacity) {
             @Override
             public boolean isFluidValid(int tank, @Nonnull FluidStack stack) {
                 for (Fluid fluid : FluidTags.getAllTags().getTag(new ResourceLocation(WaterSource.MODID, "drink")).getValues()) {

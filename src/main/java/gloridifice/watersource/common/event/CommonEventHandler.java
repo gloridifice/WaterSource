@@ -1,29 +1,23 @@
 package gloridifice.watersource.common.event;
 
 import gloridifice.watersource.WaterSource;
-import gloridifice.watersource.common.block.StrainerBlock;
-import gloridifice.watersource.common.block.entity.StrainerBlockEntity;
 import gloridifice.watersource.common.capability.PlayerLastPosCapability;
 import gloridifice.watersource.common.capability.WaterLevelCapability;
 import gloridifice.watersource.common.network.DrinkWaterMessage;
 import gloridifice.watersource.common.network.PlayerWaterLevelMessage;
 import gloridifice.watersource.common.network.SimpleNetworkHandler;
-import gloridifice.watersource.common.recipe.IThirstRecipe;
-import gloridifice.watersource.common.recipe.ThirstItemRecipe;
-import gloridifice.watersource.common.recipe.WaterLevelItemRecipe;
-import gloridifice.watersource.common.trigger.WaterLevelRestoredTrigger;
 import gloridifice.watersource.helper.FluidHelper;
+import gloridifice.watersource.helper.WaterLevelUtils;
 import gloridifice.watersource.registry.*;
-import net.minecraft.advancements.CriteriaTriggers;
 import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.stats.Stats;
+import net.minecraft.tags.ItemTags;
 import net.minecraft.util.Mth;
 import net.minecraft.world.Difficulty;
-import net.minecraft.world.InteractionHand;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.Entity;
@@ -32,7 +26,6 @@ import net.minecraft.world.entity.Pose;
 import net.minecraft.world.entity.animal.Cow;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.AxeItem;
-import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.level.Level;
@@ -54,9 +47,7 @@ import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.event.furnace.FurnaceFuelBurnTimeEvent;
 import net.minecraftforge.event.world.BlockEvent;
-import net.minecraftforge.eventbus.api.Event;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.network.PacketDistributor;
 
@@ -68,6 +59,7 @@ import static gloridifice.watersource.registry.ConfigRegistry.RESET_WATER_LEVEL_
 @Mod.EventBusSubscriber(modid = WaterSource.MODID)
 public class CommonEventHandler {
     static int tick = 0;
+
     @SubscribeEvent
     public static void addCap(AttachCapabilitiesEvent<Entity> event) {
         if (event.getObject() instanceof Player && !(event.getObject() instanceof FakePlayer)) {
@@ -79,36 +71,9 @@ public class CommonEventHandler {
     @SubscribeEvent
     public static void onLivingEntityUseItemEventFinish(LivingEntityUseItemEvent.Finish event) {
         LivingEntity entity = event.getEntityLiving();
-        if (entity instanceof Player && !(entity instanceof FakePlayer)) {
-            Random rand = new Random();
-            WaterLevelItemRecipe wRecipe = WaterLevelItemRecipe.getRecipeFromItem(entity.level, event.getItem());
-            if (event.getEntityLiving() instanceof Player player){
-                IThirstRecipe tRecipe = ThirstItemRecipe.getRecipeFromItem(entity.level, event.getItem());
-                if (wRecipe != null) {
-                    entity.getCapability(CapabilityRegistry.PLAYER_WATER_LEVEL).ifPresent(data -> {
-                        if (entity.getRemainingFireTicks() > 0 && wRecipe.getWaterLevel() >= 4) {//extinguish player
-                            if (!entity.getLevel().isClientSide()) {
-                                data.addWaterLevel(player, wRecipe.getWaterLevel() - 4);
-                                if (tRecipe == null) {
-                                    data.addWaterSaturationLevel(player, Math.max(wRecipe.getWaterSaturationLevel() - 4, 0));
-                                }
-                            }
-                            entity.playSound(SoundEvents.FIRE_EXTINGUISH, 1.0F, 1.0F);
-                            entity.clearFire();
-                        }else {//add water level
-                            data.addWaterLevel(player, wRecipe.getWaterLevel());
-                            if (tRecipe == null) {
-                                data.addWaterSaturationLevel(player, wRecipe.getWaterSaturationLevel());
-                            }
-                        }
-                    });
-                }
-                if (tRecipe != null) {
-                    if (rand.nextInt(100) < tRecipe.getProbability()) {
-                        entity.addEffect(new MobEffectInstance(EffectRegistry.THIRST, tRecipe.getDuration(), tRecipe.getAmplifier()));
-                    }
-                }
-            }
+        ItemStack stack = event.getItem();
+        if (entity instanceof Player player) {
+            WaterLevelUtils.drink(player, stack);
         }
     }
 
@@ -123,7 +88,6 @@ public class CommonEventHandler {
                     } else data.addExhaustion(player, 0.14f);
                 });
             }
-            System.out.println(player.getItemInHand(InteractionHand.MAIN_HAND).getTag());
         }
     }
 
@@ -134,7 +98,7 @@ public class CommonEventHandler {
         if (RESET_WATER_LEVEL_IN_DEATH.get()) {
             flag = flag && !event.isWasDeath();
         }
-        if (flag && event.getPlayer().getCapability(CapabilityRegistry.PLAYER_WATER_LEVEL) != null) {
+        if (flag && event.getPlayer().getCapability(CapabilityRegistry.PLAYER_WATER_LEVEL).isPresent()) {
             event.getPlayer().getCapability(CapabilityRegistry.PLAYER_WATER_LEVEL).ifPresent(date -> {
                 event.getOriginal().getCapability(CapabilityRegistry.PLAYER_WATER_LEVEL).ifPresent(t -> {
                     date.setWaterLevel(t.getWaterLevel());
@@ -273,11 +237,12 @@ public class CommonEventHandler {
             player.getCapability(CapabilityRegistry.PLAYER_WATER_LEVEL).ifPresent(data -> data.addExhaustion(player, 0.005f));
         }
     }
+
     @SubscribeEvent
-    public static void onEntityInteractSpecific(PlayerInteractEvent.EntityInteractSpecific event){
+    public static void onEntityInteractSpecific(PlayerInteractEvent.EntityInteractSpecific event) {
         ItemStack stack = event.getItemStack();
         Player player = event.getPlayer();
-        if (event.getTarget() instanceof Cow && FluidHelper.isFluidBottleQualified(stack, FluidRegistry.COCONUT_JUICE.get())){
+        if (event.getTarget() instanceof Cow && FluidHelper.isFluidBottleQualified(stack, FluidRegistry.COCONUT_JUICE.get())) {
             player.playSound(SoundEvents.COW_MILK, 1.0F, 1.0F);
             player.interactOn(event.getTarget(), event.getHand());
             player.awardStat(Stats.ITEM_USED.get(stack.getItem()));//todo
@@ -285,12 +250,13 @@ public class CommonEventHandler {
             player.getInventory().add(new ItemStack(ItemRegistry.COCONUT_MILK_BOTTLE));
         }
     }
+
     @SubscribeEvent
     public static void onPlayerRightClickBlock(PlayerInteractEvent.RightClickBlock event) {
         BlockState state = event.getWorld().getBlockState(event.getPos());
         ItemStack heldItem = event.getItemStack();
         Player player = event.getPlayer();
-        //砍椰树树皮
+        //stripe palm tree log
         if (heldItem.getItem() instanceof AxeItem && state.getBlock() == BlockRegistry.PALM_TREE_LOG) {
             event.getWorld().playSound(player, event.getPos(), SoundEvents.AXE_STRIP, SoundSource.BLOCKS, 1.0F, 1.0F);
             if (!event.getWorld().isClientSide()) {
@@ -298,9 +264,9 @@ public class CommonEventHandler {
                 heldItem.hurt(1, new Random(), (ServerPlayer) player);
             }
         }
-        //右键水方块喝水 0
+        //drink water block
         if (heldItem.isEmpty() && event.getWorld().getFluidState(event.getHitVec().getBlockPos().offset(event.getFace().getNormal())).getType() == Fluids.WATER && player.getPose() == Pose.CROUCHING) {
-            drinkWater(player);
+            drinkWaterBlock(player);
         }
     }
 
@@ -308,7 +274,7 @@ public class CommonEventHandler {
     public static void onPlayerRightClickEmpty(PlayerInteractEvent.RightClickEmpty event) {
         Player player = event.getPlayer();
         Level level = event.getWorld();
-        //右键水方块喝水 1
+        //drink water block
         HitResult hitresult = getPlayerPOVHitResult(level, player, ClipContext.Fluid.SOURCE_ONLY);
         if (player.getPose() == Pose.CROUCHING && hitresult.getType() == HitResult.Type.BLOCK && level.getFluidState(new BlockPos(hitresult.getLocation())).getType() == Fluids.WATER) {
             level.playSound(player, new BlockPos(player.getPosition(0f)), SoundEvents.GENERIC_DRINK, SoundSource.PLAYERS, 0.4f, 1.0f);
@@ -331,20 +297,15 @@ public class CommonEventHandler {
     public static void getVanillaFurnaceFuelValue(FurnaceFuelBurnTimeEvent event) {
         if (event.getItemStack().getItem() == BlockRegistry.ITEM_DIRTY_STRAINER) {
             event.setBurnTime(600);
-            // 可以设定为 0。0 代表“这个物品不是燃料”，更准确地说是“这个物品燃烧时间是 0”。
-            // 可以设定为 -1。-1 代表“由原版逻辑来决定”。
-            // 可通过 event.getBurnTime() 获得当前决定的燃烧时间。
-            // 这个事件可以取消。取消意味着后续的 Event listener 将不会收到这个事件，进而
-            // 无法修改燃烧时间。
         }
     }
 
-    public static void drinkWater(Player player) {
+    public static void drinkWaterBlock(Player player) {
         Level world = player.level;
         player.getCapability(CapabilityRegistry.PLAYER_WATER_LEVEL).ifPresent(data -> {
             data.addWaterLevel(player, 1);
             world.playSound(player, new BlockPos(player.getPosition(0f)), SoundEvents.GENERIC_DRINK, SoundSource.PLAYERS, 0.4f, 1.0f);
-            //0.05中毒，0.8口渴；
+            //0.05 poising，0.8 thirsty；
             if (!world.isClientSide()) {
                 Random random = new Random();
                 double d1 = random.nextDouble();
@@ -355,20 +316,20 @@ public class CommonEventHandler {
         });
     }
 
-    //摘自原版Item.class
-    protected static BlockHitResult getPlayerPOVHitResult(Level p_41436_, Player p_41437_, ClipContext.Fluid p_41438_) {
-        float f = p_41437_.getXRot();
-        float f1 = p_41437_.getYRot();
-        Vec3 vec3 = p_41437_.getEyePosition();
+    //from Item.class
+    protected static BlockHitResult getPlayerPOVHitResult(Level level, Player player, ClipContext.Fluid fluid) {
+        float f = player.getXRot();
+        float f1 = player.getYRot();
+        Vec3 vec3 = player.getEyePosition();
         float f2 = Mth.cos(-f1 * ((float) Math.PI / 180F) - (float) Math.PI);
         float f3 = Mth.sin(-f1 * ((float) Math.PI / 180F) - (float) Math.PI);
         float f4 = -Mth.cos(-f * ((float) Math.PI / 180F));
         float f5 = Mth.sin(-f * ((float) Math.PI / 180F));
         float f6 = f3 * f4;
         float f7 = f2 * f4;
-        double d0 = p_41437_.getAttribute(net.minecraftforge.common.ForgeMod.REACH_DISTANCE.get()).getValue();
+        double d0 = player.getAttribute(net.minecraftforge.common.ForgeMod.REACH_DISTANCE.get()).getValue();
         ;
         Vec3 vec31 = vec3.add((double) f6 * d0, (double) f5 * d0, (double) f7 * d0);
-        return p_41436_.clip(new ClipContext(vec3, vec31, ClipContext.Block.OUTLINE, p_41438_, p_41437_));
+        return level.clip(new ClipContext(vec3, vec31, ClipContext.Block.OUTLINE, fluid, player));
     }
 }

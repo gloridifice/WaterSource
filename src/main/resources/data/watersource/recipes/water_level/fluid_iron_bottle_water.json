@@ -1,9 +1,0 @@
-{
-    "type": "watersource:water_level_fluid",
-    "ingredient": {
-        "item": "watersource:iron_bottle"
-    },
-	"fluid": "minecraft:water",
-	"waterLevel": 4,
-	"waterSaturationLevel": 2
-}

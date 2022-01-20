@@ -1,8 +1,8 @@
 {
-    "type": "watersource:water_level_item",
+    "type": "watersource:water_level",
     "ingredient": {
         "item": "watersource:coconut_milk_bottle"
     },
-	"waterLevel": 5,
-	"waterSaturationLevel": 6
+	"water_level": 5,
+	"water_saturation_level": 6
 }

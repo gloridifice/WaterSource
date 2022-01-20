@@ -1,0 +1,11 @@
+{
+    "name": "Coconut Milk",
+    "icon": "watersource:coconut_milk_bottle",
+    "category": "watersource:nature_food",
+    "pages": [
+        {
+            "type": "patchouli:text",
+            "text": "Right clicking cow with Coconut Juice Bottle, player can get Coconut Milk. Drinking it will clear player's effects."
+        }
+    ]
+}

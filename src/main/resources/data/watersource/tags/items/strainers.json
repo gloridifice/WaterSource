@@ -1,8 +1,8 @@
 {
     "replace": false,
     "values": [
-        "#watersource:purification_strainers",
-        "#watersource:soul_strainers",
-		"watersource:dirty_strainer"
+        "watersource:paper_strainer",
+        "watersource:primitive_strainer",
+        "watersource:everlasting_strainer"
     ]
 }

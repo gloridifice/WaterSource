@@ -14,7 +14,7 @@ import net.minecraft.world.level.material.Fluid;
 import java.util.ArrayList;
 import java.util.List;
 
-import static gloridifice.watersource.common.recipe.NormalRecipeTypes.WATER_FILTER_RECIPE;
+import static gloridifice.watersource.registry.RecipeTypesRegistry.WATER_FILTER_RECIPE;
 
 public class WaterFilterRecipe implements Recipe<Inventory> {
     protected final Ingredient strainerIngredient;
