@@ -1,8 +1,0 @@
-{
-    "type": "watersource:water_level",
-    "ingredient": {
-        "tag": "forge:pumpkin_ spice_ lattes"
-    },
-	"water_level": 3,
-	"water_saturation_level": 3
-}
