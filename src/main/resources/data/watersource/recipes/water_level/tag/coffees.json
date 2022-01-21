@@ -1,0 +1,8 @@
+{
+    "type": "watersource:water_level",
+    "ingredient": {
+        "tag": "forge:coffees"
+    },
+	"water_level": 2,
+	"water_saturation_level": 2
+}

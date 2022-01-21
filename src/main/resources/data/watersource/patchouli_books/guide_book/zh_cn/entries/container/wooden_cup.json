@@ -1,0 +1,12 @@
+{
+    "name": "木杯",
+    "icon": "watersource:wooden_cup",
+    "category": "watersource:container",
+    "pages": [
+        {
+            "type": "patchouli:crafting",
+            "recipe": "watersource:wooden_cup",
+            "text": "木杯可以装 250mB 液体，玩家可以饮用 1 次。"
+        }
+    ]
+}

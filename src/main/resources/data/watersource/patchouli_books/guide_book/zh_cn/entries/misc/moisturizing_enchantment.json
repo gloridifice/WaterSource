@@ -1,0 +1,12 @@
+{
+    "name": "保湿附魔",
+    "icon": "minecraft:enchanted_book",
+    "category": "watersource:misc",
+    "pages": [
+        {
+            "type":"patchouli:spotlight",
+            "item":"minecraft:enchanted_book",
+            "text":"'保湿'可以被附魔在盔甲上，它会减少玩家的水分消耗。一件减少30%，两件减少50%(最高)。"
+        }
+    ]
+}

@@ -1,0 +1,28 @@
+{
+    "name": "净化滤网",
+    "icon": "watersource:primitive_strainer",
+    "category": "watersource:filter",
+    "pages": [
+        {
+            "type": "patchouli:crafting",
+            "recipe":"watersource:primitive_strainer",
+            "text": "净化滤网可以和装有水的容器物品合成，将水过滤为净化水。$(br2)原始滤网总共可以过滤 6250mB 的水。"
+        },
+        {
+            "type": "patchouli:image",
+            "images":[
+                "watersource:textures/gui/patchouli/entries/filter/purification_strainer_0_0.png",
+                "watersource:textures/gui/patchouli/entries/filter/purification_strainer_0_1.png",
+                "watersource:textures/gui/patchouli/entries/filter/purification_strainer_0_2.png",
+                "watersource:textures/gui/patchouli/entries/filter/purification_strainer_0_3.png"
+            ],
+            "border": true,
+            "text": "(这类配方目前还不会在JEI中显示)"
+        },
+        {
+            "type": "patchouli:crafting",
+            "recipe":"watersource:paper_strainer",
+            "text": "纸滤网总共可以过滤 4000mB 的水。"
+        }
+    ]
+}

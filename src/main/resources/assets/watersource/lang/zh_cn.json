@@ -56,7 +56,7 @@
   "watersource.misc.damage": "耐久",
   "watersource.misc.dirty_strainer": "已脏旧",
   "watersource.info.press.sneak": "按下“潜行”键查看信息",
-  "watersource.info.redstone_water_filter": "上半部分可以被红石比较器检测：有可用滤网时+5点红石能量；有液体时+2点红石能量，液体满时则+4点红石能量。",
+  "watersource.info.redstone_water_filter": "更多信息，请阅读饮水指南。",
 
   "fluid.watersource.coconut_juice":"椰汁",
   "fluid.watersource.soul_water":"灵魂水",
@@ -92,5 +92,9 @@
   "advancements.watersource.rain_collector.title": "不太脏",
   "advancements.watersource.rain_collector.description": "获得一个集雨器",
   "advancements.watersource.everlasting_strainer.title": "闪闪的滤网",
-  "advancements.watersource.everlasting_strainer.description": "获得一个永恒的滤网(灵魂滤网也行)。"
+  "advancements.watersource.everlasting_strainer.description": "获得一个永恒的滤网(灵魂滤网也行)。",
+
+  "item.watersource.guide_book": "饮水指南",
+  "guide_book.watersource.landing_text": "水源模组加入了水分值和口渴系统。做一个滤网，过滤出净化水，是早期的维持水分的一般途径。"
+
 }

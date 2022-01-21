@@ -1,0 +1,24 @@
+{
+    "name": "口渴效果",
+    "icon": "minecraft:potion",
+    "category": "watersource:basics",
+    "pages": [
+        {
+            "type": "patchouli:image",
+            "text": "$(l)口渴效果$()将会加快玩家水分掉落的速度。",
+            "images": [
+                "watersource:textures/gui/patchouli/entries/basics/thirst_0.png"
+            ],
+            "border": true,
+            "title": "口渴"
+        },
+        {
+            "type": "patchouli:image",
+            "images":[
+                "watersource:textures/gui/patchouli/entries/basics/thirst_1.png"
+            ],
+            "border": true,
+            "text": "玩家可能在吃或者喝一些东西的时候获得$(l)口渴效果$()。"
+        }
+    ]
+}

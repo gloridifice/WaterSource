@@ -1,0 +1,18 @@
+{
+    "name": "红石滤水器",
+    "icon": "watersource:iron_water_filter",
+    "category": "watersource:filter",
+    "pages": [
+        {
+            "type": "patchouli:crafting",
+            "recipe":"watersource:iron_water_filter",
+            "text": "红石滤水器可以被比较器检测。"
+        },
+        {
+            "type": "patchouli:spotlight",
+            "title": "检测规则",
+            "item": "minecraft:comparator",
+            "text": "红石滤水器上部可以被比较器检测。如果器上部：$(li)有滤网 +5 强度$(li)有液体 +2 强度$(li)满液体 +4 强度"
+        }
+    ]
+}

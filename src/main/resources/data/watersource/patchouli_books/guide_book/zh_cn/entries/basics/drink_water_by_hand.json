@@ -1,0 +1,11 @@
+{
+    "name": "空手喝水",
+    "icon": "minecraft:stick",
+    "category": "watersource:basics",
+    "pages": [
+        {
+            "type": "patchouli:text",
+            "text": "玩家$(l)潜行右键$()水方块可以喝水。但这种危险的行为会让你口渴甚至小概率中毒。"
+        }
+    ]
+}

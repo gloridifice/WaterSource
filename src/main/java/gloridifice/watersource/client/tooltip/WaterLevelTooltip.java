@@ -37,11 +37,11 @@ import java.util.List;
 
 @Mod.EventBusSubscriber(value = Dist.CLIENT, modid = WaterSource.MODID)
 public class WaterLevelTooltip {
-    private static int x;
+
 
     @SubscribeEvent(priority = EventPriority.LOW)
     public static void onRenderTooltipEvent(RenderTooltipEvent.GatherComponents event) {
-        x = 1;
+        int x = 1;
         if (ConfigRegistry.OPEN_FOOD_WATER_LEVEL.get()) {
             Minecraft mc = Minecraft.getInstance();
             ItemStack stack= event.getItemStack();
@@ -52,40 +52,10 @@ public class WaterLevelTooltip {
                     int max = Math.max(recipe.getWaterLevel(), recipe.getWaterSaturationLevel());
                     int width = (int) Math.ceil((double) max / 2) * 9 + 1;
                     //if (max > 8) width = 28;
-                    event.getTooltipElements().add(x, Either.right(new WaterLevelComponent(event.getItemStack(), width, 10)));
+                    event.getTooltipElements().add(x, Either.right(new WaterLevelComponent(stack, width, 10)));
                 }
             }
         }
-    }
-
-    public static int getQuarkLineCount(ItemStack itemStack) {
-        int i = 0;
-        List<MobEffectInstance> potions = PotionUtils.getMobEffects(itemStack);
-        for (MobEffectInstance instance : potions) {
-            if (instance.getEffect() == MobEffects.MOVEMENT_SLOWDOWN) {
-                i++;
-            }
-            if (instance.getEffect() == MobEffects.MOVEMENT_SPEED) {
-                i++;
-            }
-            if (instance.getEffect() == MobEffects.LUCK) {
-                i++;
-            }
-            if (instance.getEffect() == MobEffects.WEAKNESS) {
-                i++;
-            }
-            if (instance.getEffect() == MobEffects.CONDUIT_POWER) {
-                i++;
-            }
-            //for Quark
-            if (ForgeRegistries.POTIONS.getValue(new ResourceLocation("quark", "resilience")).getEffects().contains(instance.getEffect())) {
-                i++;
-            }
-        }
-        if (itemStack.getItem().getFoodProperties() != null) {
-            i++;
-        }
-        return i;
     }
 
     public static class WaterLevelComponent implements ClientTooltipComponent, TooltipComponent {

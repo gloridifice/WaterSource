@@ -1,0 +1,41 @@
+{
+    "name": "椰子树和椰子",
+    "icon": "watersource:palm_tree_leaf",
+    "category": "watersource:nature_food",
+    "pages": [
+        {
+            "type": "patchouli:image",
+            "title":"Palm Tree",
+            "images":[
+                "watersource:textures/gui/patchouli/entries/nature_food/palm_tree_0.png"
+            ],
+            "border": true,
+            "text": "椰子树生成在沙滩生物群戏，每一个椰子树都会有一个椰树冠，椰子会从上面生长。"
+        },
+        {
+            "type": "patchouli:image",
+            "images":[
+                "watersource:textures/gui/patchouli/entries/nature_food/palm_tree_1.png"
+            ],
+            "border": true,
+            "text": "椰子可以生长在沙子或红沙上，一段时间后会变成椰树苗(也可以用骨粉催)。潜行时放下椰子可以单纯地将其作为装饰。"
+        },
+        {
+            "type": "patchouli:image",
+            "images":[
+                "watersource:textures/gui/patchouli/entries/nature_food/palm_tree_2.png"
+            ],
+            "border": true,
+            "text": "椰树冠只有在椰木原木上时才会产生椰子。玩家可以用催熟。"
+        },
+        {
+            "type": "patchouli:image",
+            "images":[
+                "watersource:textures/gui/patchouli/entries/nature_food/palm_tree_3.png"
+            ],
+            "border": true,
+            "text": "椰木原木也可以被加工成各种装饰物。"
+        }
+
+    ]
+}

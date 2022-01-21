@@ -1,15 +1,13 @@
 package gloridifice.watersource.common.block.entity;
 
 import gloridifice.watersource.registry.BlockEntityRegistry;
+import gloridifice.watersource.registry.FluidRegistry;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.IntTag;
-import net.minecraft.network.Connection;
-import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.material.Fluids;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.fluids.FluidStack;
@@ -18,7 +16,6 @@ import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.fluids.capability.templates.FluidTank;
 
 import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 
 public class RainCollectorBlockEntity extends ModNormalBlockEntity  {
     LazyOptional<FluidTank> tank = LazyOptional.of(this::createFluidHandler);
@@ -91,14 +88,14 @@ public class RainCollectorBlockEntity extends ModNormalBlockEntity  {
         blockEntity.setProcessTicks(blockEntity.getProcessTicks());
         blockEntity.setProcessTicks(blockEntity.getProcessTicks() % 2000);
         if (level.isRaining()) {
-            if (blockEntity.processTicks % 5 == 0 && hasBlockOnSelf(level, blockPos)) {
+            if (blockEntity.processTicks % 5 == 0 && hasBlockAboveSelf(level, blockPos)) {
                 blockEntity.getTank().ifPresent(tank -> {
-                    tank.fill(new FluidStack(Fluids.WATER, 1), IFluidHandler.FluidAction.EXECUTE);
+                    tank.fill(new FluidStack(FluidRegistry.PURIFIED_WATER.get(), 1), IFluidHandler.FluidAction.EXECUTE);
                 });
             }
         }
     }
-    public static boolean hasBlockOnSelf(Level level, BlockPos pos){
+    public static boolean hasBlockAboveSelf(Level level, BlockPos pos){
         boolean bool = true;
         for (int i = 1; i <= level.getHeight(); i++){
             bool = bool && level.getBlockState(pos.above(i)).isAir();

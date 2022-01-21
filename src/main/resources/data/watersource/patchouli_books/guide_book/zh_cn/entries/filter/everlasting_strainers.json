@@ -1,0 +1,16 @@
+{
+    "name": "永恒滤网",
+    "icon": "watersource:everlasting_strainer",
+    "category": "watersource:filter",
+    "pages": [
+        {
+            "type": "patchouli:crafting",
+            "recipe":"watersource:everlasting_strainer",
+            "recipe2":"watersource:everlasting_soul_strainer"        
+        },
+        {
+            "type":"patchouli:text",
+            "text":"永恒滤网永远不会被破坏。"
+        }
+    ]
+}

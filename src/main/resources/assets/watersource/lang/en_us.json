@@ -61,9 +61,9 @@
   "watersource.misc.damage": "Damage",
   "watersource.misc.dirty_strainer": "DIRTY",
   "watersource.info.press.sneak": "Press key \"Sneak\" to show more information.",
-  "watersource.info.redstone_water_filter": "The upper part can be detected by Redstone Comparator: has strainer +5 power, has liquid +2 power, the liquid is full + 4 power.",
+  "watersource.info.redstone_water_filter": "Read the Drink Guide to learn more information.",
 
-  "fluid.watersource.coconut_jucie":"Coconut Juice",
+  "fluid.watersource.coconut_juice":"Coconut Juice",
   "fluid.watersource.soul_water":"Soul Water",
   "fluid.watersource.purified_water":"Purified Water",
 
@@ -81,5 +81,8 @@
   "advancements.watersource.rain_collector.title": "Not very Dirty",
   "advancements.watersource.rain_collector.description": "Get rain collector.",
   "advancements.watersource.everlasting_strainer.title": "Shining Strainer",
-  "advancements.watersource.everlasting_strainer.description": "Get a everlasting strainer (or soul strainer)."
+  "advancements.watersource.everlasting_strainer.description": "Get a everlasting strainer (or soul strainer).",
+
+  "item.watersource.guide_book": "Drinking Guide",
+  "guide_book.watersource.landing_text": "Water Source adds a drinking and thirst system into Minecraft. To keep living, player need to drink clear water or eat some water-rich food. Making a strainer and purifying water bottle is a common way to keep water in the beginning."
 }

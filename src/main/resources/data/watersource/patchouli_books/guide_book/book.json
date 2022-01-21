@@ -1,6 +1,6 @@
 {
-    "name":"Water Source Guide",
-    "landing_text":"",
+    "name":"item.watersource.guide_book",
+    "landing_text":"guide_book.watersource.landing_text",
     "version":1,
     "model":"watersource:guide_book",
     "creative_tab":"watersource_tab",
