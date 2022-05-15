@@ -1,5 +1,6 @@
 package gloridifice.watersource.client.event.tooltip;
 
+import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.systems.RenderSystem;
 import gloridifice.watersource.WaterSource;
 import gloridifice.watersource.common.recipe.IThirstRecipe;
@@ -59,6 +60,9 @@ public class WaterLevelTooltip {
             WaterLevelItemRecipe wRecipe = WaterLevelItemRecipe.getRecipeFromItem(mc.world, event.getStack());
             if (wRecipe != null) {
                 event.getLines();
+				MatrixStack matrixStack = event.getMatrixStack();
+				matrixStack.push();
+				matrixStack.translate(0, 0, 500);
                 RenderSystem.pushMatrix();
                 RenderSystem.enableBlend();
                 IThirstRecipe tRecipe = ThirstItemRecipe.getRecipeFromItem(mc.world, event.getStack());
@@ -87,16 +91,16 @@ public class WaterLevelTooltip {
                 Minecraft.getInstance().getTextureManager().bindTexture(OVERLAY_BAR);
                 if (wRecipe.getWaterLevel() % 2 == 0) {
                     for (int i = 0; i < wRecipe.getWaterLevel() / 2; i++) {
-                        AbstractGui.blit(event.getMatrixStack(), OffsetX + i * 9, OffsetY, 36 + texU2, 0, 9, 9, 256, 256);
-                        AbstractGui.blit(event.getMatrixStack(), OffsetX + i * 9, OffsetY, texU1, 0, 9, 9, 256, 256);
+                        AbstractGui.blit(matrixStack, OffsetX + i * 9, OffsetY, 36 + texU2, 0, 9, 9, 256, 256);
+                        AbstractGui.blit(matrixStack, OffsetX + i * 9, OffsetY, texU1, 0, 9, 9, 256, 256);
                     }
                 }
                 else {
-                    AbstractGui.blit(event.getMatrixStack(), OffsetX, OffsetY, 36 + texU2, 0, 9, 9, 256, 256);
-                    AbstractGui.blit(event.getMatrixStack(), OffsetX, OffsetY, 9 + texU1, 0, 9, 9, 256, 256);
+                    AbstractGui.blit(matrixStack, OffsetX, OffsetY, 36 + texU2, 0, 9, 9, 256, 256);
+                    AbstractGui.blit(matrixStack, OffsetX, OffsetY, 9 + texU1, 0, 9, 9, 256, 256);
                     for (int n = 1; n < (wRecipe.getWaterLevel() + 1) / 2; n++) {
-                        AbstractGui.blit(event.getMatrixStack(), OffsetX + n * 9, OffsetY, 36 + texU2, 0, 9, 9, 256, 256);
-                        AbstractGui.blit(event.getMatrixStack(), OffsetX + n * 9, OffsetY, texU1, 0, 9, 9, 256, 256);
+                        AbstractGui.blit(matrixStack, OffsetX + n * 9, OffsetY, 36 + texU2, 0, 9, 9, 256, 256);
+                        AbstractGui.blit(matrixStack, OffsetX + n * 9, OffsetY, texU1, 0, 9, 9, 256, 256);
                     }
                 }
                 //SaturationLevel
@@ -104,21 +108,22 @@ public class WaterLevelTooltip {
                     RenderSystem.color4f(1f, 1f, 1f, (float) Math.abs(Math.sin(tick / 40D)));
                     if (wRecipe.getWaterLevel() % 2 == 0) {
                         for (int i = 0; i < wRecipe.getWaterSaturationLevel() / 2; i++) {
-                            AbstractGui.blit(event.getMatrixStack(), OffsetX + i * 9, OffsetY + 1, 9 + texU1, 9, 9, 9, 256, 256);
-                            AbstractGui.blit(event.getMatrixStack(), OffsetX + i * 9, OffsetY - 1, texU1, 9, 9, 9, 256, 256);
+                            AbstractGui.blit(matrixStack, OffsetX + i * 9, OffsetY + 1, 9 + texU1, 9, 9, 9, 256, 256);
+                            AbstractGui.blit(matrixStack, OffsetX + i * 9, OffsetY - 1, texU1, 9, 9, 9, 256, 256);
                         }
                     }
                     else {
-                        AbstractGui.blit(event.getMatrixStack(), OffsetX + (wRecipe.getWaterSaturationLevel() / 2 - 1) * 9, OffsetY - 1, texU1, 9, 9, 9, 256, 256);
+                        AbstractGui.blit(matrixStack, OffsetX + (wRecipe.getWaterSaturationLevel() / 2 - 1) * 9, OffsetY - 1, texU1, 9, 9, 9, 256, 256);
                         for (int n = 0; n < (wRecipe.getWaterSaturationLevel() + 1) / 2 - 1; n++) {
-                            AbstractGui.blit(event.getMatrixStack(), OffsetX + n * 9, OffsetY - 1, texU1, 9, 9, 9, 256, 256);
-                            AbstractGui.blit(event.getMatrixStack(), OffsetX + n * 9, OffsetY + 1, 9 + texU1, 9, 9, 9, 256, 256);
+                            AbstractGui.blit(matrixStack, OffsetX + n * 9, OffsetY - 1, texU1, 9, 9, 9, 256, 256);
+                            AbstractGui.blit(matrixStack, OffsetX + n * 9, OffsetY + 1, 9 + texU1, 9, 9, 9, 256, 256);
                         }
                     }
                     RenderSystem.color4f(1f, 1f, 1f, 1f);
                 }
                 RenderSystem.disableBlend();
                 RenderSystem.popMatrix();
+				matrixStack.pop();
             }
         }
     }
