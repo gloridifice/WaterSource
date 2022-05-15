@@ -60,9 +60,9 @@ public class WaterLevelTooltip {
             WaterLevelItemRecipe wRecipe = WaterLevelItemRecipe.getRecipeFromItem(mc.world, event.getStack());
             if (wRecipe != null) {
                 event.getLines();
-				MatrixStack matrixStack = event.getMatrixStack();
-				matrixStack.push();
-				matrixStack.translate(0, 0, 500);
+                MatrixStack matrixStack = event.getMatrixStack();
+                matrixStack.push();
+                matrixStack.translate(0, 0, 500);
                 RenderSystem.pushMatrix();
                 RenderSystem.enableBlend();
                 IThirstRecipe tRecipe = ThirstItemRecipe.getRecipeFromItem(mc.world, event.getStack());
@@ -123,7 +123,7 @@ public class WaterLevelTooltip {
                 }
                 RenderSystem.disableBlend();
                 RenderSystem.popMatrix();
-				matrixStack.pop();
+                matrixStack.pop();
             }
         }
     }
