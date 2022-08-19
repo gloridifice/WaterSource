@@ -1,0 +1,11 @@
+{
+    "name": "Drink Water by Hand",
+    "icon": "minecraft:stick",
+    "category": "watersource:basics",
+    "pages": [
+        {
+            "type": "patchouli:text",
+            "text": "$(l)Crouching and Right Clicking$() Water Block with an empty main hand, player will drink the raw water. But it's dangerous because player will get thirsty and may get poisoning.$(br2)* You can change the probability of getting these effect in configs."
+        }
+    ]
+}

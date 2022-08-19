@@ -1,0 +1,12 @@
+{
+  "criteria": {
+    "tick": {
+      "trigger": "watersource:guide_book"
+    }
+  },
+  "rewards": {
+    "loot": [
+      "watersource:grant_book_on_first_join"
+    ]
+  }
+}

@@ -1,0 +1,8 @@
+{
+    "parent": "block/inner_stairs",
+    "textures": {
+        "bottom": "watersource:block/palm_tree_planks",
+        "top": "watersource:block/palm_tree_planks",
+        "side": "watersource:block/palm_tree_planks"
+    }
+}

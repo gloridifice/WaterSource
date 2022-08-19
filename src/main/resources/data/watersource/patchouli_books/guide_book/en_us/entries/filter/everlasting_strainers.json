@@ -1,0 +1,16 @@
+{
+    "name": "Everlasting Strainers",
+    "icon": "watersource:everlasting_strainer",
+    "category": "watersource:filter",
+    "pages": [
+        {
+            "type": "patchouli:crafting",
+            "recipe":"watersource:everlasting_strainer",
+            "recipe2":"watersource:everlasting_soul_strainer"        
+        },
+        {
+            "type":"patchouli:text",
+            "text":"Everlasting strainer will never be broken."
+        }
+    ]
+}

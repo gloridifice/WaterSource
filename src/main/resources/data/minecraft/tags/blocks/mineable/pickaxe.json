@@ -1,0 +1,9 @@
+{
+  "replace": false,
+  "values": [
+    "watersource:iron_water_filter",
+    "watersource:stone_rain_collector",
+    "watersource:stone_pot",
+    "watersource:water_dispenser"
+  ]
+}

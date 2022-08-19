@@ -1,0 +1,9 @@
+{
+    "replace": false,
+    "values": [
+        "watersource:iron_bottle",
+        "watersource:wooden_cup_drink",
+        "watersource:fluid_bottle",
+        "watersource:leather_water_bag"
+    ]
+}

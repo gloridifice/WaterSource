@@ -1,0 +1,11 @@
+{
+    "name": "水分值",
+    "icon": "watersource:fluid_bottle{Fluid:{FluidName:'watersource:purified_water', Amount:250}}",
+    "category": "watersource:basics",
+    "pages": [
+        {
+            "type": "patchouli:text",
+            "text": "和原版的饥饿值一样，玩家的水分值在0~20之间。每一个水分格代表2点水分值。 $(br)$(l)奖励:$()$(li)如果玩家的水分值 >= 17 并且饥饿值 >= 10，玩家将会每5s恢复1点生命值。$(br)$(l)惩罚: $()$(li)如果玩家的水分值 <= 6，玩家将会获得 缓慢I 和虚弱II(在简单模式是虚弱I) 的效果。"
+        }
+    ]
+}

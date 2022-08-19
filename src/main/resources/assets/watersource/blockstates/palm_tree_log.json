@@ -1,0 +1,7 @@
+{
+    "variants": {
+        "axis=y":  { "model": "watersource:block/palm_tree_log" },
+        "axis=z":   { "model": "watersource:block/palm_tree_log", "x": 90 },
+        "axis=x":   { "model": "watersource:block/palm_tree_log", "x": 90, "y": 90 }
+    }
+}

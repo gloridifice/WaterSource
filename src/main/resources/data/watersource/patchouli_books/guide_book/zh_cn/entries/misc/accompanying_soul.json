@@ -1,0 +1,20 @@
+{
+    "name": "魂鬼随行效果",
+    "icon": "minecraft:potion",
+    "category": "watersource:misc",
+    "pages": [
+        {
+            "type": "patchouli:image",
+            "text": "灵魂沙里的灵魂会为你减少伤害。",
+            "images": [
+                "watersource:textures/gui/patchouli/entries/misc/accompanying_soul_0.png"
+            ],
+            "border": true,
+            "title": "魂鬼随行"
+        },
+        {
+            "type":"patchouli:text",
+            "text":"受到攻击减少15%（+ [药水等级 * 5]%），在地狱时减伤效果增强至20%（+ [药水等级 * 6]%）。"
+        }
+    ]
+}

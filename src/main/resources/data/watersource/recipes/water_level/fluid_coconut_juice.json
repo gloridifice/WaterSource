@@ -1,0 +1,6 @@
+{
+    "type": "watersource:water_level",
+	"fluid": "watersource:coconut_juice",
+	"water_level": 4,
+	"water_saturation_level": 6
+}

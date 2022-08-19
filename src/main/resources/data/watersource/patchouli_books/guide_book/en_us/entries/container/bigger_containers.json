@@ -1,0 +1,17 @@
+{
+    "name": "Bigger Containers",
+    "icon": "watersource:iron_bottle",
+    "category": "watersource:container",
+    "pages": [
+        {
+            "type": "patchouli:crafting",
+            "recipe": "watersource:iron_bottle",
+            "recipe2": "watersource:leather_water_bag"
+        },
+        {
+            "type": "patchouli:text",
+            "text": "This kind of containers can hold 1500mB of fluids. Player can drink it 8 times."
+        }
+
+    ]
+}

@@ -1,0 +1,13 @@
+{
+    "name": "脏旧的滤网",
+    "icon": "watersource:dirty_strainer",
+    "category": "watersource:filter",
+    "pages": [
+        {
+            "type": "patchouli:spotlight",
+            "title": "脏旧的滤网",
+            "item": "watersource:dirty_strainer",
+            "text": "当一个滤网用尽时，它会变成脏旧的滤网，它可以燃烧三个物品。"
+        }
+    ]
+}

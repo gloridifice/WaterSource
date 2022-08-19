@@ -1,0 +1,18 @@
+{
+    "name": "滤水器",
+    "icon": "watersource:wooden_water_filter",
+    "category": "watersource:filter",
+    "pages": [
+        {
+            "type": "patchouli:crafting",
+            "recipe":"watersource:wooden_water_filter",
+            "text": "手持滤网右键滤水器上部可以填装滤网，输入液体输入上部，输出液体会流到下部。"
+        },
+        {
+            "type": "patchouli:spotlight",
+            "title": "道具",
+            "item": "minecraft:heart_of_the_sea",
+            "text": "滤水器的各种'道具'有各种不同的效果。$(l)海洋之心$()是目前唯一的'道具'，它可以加速过滤的过程。"
+        }
+    ]
+}

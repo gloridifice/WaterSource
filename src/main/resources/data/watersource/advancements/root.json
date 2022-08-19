@@ -1,0 +1,29 @@
+{
+    "display": {
+        "icon": {
+            "item": "watersource:fluid_bottle",
+            "nbt": "{Fluid:{FluidName:'watersource:purified_water', Amount:250}}"
+        },
+        "title": {
+            "translate": "advancements.watersource.root.title"
+        },
+        "description": {
+            "translate": "advancements.watersource.root.description"
+        },
+        "frame": "task",
+        "show_toast": true,
+        "announce_to_chat": true,
+        "hidden": false,
+        "background": "watersource:textures/block/palm_tree_planks.png"
+    },
+    "criteria": {
+        "water": {
+            "trigger": "watersource:water_level_restored"
+        }
+    },
+    "requirements": [
+        [
+            "water"
+        ]
+    ]
+}

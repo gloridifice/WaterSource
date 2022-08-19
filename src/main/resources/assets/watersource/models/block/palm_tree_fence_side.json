@@ -1,0 +1,6 @@
+{
+    "parent": "block/fence_side",
+    "textures": {
+        "texture": "watersource:block/palm_tree_planks"
+    }
+}

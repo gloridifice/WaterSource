@@ -1,0 +1,12 @@
+{
+    "name": "Moisturizing Enchantment",
+    "icon": "minecraft:enchanted_book",
+    "category": "watersource:misc",
+    "pages": [
+        {
+            "type":"patchouli:spotlight",
+            "item":"minecraft:enchanted_book",
+            "text":"Moisturizing can be enchanted in armors, and reduce the water consumption of player. One enchanted armor reduces 30% consumption, two reduce 50% consumption (max)."
+        }
+    ]
+}

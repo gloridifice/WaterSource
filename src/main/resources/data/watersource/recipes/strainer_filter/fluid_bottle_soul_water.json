@@ -1,0 +1,7 @@
+{
+    "type": "watersource:crafting_strainer_filter",
+    "item":"minecraft:potion",
+    "strainer_tag":"watersource:soul_strainers",
+	"fluidIn": "minecraft:water",
+	"fluidOut": "watersource:soul_water"
+}

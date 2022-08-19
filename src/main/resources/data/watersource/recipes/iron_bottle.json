@@ -1,0 +1,23 @@
+{
+    "type": "minecraft:crafting_shaped",
+    "group": "watersource",
+    "pattern": [
+        "yzy",
+        "y y",
+		"yxy"
+    ],
+    "key": {
+        "x": {
+            "tag": "forge:dusts/redstone"
+        },
+		"y": {
+            "tag": "forge:ingots/iron"
+        },
+		"z": {
+            "item": "minecraft:lever"
+        }
+    },
+    "result": {
+        "item": "watersource:iron_bottle"
+    }
+}

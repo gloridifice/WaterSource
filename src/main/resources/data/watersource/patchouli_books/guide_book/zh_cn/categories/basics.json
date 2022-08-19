@@ -1,0 +1,5 @@
+{
+    "name": "基础",
+    "description": "水分掉落的规律。",
+    "icon": "watersource:fluid_bottle{Fluid:{FluidName:'watersource:purified_water', Amount:250}}"
+}

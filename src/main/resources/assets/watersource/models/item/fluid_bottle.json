@@ -1,0 +1,15 @@
+{
+    "parent": "item/generated",
+    "textures": {
+        "layer0": "watersource:item/fluid_bottle",
+        "layer1": "watersource:item/fluid_bottle_overlay"
+    },
+    "overrides":[
+        {
+            "predicate":{
+                "watersource:fluid_bottle": 1
+            },
+            "model":"watersource:item/purified_water_bottle"
+        }
+    ]
+}

@@ -1,0 +1,12 @@
+{
+    "type": "watersource:thirst",
+    "ingredient": {
+        "item": "minecraft:potion"
+    },
+	"nbt":{
+        "Potion":"minecraft:water"
+    },
+	"duration": 1600,
+	"amplifier": 0,
+	"probability": 0.75
+}

@@ -1,0 +1,13 @@
+{
+  "variants": {
+    "groundtype=ordinary": {
+      "model": "watersource:block/coconut_ordinary"
+    },
+	    "groundtype=sand": {
+      "model": "watersource:block/coconut_sand"
+    },
+	    "groundtype=redsand": {
+      "model": "watersource:block/coconut_red_sand"
+    }
+}
+}

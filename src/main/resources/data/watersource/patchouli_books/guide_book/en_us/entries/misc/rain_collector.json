@@ -1,0 +1,12 @@
+{
+    "name": "Rain Collector",
+    "icon": "watersource:stone_rain_collector",
+    "category": "watersource:misc",
+    "pages": [
+        {
+            "type": "patchouli:crafting",
+            "recipe":"watersource:stone_rain_collector",
+            "text": "Rain Collector can collect rain when no block occlude it."
+        }
+    ]
+}

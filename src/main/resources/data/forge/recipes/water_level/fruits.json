@@ -1,0 +1,17 @@
+{
+    "type": "watersource:water_level",
+    "conditions": [
+        {
+            "type": "forge:not",
+            "value": {
+                "type": "forge:tag_empty",
+                "tag": "forge:fruits"
+            }
+        }
+    ],
+    "ingredient": {
+        "tag": "forge:fruits"
+    },
+	"water_level": 1,
+	"water_saturation_level": 0
+}

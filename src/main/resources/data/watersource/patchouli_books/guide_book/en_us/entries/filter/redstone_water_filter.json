@@ -1,0 +1,18 @@
+{
+    "name": "Redstone Water Filter",
+    "icon": "watersource:iron_water_filter",
+    "category": "watersource:filter",
+    "pages": [
+        {
+            "type": "patchouli:crafting",
+            "recipe":"watersource:iron_water_filter",
+            "text": "Redstone Water Filter can output signals of Comparators."
+        },
+        {
+            "type": "patchouli:spotlight",
+            "title": "Detection Rule",
+            "item": "minecraft:comparator",
+            "text": "Upper part of Redstone Water Filter can be detected by Comparator. If the upper part:$(li)has strainer +5 power$(li)has liquid +2 power$(li)the liquid is full + 4 power"
+        }
+    ]
+}

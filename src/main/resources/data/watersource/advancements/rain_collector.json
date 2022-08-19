@@ -1,0 +1,24 @@
+{
+    "parent": "watersource:root",
+    "display": {
+        "icon": {
+            "item": "watersource:stone_rain_collector"
+        },
+        "title": {
+            "translate": "advancements.watersource.rain_collector.title"
+        },
+        "description": {
+            "translate": "advancements.watersource.rain_collector.description"
+        }
+    },
+    "criteria": {
+        "water": {
+            "trigger": "minecraft:inventory_changed",
+            "conditions":{
+                "items":[
+                    {"tag":"watersource:rain_collectors"}
+                ]
+            }
+        }
+    }
+}

@@ -1,0 +1,17 @@
+{
+    "type": "watersource:water_level",
+    "conditions": [
+        {
+            "type": "forge:not",
+            "value": {
+                "type": "forge:tag_empty",
+                "tag": "forge:pumpkin_spice_lattes"
+            }
+        }
+    ],
+    "ingredient": {
+        "tag": "forge:pumpkin_spice_lattes"
+    },
+	"water_level": 3,
+	"water_saturation_level": 3
+}

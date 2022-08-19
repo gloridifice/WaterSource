@@ -1,0 +1,24 @@
+{
+    "name": "Thirst Effect",
+    "icon": "minecraft:potion",
+    "category": "watersource:basics",
+    "pages": [
+        {
+            "type": "patchouli:image",
+            "text": "Thirst Effect will quicken $(l)water reducing speed$() of player.",
+            "images": [
+                "watersource:textures/gui/patchouli/entries/basics/thirst_0.png"
+            ],
+            "border": true,
+            "title": "Thirst"
+        },
+        {
+            "type": "patchouli:image",
+            "images":[
+                "watersource:textures/gui/patchouli/entries/basics/thirst_1.png"
+            ],
+            "border": true,
+            "text": "Play will get $(l)thirst effect$() when they drink/eat some items."
+        }
+    ]
+}

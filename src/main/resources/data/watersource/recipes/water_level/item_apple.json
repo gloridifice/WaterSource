@@ -1,0 +1,8 @@
+{
+    "type": "watersource:water_level",
+    "ingredient": {
+        "item": "minecraft:apple"
+    },
+	"water_level": 2,
+	"water_saturation_level": 0
+}

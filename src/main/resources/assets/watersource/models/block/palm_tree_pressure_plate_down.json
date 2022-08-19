@@ -1,0 +1,22 @@
+{
+	"credit": "Made with Blockbench",
+	"parent": "block/pressure_plate_up",
+	"textures": {
+		"1": "watersource:block/palm_tree_pressure_plate",
+		"particle": "watersource:block/palm_tree_pressure_plate"
+	},
+	"elements": [
+		{
+			"from": [1, 0.01, 1],
+			"to": [15, 0.01, 15],
+			"faces": {
+				"north": {"uv": [1, 1, 15, 2], "rotation": 180, "texture": "#1"},
+				"east": {"uv": [14, 1, 15, 15], "rotation": 90, "texture": "#1"},
+				"south": {"uv": [1, 14, 15, 15], "texture": "#1"},
+				"west": {"uv": [1, 1, 15, 2], "texture": "#1"},
+				"up": {"uv": [1, 1, 15, 15], "texture": "#1"},
+				"down": {"uv": [1, 1, 15, 15], "texture": "#1"}
+			}
+		}
+	]
+}

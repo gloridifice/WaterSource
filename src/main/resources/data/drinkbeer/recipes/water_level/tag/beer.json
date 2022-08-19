@@ -1,0 +1,14 @@
+{
+    "type": "watersource:water_level",
+    "conditions": [
+        {
+            "type": "forge:mod_loaded",
+            "modid": "drinkbeer"
+        }
+    ],
+    "ingredient": {
+        "tag": "drinkbeer:beer"
+    },
+	"water_level": 3,
+	"water_saturation_level": 3
+}

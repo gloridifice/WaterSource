@@ -1,0 +1,13 @@
+{
+    "type": "watersource:water_level",
+	"fluid": "watersource:soul_water",
+	"water_level": 4,
+	"water_saturation_level": 3,
+	"mob_effects":[
+		{
+			"name":"watersource:accompanying_soul",
+			"duration": 3600,
+			"amplifier": 1
+		}
+	]
+}

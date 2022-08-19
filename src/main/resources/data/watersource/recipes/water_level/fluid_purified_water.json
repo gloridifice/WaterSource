@@ -1,0 +1,6 @@
+{
+    "type": "watersource:water_level",
+	"fluid": "watersource:purified_water",
+	"water_level": 5,
+	"water_saturation_level": 6
+}

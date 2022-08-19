@@ -1,0 +1,11 @@
+{
+    "name": "Water Value",
+    "icon": "watersource:fluid_bottle{Fluid:{FluidName:'watersource:purified_water', Amount:250}}",
+    "category": "watersource:basics",
+    "pages": [
+        {
+            "type": "patchouli:text",
+            "text": "Like hunger value in Vanilla, player's water value is beyond 0~20. Every water ball represents 2 water value. $(br) $(l)Award:$()$(li)If player's water value >= 17 and hunger value >= 10, player will be healed and lose few water value per 5 second. $(br)$(l)Punishment: $()$(li)If player's water values <= 6, player will get Slowness I and Weakness II (in easy mode, is Weakness I)."
+        }
+    ]
+}

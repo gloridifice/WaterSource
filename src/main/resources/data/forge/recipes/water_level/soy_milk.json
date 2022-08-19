@@ -1,0 +1,17 @@
+{
+    "type": "watersource:water_level",
+    "conditions": [
+        {
+            "type": "forge:not",
+            "value": {
+                "type": "forge:tag_empty",
+                "tag": "forge:soy_milk"
+            }
+        }
+    ],
+    "ingredient": {
+        "tag": "forge:soy_milk"
+    },
+	"water_level": 1,
+	"water_saturation_level": 2
+}

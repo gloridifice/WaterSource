@@ -1,0 +1,12 @@
+{
+    "name": "集雨器",
+    "icon": "watersource:stone_rain_collector",
+    "category": "watersource:misc",
+    "pages": [
+        {
+            "type": "patchouli:crafting",
+            "recipe":"watersource:stone_rain_collector",
+            "text": "当没有方块在集雨器上时，它会收集雨水，得到净化水。"
+        }
+    ]
+}

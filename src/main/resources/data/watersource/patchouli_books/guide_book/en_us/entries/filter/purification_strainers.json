@@ -1,0 +1,28 @@
+{
+    "name": "Purification Strainers",
+    "icon": "watersource:primitive_strainer",
+    "category": "watersource:filter",
+    "pages": [
+        {
+            "type": "patchouli:crafting",
+            "recipe":"watersource:primitive_strainer",
+            "text": "Purification Strainers can be crafted with containers filled with Water and output containers filled with Purified Water.$(br2)A Primitive Strainer can purify 6250mB of water in total."
+        },
+        {
+            "type": "patchouli:image",
+            "images":[
+                "watersource:textures/gui/patchouli/entries/filter/purification_strainer_0_0.png",
+                "watersource:textures/gui/patchouli/entries/filter/purification_strainer_0_1.png",
+                "watersource:textures/gui/patchouli/entries/filter/purification_strainer_0_2.png",
+                "watersource:textures/gui/patchouli/entries/filter/purification_strainer_0_3.png"
+            ],
+            "border": true,
+            "text": "(This kind of recipes can't be displayed in jei mod currently)"
+        },
+        {
+            "type": "patchouli:crafting",
+            "recipe":"watersource:paper_strainer",
+            "text": "A Paper Strainer can purify 4000mB of water in total."
+        }
+    ]
+}

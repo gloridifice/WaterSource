@@ -1,0 +1,17 @@
+{
+    "name": "更大的一些容器",
+    "icon": "watersource:iron_bottle",
+    "category": "watersource:container",
+    "pages": [
+        {
+            "type": "patchouli:crafting",
+            "recipe": "watersource:iron_bottle",
+            "recipe2": "watersource:leather_water_bag"
+        },
+        {
+            "type": "patchouli:text",
+            "text": "这些容器可以装 1500mB 液体，可以引用 8 次。"
+        }
+
+    ]
+}

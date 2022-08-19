@@ -1,0 +1,41 @@
+{
+    "name": "Palm Tree and Coconut",
+    "icon": "watersource:palm_tree_leaf",
+    "category": "watersource:nature_food",
+    "pages": [
+        {
+            "type": "patchouli:image",
+            "title":"Palm Tree",
+            "images":[
+                "watersource:textures/gui/patchouli/entries/nature_food/palm_tree_0.png"
+            ],
+            "border": true,
+            "text": "Palm trees are generated at Beach Biome. Every palm tree has a Palm Tree Head. Coconuts grow on it."
+        },
+        {
+            "type": "patchouli:image",
+            "images":[
+                "watersource:textures/gui/patchouli/entries/nature_food/palm_tree_1.png"
+            ],
+            "border": true,
+            "text": "Coconut can be planted on sand or red sand, then grow into a palm tree sapling. Placing with Crouching Pose can just place coconut as a decoration state."
+        },
+        {
+            "type": "patchouli:image",
+            "images":[
+                "watersource:textures/gui/patchouli/entries/nature_food/palm_tree_2.png"
+            ],
+            "border": true,
+            "text": "Coconuts grow on Palm Tree Head while it is above Palm Tree Log. Player can use bone meal to accelerate the growth."
+        },
+        {
+            "type": "patchouli:image",
+            "images":[
+                "watersource:textures/gui/patchouli/entries/nature_food/palm_tree_3.png"
+            ],
+            "border": true,
+            "text": "Palm Tree Log can also be processed into various decorations."
+        }
+
+    ]
+}

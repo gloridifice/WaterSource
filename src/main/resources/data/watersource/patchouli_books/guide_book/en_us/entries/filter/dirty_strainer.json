@@ -1,0 +1,13 @@
+{
+    "name": "Dirty Strainer",
+    "icon": "watersource:dirty_strainer",
+    "category": "watersource:filter",
+    "pages": [
+        {
+            "type": "patchouli:spotlight",
+            "title": "Dirty Strainer",
+            "item": "watersource:dirty_strainer",
+            "text": "When a strainer is broken, it will turn into a Dirty Strainer, which can burn 3 items time as a fuel."
+        }
+    ]
+}

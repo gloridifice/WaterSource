@@ -1,0 +1,7 @@
+{
+    "parent": "item/generated",
+    "textures": {
+        "layer0": "watersource:item/wooden_cup",
+		"layer1": "watersource:item/wooden_cup_overlay"
+    }
+}

@@ -1,0 +1,11 @@
+{
+    "name":"item.watersource.guide_book",
+    "landing_text":"guide_book.watersource.landing_text",
+    "version":1,
+    "model":"watersource:guide_book",
+    "creative_tab":"watersource_tab",
+    "advancements_tab": "watersource",
+    "pause_game":true,
+    "filler_texture":"watersource:textures/gui/patchouli/page_filler.png",
+    "book_texture":"watersource:textures/gui/patchouli/book_blue.png"
+}

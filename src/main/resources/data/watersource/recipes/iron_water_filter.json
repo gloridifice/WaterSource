@@ -1,0 +1,26 @@
+{
+    "type": "minecraft:crafting_shaped",
+    "group": "watersource",
+    "pattern": [
+        "yzy",
+        "yxy",
+		"yqy"
+    ],
+    "key": {
+        "x": {
+            "tag": "forge:dusts/redstone"
+        },
+		"y": {
+            "tag": "forge:ingots/iron"
+        },
+		"z": {
+            "tag": "forge:glass"
+        },
+        "q":{
+            "tag": "forge:storage_blocks/iron"
+        }
+    },
+    "result": {
+        "item": "watersource:iron_water_filter"
+    }
+}

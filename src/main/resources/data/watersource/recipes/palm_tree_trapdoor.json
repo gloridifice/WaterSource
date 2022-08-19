@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "group": "wooden_door",
+  "pattern": [
+    "###",
+    "###"
+  ],
+  "key": {
+    "#": {
+      "item": "watersource:palm_tree_planks"
+    }
+  },
+  "result": {
+    "item": "watersource:palm_tree_trapdoor",
+    "count": 2
+  }
+}

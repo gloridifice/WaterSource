@@ -1,0 +1,16 @@
+{
+    "name": "灵魂滤网",
+    "icon": "watersource:soul_strainer",
+    "category": "watersource:filter",
+    "pages": [
+        {
+            "type": "patchouli:crafting",
+            "recipe":"watersource:soul_strainer",
+            "text": "和$(l:filter/purification_strainers)$(#0094FF)净化滤网$()相同，灵魂滤网可以和装有水的容器合成，将水过滤为$(l:misc/accompanying_soul)$(#443521)灵魂水$()。"
+        },
+        {
+            "type": "patchouli:crafting",
+            "recipe":"watersource:paper_soul_strainer"
+        }
+    ]
+}

@@ -1,0 +1,7 @@
+{
+    "type": "watersource:crafting_strainer_filter",
+    "item":"watersource:wooden_cup_drink",
+    "strainer_tag":"watersource:purification_strainers",
+	"fluidIn": "minecraft:water",
+	"fluidOut": "watersource:purified_water"
+}

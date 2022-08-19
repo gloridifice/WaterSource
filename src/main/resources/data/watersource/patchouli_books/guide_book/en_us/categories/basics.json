@@ -1,0 +1,5 @@
+{
+    "name": "Basics",
+    "description": "The law of your water value.",
+    "icon": "watersource:fluid_bottle{Fluid:{FluidName:'watersource:purified_water', Amount:250}}"
+}

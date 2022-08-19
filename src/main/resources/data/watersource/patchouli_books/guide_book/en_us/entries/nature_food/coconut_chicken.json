@@ -1,0 +1,12 @@
+{
+    "name": "Coconut Chicken",
+    "icon": "watersource:coconut_chicken",
+    "category": "watersource:nature_food",
+    "pages": [
+        {
+            "type": "patchouli:crafting",
+            "recipe":"watersource:coconut_chicken",
+            "text": "Delicious."
+        }
+    ]
+}

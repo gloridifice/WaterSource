@@ -1,0 +1,17 @@
+{
+    "type": "watersource:water_level",
+    "conditions": [
+        {
+            "type": "forge:not",
+            "value": {
+                "type": "forge:tag_empty",
+                "tag": "forge:lemonade"
+            }
+        }
+    ],
+    "ingredient": {
+        "tag": "forge:lemonade"
+    },
+	"water_level": 2,
+	"water_saturation_level": 3
+}

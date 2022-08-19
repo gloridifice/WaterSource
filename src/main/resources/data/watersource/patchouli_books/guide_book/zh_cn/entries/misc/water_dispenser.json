@@ -1,0 +1,12 @@
+ {
+     "name": "饮水机",
+     "icon": "watersource:water_dispenser",
+     "category": "watersource:misc",
+     "pages": [
+         {
+             "type": "patchouli:crafting",
+             "recipe":"watersource:water_dispenser",
+             "text": "玩家可以右键饮水机来引用其中的液体。"
+         }
+     ]
+ }

@@ -1,0 +1,6 @@
+{
+    "parent": "block/template_orientable_trapdoor_top",
+    "textures": {
+        "texture": "watersource:block/palm_tree_trapdoor"
+    }
+}
