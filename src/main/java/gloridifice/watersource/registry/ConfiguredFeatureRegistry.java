@@ -1,6 +1,7 @@
 package gloridifice.watersource.registry;
 
 
+import net.minecraft.core.Holder;
 import net.minecraft.core.Registry;
 import net.minecraft.data.BuiltinRegistries;
 import net.minecraft.util.valueproviders.ConstantInt;
@@ -15,9 +16,11 @@ import net.minecraft.world.level.levelgen.feature.trunkplacers.FancyTrunkPlacer;
 import java.util.OptionalInt;
 
 public class ConfiguredFeatureRegistry {
-    public static final ConfiguredFeature<TreeConfiguration, ?> COCONUT_TREE =
+
+    /**
+    public static final Holder<? extends ConfiguredFeature<TreeConfiguration, ?>> COCONUT_TREE =
             register("palm_tree", FeatureRegistry.COCONUT_TREE
-                    .configured((new net.minecraft.world.level.levelgen.feature.configurations.TreeConfiguration.TreeConfigurationBuilder(
+                    .lace((new TreeConfiguration.TreeConfigurationBuilder(
                             BlockStateProvider.simple(BlockRegistry.PALM_TREE_LOG.defaultBlockState())
                             , new FancyTrunkPlacer(3, 11, 0)
                             , BlockStateProvider.simple(BlockRegistry.PALM_TREE_LEAF.defaultBlockState())

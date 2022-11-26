@@ -115,7 +115,7 @@ public class ThirstRecipe implements IThirstRecipe {
 
     @Override
     public RecipeType<?> getType() {
-        return RecipeTypesRegistry.THIRST_RECIPE;
+        return RecipeTypesRegistry.THIRST_RECIPE.get();
     }
 
     @Override

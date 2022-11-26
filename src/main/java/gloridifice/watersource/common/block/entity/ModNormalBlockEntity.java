@@ -8,6 +8,7 @@ import net.minecraft.network.protocol.game.ClientGamePacketListener;
 import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
@@ -52,15 +53,17 @@ public class ModNormalBlockEntity extends BlockEntity {
     public void handleUpdateTag(CompoundTag tag) {
         this.load(tag);
     }
+
     @Override
-    public CompoundTag save(CompoundTag compoundTag) {
-        saveAdditional(compoundTag);
-        return super.save(compoundTag);
+    public void load(CompoundTag pTag) {
+        saveAdditional(pTag);
+        super.load(pTag);
     }
+
     @Override
     public CompoundTag getUpdateTag() {
         CompoundTag nbtTag = new CompoundTag();
-        this.save(nbtTag);
+        this.load(nbtTag);
         this.saveAdditional(nbtTag);
         return nbtTag;
     }

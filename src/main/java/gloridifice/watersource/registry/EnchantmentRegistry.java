@@ -15,7 +15,4 @@ public class EnchantmentRegistry {
     public static final DeferredRegister<Enchantment> ENCHANTMENTS = DeferredRegister.create(ForgeRegistries.ENCHANTMENTS, WaterSource.MODID);
 
     public static final RegistryObject<Enchantment> MOISTURIZING = ENCHANTMENTS.register("moisturizing", () -> new MoisturizingEnchantment(Enchantment.Rarity.UNCOMMON, ARMOR_SLOTS));
-    public EnchantmentRegistry() {
-        ENCHANTMENTS.register(FMLJavaModLoadingContext.get().getModEventBus());
-    }
 }

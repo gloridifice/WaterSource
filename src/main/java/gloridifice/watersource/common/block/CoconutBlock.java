@@ -25,9 +25,8 @@ public class CoconutBlock extends Block implements BonemealableBlock {
     public static final VoxelShape ORDINARY_SHAPE;
     public static final VoxelShape GROWING_SHAPE;
 
-    public CoconutBlock(Properties properties, String name) {
+    public CoconutBlock(Properties properties) {
         super(properties);
-        this.setRegistryName(name);
     }
 
 
@@ -85,7 +84,7 @@ public class CoconutBlock extends Block implements BonemealableBlock {
     
     public void grow(ServerLevel level, Random rand, BlockPos pos, BlockState state) {
         if (canGrow(level, pos, state, false))
-            level.setBlock(pos, BlockRegistry.BLOCK_COCONUT_SAPLING.defaultBlockState(), 4);
+            level.setBlock(pos, BlockRegistry.BLOCK_COCONUT_SAPLING.get().defaultBlockState(), 4);
     }
 
     public void tick(BlockState state, ServerLevel level, BlockPos pos, Random rand) {

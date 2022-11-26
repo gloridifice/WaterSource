@@ -37,9 +37,8 @@ public class StrainerBlock extends BaseEntityBlock{
     }
 
 
-    public StrainerBlock(String name, Properties properties) {
+    public StrainerBlock(Properties properties) {
         super(properties);
-        this.setRegistryName(name);
     }
 
     @Override

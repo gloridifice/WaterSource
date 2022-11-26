@@ -45,7 +45,7 @@ public class WaterLevelUtils {
         }
         if (tRecipe != null) {
             if (rand.nextDouble() < tRecipe.getProbability()) {
-                player.addEffect(new MobEffectInstance(EffectRegistry.THIRST, tRecipe.getDuration(), tRecipe.getAmplifier()));
+                player.addEffect(new MobEffectInstance(EffectRegistry.THIRST.get(), tRecipe.getDuration(), tRecipe.getAmplifier()));
             }
         }
     }

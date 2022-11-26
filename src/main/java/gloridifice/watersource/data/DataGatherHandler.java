@@ -17,7 +17,7 @@ public class DataGatherHandler {
         ExistingFileHelper existingFileHelper = event.getExistingFileHelper();
         if (event.includeServer())
         {
-            //gen.addProvider(new ModBlockTagsProvider(gen, existingFileHelper));
+            gen.addProvider(new ModBlockTagsProvider(gen, existingFileHelper));
         }
     }
 }

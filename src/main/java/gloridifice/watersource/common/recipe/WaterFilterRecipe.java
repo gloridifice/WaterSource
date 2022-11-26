@@ -92,12 +92,12 @@ public class WaterFilterRecipe implements Recipe<Inventory> {
 
     @Override
     public RecipeType<?> getType() {
-        return WATER_FILTER_RECIPE;
+        return WATER_FILTER_RECIPE.get();
     }
 
     public static WaterFilterRecipe getRecipeFromInput(Level level, ItemStack strainer, Fluid fluidInput) {
         List<WaterFilterRecipe> list = new ArrayList<>();
-        list.addAll(level.getRecipeManager().getAllRecipesFor(WATER_FILTER_RECIPE));
+        list.addAll(level.getRecipeManager().getAllRecipesFor(WATER_FILTER_RECIPE.get()));
         for (WaterFilterRecipe recipe : list) {
             if (recipe.inputFluid == fluidInput) {
                 for (ItemStack itemStack : recipe.getStrainerIngredient().getItems()) {

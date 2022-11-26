@@ -15,25 +15,48 @@ import net.minecraftforge.registries.ForgeRegistries;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-public class ItemRegistry extends RegistryModule {
-    public static final DeferredRegister<Item> FLUID_ITEMS = DeferredRegister.create(ForgeRegistries.ITEMS, WaterSource.MODID);
+public class ItemRegistry {
+    public static final DeferredRegister<Item> FLUID_ITEMS =
+            DeferredRegister.create(ForgeRegistries.ITEMS,
+                    WaterSource.MODID);
 
-    public final static Item FLUID_BOTTLE = new FluidBottleItem("fluid_bottle", new Item.Properties().stacksTo(16));
-    public final static Item WOODEN_CUP = new WoodenCupItem("wooden_cup", new Item.Properties(), 250) {
+    public final static RegistryObject<Item> FLUID_BOTTLE =
+            FLUID_ITEMS.register("fluid_bottle", () ->
+            new FluidBottleItem(new Item.Properties().stacksTo(16)));
+
+    public final static RegistryObject<Item> WOODEN_CUP =
+            FLUID_ITEMS.register("wooden_cup", () ->
+            new WoodenCupItem(new Item.Properties(), 250) {
         @Override
         public ICapabilityProvider initCapabilities(@Nonnull ItemStack stack, @Nullable CompoundTag nbt) {
-            return super.initCapabilities(new ItemStack(WOODEN_CUP_DRINK), nbt);
+            return super.initCapabilities(new ItemStack(WOODEN_CUP_DRINK.get()), nbt);
         }
-    };
-    public final static Item HALF_COCONUT = new ModNormalItem("half_coconut");
-    public final static Item WOODEN_CUP_DRINK = new WoodenCupItem("wooden_cup_drink", new Item.Properties().stacksTo(1).tab(CreativeModeTabRegistry.WATER_SOURCE_TAB), 250);
-    public final static Item LEATHER_WATER_BAG = new LeatherWaterBagItem("leather_water_bag", new Item.Properties().stacksTo(1).setNoRepair().tab(CreativeModeTabRegistry.WATER_SOURCE_TAB), 1500);
-    public final static Item IRON_BOTTLE = new IronBottleItem("iron_bottle", new Item.Properties().stacksTo(1).setNoRepair().tab(CreativeModeTabRegistry.WATER_SOURCE_TAB), 1500);
+    });
+
+    public final static RegistryObject<Item> HALF_COCONUT =
+            FLUID_ITEMS.register("half_coconut", ModNormalItem::new);
+
+    public final static RegistryObject<Item> WOODEN_CUP_DRINK =
+            FLUID_ITEMS.register("wooden_cup_drink", () ->
+            new WoodenCupItem(new Item.Properties().stacksTo(1).tab(CreativeModeTabRegistry.WATER_SOURCE_TAB), 250));
+    public final static RegistryObject<Item> LEATHER_WATER_BAG =
+            FLUID_ITEMS.register("leather_water_bag", () ->
+            new LeatherWaterBagItem(new Item.Properties().stacksTo(1).setNoRepair().tab(CreativeModeTabRegistry.WATER_SOURCE_TAB), 1500));
+    public final static RegistryObject<Item> IRON_BOTTLE =
+            FLUID_ITEMS.register("iron_bottle", () ->
+            new IronBottleItem(new Item.Properties().stacksTo(1)
+                            .setNoRepair().tab(CreativeModeTabRegistry.WATER_SOURCE_TAB), 1500));
 
     //FOOD
-    public final static Item COCONUT_MILK_BOTTLE = new CoconutMilkBottleItem("coconut_milk_bottle", ModFoods.COCONUT_MILK);
-    public final static Item COCONUT_PIECE = new ModFoodItem("coconut_piece", ModFoods.COCONUT_PIECES);
-    public final static Item COCONUT_CHICKEN = new ModFoodItem("coconut_chicken", ModFoods.COCONUT_CHICKEN);
+    public final static RegistryObject<Item> COCONUT_MILK_BOTTLE =
+            FLUID_ITEMS.register("coconut_milk_bottle", () ->
+            new CoconutMilkBottleItem(ModFoods.COCONUT_MILK));
+    public final static RegistryObject<Item> COCONUT_PIECE =
+            FLUID_ITEMS.register("coconut_piece", () ->
+            new ModFoodItem( ModFoods.COCONUT_PIECES));
+    public final static RegistryObject<Item> COCONUT_CHICKEN =
+            FLUID_ITEMS.register("coconut_chicken", () ->
+            new ModFoodItem(ModFoods.COCONUT_CHICKEN));
     //Fluids
     public static RegistryObject<Item> itemPurifiedWaterBucket = FLUID_ITEMS.register("purified_water_bucket", () -> {
         return new BucketItem(FluidRegistry.PURIFIED_WATER, new Item.Properties().tab(CreativeModeTabRegistry.WATER_SOURCE_TAB));

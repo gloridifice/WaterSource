@@ -20,9 +20,8 @@ import net.minecraftforge.fluids.FluidUtil;
 import javax.annotation.Nullable;
 
 public class RainCollectorBlock extends BaseEntityBlock {
-    public RainCollectorBlock(String name, Properties properties) {
+    public RainCollectorBlock(Properties properties) {
         super(properties);
-        this.setRegistryName(name);
     }
     boolean flag = false;
     @Override

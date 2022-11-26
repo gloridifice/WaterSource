@@ -1,6 +1,5 @@
 package gloridifice.watersource.common.block;
 
-import com.google.common.collect.ImmutableMap;
 import gloridifice.watersource.registry.BlockRegistry;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
@@ -8,18 +7,15 @@ import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.*;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.core.Direction;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.IntegerProperty;
 import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.phys.BlockHitResult;
-import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import net.minecraftforge.common.IPlantable;
@@ -27,7 +23,6 @@ import net.minecraftforge.common.IPlantable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
-import java.util.function.Function;
 
 import static net.minecraft.world.level.block.state.properties.BlockStateProperties.HORIZONTAL_FACING;
 
@@ -35,9 +30,8 @@ public class NaturalCoconutBlock extends HorizontalDirectionalBlock implements I
     public static final IntegerProperty AGE = IntegerProperty.create("age", 0, 3);
     public static final VoxelShape NORTH_0_SHAPE, SOUTH_0_SHAPE, EAST_0_SHAPE, WEST_0_SHAPE, NORTH_1_SHAPE, SOUTH_1_SHAPE, EAST_1_SHAPE, WEST_1_SHAPE, NORTH_2_SHAPE, SOUTH_2_SHAPE, EAST_2_SHAPE, WEST_2_SHAPE;
 
-    public NaturalCoconutBlock(String name, BlockBehaviour.Properties properties) {
+    public NaturalCoconutBlock(BlockBehaviour.Properties properties) {
         super(properties);
-        setRegistryName(name);
     }
 
 
@@ -50,7 +44,7 @@ public class NaturalCoconutBlock extends HorizontalDirectionalBlock implements I
     @Override
     public InteractionResult use(BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult blockHitResult) {
         if (state.getValue(AGE) == 3) {
-            ItemStack itemStack = new ItemStack(BlockRegistry.ITEM_COCONUT, 3);
+            ItemStack itemStack = new ItemStack(BlockRegistry.BLOCK_COCONUT.get(), 3);
             level.setBlock(pos, state.setValue(AGE, 0), 3);
             if (!player.getInventory().add(itemStack)) {
                 player.drop(itemStack, false);
@@ -73,7 +67,7 @@ public class NaturalCoconutBlock extends HorizontalDirectionalBlock implements I
     public List<ItemStack> getDrops(BlockState state, LootContext.Builder builder) {
         List<ItemStack> list = new ArrayList<>();
         if (state.getValue(AGE) == 3) {
-            list.add(new ItemStack(BlockRegistry.ITEM_COCONUT, 3));
+            list.add(new ItemStack(BlockRegistry.BLOCK_COCONUT.get(), 3));
         }
         return list;
     }

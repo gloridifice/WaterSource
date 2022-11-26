@@ -124,7 +124,7 @@ public class WaterLevelAndEffectRecipe implements Recipe<Inventory>, Comparable<
 
     @Override
     public RecipeType<?> getType() {
-        return WATER_LEVEL_RECIPE;
+        return WATER_LEVEL_RECIPE.get();
     }
 
     public Ingredient getIngredient() {

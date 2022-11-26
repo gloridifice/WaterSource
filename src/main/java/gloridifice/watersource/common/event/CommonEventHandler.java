@@ -10,6 +10,7 @@ import gloridifice.watersource.helper.FluidHelper;
 import gloridifice.watersource.helper.WaterLevelUtils;
 import gloridifice.watersource.registry.*;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Holder;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
@@ -175,21 +176,21 @@ public class CommonEventHandler {
                     });
                 } else {*/
                 //WaterRestoring effect
-                MobEffectInstance effectInstance1 = player.getEffect(EffectRegistry.WATER_RESTORING);
+                MobEffectInstance effectInstance1 = player.getEffect(EffectRegistry.WATER_RESTORING.get());
                 if (effectInstance1 != null) {
                     player.getCapability(CapabilityRegistry.PLAYER_WATER_LEVEL).ifPresent(data -> {
                         data.restoreWater(player, 1);
                     });
                 }
 
-                Biome biome = level.getBiome(new BlockPos(player.getPosition(0f)));
+                Holder<Biome> biome = level.getBiome(new BlockPos(player.getPosition(0f)));
                 if (level.getLightEmission(new BlockPos(player.getPosition(0f))) == 15 && level.getDayTime() < 11000 && level.getDayTime() > 450 && !level.isRainingAt(new BlockPos(player.getPosition(0f)))) {
-                    if (biome.getBaseTemperature() > 0.3) {
+                    if (biome.value().getBaseTemperature() > 0.3) {
                         player.getCapability(CapabilityRegistry.PLAYER_WATER_LEVEL).ifPresent(data -> {
                             data.addExhaustion(player, 0.0075f);
                         });
                     }
-                    if (biome.getBaseTemperature() > 0.9) {
+                    if (biome.value().getBaseTemperature() > 0.9) {
                         player.getCapability(CapabilityRegistry.PLAYER_WATER_LEVEL).ifPresent(data -> {
                             data.addExhaustion(player, 0.0055f);
                         });
@@ -197,7 +198,7 @@ public class CommonEventHandler {
                 }
                 //}
                 //Thirty State
-                MobEffectInstance effectInstance = player.getEffect(EffectRegistry.THIRST);
+                MobEffectInstance effectInstance = player.getEffect(EffectRegistry.THIRST.get());
                 if (effectInstance != null) {
                     player.getCapability(CapabilityRegistry.PLAYER_WATER_LEVEL).ifPresent(data -> {
                         data.addExhaustion(player, 0.07f + 0.05f * effectInstance.getAmplifier());
@@ -247,7 +248,7 @@ public class CommonEventHandler {
             player.interactOn(event.getTarget(), event.getHand());
             player.awardStat(Stats.ITEM_USED.get(stack.getItem()));//todo
             stack.shrink(1);
-            player.getInventory().add(new ItemStack(ItemRegistry.COCONUT_MILK_BOTTLE));
+            player.getInventory().add(new ItemStack(ItemRegistry.COCONUT_MILK_BOTTLE.get()));
         }
     }
 
@@ -257,10 +258,10 @@ public class CommonEventHandler {
         ItemStack heldItem = event.getItemStack();
         Player player = event.getPlayer();
         //stripe palm tree log
-        if (heldItem.getItem() instanceof AxeItem && state.getBlock() == BlockRegistry.PALM_TREE_LOG) {
+        if (heldItem.getItem() instanceof AxeItem && state.getBlock() == BlockRegistry.PALM_TREE_LOG.get()) {
             event.getWorld().playSound(player, event.getPos(), SoundEvents.AXE_STRIP, SoundSource.BLOCKS, 1.0F, 1.0F);
             if (!event.getWorld().isClientSide()) {
-                event.getWorld().setBlock(event.getPos(), BlockRegistry.STRIPPED_PALM_TREE_LOG.defaultBlockState().setValue(RotatedPillarBlock.AXIS, state.getValue(RotatedPillarBlock.AXIS)), 3);
+                event.getWorld().setBlock(event.getPos(), BlockRegistry.STRIPPED_PALM_TREE_LOG.get().defaultBlockState().setValue(RotatedPillarBlock.AXIS, state.getValue(RotatedPillarBlock.AXIS)), 3);
                 heldItem.hurt(1, new Random(), (ServerPlayer) player);
             }
         }
@@ -284,7 +285,7 @@ public class CommonEventHandler {
 
     @SubscribeEvent
     public static void onLivingAttacked(LivingAttackEvent event) {
-        MobEffectInstance effectInstance = event.getEntityLiving().getEffect(EffectRegistry.ACCOMPANYING_SOUL);
+        MobEffectInstance effectInstance = event.getEntityLiving().getEffect(EffectRegistry.ACCOMPANYING_SOUL.get());
         if (effectInstance != null) {
             if (event.getEntityLiving().level.dimension() == Level.NETHER) {
                 event.getEntityLiving().heal(event.getAmount() * (0.25f + (float) effectInstance.getAmplifier() * 0.06f));
@@ -295,7 +296,7 @@ public class CommonEventHandler {
 
     @SubscribeEvent
     public static void getVanillaFurnaceFuelValue(FurnaceFuelBurnTimeEvent event) {
-        if (event.getItemStack().getItem() == BlockRegistry.ITEM_DIRTY_STRAINER) {
+        if (event.getItemStack().getItem() == BlockRegistry.DIRTY_STRAINER.get().asItem()) {
             event.setBurnTime(600);
         }
     }
@@ -311,7 +312,7 @@ public class CommonEventHandler {
                 double d1 = random.nextDouble();
                 double d2 = random.nextDouble();
                 if (d1 <= 0.05D) player.addEffect(new MobEffectInstance(MobEffects.POISON, 300, 0));
-                if (d2 <= 0.8D) player.addEffect(new MobEffectInstance(EffectRegistry.THIRST, 900, 0));
+                if (d2 <= 0.8D) player.addEffect(new MobEffectInstance(EffectRegistry.THIRST.get(), 900, 0));
             }
         });
     }

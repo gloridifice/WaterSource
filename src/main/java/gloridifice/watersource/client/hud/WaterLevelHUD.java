@@ -36,7 +36,7 @@ public class WaterLevelHUD extends GuiComponent {
         poseStack.pushPose();
         RenderSystem.enableBlend();
         RenderSystem.setShaderTexture(0, OVERLAY_BAR);
-        MobEffectInstance effectInstance = mc.player.getEffect(EffectRegistry.THIRST);
+        MobEffectInstance effectInstance = mc.player.getEffect(EffectRegistry.THIRST.get());
         int waterLevel = capData.getWaterLevel();
         int waterSaturationLevel = capData.getWaterSaturationLevel();
         float waterExhaustionLevel = capData.getWaterExhaustionLevel();

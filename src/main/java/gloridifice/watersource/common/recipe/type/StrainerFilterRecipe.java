@@ -8,6 +8,7 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.tags.Tag;
+import net.minecraft.tags.TagKey;
 import net.minecraft.world.inventory.CraftingContainer;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -26,7 +27,7 @@ import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidHandlerItem;
 
 public class StrainerFilterRecipe extends CustomRecipe {
-    public Tag.Named<Item> strainerTag;
+    public TagKey<Item> strainerTag;
     public Fluid inPutFluid;
     public Fluid outPutFluid;
     public Item containerItem;
@@ -34,7 +35,7 @@ public class StrainerFilterRecipe extends CustomRecipe {
     public StrainerFilterRecipe(ResourceLocation name, String strainerTag, Fluid inPutFluid, Fluid outPutFluid, Item containerItem) {
         super(name);
         if (strainerTag.isBlank()) this.strainerTag = null;
-        else this.strainerTag = ItemTags.bind(strainerTag);
+        else this.strainerTag = ItemTags.create(new ResourceLocation(strainerTag));
         this.inPutFluid = inPutFluid;
         this.outPutFluid = outPutFluid;
         this.containerItem = containerItem;
@@ -97,7 +98,7 @@ public class StrainerFilterRecipe extends CustomRecipe {
             }
         }
         if (this.containerItem == Items.POTION) {
-            containerItem = new ItemStack(ItemRegistry.FLUID_BOTTLE);
+            containerItem = new ItemStack(ItemRegistry.FLUID_BOTTLE.get());
             ItemStack result = containerItem.copy();
             IFluidHandlerItem resultFluidHandlerItem = FluidUtil.getFluidHandler(result).orElse(null);
             if (resultFluidHandlerItem != null) {

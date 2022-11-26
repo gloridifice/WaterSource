@@ -67,7 +67,7 @@ public class WaterFilterStrainerHUD extends GuiComponent {
         //render text
 
         String text = I18n.get("watersource.misc.damage") + (stack.getMaxDamage() - stack.getDamageValue()) + "/" + stack.getMaxDamage();
-        if (stack.getItem() == BlockRegistry.ITEM_DIRTY_STRAINER) text = I18n.get("watersource.misc.dirty_strainer");
+        if (stack.getItem() == BlockRegistry.DIRTY_STRAINER.get().asItem()) text = I18n.get("watersource.misc.dirty_strainer");
         font.draw(pose, text, x + 17, y + 5, 0xFFFFFF);
         pose.popPose();
     }

@@ -43,7 +43,7 @@ public class StrainerFilterRecipeSerializer<T extends StrainerFilterRecipe> exte
 
     @Override
     public void toNetwork(FriendlyByteBuf friendlyByteBuf, T recipe) {
-        friendlyByteBuf.writeUtf(recipe.strainerTag.getName().toString());
+        friendlyByteBuf.writeUtf(recipe.strainerTag.toString());
         friendlyByteBuf.writeUtf(recipe.inPutFluid.getRegistryName().toString());
         friendlyByteBuf.writeUtf(recipe.outPutFluid.getRegistryName().toString());
         friendlyByteBuf.writeUtf(recipe.containerItem.getRegistryName().toString());

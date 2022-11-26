@@ -23,17 +23,17 @@ public final class BlockEntityRegistry {
     public static final DeferredRegister<BlockEntityType<?>> BLOCK_ENTITY_REGISTER = DeferredRegister.create(ForgeRegistries.BLOCK_ENTITIES, MODID);
     public static final RegistryObject<BlockEntityType<WaterFilterUpBlockEntity>> WATER_FILTER_UP_TILE =
             BLOCK_ENTITY_REGISTER.register("iron_water_filter_up", () -> BlockEntityType.Builder.of(WaterFilterUpBlockEntity::new,
-                    BlockRegistry.IRON_WATER_FILTER, BlockRegistry.WOODEN_WATER_FILTER).build(null));
+                    BlockRegistry.IRON_WATER_FILTER.get(), BlockRegistry.WOODEN_WATER_FILTER.get()).build(null));
     public static final RegistryObject<BlockEntityType<WaterFilterDownBlockEntity>> WATER_FILTER_DOWN_TILE =
             BLOCK_ENTITY_REGISTER.register("iron_water_filter_down", () -> BlockEntityType.Builder.of(WaterFilterDownBlockEntity::new,
-                    BlockRegistry.IRON_WATER_FILTER, BlockRegistry.WOODEN_WATER_FILTER).build(null));
+                    BlockRegistry.IRON_WATER_FILTER.get(), BlockRegistry.WOODEN_WATER_FILTER.get()).build(null));
     public static final RegistryObject<BlockEntityType<RainCollectorBlockEntity>> RAIN_COLLECTOR =
             BLOCK_ENTITY_REGISTER.register("stone_rain_collector", () -> BlockEntityType.Builder.of(RainCollectorBlockEntity::new,
-                    BlockRegistry.STONE_RAIN_COLLECTOR).build(null));
+                    BlockRegistry.STONE_RAIN_COLLECTOR.get()).build(null));
     public static final RegistryObject<BlockEntityType<StrainerBlockEntity>> STRAINER_TILE =
             BLOCK_ENTITY_REGISTER.register("strainer", () -> BlockEntityType.Builder.of(StrainerBlockEntity::new,
-                            BlockRegistry.PRIMITIVE_STRAINER, BlockRegistry.PAPER_STRAINER, BlockRegistry.SOUL_STRAINER,
-                            BlockRegistry.PAPER_SOUL_STRAINER, BlockRegistry.EVERLASTING_SOUL_STRAINER, BlockRegistry.EVERLASTING_STRAINER
+                            BlockRegistry.PRIMITIVE_STRAINER.get(), BlockRegistry.PAPER_STRAINER.get(), BlockRegistry.SOUL_STRAINER.get(),
+                            BlockRegistry.PAPER_SOUL_STRAINER.get(), BlockRegistry.EVERLASTING_SOUL_STRAINER.get(), BlockRegistry.EVERLASTING_STRAINER.get()
             ).build(null));
 
 }

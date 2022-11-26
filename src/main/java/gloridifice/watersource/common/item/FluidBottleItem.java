@@ -21,8 +21,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class FluidBottleItem extends DrinkContainerItem{
-    public FluidBottleItem(String name, Properties properties) {
-        super(name, properties, 250);
+    public FluidBottleItem(Properties properties) {
+        super(properties, 250);
     }
     @Override
     public void fillItemCategory(CreativeModeTab tab, NonNullList<ItemStack> items) {
@@ -30,9 +30,9 @@ public class FluidBottleItem extends DrinkContainerItem{
         fluids.add(FluidRegistry.PURIFIED_WATER.get());
         fluids.add(FluidRegistry.SOUL_WATER.get());
         fluids.add(FluidRegistry.COCONUT_JUICE.get());
-        if (this.allowdedIn(tab) && this == ItemRegistry.FLUID_BOTTLE) {
+        if (this.allowdedIn(tab) && this == ItemRegistry.FLUID_BOTTLE.get()) {
             for (Fluid fluid : fluids) {
-                ItemStack itemStack = new ItemStack(ItemRegistry.FLUID_BOTTLE);
+                ItemStack itemStack = new ItemStack(ItemRegistry.FLUID_BOTTLE.get());
                 items.add(FluidHelper.fillContainer(itemStack, fluid));
             }
         }

@@ -1,16 +1,13 @@
 package gloridifice.watersource.common.block.entity;
 
-
-import gloridifice.watersource.WaterSource;
 import gloridifice.watersource.common.item.StrainerBlockItem;
 import gloridifice.watersource.common.recipe.WaterFilterRecipe;
+import gloridifice.watersource.data.ModItemTags;
 import gloridifice.watersource.registry.BlockEntityRegistry;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.IntTag;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.tags.ItemTags;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
@@ -176,7 +173,7 @@ public class WaterFilterUpBlockEntity extends ModNormalBlockEntity {
 
             @Override
             public boolean isItemValid(int slot, ItemStack stack) {
-                return ItemTags.getAllTags().getTag(new ResourceLocation(WaterSource.MODID, "strainers")).contains(stack.getItem());
+                return stack.is(ModItemTags.STRAINERS);
             }
 
             @Override

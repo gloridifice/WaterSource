@@ -19,6 +19,7 @@ import net.minecraft.client.renderer.entity.ItemRenderer;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.tags.Tag;
+import net.minecraft.tags.TagKey;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.inventory.tooltip.TooltipComponent;
@@ -47,7 +48,7 @@ public class WaterLevelTooltip {
             ItemStack stack= event.getItemStack();
             if (mc.level != null){
                 WaterLevelAndEffectRecipe recipe = ModRecipeManager.getWERecipeFromItem(mc.level, stack);
-                Tag<Item> dItemTag = ItemTags.bind(WaterSource.MODID + ":drinkable_containers");
+                TagKey<Item> dItemTag = ItemTags.create(new ResourceLocation("watersource:drinkable_containers"));
                 if (recipe != null && (event.getItemStack().is(dItemTag) || !FluidUtil.getFluidHandler(stack).isPresent())) {
                     int max = Math.max(recipe.getWaterLevel(), recipe.getWaterSaturationLevel());
                     int width = (int) Math.ceil((double) max / 2) * 9 + 1;

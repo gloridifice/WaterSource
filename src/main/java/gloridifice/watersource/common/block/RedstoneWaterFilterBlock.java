@@ -23,8 +23,8 @@ import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class RedstoneWaterFilterBlock extends WaterFilterBlock {
-    public RedstoneWaterFilterBlock(String name, Properties properties) {
-        super(name, properties);
+    public RedstoneWaterFilterBlock(Properties properties) {
+        super(properties);
     }
 
     @Override
@@ -47,7 +47,7 @@ public class RedstoneWaterFilterBlock extends WaterFilterBlock {
         AtomicInteger power = new AtomicInteger();
         if (blockState.getValue(IS_UP)) {
             BlockEntity tile = level.getBlockEntity(blockPos);
-            if (tile.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY).map(data -> !data.getStackInSlot(0).isEmpty() && data.getStackInSlot(0).getItem() != BlockRegistry.ITEM_DIRTY_STRAINER).orElse(false)) {
+            if (tile.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY).map(data -> !data.getStackInSlot(0).isEmpty() && data.getStackInSlot(0).getItem() != BlockRegistry.DIRTY_STRAINER.get().asItem()).orElse(false)) {
                 power.addAndGet(5);
             }
             tile.getCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY).ifPresent(data -> {
@@ -62,7 +62,7 @@ public class RedstoneWaterFilterBlock extends WaterFilterBlock {
         } else {
             BlockEntity UpTile = level.getBlockEntity(blockPos.above());
             BlockEntity DownTile = level.getBlockEntity(blockPos);
-            if (UpTile.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY).map(data -> !data.getStackInSlot(0).isEmpty() && data.getStackInSlot(0).getItem() != BlockRegistry.ITEM_DIRTY_STRAINER).orElse(false)) {
+            if (UpTile.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY).map(data -> !data.getStackInSlot(0).isEmpty() && data.getStackInSlot(0).getItem() != BlockRegistry.DIRTY_STRAINER.get().asItem()).orElse(false)) {
                 power.addAndGet(5);
             }
             DownTile.getCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY).ifPresent(data -> {

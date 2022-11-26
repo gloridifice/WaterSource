@@ -1,13 +1,11 @@
 package gloridifice.watersource.common.block;
 
-import gloridifice.watersource.WaterSource;
+import gloridifice.watersource.data.ModBlockTags;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.tags.BlockTags;
-import net.minecraft.tags.Tag;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.SpawnPlacements;
 import net.minecraft.world.level.BlockGetter;
-import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.SaplingBlock;
 import net.minecraft.world.level.block.grower.AbstractTreeGrower;
 import net.minecraft.world.level.block.state.BlockState;
@@ -22,8 +20,7 @@ public class PalmTreeSaplingBlock extends SaplingBlock {
 
     @Override
     protected boolean mayPlaceOn(BlockState state, BlockGetter blockGetter, BlockPos pos) {
-        Tag<Block> tag = BlockTags.bind(new ResourceLocation(WaterSource.MODID, "coconut_soil").toString());
-        return tag.getValues().contains(state.getBlock());
+        return state.is(ModBlockTags.COCONUT_SOIL);
     }
 
     @Override
@@ -35,8 +32,10 @@ public class PalmTreeSaplingBlock extends SaplingBlock {
     public boolean canSustainPlant(BlockState state, BlockGetter world, BlockPos pos, Direction facing, IPlantable plantable) {
         return mayPlaceOn(state, world, pos);
     }
-    /*    protected boolean isValidGround(BlockState state, IBlockReader level, BlockPos pos) {
-        Block block = state.getValueBlock();
-        return BlockTags.getAllTags().getTag(new ResourceLocation(WaterSource.MODID, "coconuts_soil")).contains(block);
-    }*/
+
+    @Override
+    public boolean isValidSpawn(BlockState state, BlockGetter level, BlockPos pos, SpawnPlacements.Type type, EntityType<?> entityType) {
+        return state.is(ModBlockTags.COCONUT_SOIL);
+    }
+
 }

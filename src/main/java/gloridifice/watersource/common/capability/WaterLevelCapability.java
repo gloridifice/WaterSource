@@ -83,7 +83,7 @@ public class WaterLevelCapability {
         if (moisturizingLevel >= 2) moisturizingRate = 0.5f;
 
         float finalValue = (float) ((double) add * ConfigRegistry.WATER_REDUCING_RATE.get()) * moisturizingRate;
-        MobEffectInstance effect = player.getEffect(EffectRegistry.THIRST);
+        MobEffectInstance effect = player.getEffect(EffectRegistry.THIRST.get());
         if (effect != null) {
             addExhaustion(finalValue * (4 + effect.getAmplifier()) / 2);
         } else addExhaustion(finalValue);

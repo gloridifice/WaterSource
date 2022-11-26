@@ -17,8 +17,8 @@ import net.minecraft.world.item.UseAnim;
 import net.minecraft.world.level.Level;
 
 public class CoconutMilkBottleItem extends ModFoodItem{
-    public CoconutMilkBottleItem(String name, FoodProperties food) {
-        super(name, new Properties().stacksTo(16), food);
+    public CoconutMilkBottleItem(FoodProperties food) {
+        super(new Properties().stacksTo(16), food);
     }
 
 

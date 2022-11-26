@@ -16,7 +16,8 @@ import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 
 public class RecipeSerializersRegistry {
-    public static final DeferredRegister<RecipeSerializer<?>> RECIPE_SERIALIZERS = DeferredRegister.create(ForgeRegistries.RECIPE_SERIALIZERS, WaterSource.MODID);
+    public static final DeferredRegister<RecipeSerializer<?>> RECIPE_SERIALIZERS =
+            DeferredRegister.create(ForgeRegistries.RECIPE_SERIALIZERS, WaterSource.MODID);
 
 
     public final static RegistryObject<StrainerFilterRecipeSerializer<StrainerFilterRecipe>> STRAINER_FILTER_RECIPE_SERIALIZER = RECIPE_SERIALIZERS.register("crafting_strainer_filter", StrainerFilterRecipeSerializer::new);

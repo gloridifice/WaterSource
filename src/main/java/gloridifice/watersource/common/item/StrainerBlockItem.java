@@ -48,7 +48,7 @@ public class StrainerBlockItem extends ModNormalBlockItem {
             if (randInt == 0) {
                 if (copy.getDamageValue() + 1 >= copy.getMaxDamage())
                 {
-                    copy = new ItemStack(BlockRegistry.ITEM_DIRTY_STRAINER);
+                    copy = new ItemStack(BlockRegistry.DIRTY_STRAINER.get());
                 }
                 else copy.setDamageValue(copy.getDamageValue() + 1);
             }

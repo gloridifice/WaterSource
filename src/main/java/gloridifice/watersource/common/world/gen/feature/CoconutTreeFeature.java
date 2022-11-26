@@ -1,17 +1,13 @@
 package gloridifice.watersource.common.world.gen.feature;
 
 import com.mojang.serialization.Codec;
-import gloridifice.watersource.WaterSource;
 import gloridifice.watersource.common.block.NaturalCoconutBlock;
+import gloridifice.watersource.data.ModBlockTags;
 import gloridifice.watersource.registry.BlockRegistry;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.tags.BlockTags;
-import net.minecraft.tags.Tag;
 import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.WorldGenLevel;
-import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.LeavesBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.levelgen.feature.Feature;
@@ -44,10 +40,10 @@ public class CoconutTreeFeature extends Feature<TreeConfiguration> {
             for (int i = 0; i < height / 2; i++) {
                 pos = blockPos.above(height / 2 + i).offset(Direction.from2DDataValue(a + 2).getNormal());
                 if (i == height / 2 - 1) {
-                    setBlock(level, pos, BlockRegistry.PALM_TREE_HEAD.defaultBlockState());
+                    setBlock(level, pos, BlockRegistry.PALM_TREE_HEAD.get().defaultBlockState());
                     for (int n = 2; n <= 5; n++) {
                         if (rand.nextInt(4) == 0) {
-                            placeLeaves(level, pos.offset(Direction.from2DDataValue(n).getNormal()), BlockRegistry.BLOCK_NATURAL_COCONUT.defaultBlockState().setValue(NaturalCoconutBlock.AGE, 3).setValue(HORIZONTAL_FACING, Direction.from2DDataValue(n).getOpposite()));
+                            placeLeaves(level, pos.offset(Direction.from2DDataValue(n).getNormal()), BlockRegistry.BLOCK_NATURAL_COCONUT.get().defaultBlockState().setValue(NaturalCoconutBlock.AGE, 3).setValue(HORIZONTAL_FACING, Direction.from2DDataValue(n).getOpposite()));
                         }
                     }
                 }
@@ -83,9 +79,7 @@ public class CoconutTreeFeature extends Feature<TreeConfiguration> {
 
 
     protected static boolean isSand(LevelReader reader, BlockPos pos) {
-        Tag<Block> tag = BlockTags.getAllTags().getTag(new ResourceLocation(WaterSource.MODID, "coconut_soil"));
-        if (tag != null) return tag.contains(reader.getBlockState(pos).getBlock());
-        return false;
+        return reader.getBlockState(pos).is(ModBlockTags.COCONUT_SOIL);
     }
 
     protected boolean placeLeaves(WorldGenLevel generationReader, BlockPos pos, BlockState blockState) {
@@ -99,7 +93,6 @@ public class CoconutTreeFeature extends Feature<TreeConfiguration> {
     protected static boolean canPlace(FeaturePlaceContext<TreeConfiguration> context){
         BlockPos blockPos = context.origin();
         WorldGenLevel level = context.level();
-        Tag.Named<Block> soilTag = BlockTags.bind(WaterSource.MODID + ":coconut_soil");
-        return soilTag != null && soilTag.contains(level.getBlockState(blockPos.below()).getBlock()) && level.getFluidState(blockPos).isEmpty();
+        return level.getBlockState(blockPos.below()).is(ModBlockTags.COCONUT_SOIL) && level.getFluidState(blockPos).isEmpty();
     }
 }

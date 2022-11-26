@@ -46,8 +46,4 @@ public final class FluidRegistry {
             .color(0xCCEAE8E1).viscosity(1000))
             .bucket(ItemRegistry.ITEM_COCONUT_MILK_BUCKET).block(BlockRegistry.BLOCK_COCONUT_JUICE_FLUID)
             .slopeFindDistance(3).explosionResistance(100F);
-
-    public FluidRegistry() {
-        FLUIDS.register(FMLJavaModLoadingContext.get().getModEventBus());
-    }
 }

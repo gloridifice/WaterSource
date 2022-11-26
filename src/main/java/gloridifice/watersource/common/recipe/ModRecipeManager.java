@@ -11,7 +11,7 @@ import java.util.List;
 public class ModRecipeManager {
     public static WaterLevelAndEffectRecipe getWERecipeFromItem(Level level, ItemStack itemStack) {
         List<WaterLevelAndEffectRecipe> recipes = new ArrayList<>();
-        for (WaterLevelAndEffectRecipe recipe : level.getRecipeManager().getAllRecipesFor(RecipeTypesRegistry.WATER_LEVEL_RECIPE)) {
+        for (WaterLevelAndEffectRecipe recipe : level.getRecipeManager().getAllRecipesFor(RecipeTypesRegistry.WATER_LEVEL_RECIPE.get())) {
             if (recipe.conform(itemStack)) {
                 recipes.add(recipe);
             }
@@ -26,7 +26,7 @@ public class ModRecipeManager {
     public static ThirstRecipe getThirstRecipeFromItem(Level world, ItemStack itemStack) {
         List<ThirstRecipe> list = new ArrayList<>();
         if (world != null) {
-            list.addAll(world.getRecipeManager().getAllRecipesFor(RecipeTypesRegistry.THIRST_RECIPE));
+            list.addAll(world.getRecipeManager().getAllRecipesFor(RecipeTypesRegistry.THIRST_RECIPE.get()));
         }
         for (ThirstRecipe recipe : list) {
             if (recipe.conform(itemStack)) {

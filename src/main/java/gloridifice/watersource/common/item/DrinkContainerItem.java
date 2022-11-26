@@ -1,6 +1,7 @@
 package gloridifice.watersource.common.item;
 
 import gloridifice.watersource.WaterSource;
+import gloridifice.watersource.data.ModFluidTags;
 import gloridifice.watersource.helper.FluidHelper;
 import gloridifice.watersource.registry.CapabilityRegistry;
 import gloridifice.watersource.registry.CreativeModeTabRegistry;
@@ -51,9 +52,8 @@ import static net.minecraftforge.fluids.capability.templates.FluidHandlerItemSta
 public class DrinkContainerItem extends ItemFluidContainer {
     boolean canDrink = false;
 
-    public DrinkContainerItem(String name, Properties properties, int capacity) {
+    public DrinkContainerItem( Properties properties, int capacity) {
         super(properties.tab(CreativeModeTabRegistry.WATER_SOURCE_TAB), capacity);
-        this.setRegistryName(name);
     }
 
     @Override
@@ -143,16 +143,11 @@ public class DrinkContainerItem extends ItemFluidContainer {
     }
 
     @Override
-    public ICapabilityProvider initCapabilities(@Nonnull ItemStack stack, @Nullable CompoundTag nbt) {
-        return new FluidHandlerItemStack.SwapEmpty(stack, stack.getContainerItem(),this.capacity) {
+    public ICapabilityProvider initCapabilities(@Nonnull ItemStack itemStack, @Nullable CompoundTag nbt) {
+        return new FluidHandlerItemStack.SwapEmpty(itemStack, itemStack.getContainerItem(),this.capacity) {
             @Override
             public boolean isFluidValid(int tank, @Nonnull FluidStack stack) {
-                for (Fluid fluid : FluidTags.getAllTags().getTag(new ResourceLocation(WaterSource.MODID, "drink")).getValues()) {
-                    if (fluid == stack.getFluid()) {
-                        return true;
-                    }
-                }
-                return false;
+                return stack.getFluid().is(ModFluidTags.DRINK);
             }
         };
     }

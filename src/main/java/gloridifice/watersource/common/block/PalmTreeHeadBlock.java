@@ -2,6 +2,7 @@ package gloridifice.watersource.common.block;
 
 
 import gloridifice.watersource.WaterSource;
+import gloridifice.watersource.data.ModBlockTags;
 import gloridifice.watersource.registry.BlockRegistry;
 import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceLocation;
@@ -22,14 +23,13 @@ import static net.minecraft.world.level.block.state.properties.BlockStatePropert
 
 
 public class PalmTreeHeadBlock extends Block implements IPlantable, BonemealableBlock {
-    public PalmTreeHeadBlock(String name, Properties properties) {
+    public PalmTreeHeadBlock(Properties properties) {
         super(properties);
-        this.setRegistryName(name);
     }
 
 
     public boolean canGrow(ServerLevel level, BlockPos pos, BlockState state, boolean isClient) {
-        if (BlockTags.getAllTags().getTag(new ResourceLocation(WaterSource.MODID, "palm_tree_logs")).contains(level.getBlockState(pos.below()).getBlock())) {
+        if (state.is(ModBlockTags.PALM_TREE_LOGS)) {
             return true;
         }
         return false;
@@ -41,7 +41,7 @@ public class PalmTreeHeadBlock extends Block implements IPlantable, Bonemealable
         int a = rand.nextInt(4);
         Direction direction = Direction.from2DDataValue(a);
         if (level.getBlockState(pos.offset(direction.getNormal())).isAir()) {
-            level.setBlock(pos.offset(direction.getNormal()), BlockRegistry.BLOCK_NATURAL_COCONUT.defaultBlockState().setValue(NaturalCoconutBlock.AGE, 0).setValue(HORIZONTAL_FACING, direction.getOpposite()), 3);
+            level.setBlock(pos.offset(direction.getNormal()), BlockRegistry.BLOCK_NATURAL_COCONUT.get().defaultBlockState().setValue(NaturalCoconutBlock.AGE, 0).setValue(HORIZONTAL_FACING, direction.getOpposite()), 3);
         }
     }
 

@@ -4,6 +4,7 @@ package gloridifice.watersource.common.block;
 import gloridifice.watersource.WaterSource;
 import gloridifice.watersource.common.block.entity.WaterFilterDownBlockEntity;
 import gloridifice.watersource.common.block.entity.WaterFilterUpBlockEntity;
+import gloridifice.watersource.data.ModItemTags;
 import gloridifice.watersource.helper.FluidHelper;
 import gloridifice.watersource.registry.BlockEntityRegistry;
 import gloridifice.watersource.registry.FluidRegistry;
@@ -48,10 +49,9 @@ import javax.annotation.Nullable;
 public class WaterFilterBlock extends BaseEntityBlock {
     public static final BooleanProperty IS_UP = BooleanProperty.create("up");
 
-    public WaterFilterBlock(String name, Properties properties) {
+    public WaterFilterBlock(Properties properties) {
         super(properties);
         this.registerDefaultState(this.defaultBlockState().setValue(IS_UP, false));
-        this.setRegistryName(name);
     }
 
 
@@ -119,7 +119,7 @@ public class WaterFilterBlock extends BaseEntityBlock {
                 if (!strainerStack.isEmpty()) {
                     flag = FluidUtil.interactWithFluidHandler(player, interactionHand, fluidTankUp);
                 }
-                if (ItemTags.getAllTags().getTag(new ResourceLocation(WaterSource.MODID, "strainers")).contains(heldItem.getItem())) {
+                if (heldItem.is(ModItemTags.STRAINERS)) {
                     if (strainerStack.isEmpty()) {
                         //install strainer
                         strainerHandler.insertItem(0, heldItem.copy(), true);
@@ -200,9 +200,9 @@ public class WaterFilterBlock extends BaseEntityBlock {
         ItemStack filledItem = ItemStack.EMPTY;
         FluidStack fluidStack = fluidHandler.getFluidInTank(0);
         if (fluidStack.getFluid() == FluidRegistry.PURIFIED_WATER.get()) {
-            filledItem = FluidHelper.fillContainer(new ItemStack(ItemRegistry.FLUID_BOTTLE), FluidRegistry.PURIFIED_WATER.get());
+            filledItem = FluidHelper.fillContainer(new ItemStack(ItemRegistry.FLUID_BOTTLE.get()), FluidRegistry.PURIFIED_WATER.get());
         } else if (fluidStack.getFluid() == FluidRegistry.SOUL_WATER.get()) {
-            filledItem = FluidHelper.fillContainer(new ItemStack(ItemRegistry.FLUID_BOTTLE), FluidRegistry.SOUL_WATER.get());
+            filledItem = FluidHelper.fillContainer(new ItemStack(ItemRegistry.FLUID_BOTTLE.get()), FluidRegistry.SOUL_WATER.get());
         }
         if (!filledItem.isEmpty() && fluidStack.getAmount() >= 250) {
             return filledItem;

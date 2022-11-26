@@ -2,6 +2,7 @@ package gloridifice.watersource.common.block.grower;
 
 import gloridifice.watersource.registry.ConfiguredFeatureRegistry;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Holder;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.grower.AbstractTreeGrower;
@@ -9,13 +10,19 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.chunk.ChunkGenerator;
 import net.minecraft.world.level.levelgen.feature.ConfiguredFeature;
 import net.minecraft.world.level.levelgen.feature.configurations.TreeConfiguration;
+import org.jetbrains.annotations.Nullable;
 
-import javax.annotation.Nullable;
 import java.util.Random;
 
 public class CoconutTreeGrower extends AbstractTreeGrower {
     @Nullable
-    protected ConfiguredFeature<TreeConfiguration, ?> getCoconutTreeFeatureConfig (){
+    @Override
+    protected Holder<? extends ConfiguredFeature<?, ?>> getConfiguredFeature(Random pRandom, boolean pLargeHive) {
+        return null;
+    }
+    /**
+    @Nullable
+    protected Holder<? extends ConfiguredFeature<TreeConfiguration, ?>> getCoconutTreeFeatureConfig (){
         return ConfiguredFeatureRegistry.COCONUT_TREE;
     }
 
@@ -49,7 +56,7 @@ public class CoconutTreeGrower extends AbstractTreeGrower {
 
     @Nullable
     @Override
-    protected ConfiguredFeature<net.minecraft.world.level.levelgen.feature.configurations.TreeConfiguration, ?> getConfiguredFeature(Random p_60014_, boolean p_60015_) {
+    protected Holder<? extends ConfiguredFeature<?, ?>> getConfiguredFeature(Random p_60014_, boolean p_60015_) {
         return ConfiguredFeatureRegistry.COCONUT_TREE;
-    }
+    }*/
 }

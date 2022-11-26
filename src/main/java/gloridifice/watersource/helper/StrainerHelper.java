@@ -3,6 +3,7 @@ package gloridifice.watersource.helper;
 import gloridifice.watersource.WaterSource;
 import gloridifice.watersource.common.block.StrainerBlock;
 import gloridifice.watersource.common.recipe.WaterFilterRecipe;
+import gloridifice.watersource.data.ModBlockTags;
 import gloridifice.watersource.registry.BlockRegistry;
 import net.minecraft.client.Minecraft;
 import net.minecraft.resources.ResourceLocation;
@@ -14,9 +15,10 @@ import net.minecraftforge.fluids.FluidUtil;
 import net.minecraftforge.fluids.capability.IFluidHandler;
 
 public class StrainerHelper {
+
     public static ItemStack getResultStack(ItemStack stack, StrainerBlock block) {
         ItemStack itemStack = stack.copy();
-        if (!stack.isEmpty() && BlockTags.getAllTags().getTag(new ResourceLocation(WaterSource.MODID, "strainer")).contains(block) && block != BlockRegistry.DIRTY_STRAINER && FluidUtil.getFluidHandler(stack) != null) {
+        if (!stack.isEmpty() && block.defaultBlockState().is(ModBlockTags.STRAINERS) && block != BlockRegistry.DIRTY_STRAINER.get() && FluidUtil.getFluidHandler(stack) != null) {
             FluidUtil.getFluidHandler(itemStack).ifPresent(data -> {
                 WaterFilterRecipe recipe = WaterFilterRecipe.getRecipeFromInput(Minecraft.getInstance().level, new ItemStack(Item.BY_BLOCK.get(block)), data.getFluidInTank(0).getFluid());
                 if (recipe != null) {
@@ -31,7 +33,7 @@ public class StrainerHelper {
 
     public static int getDamageAmount(ItemStack stack, StrainerBlock block) {
         ItemStack itemStack = stack.copy();
-        if (!stack.isEmpty() && BlockTags.getAllTags().getTag(new ResourceLocation(WaterSource.MODID, "strainer")).contains(block) && block != BlockRegistry.DIRTY_STRAINER && FluidUtil.getFluidHandler(stack) != null) {
+        if (!stack.isEmpty() && block.defaultBlockState().is(ModBlockTags.STRAINERS) && block != BlockRegistry.DIRTY_STRAINER.get() && FluidUtil.getFluidHandler(stack) != null) {
             return FluidUtil.getFluidHandler(itemStack).map(data -> {
                 WaterFilterRecipe recipe = WaterFilterRecipe.getRecipeFromInput(Minecraft.getInstance().level, new ItemStack(Item.BY_BLOCK.get(block)), data.getFluidInTank(0).getFluid());
                 if (recipe != null) {

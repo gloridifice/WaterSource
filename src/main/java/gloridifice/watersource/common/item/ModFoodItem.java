@@ -7,11 +7,11 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 
 public class ModFoodItem extends ModNormalItem {
-    public ModFoodItem(String name, FoodProperties food) {
-        super(name, new Properties().food(food));
+    public ModFoodItem(FoodProperties food) {
+        super(new Properties().food(food));
     }
-    public ModFoodItem(String name, Item.Properties properties, FoodProperties food) {
-        super(name, properties.food(food));
+    public ModFoodItem(Item.Properties properties, FoodProperties food) {
+        super(properties.food(food));
     }
 
     @Override

@@ -29,17 +29,17 @@ public class ClientProxy {
     }
 
     public static void registerRenderType() {
-        registerCutoutType(BlockRegistry.WOODEN_WATER_FILTER);
-        registerCutoutType(BlockRegistry.IRON_WATER_FILTER);
-        registerCutoutType(BlockRegistry.PALM_TREE_HEAD);
-        registerCutoutType(BlockRegistry.BLOCK_COCONUT);
-        registerCutoutType(BlockRegistry.PALM_TREE_LEAF);
-        registerCutoutType(BlockRegistry.BLOCK_COCONUT_SAPLING);
-        registerCutoutType(BlockRegistry.PRIMITIVE_STRAINER);
-        registerCutoutType(BlockRegistry.BLOCK_NATURAL_COCONUT);
-        registerCutoutType(BlockRegistry.PALM_TREE_DOOR);
-        registerCutoutType(BlockRegistry.PALM_TREE_TRAPDOOR);
-        registerCutoutType(BlockRegistry.STONE_RAIN_COLLECTOR);
+        registerCutoutType(BlockRegistry.WOODEN_WATER_FILTER.get());
+        registerCutoutType(BlockRegistry.IRON_WATER_FILTER.get());
+        registerCutoutType(BlockRegistry.PALM_TREE_HEAD.get());
+        registerCutoutType(BlockRegistry.BLOCK_COCONUT.get());
+        registerCutoutType(BlockRegistry.PALM_TREE_LEAF.get());
+        registerCutoutType(BlockRegistry.BLOCK_COCONUT_SAPLING.get());
+        registerCutoutType(BlockRegistry.PRIMITIVE_STRAINER.get());
+        registerCutoutType(BlockRegistry.BLOCK_NATURAL_COCONUT.get());
+        registerCutoutType(BlockRegistry.PALM_TREE_DOOR.get());
+        registerCutoutType(BlockRegistry.PALM_TREE_TRAPDOOR.get());
+        registerCutoutType(BlockRegistry.STONE_RAIN_COLLECTOR.get());
     }
 
     public static void registerTooltipComponent() {
@@ -67,7 +67,7 @@ public class ClientProxy {
     }
 
     public static void regItemPropertyFunction() {
-        ItemProperties.register(ItemRegistry.FLUID_BOTTLE,
+        ItemProperties.register(ItemRegistry.FLUID_BOTTLE.get(),
                 new ResourceLocation(WaterSource.MODID, "fluid_bottle"),
                 (itemStack, level, livingEntity, value) -> {
                     IFluidHandlerItem fluidHandlerItem = itemStack.getCapability(CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY).orElse(null);

@@ -13,7 +13,7 @@ public class CreativeModeTabRegistry {
         }
         @Override
         public ItemStack makeIcon() {
-            return FluidHelper.fillContainer(new ItemStack(ItemRegistry.FLUID_BOTTLE), FluidRegistry.PURIFIED_WATER.get());
+            return FluidHelper.fillContainer(new ItemStack(ItemRegistry.FLUID_BOTTLE.get()), FluidRegistry.PURIFIED_WATER.get());
         }
     }
 }
