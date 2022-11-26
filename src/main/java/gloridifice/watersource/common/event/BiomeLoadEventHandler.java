@@ -13,8 +13,8 @@ public class BiomeLoadEventHandler {
     @SubscribeEvent
     public static void onBiomeLoading(BiomeLoadingEvent event) {
         if (event.getClimate().temperature >= 0.15f && event.getCategory() == Biome.BiomeCategory.BEACH) {
-            event.getGeneration().addFeature(GenerationStep.Decoration.VEGETAL_DECORATION,
-                    ConfiguredFeatureRegistry.COCONUT_TREE_PLACEMENT);
+            /**event.getGeneration().addFeature(GenerationStep.Decoration.VEGETAL_DECORATION,
+                    ConfiguredFeatureRegistry.COCONUT_TREE_PLACEMENT);*/
         }
     }
 }

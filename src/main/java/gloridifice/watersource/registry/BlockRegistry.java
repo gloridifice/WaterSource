@@ -172,9 +172,8 @@ public class BlockRegistry {
 
     public static final RegistryObject<Block> BLOCK_WATER_DISPENSER =
             registerDefault("water_dispenser", () ->
-            new WaterDispenserBlock("water_dispenser",
-                    Block.Properties
-                            .of(Material.METAL).noOcclusion()));//todo fill properties
+            new WaterDispenserBlock(Block.Properties
+                    .of(Material.METAL).noOcclusion()));//todo fill properties
 
     //Fluid
     public static RegistryObject<LiquidBlock> BLOCK_PURIFIED_WATER_FLUID =
