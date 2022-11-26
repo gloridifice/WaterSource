@@ -170,41 +170,12 @@ public class BlockRegistry {
                     .strength(3.0F, 3.0f)
                     .noOcclusion()));
 
-    //public static final Block BLOCK_WATER_DISPENSER = new WaterDispenserBlock("water_dispenser",AbstractBlock.Properties.of(Material.IRON).noOcclusion());//todo fill properties
+    public static final RegistryObject<Block> BLOCK_WATER_DISPENSER =
+            registerDefault("water_dispenser", () ->
+            new WaterDispenserBlock("water_dispenser",
+                    Block.Properties
+                            .of(Material.METAL).noOcclusion()));//todo fill properties
 
-    /**
-   public final static BlockItem ITEM_NATURAL_COCONUT =
-     new ModNormalBlockItem(BLOCK_NATURAL_COCONUT.get());
-    public final static BlockItem ITEM_COCONUT =
-            FLUID_ITEMS.register("")
-            new ModNormalBlockItem(BLOCK_COCONUT);
-    public final static BlockItem ITEM_PALM_TREE_LEAF = new ModNormalBlockItem(PALM_TREE_LEAF);
-    public final static BlockItem ITEM_PALM_TREE_HEAD = new ModNormalBlockItem(PALM_TREE_HEAD);
-    public final static BlockItem ITEM_WOODEN_WATER_FILTER = new ModNormalBlockItem(WOODEN_WATER_FILTER.get());
-    public final static BlockItem ITEM_IRON_WATER_FILTER = new ModNormalBlockItem(IRON_WATER_FILTER.get());
-    public final static BlockItem ITEM_PALM_TREE_LOG = new ModNormalBlockItem(PALM_TREE_LOG);
-    public final static BlockItem ITEM_COCONUT_SAPLING = new ModNormalBlockItem(BLOCK_COCONUT_SAPLING);
-    public final static BlockItem ITEM_PRIMITIVE_STRAINER = new StrainerBlockItem(PRIMITIVE_STRAINER, 25);
-    public final static BlockItem ITEM_PAPER_STRAINER = new StrainerBlockItem(PAPER_STRAINER, 16);
-    public final static BlockItem ITEM_SOUL_STRAINER = new StrainerBlockItem(SOUL_STRAINER, 25);
-    public final static BlockItem ITEM_PAPER_SOUL_STRAINER = new StrainerBlockItem(PAPER_SOUL_STRAINER, 16);
-    public final static BlockItem ITEM_DIRTY_STRAINER = new StrainerBlockItem(DIRTY_STRAINER);
-    public final static BlockItem ITEM_EVERLASTING_STRAINER = new EverlastingStrainerBlockItem(EVERLASTING_STRAINER);
-    public final static BlockItem ITEM_EVERLASTING_SOUL_STRAINER = new EverlastingStrainerBlockItem(EVERLASTING_SOUL_STRAINER);
-
-    public final static BlockItem ITEM_PALM_TREE_PLANKS = new ModNormalBlockItem(PALM_TREE_PLANKS);
-    public final static BlockItem ITEM_PALM_TREE_DOOR = new ModNormalBlockItem(PALM_TREE_DOOR);
-    public final static BlockItem ITEM_PALM_TREE_TRAPDOOR = new ModNormalBlockItem(PALM_TREE_TRAPDOOR);
-    public final static BlockItem ITEM_PALM_TREE_STAIRS = new ModNormalBlockItem(PALM_TREE_STAIRS);
-    public final static BlockItem ITEM_STRIPPED_PALM_TREE_LOG = new ModNormalBlockItem(STRIPPED_PALM_TREE_LOG);
-    public final static BlockItem ITEM_PALM_TREE_BUTTON = new ModNormalBlockItem(PALM_TREE_BUTTON);
-    public final static BlockItem ITEM_PALM_TREE_SLAB = new ModNormalBlockItem(PALM_TREE_SLAB);
-    public final static BlockItem ITEM_PALM_TREE_FENCE = new ModNormalBlockItem(PALM_TREE_FENCE);
-    public final static BlockItem ITEM_PALM_TREE_FENCE_GATE = new ModNormalBlockItem(PALM_TREE_FENCE_GATE);
-    public final static BlockItem ITEM_PALM_TREE_PRESSURE_PLATE = new ModNormalBlockItem(PALM_TREE_PRESSURE_PLATE);
-    public final static BlockItem ITEM_STONE_FLUID_TANK = new ModNormalBlockItem(STONE_RAIN_COLLECTOR);
-    //public final static BlockItem ITEM_WATER_DISPENSER = new ModNormalBlockItem(BLOCK_WATER_DISPENSER);
-    */
     //Fluid
     public static RegistryObject<LiquidBlock> BLOCK_PURIFIED_WATER_FLUID =
             FLUID_BLOCKS.register("purified_water_fluid", () -> {

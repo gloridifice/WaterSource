@@ -15,12 +15,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.Random;
 
 public class CoconutTreeGrower extends AbstractTreeGrower {
-    @Nullable
-    @Override
-    protected Holder<? extends ConfiguredFeature<?, ?>> getConfiguredFeature(Random pRandom, boolean pLargeHive) {
-        return null;
-    }
-    /**
+
     @Nullable
     protected Holder<? extends ConfiguredFeature<TreeConfiguration, ?>> getCoconutTreeFeatureConfig (){
         return ConfiguredFeatureRegistry.COCONUT_TREE;
@@ -28,7 +23,7 @@ public class CoconutTreeGrower extends AbstractTreeGrower {
 
     @Override
     public boolean growTree(ServerLevel level, ChunkGenerator chunkGenerator, BlockPos blockPos, BlockState state, Random random) {
-        ConfiguredFeature<TreeConfiguration, ?> configuredfeature = this.getCoconutTreeFeatureConfig();
+        Holder<? extends ConfiguredFeature<TreeConfiguration, ?>> configuredfeature = this.getCoconutTreeFeatureConfig();
         if (configuredfeature == null) {
             return false;
         } else {
@@ -45,7 +40,7 @@ public class CoconutTreeGrower extends AbstractTreeGrower {
             }
             //
             level.setBlock(blockPos, Blocks.AIR.defaultBlockState(), 4);
-            if (configuredfeature.place(level, chunkGenerator, random, blockPos)) {
+            if (configuredfeature.value().place(level, chunkGenerator, random, blockPos)) {
                 return true;
             } else {
                 level.setBlock(blockPos, state, 4);
@@ -56,7 +51,8 @@ public class CoconutTreeGrower extends AbstractTreeGrower {
 
     @Nullable
     @Override
-    protected Holder<? extends ConfiguredFeature<?, ?>> getConfiguredFeature(Random p_60014_, boolean p_60015_) {
+    protected Holder<? extends ConfiguredFeature<?, ?>> getConfiguredFeature(Random pRandom, boolean pLargeHive) {
         return ConfiguredFeatureRegistry.COCONUT_TREE;
-    }*/
+    }
+
 }
