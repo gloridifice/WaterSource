@@ -21,7 +21,7 @@ public class ItemRegistry {
                     WaterSource.MODID);
 
     public final static RegistryObject<Item> FLUID_BOTTLE =
-            FLUID_ITEMS.register("fluid_bottle.json", () ->
+            FLUID_ITEMS.register("fluid_bottle", () ->
             new FluidBottleItem(new Item.Properties().stacksTo(16)));
 
     public final static RegistryObject<Item> WOODEN_CUP =
