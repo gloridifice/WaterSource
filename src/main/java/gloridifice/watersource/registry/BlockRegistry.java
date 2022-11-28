@@ -27,29 +27,29 @@ public class BlockRegistry {
     public static final DeferredRegister<Block> FLUID_BLOCKS =
             DeferredRegister.create(ForgeRegistries.BLOCKS,
                     WaterSource.MODID);
-    public final static RegistryObject<WaterFilterBlock> WOODEN_WATER_FILTER =
+    public final static RegistryObject<Block> WOODEN_WATER_FILTER =
             registerDefault("wooden_water_filter",
                     () -> new WaterFilterBlock(Block.Properties.of(Material.WOOD,
                             MaterialColor.COLOR_BROWN).sound(SoundType.WOOD)
                             .strength(1.0F, 3.0f).noOcclusion()));
-    public final static RegistryObject<RedstoneWaterFilterBlock> IRON_WATER_FILTER =
+    public final static RegistryObject<Block> IRON_WATER_FILTER =
             registerDefault("iron_water_filter",
                     () -> new RedstoneWaterFilterBlock(Block.Properties.of(Material.METAL,
                             MaterialColor.COLOR_GRAY).sound(SoundType.STONE)
                             .strength(2.2F, 3.0f)
                             .noOcclusion().requiresCorrectToolForDrops()));
 
-    public final static RegistryObject<RotatedPillarBlock> PALM_TREE_LOG =
+    public final static RegistryObject<Block> PALM_TREE_LOG =
             registerDefault("palm_tree_log", () -> log(MaterialColor.WOOD, MaterialColor.WOOD));
 
-    public final static RegistryObject<PalmTreeHeadBlock> PALM_TREE_HEAD =
+    public final static RegistryObject<Block> PALM_TREE_HEAD =
             registerDefault("palm_tree_head",
                     () -> new PalmTreeHeadBlock(Block.Properties.of(Material.WOOD,
                             MaterialColor.COLOR_BROWN).sound(SoundType.WOOD)
                             .strength(2.0f, 3.0f)
                             .randomTicks()));
 
-    public final static RegistryObject<LeavesBlock> PALM_TREE_LEAF =
+    public final static RegistryObject<Block> PALM_TREE_LEAF =
             registerDefault("palm_tree_leaf",
                     () -> new LeavesBlock(Block.Properties.of(Material.LEAVES)
                     .strength(0.2F).randomTicks()
@@ -57,58 +57,58 @@ public class BlockRegistry {
                     .requiresCorrectToolForDrops()
                     .noOcclusion()));//todo
 
-    public final static RegistryObject<NaturalCoconutBlock> BLOCK_NATURAL_COCONUT =
+    public final static RegistryObject<Block> BLOCK_NATURAL_COCONUT =
             registerDefault("natural_coconut", () ->
             new NaturalCoconutBlock(Block.Properties.of(Material.WOOD)
                     .strength(0.4F)
                     .sound(SoundType.WOOD)
                     .randomTicks().noOcclusion()));
 
-    public final static RegistryObject<CoconutBlock> BLOCK_COCONUT =
+    public final static RegistryObject<Block> BLOCK_COCONUT =
             registerDefault("coconut", () ->
             new CoconutBlock(Block.Properties.of(Material.WOOD,
                     MaterialColor.COLOR_BROWN)
                     .strength(0.4F)
                     .sound(SoundType.WOOD)
                     .randomTicks().noOcclusion()));
-    public final static RegistryObject<PalmTreeSaplingBlock> BLOCK_COCONUT_SAPLING =
+    public final static RegistryObject<Block> BLOCK_COCONUT_SAPLING =
             registerDefault("palm_tree_sapling", () ->
             new PalmTreeSaplingBlock(new CoconutTreeGrower(), Block.Properties.of(Material.PLANT).sound(SoundType.CROP).randomTicks().noCollission()));
 
     //strainers
-    public final static RegistryObject<StrainerBlock> PRIMITIVE_STRAINER =
+    public final static RegistryObject<Block> PRIMITIVE_STRAINER =
             registerDefault("primitive_strainer", () ->
             new StrainerBlock(Block.Properties.of(Material.WOOL)
                     .sound(SoundType.WOOL).noOcclusion()
                     .strength(0.6f)));
 
-    public final static RegistryObject<StrainerBlock> PAPER_STRAINER =
+    public final static RegistryObject<Block> PAPER_STRAINER =
             registerDefault("paper_strainer", () ->
             new StrainerBlock(Block.Properties.of(Material.WOOL)
                     .sound(SoundType.WOOL).noOcclusion().strength(0.4f)));
 
-    public final static RegistryObject<StrainerBlock> DIRTY_STRAINER =
+    public final static RegistryObject<Block> DIRTY_STRAINER =
             registerDefault("dirty_strainer", () ->
             new StrainerBlock(Block.Properties.of(Material.WOOL)
                     .sound(SoundType.WOOL)
                     .noOcclusion().strength(0.6f)));
 
-    public final static RegistryObject<StrainerBlock> PAPER_SOUL_STRAINER =
+    public final static RegistryObject<Block> PAPER_SOUL_STRAINER =
             registerDefault("paper_soul_strainer", () ->
             new StrainerBlock(Block.Properties.of(Material.WOOL)
                             .sound(SoundType.WOOL)
                             .noOcclusion().strength(0.4f)));
-    public final static RegistryObject<StrainerBlock> SOUL_STRAINER =
+    public final static RegistryObject<Block> SOUL_STRAINER =
             registerDefault("soul_strainer", () ->
             new StrainerBlock(Block.Properties.of(Material.WOOL).sound(SoundType.WOOL)
                             .noOcclusion().strength(0.6f)));
 
-    public final static RegistryObject<StrainerBlock> EVERLASTING_STRAINER =
+    public final static RegistryObject<Block> EVERLASTING_STRAINER =
             registerDefault("everlasting_strainer", () ->
             new StrainerBlock(Block.Properties.of(Material.WOOL
             ).sound(SoundType.WOOL).noOcclusion().strength(0.6f)));
 
-    public final static RegistryObject<StrainerBlock> EVERLASTING_SOUL_STRAINER =
+    public final static RegistryObject<Block> EVERLASTING_SOUL_STRAINER =
             registerDefault("everlasting_soul_strainer", () ->
             new StrainerBlock(Block.Properties.of(Material.WOOL)
                     .sound(SoundType.WOOL).noOcclusion()
@@ -118,52 +118,52 @@ public class BlockRegistry {
             registerDefault("palm_tree_planks", () ->
             new Block(Block.Properties.of(Material.WOOD, MaterialColor.WOOD).strength(2.0F, 3.0F).sound(SoundType.WOOD)));
 
-    public static final RegistryObject<PalmTreeDoorBlock> PALM_TREE_DOOR =
+    public static final RegistryObject<Block> PALM_TREE_DOOR =
             registerDefault("palm_tree_door", () ->
             new PalmTreeDoorBlock(Block.Properties.of(Material.WOOD,
                     MaterialColor.WOOD)
                     .strength(3.0F)
                     .sound(SoundType.WOOD).noOcclusion()));
 
-    public static final RegistryObject<PalmTreeTrapdoor> PALM_TREE_TRAPDOOR =
+    public static final RegistryObject<Block> PALM_TREE_TRAPDOOR =
             registerDefault("palm_tree_trapdoor", () ->
             new PalmTreeTrapdoor(Block.
                     Properties.of(Material.WOOD, MaterialColor.WOOD)
                     .strength(3.0F)
                     .sound(SoundType.WOOD).noOcclusion()));
 
-    public static final RegistryObject<StairBlock> PALM_TREE_STAIRS =
+    public static final RegistryObject<Block> PALM_TREE_STAIRS =
             registerDefault("palm_tree_stairs", () ->
             new StairBlock(() -> PALM_TREE_PLANKS.get().getStateDefinition().any(),
                     Block.Properties.copy(PALM_TREE_PLANKS.get())));
 
-    public static final RegistryObject<RotatedPillarBlock> STRIPPED_PALM_TREE_LOG =
+    public static final RegistryObject<Block> STRIPPED_PALM_TREE_LOG =
             registerDefault("stripped_palm_tree_log", () ->
             log(MaterialColor.WOOD, MaterialColor.WOOD));
 
-    public static final RegistryObject<ModButtonBlock> PALM_TREE_BUTTON =
+    public static final RegistryObject<Block> PALM_TREE_BUTTON =
             registerDefault("palm_tree_button", () ->
-            new ModButtonBlock(Block.Properties.of(Material.WOOD)
+            new WoodButtonBlock(Block.Properties.of(Material.WOOD)
                     .strength(0.5F)
                     .sound(SoundType.WOOD)));
 
-    public static final RegistryObject<SlabBlock> PALM_TREE_SLAB =
+    public static final RegistryObject<Block> PALM_TREE_SLAB =
             registerDefault("palm_tree_slab", () ->
             new SlabBlock(Block.Properties.copy(PALM_TREE_PLANKS.get())));
-    public static final RegistryObject<FenceBlock> PALM_TREE_FENCE =
+    public static final RegistryObject<Block> PALM_TREE_FENCE =
             registerDefault("palm_tree_fence", () ->
             new FenceBlock(Block.Properties.copy(PALM_TREE_PLANKS.get())));
 
-    public static final RegistryObject<FenceGateBlock> PALM_TREE_FENCE_GATE =
+    public static final RegistryObject<Block> PALM_TREE_FENCE_GATE =
             registerDefault("palm_tree_fence_gate", () ->
             new FenceGateBlock(Block.Properties.copy(PALM_TREE_PLANKS.get())));
 
-    public static final RegistryObject<ModPressurePlateBlock> PALM_TREE_PRESSURE_PLATE =
+    public static final RegistryObject<Block> PALM_TREE_PRESSURE_PLATE =
             registerDefault("palm_tree_pressure_plate", () ->
             new ModPressurePlateBlock(PressurePlateBlock.Sensitivity.EVERYTHING,
                     Block.Properties.copy(PALM_TREE_PLANKS.get())));
 
-    public static final RegistryObject<RainCollectorBlock> STONE_RAIN_COLLECTOR =
+    public static final RegistryObject<Block> STONE_RAIN_COLLECTOR =
             registerDefault("stone_rain_collector", () ->
             new RainCollectorBlock(Block.Properties.of(Material.STONE)
                     .requiresCorrectToolForDrops()
@@ -182,13 +182,13 @@ public class BlockRegistry {
                 Block.Properties.of(Material.WATER)
                         .noCollission().strength(100.0F).noDrops());
     });
-    public static RegistryObject<LiquidBlock> BLOCK_SOUL_WATER_FLUID =
+    public static final RegistryObject<LiquidBlock> BLOCK_SOUL_WATER_FLUID =
             FLUID_BLOCKS.register("soul_water_fluid", () ->
                     new LiquidBlock(FluidRegistry.SOUL_WATER,
                             Block.Properties.of(Material.WATER)
                                     .noCollission()
                                     .strength(100.0F).noDrops()));
-    public static RegistryObject<LiquidBlock> BLOCK_COCONUT_JUICE_FLUID =
+    public static final RegistryObject<LiquidBlock> BLOCK_COCONUT_JUICE_FLUID =
             FLUID_BLOCKS.register("coconut_juice_fluid", () ->
        new LiquidBlock(FluidRegistry.COCONUT_JUICE, Block.Properties.of(Material.WATER).noCollission().strength(100.0F).noDrops()));
 

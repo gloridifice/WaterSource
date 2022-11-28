@@ -68,7 +68,7 @@ public class ClientProxy {
 
     public static void regItemPropertyFunction() {
         ItemProperties.register(ItemRegistry.FLUID_BOTTLE.get(),
-                new ResourceLocation(WaterSource.MODID, "fluid_bottle"),
+                new ResourceLocation(WaterSource.MODID, "fluid_bottle.json"),
                 (itemStack, level, livingEntity, value) -> {
                     IFluidHandlerItem fluidHandlerItem = itemStack.getCapability(CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY).orElse(null);
                     FluidStack fluidStack = fluidHandlerItem.getFluidInTank(0);
