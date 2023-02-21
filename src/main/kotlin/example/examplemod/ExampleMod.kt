@@ -20,7 +20,7 @@ import thedarkcolour.kotlinforforge.forge.runForDist
  */
 @Mod(ExampleMod.ID)
 object ExampleMod {
-    const val ID = "examplemod"
+    const val ID = "watersource"
 
     // the logger for our mod
     val LOGGER: Logger = LogManager.getLogger(ID)

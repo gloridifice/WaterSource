@@ -16,4 +16,7 @@ object ModBlocks {
     val EXAMPLE_BLOCK by REGISTRY.registerObject("example_block") {
         Block(BlockBehaviour.Properties.of(Material.BAMBOO).lightLevel { 15 }.strength(3.0f))
     }
+    val WATERFILTER_BLOCK by REGISTRY.registerObject("water_filter") {
+        Block(BlockBehaviour.Properties.of(Material.WOOD).lightLevel { 13 })
+    }
 }

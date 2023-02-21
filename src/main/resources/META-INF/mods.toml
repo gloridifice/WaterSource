@@ -6,9 +6,9 @@ loaderVersion="[3,)" # Require at least 3.x
 license='LGPL'
 
 [[mods]]
-modId="examplemod"
+modId="watersource"
 version="${file.jarVersion}"
-displayName="ExampleMod"
+displayName="Water Source"
 credits="The ExampleMod dev team"
 authors="ExampleModAuthor"
 description='''
