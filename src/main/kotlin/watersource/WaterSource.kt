@@ -11,6 +11,8 @@ import org.apache.logging.log4j.Logger
 import thedarkcolour.kotlinforforge.forge.MOD_BUS
 import thedarkcolour.kotlinforforge.forge.runForDist
 import watersource.world.level.item.ModItems
+import watersource.world.recipe.ModRecipeSerializers
+import watersource.world.recipe.ModRecipeTypes
 
 /**
  * Main mod class. Should be an `object` declaration annotated with `@Mod`.
@@ -32,6 +34,8 @@ object WaterSource {
         // Register the KDeferredRegister to the mod-specific event bus
         ModBlocks.REGISTRY.register(MOD_BUS)
         ModItems.REGISTRY.register(MOD_BUS)
+        ModRecipeSerializers.REGISTRY.register(MOD_BUS)
+        ModRecipeTypes.REGISTRY.register(MOD_BUS)
 
         val obj = runForDist(
         clientTarget = {
