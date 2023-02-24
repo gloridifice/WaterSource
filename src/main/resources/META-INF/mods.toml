@@ -7,20 +7,20 @@ license='LGPL'
 
 [[mods]]
 modId="watersource"
-version="${file.jarVersion}"
+version="${file.jarVersion}}"
 displayName="Water Source"
-credits="The ExampleMod dev team"
-authors="ExampleModAuthor"
+credits="The ExampleMod dev team" #todo
+authors="ExampleModAuthor" #todo
 description='''
 Example mod that uses Kotlin for Forge.
-'''
-[[dependencies.examplemod]]
+'''#todo
+[[dependencies.watersource]]
     modId="forge"
     mandatory=true
     versionRange="[41,)"
     ordering="NONE"
     side="BOTH"
-[[dependencies.examplemod]]
+[[dependencies.watersource]]
     modId="minecraft"
     mandatory=true
     versionRange="[1.19,1.20)"
