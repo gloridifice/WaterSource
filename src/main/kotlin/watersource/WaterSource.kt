@@ -4,6 +4,7 @@ import watersource.world.level.block.ModBlocks
 import net.minecraft.client.Minecraft
 import net.minecraftforge.fml.common.Mod
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent
+import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent
 import net.minecraftforge.fml.event.lifecycle.FMLDedicatedServerSetupEvent
 import org.apache.logging.log4j.Level
 import org.apache.logging.log4j.LogManager
@@ -11,6 +12,7 @@ import org.apache.logging.log4j.Logger
 import thedarkcolour.kotlinforforge.forge.MOD_BUS
 import thedarkcolour.kotlinforforge.forge.runForDist
 import watersource.world.level.item.ModItems
+import watersource.world.network.ModNetWorkHandler
 import watersource.world.recipe.ModRecipeSerializers
 import watersource.world.recipe.ModRecipeTypes
 
@@ -23,12 +25,12 @@ import watersource.world.recipe.ModRecipeTypes
  */
 @Mod(WaterSource.ID)
 object WaterSource {
-        const val ID = "watersource"
+    const val ID = "watersource"
 
-        // the logger for our mod
-        val LOGGER: Logger = LogManager.getLogger(ID)
+    // the logger for our mod
+    val LOGGER: Logger = LogManager.getLogger(ID)
 
-        init {
+    init {
         LOGGER.log(Level.INFO, "Hello world!")
 
         // Register the KDeferredRegister to the mod-specific event bus
@@ -38,31 +40,36 @@ object WaterSource {
         ModRecipeTypes.REGISTRY.register(MOD_BUS)
 
         val obj = runForDist(
-        clientTarget = {
-        MOD_BUS.addListener(::onClientSetup)
-        Minecraft.getInstance()
-        },
-        serverTarget = {
-        MOD_BUS.addListener(::onServerSetup)
-        "test"
-        })
-
+            clientTarget = {
+                MOD_BUS.addListener(::onClientSetup)
+                Minecraft.getInstance()
+            },
+            serverTarget = {
+                MOD_BUS.addListener(::onServerSetup)
+                "test"
+            })
         println(obj)
-        }
+        MOD_BUS.addListener(::onCommonSetup)
 
-/**
- * This is used for initializing client specific
- * things such as renderers and keymaps
- * Fired on the mod specific event bus.
- */
-private fun onClientSetup(event: FMLClientSetupEvent) {
+    }
+
+    /**
+     * This is used for initializing client specific
+     * things such as renderers and keymaps
+     * Fired on the mod specific event bus.
+     */
+    private fun onClientSetup(event: FMLClientSetupEvent) {
         LOGGER.log(Level.INFO, "Initializing client...")
-        }
+    }
 
-/**
- * Fired on the global Forge bus.
- */
-private fun onServerSetup(event: FMLDedicatedServerSetupEvent) {
+    /**
+     * Fired on the global Forge bus.
+     */
+    private fun onServerSetup(event: FMLDedicatedServerSetupEvent) {
         LOGGER.log(Level.INFO, "Server starting...")
-        }
-        }
+    }
+    private fun onCommonSetup(event: FMLCommonSetupEvent){
+
+        ModNetWorkHandler.doRegistry()
+    }
+}

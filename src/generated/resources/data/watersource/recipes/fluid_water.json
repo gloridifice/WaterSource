@@ -1,0 +1,9 @@
+{
+  "type": "watersource:water_level",
+  "fluid": {
+    "name": "minecraft:water",
+    "saturationModifier": 0.5,
+    "water": 6.0
+  },
+  "group": ""
+}
