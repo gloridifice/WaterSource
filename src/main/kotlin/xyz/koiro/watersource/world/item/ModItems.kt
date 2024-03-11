@@ -9,7 +9,6 @@ import xyz.koiro.watersource.WaterSource
 
 object ModItems {
     val NEW_ITEM = registerItem("new_item", Item(FabricItemSettings()))
-
     fun active(){}
     fun registerItem(registryName: String, item: Item): Item {
         return Registry.register(Registries.ITEM, Identifier(WaterSource.MODID, registryName), item)

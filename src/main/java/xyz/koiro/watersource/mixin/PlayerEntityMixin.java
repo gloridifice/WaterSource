@@ -1,6 +1,7 @@
 package xyz.koiro.watersource.mixin;
 
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.util.ActionResult;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
@@ -10,14 +11,11 @@ import xyz.koiro.watersource.event.ModServerEvents;
 
 @Mixin(PlayerEntity.class)
 public class PlayerEntityMixin {
-    @Inject(at = @At(value = "RETURN"), method = "jump()V")
+    @Inject(at = @At(value = "INVOKE"), method = "jump()V")
     private void onJump(final CallbackInfo info){
         var player = (net.minecraft.entity.player.PlayerEntity) (Object) this;
-        if (!player.getWorld().isClient()) {
+        if (player instanceof ServerPlayerEntity) {
             ActionResult result = ModServerEvents.INSTANCE.getPLAYER_JUMP().invoker().interact(player);
-            if(result == ActionResult.FAIL) {
-                info.cancel();
-            }
-        } else info.cancel();
+        }
     }
 }

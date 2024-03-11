@@ -70,22 +70,6 @@ object ModEventsRegistries {
         }
     }
 
-    private val useWaterContainingItem = UseItemCallback { player, world, hand ->
-        TODO("How can I get if an item is just used?")
-        val handItem = player.getStackInHand(hand)
-
-        val data = HydrationDataManager.SERVER.findByItemStack(handItem)
-        data?.let { hydrationData ->
-            val level = hydrationData.level
-            val saturation = hydrationData.saturation
-            player.modifyAttached(ModAttachmentTypes.WATER_LEVEL) {
-                it.recoveryWater(level, saturation)
-                it
-            }
-        }
-        TypedActionResult.pass(ItemStack.EMPTY)
-    }
-
     private val playerJumpWaterExhaustion = ModServerEvents.PlayerJump {
         if (it is ServerPlayerEntity) {
             val waterLevelData = it.getAttachedOrCreate(ModAttachmentTypes.WATER_LEVEL)
@@ -95,9 +79,19 @@ object ModEventsRegistries {
         ActionResult.PASS
     }
 
-    private val playerUseItemFinished = ModServerEvents.FinishUsingItem { user, world, stack ->
-        if (user is ServerPlayerEntity){
-            WaterSource.LOGGER.info("Finish using!")
+    private val playerUseItemFinished = ModServerEvents.FinishUsingItem { player, world, stack ->
+        if (player is ServerPlayerEntity){
+            WaterSource.LOGGER.info("Player ${player.name} finishes using ${stack.name}")
+            val data = HydrationDataManager.SERVER.findByItemStack(stack)
+            data?.let { hydrationData ->
+                val level = hydrationData.level
+                val saturation = hydrationData.saturation
+                player.modifyAttached(ModAttachmentTypes.WATER_LEVEL) {
+                    it.recoveryWater(level, saturation)
+                    it
+                }
+                player.getAttached(ModAttachmentTypes.WATER_LEVEL)?.updateToClient(player)
+            }
         }
         ActionResult.PASS
     }
@@ -105,7 +99,6 @@ object ModEventsRegistries {
     fun initialize() {
         ServerEntityEvents.ENTITY_LOAD.register(serverEntityLoadHandler)
         ServerTickEvents.END_WORLD_TICK.register(worldTickHandler)
-        UseItemCallback.EVENT.register(useWaterContainingItem)
         ModServerEvents.PLAYER_JUMP.register(playerJumpWaterExhaustion)
         ModServerEvents.FINISH_USING_ITEM.register(playerUseItemFinished)
     }
