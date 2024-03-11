@@ -12,21 +12,28 @@ import net.minecraft.registry.Registries
 import net.minecraft.registry.RegistryKeys
 import net.minecraft.registry.tag.TagKey
 import net.minecraft.util.Identifier
+import xyz.koiro.watersource.identifier
 
 class HydrationData(
     val level: Int,
     val saturation: Int,
-    val matchMode: MatchMode,
+    val matchMode: MatchMode = MatchMode.All,
     val matchList: ArrayList<IMatch>,
-    val format: Format
 ) {
 
+    val format: Format
+    init {
+        val item = (matchList.find { it is ItemMatch } as ItemMatch?)?.item?.identifier().toString()
+        val fluid = (matchList.find { it is FluidMatch } as FluidMatch?)?.fluid?.identifier().toString()
+        val itemTag = (matchList.find { it is ItemTagMatch } as ItemTagMatch?)?.key?.id.toString()
+        val fluidTag = (matchList.find { it is FluidTagMatch } as FluidTagMatch?)?.key?.id.toString()
+        format = Format(level, saturation, matchMode, item, fluid, itemTag, fluidTag)
+    }
     constructor(format: Format) : this(
         format.level ?: 0,
         format.saturation ?: 0,
         format.matchMode ?: MatchMode.All,
         arrayListOf<IMatch>(),
-        format
     ){
         format.item?.let {
             matchList.add(ItemMatch(Registries.ITEM.get(Identifier.tryParse(it))))
@@ -55,7 +62,7 @@ class HydrationData(
         }
     }
 
-    class ItemMatch(private val item: Item) : IMatch {
+    class ItemMatch(val item: Item) : IMatch {
         override fun match(itemStack: ItemStack?): Boolean {
             return itemStack?.isOf(item) ?: false
         }
@@ -63,7 +70,7 @@ class HydrationData(
         override fun match(fluid: Fluid?): Boolean = false
     }
 
-    class FluidMatch(private val fluid: Fluid) : IMatch {
+    class FluidMatch(val fluid: Fluid) : IMatch {
         override fun match(itemStack: ItemStack?): Boolean {
             val context = ContainerItemContext.withConstant(itemStack)
             val storage = context.find(FluidStorage.ITEM)
@@ -76,7 +83,7 @@ class HydrationData(
         }
     }
 
-    class ItemTagMatch(private val key: TagKey<Item>) : IMatch {
+    class ItemTagMatch(val key: TagKey<Item>) : IMatch {
         override fun match(itemStack: ItemStack?): Boolean {
             return itemStack?.isIn(key) ?: false
         }
@@ -86,7 +93,7 @@ class HydrationData(
         }
     }
 
-    class FluidTagMatch(private val key: TagKey<Fluid>) : IMatch {
+    class FluidTagMatch(val key: TagKey<Fluid>) : IMatch {
         override fun match(itemStack: ItemStack?): Boolean {
             val context = ContainerItemContext.withConstant(itemStack)
             val storage = context.find(FluidStorage.ITEM)

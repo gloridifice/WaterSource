@@ -13,7 +13,7 @@ object ModClientHUD {
             val textRenderer = mc.textRenderer
             player.getAttached(ModAttachmentTypes.WATER_LEVEL)?.let {
                 drawContext.drawText(textRenderer,
-                    "Water Level: ${it.level}/${it.maxLevel}, Saturation: ${it.saturation}/${it.maxSaturation}\n" +
+                    "Water Level: ${it.level}/${it.maxLevel}, Saturation: ${it.saturation}/${it.maxSaturation}, " +
                             "Exhaustion: ${it.exhaustion}/${it.maxExhaustion}", 10, 10, 0xFFFFFF, false)
             }
         }
