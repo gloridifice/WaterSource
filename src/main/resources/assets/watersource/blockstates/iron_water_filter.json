@@ -1,6 +1,0 @@
-{
-    "variants": {
-        "up=false":  { "model": "watersource:block/iron_water_filter_down" },
-        "up=true": { "model": "watersource:block/iron_water_filter_up"}
-    }
-}

@@ -1,6 +1,0 @@
-{
-    "parent": "block/cube_all",
-    "textures": {
-        "all": "watersource:block/palm_tree_planks"
-    }
-}

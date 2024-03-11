@@ -1,7 +1,0 @@
-{
-	"parent": "watersource:item/wooden_water_filter",
-	"textures": {
-		"0": "watersource:block/iron_water_filter",
-		"particle": "watersource:block/iron_water_filter"
-	}
-}
