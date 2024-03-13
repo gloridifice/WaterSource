@@ -4,6 +4,7 @@ package xyz.koiro.watersource.attechment
 
 import net.fabricmc.fabric.api.attachment.v1.AttachmentRegistry
 import net.minecraft.util.math.Vec3d
+import org.apache.commons.lang3.mutable.MutableInt
 import xyz.koiro.watersource.WaterSource
 import java.util.Optional
 
@@ -15,6 +16,8 @@ object ModAttachmentTypes {
         AttachmentRegistry.createDefaulted(WaterSource.identifier("last_position")) {
             Optional.empty<PosOffset>()
         }!!
+    val WATER_REWARD_HEAL_TICKER =
+        AttachmentRegistry.createDefaulted(WaterSource.identifier("water_reward_heal_ticker")) { MutableInt(0) }
 
     data class PosOffset(
         val current: Vec3d,
@@ -22,8 +25,4 @@ object ModAttachmentTypes {
     ) {
         val offset: Vec3d = current.subtract(last)
     }
-
-    data class LowWaterPunishmentData(
-        val hurtCounter: Float,
-    )
 }

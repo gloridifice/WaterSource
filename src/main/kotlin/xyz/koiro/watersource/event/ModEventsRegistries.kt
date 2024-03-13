@@ -4,13 +4,9 @@ package xyz.koiro.watersource.event
 
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerEntityEvents
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents
-import net.fabricmc.fabric.api.event.player.UseItemCallback
 import net.minecraft.entity.effect.StatusEffectInstance
-import net.minecraft.entity.effect.StatusEffects
-import net.minecraft.item.ItemStack
 import net.minecraft.server.network.ServerPlayerEntity
 import net.minecraft.util.ActionResult
-import net.minecraft.util.TypedActionResult
 import net.minecraft.world.World
 import xyz.koiro.watersource.WaterExhaustionInfo
 import xyz.koiro.watersource.WaterPunishmentInfo
@@ -18,6 +14,7 @@ import xyz.koiro.watersource.WaterSource
 import xyz.koiro.watersource.WaterSource.getWaterSourceDifficulty
 import xyz.koiro.watersource.attechment.ModAttachmentTypes
 import xyz.koiro.watersource.data.HydrationDataManager
+import xyz.koiro.watersource.ifInSurvivalAndGetWaterData
 import java.util.*
 
 object ModEventsRegistries {
@@ -32,27 +29,38 @@ object ModEventsRegistries {
             updatePlayerLastPositionData(player)
             waterExhaustionTick(player)
             lowWaterLevelPunishment(player, world)
+            highWaterLevelReward(player, world)
         }
     }
 
-    private val worldTickStart = ServerTickEvents.StartWorldTick { world ->
-        world.players.forEach { player ->
-            lowWaterLevelPunishment(player, world)
+    private fun highWaterLevelReward(player: ServerPlayerEntity, world: World){
+        player.ifInSurvivalAndGetWaterData { waterLevelData ->
+            if (waterLevelData.level > 16) {
+                val tick = player.getAttachedOrCreate(ModAttachmentTypes.WATER_REWARD_HEAL_TICKER)
+                tick.add(1)
+                if (tick.value > 125){
+                    player.heal(1f)
+                    waterLevelData.addExhaustion(WaterExhaustionInfo.REWARD_HEALTH)
+                    waterLevelData.updateToClient(player)
+                    tick.setValue(0)
+                }
+            }
         }
     }
     private fun lowWaterLevelPunishment(player: ServerPlayerEntity, world: World) {
-        val waterLevelData = player.getAttachedOrCreate(ModAttachmentTypes.WATER_LEVEL)
-        val diff = world.getWaterSourceDifficulty()
-        when {
-            waterLevelData.level <= 0 -> {
-                WaterPunishmentInfo.getPunishmentStatusEffectsZero(diff).forEach {
-                    player.addStatusEffect(StatusEffectInstance(it))
+        player.ifInSurvivalAndGetWaterData { waterData ->
+            val diff = world.getWaterSourceDifficulty()
+            when {
+                waterData.level <= 0 -> {
+                    WaterPunishmentInfo.getPunishmentStatusEffectsZero(diff).forEach { effect ->
+                        player.addStatusEffect(StatusEffectInstance(effect))
+                    }
                 }
-            }
 
-            waterLevelData.level <= 6 -> {
-                WaterPunishmentInfo.getPunishmentStatusEffectsSix(diff).forEach {
-                    player.addStatusEffect(StatusEffectInstance(it))
+                waterData.level <= 6 -> {
+                    WaterPunishmentInfo.getPunishmentStatusEffectsSix(diff).forEach { effect ->
+                        player.addStatusEffect(StatusEffectInstance(effect))
+                    }
                 }
             }
         }
@@ -66,11 +74,9 @@ object ModEventsRegistries {
     }
 
     private fun attachPlayerLastPositionData(player: ServerPlayerEntity) {
-        if (!player.hasAttached(ModAttachmentTypes.POSITION_OFFSET)) {
-            player.getAttachedOrCreate(ModAttachmentTypes.POSITION_OFFSET)
+        player.getAttachedOrCreate(ModAttachmentTypes.POSITION_OFFSET)
 
-            WaterSource.LOGGER.info("Player <${player.name}>'s pos offset data attached.")
-        }
+        WaterSource.LOGGER.info("Player <${player.name}>'s pos offset data attached.")
     }
 
     private fun updatePlayerLastPositionData(player: ServerPlayerEntity) {
@@ -86,38 +92,41 @@ object ModEventsRegistries {
     }
 
     private fun waterExhaustionTick(player: ServerPlayerEntity) {
-        val posOffset = player.getAttachedOrCreate(ModAttachmentTypes.POSITION_OFFSET)
-        val waterLevelAttach = player.getAttachedOrCreate(ModAttachmentTypes.WATER_LEVEL)
-        //Movement
-        posOffset.ifPresent {
-            if (player.isSprinting) {
-                waterLevelAttach.addExhaustion(WaterExhaustionInfo.SPRINT * it.offset.length().toFloat())
-                waterLevelAttach.updateToClient(player)
+        player.ifInSurvivalAndGetWaterData { waterData ->
+            val posOffset = player.getAttachedOrCreate(ModAttachmentTypes.POSITION_OFFSET)
+            //Movement
+            posOffset.ifPresent {
+                if (player.isSprinting) {
+                    waterData.addExhaustion(WaterExhaustionInfo.SPRINT * it.offset.length().toFloat())
+                    waterData.updateToClient(player)
+                }
             }
         }
     }
 
-    private val playerJumpWaterExhaustion = ModServerEvents.PlayerJump {
-        if (it is ServerPlayerEntity) {
-            val waterLevelData = it.getAttachedOrCreate(ModAttachmentTypes.WATER_LEVEL)
-            waterLevelData.addExhaustion(WaterExhaustionInfo.JUMP)
-            waterLevelData.updateToClient(it)
+    private val playerJumpWaterExhaustion = ModServerEvents.PlayerJump { player ->
+        if (player is ServerPlayerEntity) {
+            player.ifInSurvivalAndGetWaterData {
+                it.addExhaustion(WaterExhaustionInfo.JUMP)
+                it.updateToClient(player)
+            }
         }
         ActionResult.SUCCESS
     }
 
-    private val playerUseItemFinished = ModServerEvents.FinishUsingItem { player, world, stack ->
+    private val playerUseHydrationItemFinished = ModServerEvents.FinishUsingItem { player, world, stack ->
         if (player is ServerPlayerEntity) {
-            WaterSource.LOGGER.info("Player ${player.name} finishes using ${stack.name}")
-            val data = HydrationDataManager.SERVER.findByItemStack(stack)
-            data?.let { hydrationData ->
-                val level = hydrationData.level
-                val saturation = hydrationData.saturation
-                player.modifyAttached(ModAttachmentTypes.WATER_LEVEL) {
-                    it.recoveryWater(level, saturation)
-                    it
+            player.ifInSurvivalAndGetWaterData { waterLevelData ->
+                WaterSource.LOGGER.info("Player ${player.name} finishes using ${stack.name}")
+                val data = HydrationDataManager.SERVER.findByItemStack(stack)
+
+                data?.let { hydrationData ->
+                    val level = hydrationData.level
+                    val saturation = hydrationData.saturation
+                    waterLevelData.recoveryWater(level, saturation)
+                    waterLevelData.updateToClient(player)
+                    hydrationData.applyEffectsToPlayer(player)
                 }
-                player.getAttached(ModAttachmentTypes.WATER_LEVEL)?.updateToClient(player)
             }
         }
         ActionResult.PASS
@@ -146,11 +155,9 @@ object ModEventsRegistries {
     fun initialize() {
         ServerEntityEvents.ENTITY_LOAD.register(serverEntityLoadHandler)
         ServerTickEvents.END_WORLD_TICK.register(worldTickHandler)
-//        ServerTickEvents.START_WORLD_TICK.register(worldTickStart)
         ModServerEvents.PLAYER_JUMP.register(playerJumpWaterExhaustion)
-        ModServerEvents.FINISH_USING_ITEM.register(playerUseItemFinished)
+        ModServerEvents.FINISH_USING_ITEM.register(playerUseHydrationItemFinished)
         ModServerEvents.PLAYER_WRITE_CUSTOM_NBT.register(writeModPlayerData)
         ModServerEvents.PLAYER_READ_CUSTOM_NBT.register(readModPlayerNbt)
-
     }
 }
