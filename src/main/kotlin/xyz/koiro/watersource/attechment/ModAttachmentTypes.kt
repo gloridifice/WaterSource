@@ -22,4 +22,8 @@ object ModAttachmentTypes {
     ) {
         val offset: Vec3d = current.subtract(last)
     }
+
+    data class LowWaterPunishmentData(
+        val hurtCounter: Float,
+    )
 }

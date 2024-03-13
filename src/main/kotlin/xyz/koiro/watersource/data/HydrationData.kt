@@ -3,6 +3,8 @@
 package xyz.koiro.watersource.data
 
 import com.google.gson.annotations.SerializedName
+import kotlinx.serialization.SerialName
+import kotlinx.serialization.Serializable
 import net.fabricmc.fabric.api.transfer.v1.context.ContainerItemContext
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidStorage
 import net.minecraft.fluid.Fluid
@@ -23,10 +25,10 @@ class HydrationData(
 
     val format: Format
     init {
-        val item = (matchList.find { it is ItemMatch } as ItemMatch?)?.item?.identifier().toString()
-        val fluid = (matchList.find { it is FluidMatch } as FluidMatch?)?.fluid?.identifier().toString()
-        val itemTag = (matchList.find { it is ItemTagMatch } as ItemTagMatch?)?.key?.id.toString()
-        val fluidTag = (matchList.find { it is FluidTagMatch } as FluidTagMatch?)?.key?.id.toString()
+        val item = (matchList.find { it is ItemMatch } as ItemMatch?)?.item?.identifier()?.toString()
+        val fluid = (matchList.find { it is FluidMatch } as FluidMatch?)?.fluid?.identifier()?.toString()
+        val itemTag = (matchList.find { it is ItemTagMatch } as ItemTagMatch?)?.key?.id?.toString()
+        val fluidTag = (matchList.find { it is FluidTagMatch } as FluidTagMatch?)?.key?.id?.toString()
         format = Format(level, saturation, matchMode, item, fluid, itemTag, fluidTag)
     }
     constructor(format: Format) : this(
@@ -35,16 +37,17 @@ class HydrationData(
         format.matchMode ?: MatchMode.All,
         arrayListOf<IMatch>(),
     ){
-        format.item?.let {
+        fun valid(it: String?): String? = if(!it.isNullOrBlank() && it != "null") it else null
+        valid(format.item)?.let {
             matchList.add(ItemMatch(Registries.ITEM.get(Identifier.tryParse(it))))
         }
-        format.fluid?.let {
+        valid(format.fluid)?.let {
             matchList.add(FluidMatch(Registries.FLUID.get(Identifier.tryParse(it))))
         }
-        format.itemTag?.let {
+        valid(format.itemTag)?.let {
             matchList.add(ItemTagMatch(TagKey.of(RegistryKeys.ITEM, Identifier.tryParse(it))))
         }
-        format.fluidTag?.let {
+        valid(format.fluidTag)?.let {
             matchList.add(FluidTagMatch(TagKey.of(RegistryKeys.FLUID, Identifier.tryParse(it))))
         }
     }
@@ -111,26 +114,35 @@ class HydrationData(
         fun match(fluid: Fluid?): Boolean
     }
 
+    @Serializable
     data class Format(
-        val level: Int?,
-        val saturation: Int?,
+        val level: Int? = null,
+        val saturation: Int? = null,
 
         @SerializedName("match_mode")
-        val matchMode: MatchMode?,
+        @SerialName("match_mode")
+        val matchMode: MatchMode? = null,
 
-        val item: String?,
-        val fluid: String?,
+        val item: String? = null,
+        val fluid: String? = null,
+
         @SerializedName("item_tag")
-        val itemTag: String?,
+        @SerialName("item_tag")
+        val itemTag: String? = null,
+
         @SerializedName("fluid_tag")
-        val fluidTag: String?,
+        @SerialName("fluid_tag")
+        val fluidTag: String? = null,
     )
 
+    @Serializable
     enum class MatchMode {
         @SerializedName("all")
+        @SerialName("all")
         All,
 
         @SerializedName("any")
+        @SerialName("any")
         Any
     }
 }

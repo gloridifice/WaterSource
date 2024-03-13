@@ -84,4 +84,10 @@ class WaterLevelData(
     fun updateToClient(user: ServerPlayerEntity){
         ServerPlayNetworking.send(user, ModNetworking.UPDATE_WATER_DATA_ID, writeBuf(PacketByteBufs.create()))
     }
+
+    fun setData(level: Int = 20, saturation: Int = 8, exhaustion: Float = 0f){
+        this.level = level
+        this.saturation = saturation
+        this.exhaustion = exhaustion
+    }
 }

@@ -1,6 +1,7 @@
 package xyz.koiro.watersource.data
 
 import com.google.gson.Gson
+import kotlinx.serialization.json.Json
 import net.fabricmc.fabric.api.resource.SimpleSynchronousResourceReloadListener
 import net.minecraft.fluid.Fluid
 import net.minecraft.item.ItemStack
@@ -35,7 +36,7 @@ class HydrationDataManager: SimpleSynchronousResourceReloadListener{
             try {
                 val stream = manager.getResource(id).get().inputStream
                 val string = String(stream.readAllBytes())
-                val format = Gson().fromJson(string, HydrationData.Format::class.java)
+                val format = Json.decodeFromString<HydrationData.Format>(string)
                 val data = HydrationData(format)
                 map.putIfAbsent(id.toString(), data)
                 WaterSource.LOGGER.info("Successfully load water level data <${id}>")

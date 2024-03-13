@@ -1,6 +1,7 @@
 package xyz.koiro.watersource.mixin;
 
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.nbt.NbtCompound;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.util.ActionResult;
 import org.spongepowered.asm.mixin.Mixin;
@@ -16,6 +17,22 @@ public class PlayerEntityMixin {
         var player = (net.minecraft.entity.player.PlayerEntity) (Object) this;
         if (player instanceof ServerPlayerEntity) {
             ActionResult result = ModServerEvents.INSTANCE.getPLAYER_JUMP().invoker().interact(player);
+        }
+    }
+
+    @Inject(at = @At(value = "INVOKE"), method = "readCustomDataFromNbt")
+    private void onReadCustomNbt(final NbtCompound nbt, final CallbackInfo info){
+        var player = (net.minecraft.entity.player.PlayerEntity) (Object) this;
+        if (player instanceof ServerPlayerEntity serverPlayer) {
+            ActionResult result = ModServerEvents.INSTANCE.getPLAYER_READ_CUSTOM_NBT().invoker().interact(serverPlayer, nbt);
+        }
+    }
+
+    @Inject(at = @At(value = "INVOKE"), method = "writeCustomDataToNbt")
+    private void onWriteCustomNbt(final NbtCompound nbt, final CallbackInfo info){
+        var player = (net.minecraft.entity.player.PlayerEntity) (Object) this;
+        if (player instanceof ServerPlayerEntity serverPlayer) {
+            ActionResult result = ModServerEvents.INSTANCE.getPLAYER_WRITE_CUSTOM_NBT().invoker().interact(serverPlayer, nbt);
         }
     }
 }

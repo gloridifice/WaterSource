@@ -9,6 +9,6 @@ import xyz.koiro.watersource.datagen.provider.HydrationDataProvider
 
 class HydrationDataGenerator(output: DataOutput): HydrationDataProvider(output) {
     override fun addData(dataMap: HashMap<Identifier, HydrationData>) {
-        dataMap.put(WaterSource.identifier("apple"), item(Items.APPLE, 1, 1))
+        dataMap[WaterSource.identifier("apple")] = item(Items.APPLE, 1, 1)
     }
 }

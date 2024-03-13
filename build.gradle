@@ -2,6 +2,8 @@ plugins {
 	id 'fabric-loom' version '1.5-SNAPSHOT'
 	id 'maven-publish'
   	id "org.jetbrains.kotlin.jvm" version "1.9.22"
+	id 'org.jetbrains.kotlin.plugin.serialization' version '1.9.23'
+
 }
 
 version = project.mod_version
@@ -37,6 +39,8 @@ fabricApi {
 dependencies {
 	minecraft "com.mojang:minecraft:${project.minecraft_version}"
 	mappings "net.fabricmc:yarn:${project.yarn_mappings}:v2"
+	implementation 'org.jetbrains.kotlinx:kotlinx-serialization-json:1.6.0'
+
 	modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
 
 	modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
