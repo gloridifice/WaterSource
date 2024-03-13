@@ -96,6 +96,7 @@ object ModEventsRegistries {
         if (it is ServerPlayerEntity) {
             val waterLevelData = it.getAttachedOrCreate(ModAttachmentTypes.WATER_LEVEL)
             waterLevelData.addExhaustion(WaterExhaustionInfo.JUMP)
+            WaterSource.LOGGER.info("player jump!")
             waterLevelData.updateToClient(it)
         }
         ActionResult.PASS
