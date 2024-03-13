@@ -22,7 +22,6 @@ class HydrationData(
     val matchMode: MatchMode = MatchMode.All,
     val matchList: ArrayList<IMatch>,
 ) {
-
     val format: Format
     init {
         val item = (matchList.find { it is ItemMatch } as ItemMatch?)?.item?.identifier()?.toString()

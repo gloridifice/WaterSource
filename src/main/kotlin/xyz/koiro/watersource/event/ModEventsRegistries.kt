@@ -35,19 +35,24 @@ object ModEventsRegistries {
         }
     }
 
+    private val worldTickStart = ServerTickEvents.StartWorldTick { world ->
+        world.players.forEach { player ->
+            lowWaterLevelPunishment(player, world)
+        }
+    }
     private fun lowWaterLevelPunishment(player: ServerPlayerEntity, world: World) {
         val waterLevelData = player.getAttachedOrCreate(ModAttachmentTypes.WATER_LEVEL)
         val diff = world.getWaterSourceDifficulty()
         when {
             waterLevelData.level <= 0 -> {
                 WaterPunishmentInfo.getPunishmentStatusEffectsZero(diff).forEach {
-                    player.addStatusEffect(it)
+                    player.addStatusEffect(StatusEffectInstance(it))
                 }
             }
 
-            waterLevelData.level < 6 -> {
+            waterLevelData.level <= 6 -> {
                 WaterPunishmentInfo.getPunishmentStatusEffectsSix(diff).forEach {
-                    player.addStatusEffect(it)
+                    player.addStatusEffect(StatusEffectInstance(it))
                 }
             }
         }
@@ -96,10 +101,9 @@ object ModEventsRegistries {
         if (it is ServerPlayerEntity) {
             val waterLevelData = it.getAttachedOrCreate(ModAttachmentTypes.WATER_LEVEL)
             waterLevelData.addExhaustion(WaterExhaustionInfo.JUMP)
-            WaterSource.LOGGER.info("player jump!")
             waterLevelData.updateToClient(it)
         }
-        ActionResult.PASS
+        ActionResult.SUCCESS
     }
 
     private val playerUseItemFinished = ModServerEvents.FinishUsingItem { player, world, stack ->
@@ -142,9 +146,11 @@ object ModEventsRegistries {
     fun initialize() {
         ServerEntityEvents.ENTITY_LOAD.register(serverEntityLoadHandler)
         ServerTickEvents.END_WORLD_TICK.register(worldTickHandler)
+//        ServerTickEvents.START_WORLD_TICK.register(worldTickStart)
         ModServerEvents.PLAYER_JUMP.register(playerJumpWaterExhaustion)
         ModServerEvents.FINISH_USING_ITEM.register(playerUseItemFinished)
         ModServerEvents.PLAYER_WRITE_CUSTOM_NBT.register(writeModPlayerData)
         ModServerEvents.PLAYER_READ_CUSTOM_NBT.register(readModPlayerNbt)
+
     }
 }
