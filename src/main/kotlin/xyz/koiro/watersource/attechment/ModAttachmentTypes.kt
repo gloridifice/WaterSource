@@ -19,6 +19,9 @@ object ModAttachmentTypes {
     val WATER_REWARD_HEAL_TICKER =
         AttachmentRegistry.createDefaulted(WaterSource.identifier("water_reward_heal_ticker")) { MutableInt(0) }
 
+    val THIRSTY_ADD_EXHAUSTION_TICKER =
+        AttachmentRegistry.createDefaulted(WaterSource.identifier("thirsty_add_exhaustion_ticker")) { MutableInt(0) }
+
     data class PosOffset(
         val current: Vec3d,
         val last: Vec3d,

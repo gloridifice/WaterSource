@@ -2,9 +2,12 @@ package xyz.koiro.watersource.attechment
 
 import net.fabricmc.fabric.api.networking.v1.PacketByteBufs
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking
+import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.network.PacketByteBuf
 import net.minecraft.server.network.ServerPlayerEntity
+import xyz.koiro.watersource.WaterExhaustionInfo
 import xyz.koiro.watersource.network.ModNetworking
+import xyz.koiro.watersource.world.effect.ModStatusEffects
 
 class WaterLevelData(
     level: Int = 20,
@@ -33,7 +36,12 @@ class WaterLevelData(
 
     /** Consume water by adding exhaustion like hungry system in vanilla.
      * */
-    fun addExhaustion(amount: Float) {
+    fun addExhaustion(amount: Float, player: PlayerEntity) {
+        val effect = player.getStatusEffect(ModStatusEffects.THIRSTY)
+        var amount =  amount
+        effect?.let {
+            amount *= WaterExhaustionInfo.thirstyMultiplier(it.amplifier)
+        }
         val added = amount + exhaustion
         exhaustion = if (added >= maxExhaustion) {
             val count = (added / maxExhaustion).toInt()

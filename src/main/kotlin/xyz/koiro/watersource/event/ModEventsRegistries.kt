@@ -15,6 +15,7 @@ import xyz.koiro.watersource.WaterSource.getWaterSourceDifficulty
 import xyz.koiro.watersource.attechment.ModAttachmentTypes
 import xyz.koiro.watersource.data.HydrationDataManager
 import xyz.koiro.watersource.ifInSurvivalAndGetWaterData
+import xyz.koiro.watersource.world.effect.ModStatusEffects
 import java.util.*
 
 object ModEventsRegistries {
@@ -30,17 +31,31 @@ object ModEventsRegistries {
             waterExhaustionTick(player)
             lowWaterLevelPunishment(player, world)
             highWaterLevelReward(player, world)
+            thirstyTick(player)
+        }
+    }
+
+    private fun thirstyTick(player: ServerPlayerEntity) {
+        player.ifInSurvivalAndGetWaterData { waterData ->
+            player.getStatusEffect(ModStatusEffects.THIRSTY)?.let { effectInstance ->
+                val ticker = player.getAttachedOrCreate(ModAttachmentTypes.THIRSTY_ADD_EXHAUSTION_TICKER)
+                ticker.add(1)
+                if (ticker.value >= 20){
+                    waterData.addExhaustion(WaterExhaustionInfo.thirstyPerSecond(effectInstance.amplifier), player)
+                    waterData.updateToClient(player)
+                }
+            }
         }
     }
 
     private fun highWaterLevelReward(player: ServerPlayerEntity, world: World){
         player.ifInSurvivalAndGetWaterData { waterLevelData ->
-            if (waterLevelData.level > 16) {
+            if (waterLevelData.level > 16 && !player.hasStatusEffect(ModStatusEffects.THIRSTY)) {
                 val tick = player.getAttachedOrCreate(ModAttachmentTypes.WATER_REWARD_HEAL_TICKER)
                 tick.add(1)
                 if (tick.value > 125){
                     player.heal(1f)
-                    waterLevelData.addExhaustion(WaterExhaustionInfo.REWARD_HEALTH)
+                    waterLevelData.addExhaustion(WaterExhaustionInfo.REWARD_HEALTH, player)
                     waterLevelData.updateToClient(player)
                     tick.setValue(0)
                 }
@@ -97,7 +112,7 @@ object ModEventsRegistries {
             //Movement
             posOffset.ifPresent {
                 if (player.isSprinting) {
-                    waterData.addExhaustion(WaterExhaustionInfo.SPRINT * it.offset.length().toFloat())
+                    waterData.addExhaustion(WaterExhaustionInfo.SPRINT * it.offset.length().toFloat(), player)
                     waterData.updateToClient(player)
                 }
             }
@@ -107,7 +122,7 @@ object ModEventsRegistries {
     private val playerJumpWaterExhaustion = ModServerEvents.PlayerJump { player ->
         if (player is ServerPlayerEntity) {
             player.ifInSurvivalAndGetWaterData {
-                it.addExhaustion(WaterExhaustionInfo.JUMP)
+                it.addExhaustion(WaterExhaustionInfo.JUMP, player)
                 it.updateToClient(player)
             }
         }
