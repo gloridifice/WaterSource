@@ -14,7 +14,7 @@ import xyz.koiro.watersource.WaterSource
 import xyz.koiro.watersource.WaterSource.getWaterSourceDifficulty
 import xyz.koiro.watersource.attechment.ModAttachmentTypes
 import xyz.koiro.watersource.data.HydrationDataManager
-import xyz.koiro.watersource.ifInSurvivalAndGetWaterData
+import xyz.koiro.watersource.api.ifInSurvivalAndGetWaterData
 import xyz.koiro.watersource.world.effect.ModStatusEffects
 import java.util.*
 
