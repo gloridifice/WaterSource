@@ -13,6 +13,7 @@ import xyz.koiro.watersource.attechment.WaterLevelData
 fun Item.identifier(): Identifier {
     return Registries.ITEM.getId(this)
 }
+
 fun Fluid.identifier(): Identifier {
     return Registries.FLUID.getId(this)
 }
@@ -25,12 +26,13 @@ fun Item.simpleStack(): ItemStack {
 fun StatusEffect.identifier(): Identifier? {
     return Registries.STATUS_EFFECT.getId(this)
 }
-fun PlayerEntity.canExhaustWater(): Boolean{
+
+fun PlayerEntity.canExhaustWater(): Boolean {
     return !(this.isCreative || this.isSpectator)
 }
 
-fun PlayerEntity.ifInSurvivalAndGetWaterData(action: (data: WaterLevelData) -> Unit){
-    if (this.canExhaustWater()){
+fun PlayerEntity.ifInSurvivalAndGetWaterData(action: (data: WaterLevelData) -> Unit) {
+    if (this.canExhaustWater()) {
         val data = this.getAttachedOrCreate(ModAttachmentTypes.WATER_LEVEL)
         action(data)
     }

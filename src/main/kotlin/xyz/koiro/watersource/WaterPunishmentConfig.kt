@@ -3,7 +3,7 @@ package xyz.koiro.watersource
 import net.minecraft.entity.effect.StatusEffectInstance
 import net.minecraft.entity.effect.StatusEffects
 
-object WaterPunishmentInfo {
+object WaterPunishmentConfig {
     
     private val DURATION = 50;
     fun getPunishmentStatusEffectsSix(difficulty: WaterSource.ModDifficulty): Iterable<StatusEffectInstance>{

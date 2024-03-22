@@ -8,8 +8,8 @@ import net.minecraft.entity.effect.StatusEffectInstance
 import net.minecraft.server.network.ServerPlayerEntity
 import net.minecraft.util.ActionResult
 import net.minecraft.world.World
-import xyz.koiro.watersource.WaterExhaustionInfo
-import xyz.koiro.watersource.WaterPunishmentInfo
+import xyz.koiro.watersource.WaterExhaustionConfig
+import xyz.koiro.watersource.WaterPunishmentConfig
 import xyz.koiro.watersource.WaterSource
 import xyz.koiro.watersource.WaterSource.getWaterSourceDifficulty
 import xyz.koiro.watersource.attechment.ModAttachmentTypes
@@ -41,7 +41,7 @@ object ModEventsRegistries {
                 val ticker = player.getAttachedOrCreate(ModAttachmentTypes.THIRSTY_ADD_EXHAUSTION_TICKER)
                 ticker.add(1)
                 if (ticker.value >= 20){
-                    waterData.addExhaustion(WaterExhaustionInfo.thirstyPerSecond(effectInstance.amplifier), player)
+                    waterData.addExhaustion(WaterExhaustionConfig.thirstyPerSecond(effectInstance.amplifier), player)
                     waterData.updateToClient(player)
                 }
             }
@@ -55,7 +55,7 @@ object ModEventsRegistries {
                 tick.add(1)
                 if (tick.value > 125){
                     player.heal(1f)
-                    waterLevelData.addExhaustion(WaterExhaustionInfo.REWARD_HEALTH, player)
+                    waterLevelData.addExhaustion(WaterExhaustionConfig.REWARD_HEALTH, player)
                     waterLevelData.updateToClient(player)
                     tick.setValue(0)
                 }
@@ -67,13 +67,13 @@ object ModEventsRegistries {
             val diff = world.getWaterSourceDifficulty()
             when {
                 waterData.level <= 0 -> {
-                    WaterPunishmentInfo.getPunishmentStatusEffectsZero(diff).forEach { effect ->
+                    WaterPunishmentConfig.getPunishmentStatusEffectsZero(diff).forEach { effect ->
                         player.addStatusEffect(StatusEffectInstance(effect))
                     }
                 }
 
                 waterData.level <= 6 -> {
-                    WaterPunishmentInfo.getPunishmentStatusEffectsSix(diff).forEach { effect ->
+                    WaterPunishmentConfig.getPunishmentStatusEffectsSix(diff).forEach { effect ->
                         player.addStatusEffect(StatusEffectInstance(effect))
                     }
                 }
@@ -112,7 +112,7 @@ object ModEventsRegistries {
             //Movement
             posOffset.ifPresent {
                 if (player.isSprinting) {
-                    waterData.addExhaustion(WaterExhaustionInfo.SPRINT * it.offset.length().toFloat(), player)
+                    waterData.addExhaustion(WaterExhaustionConfig.SPRINT * it.offset.length().toFloat(), player)
                     waterData.updateToClient(player)
                 }
             }
@@ -122,7 +122,7 @@ object ModEventsRegistries {
     private val playerJumpWaterExhaustion = ModServerEvents.PlayerJump { player ->
         if (player is ServerPlayerEntity) {
             player.ifInSurvivalAndGetWaterData {
-                it.addExhaustion(WaterExhaustionInfo.JUMP, player)
+                it.addExhaustion(WaterExhaustionConfig.JUMP, player)
                 it.updateToClient(player)
             }
         }

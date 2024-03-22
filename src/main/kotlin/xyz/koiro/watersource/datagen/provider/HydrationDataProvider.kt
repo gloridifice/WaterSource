@@ -2,7 +2,6 @@ package xyz.koiro.watersource.datagen.provider
 
 import com.google.common.hash.Hashing
 import com.google.common.hash.HashingOutputStream
-import com.google.gson.stream.JsonWriter
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.encodeToStream
 import net.minecraft.data.DataOutput
@@ -13,21 +12,24 @@ import net.minecraft.fluid.Fluid
 import net.minecraft.item.Item
 import net.minecraft.registry.tag.TagKey
 import net.minecraft.util.Identifier
-import net.minecraft.util.JsonHelper
 import xyz.koiro.watersource.WaterSource
 import xyz.koiro.watersource.data.HydrationData
 import java.io.ByteArrayOutputStream
 import java.io.IOException
-import java.io.OutputStream
-import java.io.OutputStreamWriter
-import java.nio.charset.StandardCharsets
 import java.util.concurrent.CompletableFuture
 
 abstract class HydrationDataProvider(val output: DataOutput) : DataProvider {
-    override fun run(writer: DataWriter): CompletableFuture<*> {
+    class HydrationDataAdder(){
         val dataMap = hashMapOf<Identifier, HydrationData>()
-        addData(dataMap)
-        val array = dataMap.map { (ident, data) ->
+
+        fun add(identifier: Identifier, hydrationData: HydrationData){
+            dataMap[identifier] = hydrationData
+        }
+    }
+    override fun run(writer: DataWriter): CompletableFuture<*> {
+        val dataAdder = HydrationDataAdder()
+        addData(dataAdder)
+        val array = dataAdder.dataMap.map { (ident, data) ->
             val path = output.getResolver(DataOutput.OutputType.DATA_PACK, "water_level").resolveJson(ident)
             CompletableFuture.runAsync {
                 try {
@@ -43,7 +45,7 @@ abstract class HydrationDataProvider(val output: DataOutput) : DataProvider {
         return (CompletableFuture.allOf(*array))
     }
 
-    abstract fun addData(dataMap: HashMap<Identifier, HydrationData>)
+    abstract fun addData(adder: HydrationDataAdder)
 
     fun item(item: Item, level: Int, saturation: Int, vararg effectInstance: StatusEffectInstance): HydrationData {
         val effects = ArrayList(effectInstance.toList())

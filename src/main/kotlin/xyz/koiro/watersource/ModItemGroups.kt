@@ -10,9 +10,11 @@ import xyz.koiro.watersource.world.item.ModItems
 object ModItemGroups {
     const val MAIN_ITEM_GROUP_TRANSLATION_KEY = "watersource.item_group.main"
     private val list = listOf<ItemStack>(
-        ModItems.PAPER_FILTER.simpleStack(),
-        ModItems.NATURAL_FILTER.simpleStack(),
+        ModItems.PAPER_STRAINER.simpleStack(),
+        ModItems.NATURAL_STRAINER.simpleStack(),
+        ModItems.LEATHER_WATER_BAG.simpleStack()
     )
+
     val MAIN_ITEM_GROUP = Registry.register(
         Registries.ITEM_GROUP, WaterSource.identifier("main"), FabricItemGroup.builder()
             .displayName(Text.translatable(MAIN_ITEM_GROUP_TRANSLATION_KEY))
