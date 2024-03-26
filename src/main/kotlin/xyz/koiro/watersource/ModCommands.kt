@@ -10,7 +10,7 @@ import net.minecraft.server.command.CommandManager.*
 import net.minecraft.server.command.ServerCommandSource
 import net.minecraft.server.network.ServerPlayerEntity
 import net.minecraft.text.Text
-import xyz.koiro.watersource.attechment.ModAttachmentTypes
+import xyz.koiro.watersource.world.attachment.ModAttachmentTypes
 
 
 object ModCommands {

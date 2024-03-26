@@ -1,8 +1,8 @@
 package xyz.koiro.watersource.network
 
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking
-import xyz.koiro.watersource.attechment.ModAttachmentTypes
-import xyz.koiro.watersource.attechment.WaterLevelData
+import xyz.koiro.watersource.world.attachment.ModAttachmentTypes
+import xyz.koiro.watersource.world.attachment.WaterLevelData
 
 object ModClientNetworking {
     fun initialize() {

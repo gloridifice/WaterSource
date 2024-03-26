@@ -3,7 +3,7 @@ package xyz.koiro.watersource.hud
 import net.fabricmc.fabric.api.client.rendering.v1.HudRenderCallback
 import net.minecraft.client.MinecraftClient
 import net.minecraft.client.gui.DrawContext
-import xyz.koiro.watersource.attechment.ModAttachmentTypes
+import xyz.koiro.watersource.world.attachment.ModAttachmentTypes
 
 object ModClientHUD {
     fun initialize(){

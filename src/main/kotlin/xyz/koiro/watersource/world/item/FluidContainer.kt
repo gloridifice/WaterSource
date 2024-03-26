@@ -28,7 +28,7 @@ import xyz.koiro.watersource.api.insertFluid
 open class FluidContainer(
     settings: Settings,
     val capacity: Long
-) : Item(settings.maxDamage((capacity / WaterSourceConfig.UNIT_DRINK_VOLUME).toInt())) {
+) : Item(settings.maxDamage((capacity / WSConfig.UNIT_DRINK_VOLUME).toInt())) {
     init {
         FluidStorage.ITEM.registerForItems(::getFluidStorage, this)
     }
@@ -75,7 +75,7 @@ open class FluidContainer(
     }
 
     open fun updateDamageFromAmount(stack: ItemStack, amount: Long) {
-        stack.damage = stack.maxDamage - (amount / WaterSourceConfig.UNIT_DRINK_VOLUME).toInt()
+        stack.damage = stack.maxDamage - (amount / WSConfig.UNIT_DRINK_VOLUME).toInt()
     }
 
     override fun appendTooltip(

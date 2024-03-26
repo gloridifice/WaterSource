@@ -1,6 +1,6 @@
 @file:Suppress("UnstableApiUsage")
 
-package xyz.koiro.watersource.attechment
+package xyz.koiro.watersource.world.attachment
 
 import net.fabricmc.fabric.api.attachment.v1.AttachmentRegistry
 import net.minecraft.util.math.Vec3d

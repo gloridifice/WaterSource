@@ -1,11 +1,11 @@
-package xyz.koiro.watersource.attechment
+package xyz.koiro.watersource.world.attachment
 
 import net.fabricmc.fabric.api.networking.v1.PacketByteBufs
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking
 import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.network.PacketByteBuf
 import net.minecraft.server.network.ServerPlayerEntity
-import xyz.koiro.watersource.WaterExhaustionConfig
+import xyz.koiro.watersource.WSConfig
 import xyz.koiro.watersource.network.ModNetworking
 import xyz.koiro.watersource.world.effect.ModStatusEffects
 
@@ -40,7 +40,7 @@ class WaterLevelData(
         val effect = player.getStatusEffect(ModStatusEffects.THIRSTY)
         var amount =  amount
         effect?.let {
-            amount *= WaterExhaustionConfig.thirstyMultiplier(it.amplifier)
+            amount *= WSConfig.Exhaustion.thirstyMultiplier(it.amplifier)
         }
         val added = amount + exhaustion
         exhaustion = if (added >= maxExhaustion) {
@@ -55,9 +55,9 @@ class WaterLevelData(
 
     /** Do recovery water level and saturation level with drinks.
      * */
-    fun recoveryWater(level: Int, saturation: Int) {
-        this.level += level
-        this.saturation += saturation
+    fun restoreWater(level: Int, saturation: Int, multiplier: Int) {
+        this.level += WSConfig.applyWaterLevelRestoreMultiplier(level, multiplier)
+        this.saturation += WSConfig.applyWaterLevelRestoreMultiplier(saturation, multiplier)
     }
 
     /** Consume water saturation level and water level. */

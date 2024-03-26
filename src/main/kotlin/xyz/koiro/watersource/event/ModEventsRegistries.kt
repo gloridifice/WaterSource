@@ -8,17 +8,31 @@ import net.minecraft.entity.effect.StatusEffectInstance
 import net.minecraft.server.network.ServerPlayerEntity
 import net.minecraft.util.ActionResult
 import net.minecraft.world.World
-import xyz.koiro.watersource.WaterExhaustionConfig
-import xyz.koiro.watersource.WaterPunishmentConfig
+import xyz.koiro.watersource.WSConfig
+import xyz.koiro.watersource.WSConfig.Exhaustion
+import xyz.koiro.watersource.WSConfig.Punishment
 import xyz.koiro.watersource.WaterSource
 import xyz.koiro.watersource.WaterSource.getWaterSourceDifficulty
-import xyz.koiro.watersource.attechment.ModAttachmentTypes
+import xyz.koiro.watersource.api.extractFluid
+import xyz.koiro.watersource.api.getOrCreateFluidStorageData
+import xyz.koiro.watersource.world.attachment.ModAttachmentTypes
 import xyz.koiro.watersource.data.HydrationDataManager
 import xyz.koiro.watersource.api.ifInSurvivalAndGetWaterData
+import xyz.koiro.watersource.data.HydrationData
 import xyz.koiro.watersource.world.effect.ModStatusEffects
+import xyz.koiro.watersource.world.item.DrinkableContainer
 import java.util.*
 
 object ModEventsRegistries {
+    fun initialize() {
+        ServerEntityEvents.ENTITY_LOAD.register(serverEntityLoadHandler)
+        ServerTickEvents.END_WORLD_TICK.register(worldTickHandler)
+        ModServerEvents.PLAYER_JUMP.register(playerJumpWaterExhaustion)
+        ModServerEvents.FINISH_USING_ITEM.register(playerUseHydrationItemFinished)
+        ModServerEvents.PLAYER_WRITE_CUSTOM_NBT.register(writeModPlayerData)
+        ModServerEvents.PLAYER_READ_CUSTOM_NBT.register(readModPlayerNbt)
+    }
+
     private val serverEntityLoadHandler = ServerEntityEvents.Load { entity, _ ->
         if (entity is ServerPlayerEntity) {
             attachWaterLevelData(entity)
@@ -40,40 +54,41 @@ object ModEventsRegistries {
             player.getStatusEffect(ModStatusEffects.THIRSTY)?.let { effectInstance ->
                 val ticker = player.getAttachedOrCreate(ModAttachmentTypes.THIRSTY_ADD_EXHAUSTION_TICKER)
                 ticker.add(1)
-                if (ticker.value >= 20){
-                    waterData.addExhaustion(WaterExhaustionConfig.thirstyPerSecond(effectInstance.amplifier), player)
+                if (ticker.value >= 20) {
+                    waterData.addExhaustion(Exhaustion.thirstyPerSecond(effectInstance.amplifier), player)
                     waterData.updateToClient(player)
                 }
             }
         }
     }
 
-    private fun highWaterLevelReward(player: ServerPlayerEntity, world: World){
+    private fun highWaterLevelReward(player: ServerPlayerEntity, world: World) {
         player.ifInSurvivalAndGetWaterData { waterLevelData ->
             if (waterLevelData.level > 16 && !player.hasStatusEffect(ModStatusEffects.THIRSTY)) {
                 val tick = player.getAttachedOrCreate(ModAttachmentTypes.WATER_REWARD_HEAL_TICKER)
                 tick.add(1)
-                if (tick.value > 125){
+                if (tick.value > 125) {
                     player.heal(1f)
-                    waterLevelData.addExhaustion(WaterExhaustionConfig.REWARD_HEALTH, player)
+                    waterLevelData.addExhaustion(Exhaustion.REWARD_HEALTH, player)
                     waterLevelData.updateToClient(player)
                     tick.setValue(0)
                 }
             }
         }
     }
+
     private fun lowWaterLevelPunishment(player: ServerPlayerEntity, world: World) {
         player.ifInSurvivalAndGetWaterData { waterData ->
             val diff = world.getWaterSourceDifficulty()
             when {
                 waterData.level <= 0 -> {
-                    WaterPunishmentConfig.getPunishmentStatusEffectsZero(diff).forEach { effect ->
+                    Punishment.getPunishmentStatusEffectsZero(diff).forEach { effect ->
                         player.addStatusEffect(StatusEffectInstance(effect))
                     }
                 }
 
                 waterData.level <= 6 -> {
-                    WaterPunishmentConfig.getPunishmentStatusEffectsSix(diff).forEach { effect ->
+                    Punishment.getPunishmentStatusEffectsSix(diff).forEach { effect ->
                         player.addStatusEffect(StatusEffectInstance(effect))
                     }
                 }
@@ -112,7 +127,7 @@ object ModEventsRegistries {
             //Movement
             posOffset.ifPresent {
                 if (player.isSprinting) {
-                    waterData.addExhaustion(WaterExhaustionConfig.SPRINT * it.offset.length().toFloat(), player)
+                    waterData.addExhaustion(Exhaustion.SPRINT * it.offset.length().toFloat(), player)
                     waterData.updateToClient(player)
                 }
             }
@@ -122,7 +137,7 @@ object ModEventsRegistries {
     private val playerJumpWaterExhaustion = ModServerEvents.PlayerJump { player ->
         if (player is ServerPlayerEntity) {
             player.ifInSurvivalAndGetWaterData {
-                it.addExhaustion(WaterExhaustionConfig.JUMP, player)
+                it.addExhaustion(Exhaustion.JUMP, player)
                 it.updateToClient(player)
             }
         }
@@ -133,14 +148,26 @@ object ModEventsRegistries {
         if (player is ServerPlayerEntity) {
             player.ifInSurvivalAndGetWaterData { waterLevelData ->
                 WaterSource.LOGGER.info("Player ${player.name} finishes using ${stack.name}")
-                val data = HydrationDataManager.SERVER.findByItemStack(stack)
+
+                val isItemDrinkable = stack.item is DrinkableContainer
+                val data: HydrationData? = if (isItemDrinkable) {
+                    stack.getOrCreateFluidStorageData()?.let { storage ->
+                        HydrationDataManager.SERVER.findByFluid(storage.fluid)
+                    }
+                } else {
+                    HydrationDataManager.SERVER.findByItemStack(stack)
+                }
 
                 data?.let { hydrationData ->
+                    val multiplier = if (isItemDrinkable) (stack.item as DrinkableContainer).drinkVolumeMultiplier else 1
                     val level = hydrationData.level
                     val saturation = hydrationData.saturation
-                    waterLevelData.recoveryWater(level, saturation)
+                    waterLevelData.restoreWater(level, saturation, multiplier)
                     waterLevelData.updateToClient(player)
-                    hydrationData.applyEffectsToPlayer(player)
+                    hydrationData.applyEffectsToPlayer(player, multiplier)
+                    if (isItemDrinkable){
+                        stack.extractFluid(WSConfig.UNIT_DRINK_VOLUME)
+                    }
                 }
             }
         }
@@ -167,12 +194,4 @@ object ModEventsRegistries {
         ActionResult.PASS
     }
 
-    fun initialize() {
-        ServerEntityEvents.ENTITY_LOAD.register(serverEntityLoadHandler)
-        ServerTickEvents.END_WORLD_TICK.register(worldTickHandler)
-        ModServerEvents.PLAYER_JUMP.register(playerJumpWaterExhaustion)
-        ModServerEvents.FINISH_USING_ITEM.register(playerUseHydrationItemFinished)
-        ModServerEvents.PLAYER_WRITE_CUSTOM_NBT.register(writeModPlayerData)
-        ModServerEvents.PLAYER_READ_CUSTOM_NBT.register(readModPlayerNbt)
-    }
 }
