@@ -12,7 +12,9 @@ object ModItemGroups {
     private val list = listOf<ItemStack>(
         ModItems.PAPER_STRAINER.simpleStack(),
         ModItems.NATURAL_STRAINER.simpleStack(),
-        ModItems.LEATHER_WATER_BAG.simpleStack()
+        ModItems.LEATHER_WATER_BAG.simpleStack(),
+        ModItems.PURIFIED_WATER_BUCKET.simpleStack(),
+        ModItems.PURIFIED_WATTER_BOTTLE.simpleStack()
     )
 
     val MAIN_ITEM_GROUP = Registry.register(
@@ -23,10 +25,11 @@ object ModItemGroups {
                     entries.add(it)
                 }
             }
+            .icon { ModItems.PURIFIED_WATTER_BOTTLE.simpleStack() }
             .build()
     )
 
-    fun active(){
+    fun active() {
 
     }
 }

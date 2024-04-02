@@ -14,7 +14,7 @@ import xyz.koiro.watersource.WaterSource
 import xyz.koiro.watersource.api.getOrCreateFluidStorageData
 import xyz.koiro.watersource.data.HydrationDataManager
 
-class DrinkableContainer(
+open class DrinkableContainer(
     settings: Settings, capacity: Long,
     val useDuration: Int = 32,
     val drinkVolumeMultiplier: Int = 1

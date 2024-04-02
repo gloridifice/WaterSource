@@ -11,7 +11,9 @@ import net.minecraft.world.World
 import org.slf4j.LoggerFactory
 import xyz.koiro.watersource.data.ModResourceRegistries
 import xyz.koiro.watersource.event.ModEventsRegistries
+import xyz.koiro.watersource.world.block.ModBlocks
 import xyz.koiro.watersource.world.effect.ModStatusEffects
+import xyz.koiro.watersource.world.fluid.ModFluids
 import xyz.koiro.watersource.world.recipe.ModRecipes
 import xyz.koiro.watersource.world.item.ModItems
 
@@ -21,6 +23,8 @@ object WaterSource : ModInitializer {
 
     override fun onInitialize() {
         ModItems.active()
+        ModBlocks.active()
+        ModFluids.active()
         ModStatusEffects.active()
         ModItemGroups.active()
         ModRecipes.initialize()
