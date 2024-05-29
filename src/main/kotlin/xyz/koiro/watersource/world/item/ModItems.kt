@@ -24,6 +24,12 @@ object ModItems {
         Strainer(FabricItemSettings().maxCount(1).maxDamage(8))
     )
 
+    @AutoGenItemData(enLang = "Waste Strainer", cnLang = "旧滤网")
+    val WASTE_STRAINER = registerItem(
+        "waste_strainer",
+        Item(FabricItemSettings())
+    )
+
     //todo test
     @AutoGenItemData(enLang = "Leather Water Bag", cnLang = "皮水袋")
     val LEATHER_WATER_BAG = registerItem(
