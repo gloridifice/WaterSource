@@ -24,6 +24,7 @@ import xyz.koiro.watersource.*
 import xyz.koiro.watersource.api.FluidStorageData
 import xyz.koiro.watersource.api.getOrCreateFluidStorageData
 import xyz.koiro.watersource.api.insertFluid
+import kotlin.math.round
 
 open class FluidContainer(
     settings: Settings,
@@ -37,6 +38,14 @@ open class FluidContainer(
         return fluid == currentData.fluid || currentData.isBlank()
     }
 
+    fun updateDamage(stack: ItemStack) {
+        stack.getOrCreateFluidStorageData()?.let {
+            val amount = it.amount
+            val damage = round((1 - amount.toDouble() / capacity.toDouble()) * maxDamage).toInt()
+            stack.damage = damage
+        }
+    }
+
     override fun use(world: World, user: PlayerEntity, hand: Hand): TypedActionResult<ItemStack> {
         if (!world.isClient()) {
             //todo get delta
@@ -46,6 +55,7 @@ open class FluidContainer(
                 val blockState = world.getBlockState(hit.blockPos)
                 if (blockState.fluidState.fluid == Fluids.WATER) {
                     handItem.insertFluid(Fluids.WATER) { it.capacity }
+                    updateDamage(handItem)
                     return TypedActionResult.success(handItem)
                 }
             }
@@ -65,17 +75,13 @@ open class FluidContainer(
                 val nbtCompound = NbtCompound()
                 this.writeNbt(nbtCompound)
                 stack.setSubNbt("FluidStorage", nbtCompound)
-                updateDamageFromAmount(stack, this.getAmount())
+                updateDamage(stack)
             }
         }
         if (nbt != null) {
             ret.readNbt(nbt)
         }
         return ret
-    }
-
-    open fun updateDamageFromAmount(stack: ItemStack, amount: Long) {
-        stack.damage = stack.maxDamage - (amount / WSConfig.UNIT_DRINK_VOLUME).toInt()
     }
 
     override fun appendTooltip(

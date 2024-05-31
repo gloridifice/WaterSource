@@ -71,7 +71,7 @@ class StrainerFilteringFluidRecipeJsonBuilder(
         val outFluidId: String,
         val strainer: Ingredient,
         val advancementBuilder: Advancement.Builder?,
-        val advancementId: Identifier?,
+        val advancementIdentifier: Identifier?,
         val group: String?,
     ) : RecipeJsonProvider {
         override fun serialize(json: JsonObject) {
@@ -87,6 +87,6 @@ class StrainerFilteringFluidRecipeJsonBuilder(
 
         override fun toAdvancementJson(): JsonObject? = this.advancementBuilder?.toJson()
 
-        override fun getAdvancementId(): Identifier? = this.advancementId
+        override fun getAdvancementId(): Identifier? = this.advancementIdentifier
     }
 }

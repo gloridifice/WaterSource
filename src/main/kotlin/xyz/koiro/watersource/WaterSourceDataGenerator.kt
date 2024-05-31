@@ -7,6 +7,7 @@ import xyz.koiro.watersource.datagen.ModChineseLangGenerator
 import xyz.koiro.watersource.datagen.ModEnglishLangGenerator
 import xyz.koiro.watersource.datagen.ModModelGenerator
 import xyz.koiro.watersource.datagen.ModItemTagGenerator
+import xyz.koiro.watersource.datagen.ModFluidTagGenerator
 import xyz.koiro.watersource.datagen.ModRecipeGenerator
 
 object WaterSourceDataGenerator : DataGeneratorEntrypoint {
@@ -17,6 +18,7 @@ object WaterSourceDataGenerator : DataGeneratorEntrypoint {
 		pack.addProvider(::ModChineseLangGenerator)
 		pack.addProvider(::ModEnglishLangGenerator)
 		pack.addProvider(::ModItemTagGenerator)
+		pack.addProvider(::ModFluidTagGenerator)
 		pack.addProvider(::ModRecipeGenerator)
 	}
 }

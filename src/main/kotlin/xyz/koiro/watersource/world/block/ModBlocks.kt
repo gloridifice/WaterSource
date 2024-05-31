@@ -26,7 +26,7 @@ object ModBlocks {
     }
 
     fun reflectAutoGenDataBlocks(): Iterable<Pair<Block, AutoGenBlockData>> =
-        ModItems::class.java.getDeclaredFields().filter {
+        ModBlocks::class.java.getDeclaredFields().filter {
             val block = it.get(null) as? Block
             val isBlock = block != null
             val isAutoGenData = it.getAnnotation(AutoGenBlockData::class.java) != null

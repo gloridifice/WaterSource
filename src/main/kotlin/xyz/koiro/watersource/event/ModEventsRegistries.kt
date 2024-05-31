@@ -21,6 +21,7 @@ import xyz.koiro.watersource.api.ifInSurvivalAndGetWaterData
 import xyz.koiro.watersource.data.HydrationData
 import xyz.koiro.watersource.world.effect.ModStatusEffects
 import xyz.koiro.watersource.world.item.DrinkableContainer
+import xyz.koiro.watersource.world.item.IHydrationUsable
 import java.util.*
 
 object ModEventsRegistries {
@@ -149,24 +150,17 @@ object ModEventsRegistries {
             player.ifInSurvivalAndGetWaterData { waterLevelData ->
                 WaterSource.LOGGER.info("Player ${player.name} finishes using ${stack.name}")
 
-                val isItemDrinkable = stack.item is DrinkableContainer
-                val data: HydrationData? = if (isItemDrinkable) {
-                    stack.getOrCreateFluidStorageData()?.let { storage ->
-                        HydrationDataManager.SERVER.findByFluid(storage.fluid)
+                val item = stack.item
+                if (item is IHydrationUsable){
+                    val data = item.findHydrationData(stack, HydrationDataManager.SERVER)
+                    data?.let {
+                        item.hydrationUse(stack, it, waterLevelData, player)
+                        item.onHydrationUsingFinished(stack)
                     }
                 } else {
-                    HydrationDataManager.SERVER.findByItemStack(stack)
-                }
-
-                data?.let { hydrationData ->
-                    val multiplier = if (isItemDrinkable) (stack.item as DrinkableContainer).drinkVolumeMultiplier else 1
-                    val level = hydrationData.level
-                    val saturation = hydrationData.saturation
-                    waterLevelData.restoreWater(level, saturation, multiplier)
-                    waterLevelData.updateToClient(player)
-                    hydrationData.applyEffectsToPlayer(player, multiplier)
-                    if (isItemDrinkable){
-                        stack.extractFluid(WSConfig.UNIT_DRINK_VOLUME)
+                    val data = HydrationDataManager.SERVER.findByItemStack(stack)
+                    data?.let {
+                        IHydrationUsable.restoreWaterFromHydrationData(it, waterLevelData, player)
                     }
                 }
             }

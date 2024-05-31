@@ -12,8 +12,7 @@ object ModRecipes {
     fun initialize(){
     }
 
-    val STRAINER_FILTERING_FLUID_TYPE = registerRecipeType("strainer_filtering_fluid_type", StrainerFilteringFluidRecipe.Type())
-    val STRAINER_FILTERING_FLUID_SERIALIZER = registerRecipeSerializer("strainer_filtering_fluid_serializer", StrainerFilteringFluidRecipe.Serializer())
+    val STRAINER_FILTERING_FLUID_SERIALIZER = registerRecipeSerializer("strainer_filtering_fluid", StrainerFilteringFluidRecipe.Serializer())
 
     private fun registerRecipeType(registryName: String, recipeType: RecipeType<*>): RecipeType<*> {
         return Registry.register(Registries.RECIPE_TYPE, Identifier(WaterSource.MODID, registryName), recipeType)

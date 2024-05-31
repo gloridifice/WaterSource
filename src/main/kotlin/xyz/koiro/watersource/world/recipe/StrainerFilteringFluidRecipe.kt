@@ -22,29 +22,27 @@ import xyz.koiro.watersource.world.item.Strainer
 
 class StrainerFilteringFluidRecipe(
     val inFluid: Fluid, val outFluid: Fluid,
-    val id: Identifier, val strainer: Ingredient
+    id: Identifier, val strainer: Ingredient
 ) : SpecialCraftingRecipe(id, CraftingRecipeCategory.MISC) {
     fun getInputAndStrainer(inventory: RecipeInputInventory): Ctx? {
-        if (inventory.size() == 2) {
-            var strainerStack: ItemStack? = null
-            var inputStack: ItemStack? = null
-            var sIndex = 0
-            var iIndex = 0
+        var strainerStack: ItemStack? = null
+        var inputStack: ItemStack? = null
+        var sIndex = 0
+        var iIndex = 0
 
-            for (i in 0..<inventory.size()) {
-                val stack = inventory.getStack(i)
-                if (this.strainer.test(strainerStack)) {
-                    strainerStack = stack
-                    sIndex = i
-                }
-                if (stack.getOrCreateFluidStorageData()?.fluid == inFluid) {
-                    inputStack = stack
-                    iIndex = i
-                }
+        for (i in 0..<inventory.size()) {
+            val stack = inventory.getStack(i)
+            if (this.strainer.test(stack)) {
+                strainerStack = stack
+                sIndex = i
             }
-            if (inputStack != null && strainerStack != null)
-                return Ctx(strainerStack, inputStack, sIndex, iIndex)
+            if (stack.getOrCreateFluidStorageData()?.fluid == inFluid) {
+                inputStack = stack
+                iIndex = i
+            }
         }
+        if (inputStack != null && strainerStack != null)
+            return Ctx(strainerStack, inputStack, sIndex, iIndex)
         return null;
     }
 
@@ -55,7 +53,7 @@ class StrainerFilteringFluidRecipe(
 
             input.getOrCreateFluidStorageData()?.let { fluidStorageData ->
                 (strainer.item as? Strainer)?.calCostDamage(strainer, fluidStorageData.amount)?.let { dmg ->
-                    return strainer.damage + dmg < strainer.maxDamage
+                    return strainer.damage + dmg <= strainer.maxDamage
                 }
             }
         }
@@ -78,13 +76,15 @@ class StrainerFilteringFluidRecipe(
     }
 
     override fun getRemainder(inventory: RecipeInputInventory): DefaultedList<ItemStack> {
-        val defaultedList = super.getRemainder(inventory)
+        val defaultedList = DefaultedList.ofSize(inventory.size(), ItemStack.EMPTY)
+        for (i in defaultedList.indices) {
+            val item = inventory.getStack(i).item
+            if (!item.hasRecipeRemainder()) continue
+            defaultedList[i] = ItemStack(item.recipeRemainder)
+        }
         getInputAndStrainer(inventory)?.let { ctx ->
             ctx.input.getOrCreateFluidStorageData()?.let { fluidStorageData ->
-                val remained = (ctx.strainer.item as? Strainer)?.useStrainer(
-                    strainerStack = ctx.strainer,
-                    volume = fluidStorageData.amount
-                ) ?: ItemStack.EMPTY
+                val remained = (ctx.strainer.item as? Strainer)?.useStrainer(ctx.strainer, fluidStorageData.amount) ?: ItemStack.EMPTY
                 defaultedList[ctx.strainerIndex] = remained
             }
         }
@@ -92,24 +92,14 @@ class StrainerFilteringFluidRecipe(
     }
 
     override fun fits(width: Int, height: Int): Boolean {
-        return true
+        return width * height >= 2
     }
-
-    override fun getOutput(registryManager: DynamicRegistryManager?): ItemStack {
-        return ItemStack.EMPTY
-    }
-
-    override fun getId(): Identifier = id
 
     override fun getSerializer(): RecipeSerializer<*> {
         return ModRecipes.STRAINER_FILTERING_FLUID_SERIALIZER
     }
 
-    override fun getType(): RecipeType<*> {
-        return ModRecipes.STRAINER_FILTERING_FLUID_TYPE
-    }
-
-    class Type: RecipeType<StrainerFilteringFluidRecipe>
+    class Type : RecipeType<StrainerFilteringFluidRecipe>
 
     class Serializer : RecipeSerializer<StrainerFilteringFluidRecipe> {
         override fun read(id: Identifier, json: JsonObject): StrainerFilteringFluidRecipe {

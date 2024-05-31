@@ -42,6 +42,7 @@ object ModItems {
 
     @AutoGenItemData(enLang = "Purified Water Bottle", cnLang = "净水瓶")
     val PURIFIED_WATTER_BOTTLE = registerItem("purified_water_bottle", DrinkOnceItem(FabricItemSettings().maxCount(0), Items.GLASS_BOTTLE))
+
     fun active() {
     }
 

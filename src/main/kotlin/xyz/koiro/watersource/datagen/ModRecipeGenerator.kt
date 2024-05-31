@@ -31,6 +31,6 @@ class ModRecipeGenerator(output: FabricDataOutput?) : FabricRecipeProvider(outpu
         outFluid: Fluid,
         strainer: Ingredient
     ) {
-        StrainerFilteringFluidRecipeJsonBuilder(id, outFluid, inFluid, strainer).offerTo(exporter, id)
+        StrainerFilteringFluidRecipeJsonBuilder(id, inFluid, outFluid, strainer).offerTo(exporter, id)
     }
 }

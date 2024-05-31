@@ -7,10 +7,18 @@ import net.minecraft.item.Items
 import xyz.koiro.watersource.WaterSource
 import xyz.koiro.watersource.datagen.provider.HydrationDataProvider
 import xyz.koiro.watersource.world.effect.ModStatusEffects
+import xyz.koiro.watersource.world.fluid.ModFluids
 
-class HydrationDataGenerator(output: DataOutput): HydrationDataProvider(output) {
+class HydrationDataGenerator(output: DataOutput) : HydrationDataProvider(output) {
     override fun addData(adder: HydrationDataAdder) {
-        adder.add(WaterSource.identifier("item_apple"), item(Items.APPLE, 1, 1))
-        adder.add(WaterSource.identifier("fluid_water"), fluid(Fluids.WATER, 2, 0, StatusEffectInstance(ModStatusEffects.THIRSTY, 1200)))
+        adder.add(WaterSource.identifier("item_apple"), item(Items.APPLE, 1, 2))
+        adder.add(
+            WaterSource.identifier("fluid_water"),
+            fluid(Fluids.WATER, 2, 0, StatusEffectInstance(ModStatusEffects.THIRSTY, 1200))
+        )
+        adder.add(
+            WaterSource.identifier("fluid_purified_water"),
+            fluid(ModFluids.PURIFIED_WATER, 4, 6)
+        )
     }
 }
