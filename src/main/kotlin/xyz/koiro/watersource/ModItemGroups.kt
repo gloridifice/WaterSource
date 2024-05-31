@@ -14,7 +14,7 @@ object ModItemGroups {
         ModItems.NATURAL_STRAINER.simpleStack(),
         ModItems.LEATHER_WATER_BAG.simpleStack(),
         ModItems.PURIFIED_WATER_BUCKET.simpleStack(),
-        ModItems.PURIFIED_WATTER_BOTTLE.simpleStack()
+        ModItems.PURIFIED_WATER_BOTTLE.simpleStack()
     )
 
     val MAIN_ITEM_GROUP = Registry.register(
@@ -25,7 +25,7 @@ object ModItemGroups {
                     entries.add(it)
                 }
             }
-            .icon { ModItems.PURIFIED_WATTER_BOTTLE.simpleStack() }
+            .icon { ModItems.PURIFIED_WATER_BOTTLE.simpleStack() }
             .build()
     )
 

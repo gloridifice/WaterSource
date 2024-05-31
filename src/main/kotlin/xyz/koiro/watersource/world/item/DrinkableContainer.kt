@@ -21,8 +21,9 @@ import xyz.koiro.watersource.world.attachment.WaterLevelData
 open class DrinkableContainer(
     settings: Settings, capacity: Long,
     val useDuration: Int = 32,
-    val drinkVolumeMultiplier: Int = 1
-) : FluidContainer(settings, capacity), IHydrationUsable {
+    val drinkVolumeMultiplier: Int = 1,
+    emptyContainerStack: (() -> ItemStack)? = null
+) : FluidContainer(settings, capacity, emptyContainerStack), IHydrationUsable {
     override fun use(world: World, user: PlayerEntity, hand: Hand): TypedActionResult<ItemStack> {
         val result = super.use(world, user, hand)
         if (result.result != ActionResult.PASS) return result
@@ -52,9 +53,10 @@ open class DrinkableContainer(
         return UseAction.DRINK
     }
 
-    override fun onHydrationUsingFinished(stack: ItemStack) {
-        updateDamage(stack)
+    override fun onHydrationUsingFinished(stack: ItemStack, player: ServerPlayerEntity, hand: Hand) {
+        onFluidDataChanged(stack, player, hand)
     }
+
 
     override fun hydrationUse(
         stack: ItemStack,

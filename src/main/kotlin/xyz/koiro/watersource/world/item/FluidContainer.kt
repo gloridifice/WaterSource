@@ -28,7 +28,8 @@ import kotlin.math.round
 
 open class FluidContainer(
     settings: Settings,
-    val capacity: Long
+    val capacity: Long,
+    val emptyContainer: (() -> ItemStack)? = null
 ) : Item(settings.maxDamage((capacity / WSConfig.UNIT_DRINK_VOLUME).toInt())) {
     init {
         FluidStorage.ITEM.registerForItems(::getFluidStorage, this)
@@ -38,24 +39,29 @@ open class FluidContainer(
         return fluid == currentData.fluid || currentData.isBlank()
     }
 
-    fun updateDamage(stack: ItemStack) {
+    fun onFluidDataChanged(stack: ItemStack, playerEntity: PlayerEntity, hand: Hand) {
         stack.getOrCreateFluidStorageData()?.let {
             val amount = it.amount
             val damage = round((1 - amount.toDouble() / capacity.toDouble()) * maxDamage).toInt()
-            stack.damage = damage
+            if (damage >= maxDamage){
+                if (emptyContainer != null){
+                    playerEntity.setStackInHand(hand, emptyContainer.invoke())
+                } else stack.damage = maxDamage
+            } else {
+                stack.damage = damage
+            }
         }
     }
 
     override fun use(world: World, user: PlayerEntity, hand: Hand): TypedActionResult<ItemStack> {
         if (!world.isClient()) {
-            //todo get delta
             val hit = user.raycast(3.0, 0.05f, true)
             val handItem = user.getStackInHand(hand)
             if (hit is BlockHitResult) {
                 val blockState = world.getBlockState(hit.blockPos)
                 if (blockState.fluidState.fluid == Fluids.WATER) {
                     handItem.insertFluid(Fluids.WATER) { it.capacity }
-                    updateDamage(handItem)
+                    onFluidDataChanged(handItem, user, hand)
                     return TypedActionResult.success(handItem)
                 }
             }
@@ -75,7 +81,6 @@ open class FluidContainer(
                 val nbtCompound = NbtCompound()
                 this.writeNbt(nbtCompound)
                 stack.setSubNbt("FluidStorage", nbtCompound)
-                updateDamage(stack)
             }
         }
         if (nbt != null) {

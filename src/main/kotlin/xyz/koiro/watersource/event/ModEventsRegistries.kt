@@ -155,7 +155,7 @@ object ModEventsRegistries {
                     val data = item.findHydrationData(stack, HydrationDataManager.SERVER)
                     data?.let {
                         item.hydrationUse(stack, it, waterLevelData, player)
-                        item.onHydrationUsingFinished(stack)
+                        item.onHydrationUsingFinished(stack, player, player.activeHand)
                     }
                 } else {
                     val data = HydrationDataManager.SERVER.findByItemStack(stack)

@@ -3,6 +3,7 @@ package xyz.koiro.watersource.world.item
 import net.fabricmc.fabric.api.item.v1.FabricItemSettings
 import net.minecraft.item.BucketItem
 import net.minecraft.item.Item
+import net.minecraft.item.ItemStack
 import net.minecraft.item.Items
 import net.minecraft.registry.Registries
 import net.minecraft.registry.Registry
@@ -30,18 +31,39 @@ object ModItems {
         Item(FabricItemSettings())
     )
 
-    //todo test
     @AutoGenItemData(enLang = "Leather Water Bag", cnLang = "皮水袋")
     val LEATHER_WATER_BAG = registerItem(
         "leather_water_bag",
         DrinkableContainer(FabricItemSettings().maxCount(1), 1000)
     )
 
+    @AutoGenItemData(enLang = "Wooden Cup", cnLang = "木杯子")
+    val WOODEN_CUP: Item = registerItem(
+        "wooden_cup",
+        DrinkableContainer(
+            FabricItemSettings().maxCount(1),
+            250,
+            emptyContainerStack = { ItemStack(WOODEN_CUP_EMPTY) }
+        )
+    )
+
+    @AutoGenItemData(enLang = "Wooden Cup", cnLang = "木杯子")
+    val WOODEN_CUP_EMPTY: Item = registerItem(
+        "wooden_cup_empty",
+        EmptyDrinkableContainer(FabricItemSettings()) { ItemStack(WOODEN_CUP) }
+    )
+
     @AutoGenItemData(enLang = "Purified Water Bucket", cnLang = "净水桶")
-    val PURIFIED_WATER_BUCKET = registerItem("purified_water_bucket", BucketItem(ModFluids.PURIFIED_WATER, FabricItemSettings().maxCount(1)))
+    val PURIFIED_WATER_BUCKET =
+        registerItem("purified_water_bucket", BucketItem(ModFluids.PURIFIED_WATER, FabricItemSettings().maxCount(1)))
 
     @AutoGenItemData(enLang = "Purified Water Bottle", cnLang = "净水瓶")
-    val PURIFIED_WATTER_BOTTLE = registerItem("purified_water_bottle", DrinkOnceItem(FabricItemSettings().maxCount(0), Items.GLASS_BOTTLE))
+    val PURIFIED_WATER_BOTTLE =
+        registerItem(
+            "purified_water_bottle",
+            DrinkOnceItem(FabricItemSettings().maxCount(16), 32) { ItemStack(Items.GLASS_BOTTLE) }
+        )
+
 
     fun active() {
     }

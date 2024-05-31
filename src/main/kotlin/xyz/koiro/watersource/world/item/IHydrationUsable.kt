@@ -2,12 +2,13 @@ package xyz.koiro.watersource.world.item
 
 import net.minecraft.item.ItemStack
 import net.minecraft.server.network.ServerPlayerEntity
+import net.minecraft.util.Hand
 import xyz.koiro.watersource.data.HydrationData
 import xyz.koiro.watersource.data.HydrationDataManager
 import xyz.koiro.watersource.world.attachment.WaterLevelData
 
 interface IHydrationUsable {
-    fun onHydrationUsingFinished(stack: ItemStack)
+    fun onHydrationUsingFinished(stack: ItemStack, player: ServerPlayerEntity, hand: Hand)
     fun hydrationUse(
         stack: ItemStack,
         hydrationData: HydrationData,
