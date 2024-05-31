@@ -17,7 +17,7 @@ import xyz.koiro.watersource.world.fluid.ModFluids
 import xyz.koiro.watersource.world.item.ModItems
 
 object ModBlocks {
-
+    @AutoGenBlockData("Purified Water", "净化水", false)
     val PURIFIED_WATER = registerBlock("purified_water", FluidBlock(ModFluids.FLOWING_PURIFIED_WATER as FlowableFluid, AbstractBlock.Settings.create().mapColor(MapColor.WATER_BLUE).replaceable().noCollision().strength(100.0f).pistonBehavior(PistonBehavior.DESTROY).dropsNothing().liquid().sounds(BlockSoundGroup.INTENTIONALLY_EMPTY)))
 
     fun active(){}

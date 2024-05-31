@@ -96,7 +96,7 @@ open class FluidContainer(
         context: TooltipContext
     ) {
         stack.getOrCreateFluidStorageData()?.let { storageData ->
-            val name = Text.translatable(storageData.fluid.identifier().toTranslationKey("fluid"))
+            val name = storageData.fluid.defaultState.blockState.block.name
             val rawText =
                 if (storageData.isBlank()) Text.of("Empty") else
                     name.append(Text.of(": ${storageData.amount}/${storageData.capacity}"))

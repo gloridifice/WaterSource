@@ -53,12 +53,8 @@ object ModEventsRegistries {
     private fun thirstyTick(player: ServerPlayerEntity) {
         player.ifInSurvivalAndGetWaterData { waterData ->
             player.getStatusEffect(ModStatusEffects.THIRSTY)?.let { effectInstance ->
-                val ticker = player.getAttachedOrCreate(ModAttachmentTypes.THIRSTY_ADD_EXHAUSTION_TICKER)
-                ticker.add(1)
-                if (ticker.value >= 20) {
-                    waterData.addExhaustion(Exhaustion.thirstyPerSecond(effectInstance.amplifier), player)
-                    waterData.updateToClient(player)
-                }
+                waterData.addExhaustion(Exhaustion.thirstyPerSecond(effectInstance.amplifier) / 50f, player)
+                waterData.updateToClient(player)
             }
         }
     }
@@ -151,7 +147,7 @@ object ModEventsRegistries {
                 WaterSource.LOGGER.info("Player ${player.name} finishes using ${stack.name}")
 
                 val item = stack.item
-                if (item is IHydrationUsable){
+                if (item is IHydrationUsable) {
                     val data = item.findHydrationData(stack, HydrationDataManager.SERVER)
                     data?.let {
                         item.hydrationUse(stack, it, waterLevelData, player)

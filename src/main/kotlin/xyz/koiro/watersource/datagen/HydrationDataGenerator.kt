@@ -4,6 +4,7 @@ import net.minecraft.data.DataOutput
 import net.minecraft.entity.effect.StatusEffectInstance
 import net.minecraft.fluid.Fluids
 import net.minecraft.item.Items
+import net.minecraft.util.Identifier
 import xyz.koiro.watersource.WaterSource
 import xyz.koiro.watersource.datagen.provider.HydrationDataProvider
 import xyz.koiro.watersource.world.effect.ModStatusEffects
@@ -19,14 +20,15 @@ class HydrationDataGenerator(output: DataOutput) : HydrationDataProvider(output)
         )
         adder.add(
             WaterSource.identifier("fluid_purified_water"),
-            fluid(ModFluids.PURIFIED_WATER, 4, 6)
+            fluid(ModFluids.PURIFIED_WATER, 4, 5)
         )
         adder.add(
             WaterSource.identifier("item_purified_water_bottle"),
-            item(ModItems.PURIFIED_WATER_BOTTLE, 4, 6)
+            item(ModItems.PURIFIED_WATER_BOTTLE, 4, 5)
         )
 
         // Vanilla -----------------------
-        adder.add(WaterSource.identifier("item_apple"), item(Items.APPLE, 1, 2))
+        adder.add(Identifier("item_apple"), item(Items.APPLE, 1, 2))
+        adder.add(Identifier("item_potion"), item(Items.POTION, 2, 0, StatusEffectInstance(ModStatusEffects.THIRSTY, 1200)))
     }
 }

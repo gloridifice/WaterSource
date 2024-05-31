@@ -14,13 +14,12 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import xyz.koiro.watersource.WaterSource;
 import xyz.koiro.watersource.event.ModServerEvents;
 
-@Mixin(Item.class)
+@Mixin(ItemStack.class)
 public class ItemMixin {
-
-    @Inject(at = @At("INVOKE"), method = "finishUsing")
-    private void finishUsing(final ItemStack stack, final World world, final LivingEntity user, final CallbackInfoReturnable<ItemStack> info){
+    @Inject(at = @At("RETURN"), method = "finishUsing")
+    private void finishUsing(final World world, final LivingEntity user, final CallbackInfoReturnable<ItemStack> info){
         if (!world.isClient()){
-            ActionResult result = ModServerEvents.INSTANCE.getFINISH_USING_ITEM().invoker().interact(user, (ServerWorld) world, stack);
+            ActionResult result = ModServerEvents.INSTANCE.getFINISH_USING_ITEM().invoker().interact(user, (ServerWorld) world, (ItemStack) (Object) this);
         }
     }
 }

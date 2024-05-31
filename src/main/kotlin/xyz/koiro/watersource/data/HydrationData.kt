@@ -70,7 +70,7 @@ class HydrationData(
 
     fun applyEffectsToPlayer(player: ServerPlayerEntity, multiplier: Int = 1){
         effects.forEach { effectInstance ->
-            player.addStatusEffect(StatusEffectInstance(effectInstance.effectType, effectInstance.amplifier, effectInstance.duration * multiplier))
+            player.addStatusEffect(StatusEffectInstance(effectInstance.effectType, effectInstance.duration * multiplier, effectInstance.amplifier))
         }
     }
     fun match(itemStack: ItemStack?): Boolean {

@@ -13,7 +13,7 @@ object WSConfig {
 
     object Exhaustion {
         val SPRINT = 0.05f // per meter
-        val JUMP = 0.8f
+        val JUMP = 0.4f
         val REWARD_HEALTH = 2f
         fun thirstyPerSecond(amplifier: Int): Float{
             return 0.5f + (amplifier + 1) * 0.3f
@@ -24,7 +24,6 @@ object WSConfig {
     }
 
     object Punishment {
-
         private val DURATION = 50;
         fun getPunishmentStatusEffectsSix(difficulty: WaterSource.ModDifficulty): Iterable<StatusEffectInstance>{
             return when(difficulty){
