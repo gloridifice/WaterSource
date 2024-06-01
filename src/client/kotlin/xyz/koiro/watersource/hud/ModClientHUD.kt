@@ -1,6 +1,5 @@
 package xyz.koiro.watersource.hud
 
-import com.mojang.blaze3d.systems.RenderSystem
 import net.fabricmc.fabric.api.client.rendering.v1.HudRenderCallback
 import net.minecraft.client.MinecraftClient
 import net.minecraft.client.gui.DrawContext
@@ -72,10 +71,10 @@ object ModClientHUD {
                 val isEndAndEndIsHalf = i == frameCount - 1 && fEndIsHalf
                 val fY = y + yOffsetList[i]
                 if (isEndAndEndIsHalf) {
-                    DrawWaterBallUtils(x, fY, isThirty, DrawWaterBallUtils.Part.DownFrame).draw(context)
+                    DrawWaterBallUtils(x, fY, isThirty, DrawWaterBallUtils.Part.SaturationDown).draw(context)
                 } else {
-                    DrawWaterBallUtils(x, fY, isThirty, DrawWaterBallUtils.Part.UpFrame).draw(context)
-                    DrawWaterBallUtils(x, fY, isThirty, DrawWaterBallUtils.Part.DownFrame).draw(context)
+                    DrawWaterBallUtils(x, fY, isThirty, DrawWaterBallUtils.Part.SaturationUp).draw(context)
+                    DrawWaterBallUtils(x, fY, isThirty, DrawWaterBallUtils.Part.SaturationDown).draw(context)
                 }
             }
         }

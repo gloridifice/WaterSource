@@ -31,6 +31,11 @@ abstract class HydrationDataProvider(val output: DataOutput) : DataProvider {
             val itemId = item.identifier()
             dataMap[Identifier(itemId.namespace, "item_${itemId.path}")] = item(item, level, saturation)
         }
+
+        fun addDryItemWithAutoId(item: Item, dryLevel: Int) {
+            val itemId = item.identifier()
+            dataMap[Identifier(itemId.namespace, "dry_item_${itemId.path}")] = dryItem(item, dryLevel)
+        }
     }
 
     override fun run(writer: DataWriter): CompletableFuture<*> {
@@ -42,7 +47,7 @@ abstract class HydrationDataProvider(val output: DataOutput) : DataProvider {
                 try {
                     val byteArrayOutputStream = ByteArrayOutputStream()
                     val hashingOutputStream = HashingOutputStream(Hashing.sha1(), byteArrayOutputStream)
-                    Json.encodeToStream(data.format, hashingOutputStream)
+                    Json.encodeToStream(data.format(), hashingOutputStream)
                     writer.write(path, byteArrayOutputStream.toByteArray(), hashingOutputStream.hash())
                 } catch (e: IOException) {
                     WaterSource.LOGGER.error("Failed to save file {}", path, e)
@@ -55,11 +60,23 @@ abstract class HydrationDataProvider(val output: DataOutput) : DataProvider {
     abstract fun addData(adder: HydrationDataAdder)
 
     companion object {
-        fun item(item: Item, level: Int, saturation: Int, vararg effectInstance: StatusEffectInstance): HydrationData {
+        fun dryItem(item: Item, dryLevel: Int, vararg effectInstance: HydrationData.ProbabilityStatusEffectInstance): HydrationData {
+            val effects = ArrayList(effectInstance.toList())
+            return HydrationData(
+                0,
+                0,
+                dryLevel,
+                matchList = arrayListOf(HydrationData.ItemMatch(item)),
+                effects = effects
+            )
+        }
+
+        fun item(item: Item, level: Int, saturation: Int, vararg effectInstance: HydrationData.ProbabilityStatusEffectInstance): HydrationData {
             val effects = ArrayList(effectInstance.toList())
             return HydrationData(
                 level,
                 saturation,
+                null,
                 matchList = arrayListOf(HydrationData.ItemMatch(item)),
                 effects = effects
             )
@@ -69,11 +86,11 @@ abstract class HydrationDataProvider(val output: DataOutput) : DataProvider {
             fluid: Fluid,
             level: Int,
             saturation: Int,
-            vararg effectInstance: StatusEffectInstance
+            vararg effectInstance: HydrationData.ProbabilityStatusEffectInstance
         ): HydrationData {
             val effects = ArrayList(effectInstance.toList())
             return HydrationData(
-                level, saturation, matchList = arrayListOf(HydrationData.FluidMatch(fluid)),
+                level, saturation, null, matchList = arrayListOf(HydrationData.FluidMatch(fluid)),
                 effects = effects
             )
         }
@@ -82,11 +99,11 @@ abstract class HydrationDataProvider(val output: DataOutput) : DataProvider {
             tag: TagKey<Item>,
             level: Int,
             saturation: Int,
-            vararg effectInstance: StatusEffectInstance
+            vararg effectInstance: HydrationData.ProbabilityStatusEffectInstance
         ): HydrationData {
             val effects = ArrayList(effectInstance.toList())
             return HydrationData(
-                level, saturation, matchList = arrayListOf(HydrationData.ItemTagMatch(tag)),
+                level, saturation, null, matchList = arrayListOf(HydrationData.ItemTagMatch(tag)),
                 effects = effects
             )
         }
@@ -95,11 +112,11 @@ abstract class HydrationDataProvider(val output: DataOutput) : DataProvider {
             tag: TagKey<Fluid>,
             level: Int,
             saturation: Int,
-            vararg effectInstance: StatusEffectInstance
+            vararg effectInstance: HydrationData.ProbabilityStatusEffectInstance
         ): HydrationData {
             val effects = ArrayList(effectInstance.toList())
             return HydrationData(
-                level, saturation, matchList = arrayListOf(HydrationData.FluidTagMatch(tag)),
+                level, saturation, null, matchList = arrayListOf(HydrationData.FluidTagMatch(tag)),
                 effects = effects
             )
         }

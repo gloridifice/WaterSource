@@ -15,18 +15,24 @@ interface IHydrationUsable {
         waterLevelData: WaterLevelData,
         player: ServerPlayerEntity
     )
+
     fun findHydrationData(stack: ItemStack, manager: HydrationDataManager): HydrationData?
 
-    companion object{
+    companion object {
         fun restoreWaterFromHydrationData(
             hydrationData: HydrationData,
             waterLevelData: WaterLevelData,
             player: ServerPlayerEntity,
             multiplier: Int = 1,
-        ){
+        ) {
             val level = hydrationData.level
             val saturation = hydrationData.saturation
-            waterLevelData.restoreWater(level, saturation, multiplier)
+            if (hydrationData.isDry()) {
+                val dryLevel = hydrationData.dryLevel!!
+                waterLevelData.dryConsumeWater(dryLevel)
+            } else {
+                waterLevelData.restoreWater(level, saturation, multiplier)
+            }
             waterLevelData.updateToClient(player)
             hydrationData.applyEffectsToPlayer(player, multiplier)
         }

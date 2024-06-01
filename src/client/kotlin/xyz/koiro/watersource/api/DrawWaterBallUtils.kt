@@ -11,24 +11,26 @@ data class DrawWaterBallUtils(
     val y: Int,
     val isThirty: Boolean,
     val part: Part,
-    val twinkle: Boolean = false
+    val twinkle: Boolean = false,
 ) {
     companion object {
         val WATER_LEVEL_ICONS = WaterSource.identifier("textures/gui/hud/icons.png")
     }
 
     enum class Part(val u: Int) {
-        Empty(0), Full(9), LeftHalf(18), RightHalf(27), UpFrame(36), DownFrame(45)
+        Empty(0), Full(9), LeftHalf(18), RightHalf(27), SaturationUp(36), SaturationDown(45), DryUp(54), DryDown(63)
     }
 
     fun draw(context: DrawContext) {
         val y = when (part) {
-            Part.UpFrame -> this.y - 1
-            Part.DownFrame -> this.y + 1
+            Part.SaturationUp, Part.DryUp -> this.y - 1
+            Part.SaturationDown, Part.DryDown -> this.y + 1
             else -> this.y
         }
 
-        val draw = { context.drawTexture(WATER_LEVEL_ICONS, x, y, part.u, if (isThirty) 9 else 0, 9, 9) }
+        val draw = {
+            context.drawTexture(WATER_LEVEL_ICONS, x, y, part.u, if (isThirty) 9 else 0, 9, 9)
+        }
 
         RenderSystem.enableBlend()
         if (twinkle) {

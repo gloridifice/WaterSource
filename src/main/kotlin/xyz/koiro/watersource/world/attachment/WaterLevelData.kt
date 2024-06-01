@@ -67,6 +67,11 @@ class WaterLevelData(
         else saturation = diff
     }
 
+    /** Consume only water saturation */
+    fun dryConsumeWater(amount: Int){
+        saturation -= amount
+    }
+
     fun writeBuf(buf: PacketByteBuf): PacketByteBuf{
         buf.writeInt(level)
         buf.writeInt(saturation)

@@ -8,6 +8,8 @@ import net.minecraft.resource.ResourceManager
 import net.minecraft.util.Identifier
 import xyz.koiro.watersource.WaterSource
 import xyz.koiro.watersource.api.getOrCreateFluidStorageData
+import xyz.koiro.watersource.datagen.provider.HydrationDataProvider
+import kotlin.math.floor
 
 class HydrationDataManager : SimpleSynchronousResourceReloadListener {
     private val map = HashMap<String, HydrationData>()
@@ -18,9 +20,17 @@ class HydrationDataManager : SimpleSynchronousResourceReloadListener {
     }
 
     fun findByItemStack(itemStack: ItemStack): HydrationData? {
-        return sequence?.find {
+        val data = sequence?.find {
             it.match(itemStack)
         } ?: itemStack.getOrCreateFluidStorageData()?.let { data -> sequence?.find { it.match(data.fluid) } }
+        return data
+            ?: if (itemStack.isFood) {
+                itemStack.item.foodComponent?.hunger?.let {
+                    if (it > 1) {
+                        HydrationDataProvider.dryItem(itemStack.item, floor(it / 2f).toInt())
+                    } else null
+                }
+            } else null
     }
 
     fun findByFluid(fluid: Fluid): HydrationData? {
