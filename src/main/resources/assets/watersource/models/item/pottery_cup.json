@@ -1,0 +1,7 @@
+{
+  "parent": "minecraft:item/generated",
+  "textures": {
+    "layer0": "watersource:item/pottery_cup_empty",
+    "layer1": "watersource:item/pottery_cup_overlay"
+  }
+}

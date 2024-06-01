@@ -11,7 +11,7 @@ import kotlin.math.ceil
 import kotlin.random.Random
 
 object ModClientHUD {
-    private var elapsedTime: Float = 0f
+    var elapsedTime: Float = 0f
     fun initialize() {
         HudRenderCallback.EVENT.register { context: DrawContext, deltaTime: Float ->
             val mc = MinecraftClient.getInstance()
@@ -36,7 +36,8 @@ object ModClientHUD {
             val level = waterLevelData.level
             val saturation = waterLevelData.saturation
             val offsetBetweenFoodBar = 10
-            val y: Int = context.scaledWindowHeight - 39 - offsetBetweenFoodBar
+            var y: Int = context.scaledWindowHeight - 39 - offsetBetweenFoodBar
+            if (player.isSubmergedInWater || player.air < player.maxAir) y -= 10
             val xStart: Int = context.scaledWindowWidth / 2 + 91
             val isThirty = player.hasStatusEffect(ModStatusEffects.THIRSTY)
 

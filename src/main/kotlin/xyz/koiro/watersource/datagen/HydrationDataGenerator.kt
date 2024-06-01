@@ -20,15 +20,24 @@ class HydrationDataGenerator(output: DataOutput) : HydrationDataProvider(output)
         )
         adder.add(
             WaterSource.identifier("fluid_purified_water"),
-            fluid(ModFluids.PURIFIED_WATER, 4, 5)
+            fluid(ModFluids.PURIFIED_WATER, 4, 6)
         )
-        adder.add(
-            WaterSource.identifier("item_purified_water_bottle"),
-            item(ModItems.PURIFIED_WATER_BOTTLE, 4, 5)
-        )
+        adder.addItemWithAutoId(ModItems.PURIFIED_WATER_BOTTLE, 4, 6)
 
         // Vanilla -----------------------
-        adder.add(Identifier("item_apple"), item(Items.APPLE, 1, 2))
-        adder.add(Identifier("item_potion"), item(Items.POTION, 2, 0, StatusEffectInstance(ModStatusEffects.THIRSTY, 1200)))
+        adder.addItemWithAutoId(Items.APPLE, 1, 2)
+        adder.addItemWithAutoId(Items.GOLDEN_APPLE, 2, 8)
+        adder.addItemWithAutoId(Items.ENCHANTED_GOLDEN_APPLE, 4, 10)
+        adder.addItemWithAutoId(Items.MUSHROOM_STEW, 1, 0)
+        adder.addItemWithAutoId(Items.SUSPICIOUS_STEW, 1, 0)
+        adder.addItemWithAutoId(Items.RABBIT_STEW, 1, 0)
+        adder.addItemWithAutoId(Items.MELON_SLICE, 1, 1)
+        adder.addItemWithAutoId(Items.GLISTERING_MELON_SLICE, 1, 2)
+        adder.addItemWithAutoId(Items.SWEET_BERRIES, 1, 0)
+        adder.addItemWithAutoId(Items.GLOW_BERRIES, 1, 0)
+        adder.add(
+            Identifier("item_potion"),
+            item(Items.POTION, 2, 0, StatusEffectInstance(ModStatusEffects.THIRSTY, 1200))
+        )
     }
 }

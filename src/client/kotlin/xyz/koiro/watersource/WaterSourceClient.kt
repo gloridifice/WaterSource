@@ -26,7 +26,7 @@ object WaterSourceClient : ClientModInitializer {
             ModFluids.PURIFIED_WATER, ModFluids.FLOWING_PURIFIED_WATER, SimpleFluidRenderHandler(
                 Identifier("minecraft:block/water_still"),
                 Identifier("minecraft:block/water_flow"),
-                0x3d98e7
+                0x62A9E7
             )
         )
         BlockRenderLayerMap.INSTANCE.putFluids(RenderLayer.getTranslucent(), ModFluids.PURIFIED_WATER, ModFluids.FLOWING_PURIFIED_WATER);

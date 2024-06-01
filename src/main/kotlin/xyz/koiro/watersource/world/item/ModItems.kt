@@ -17,7 +17,7 @@ object ModItems {
     @AutoGenItemData(enLang = "Natural Strainer", cnLang = "自然滤网")
     val NATURAL_STRAINER = registerItem(
         "natural_strainer",
-        Strainer(FabricItemSettings().maxCount(1).maxDamage(14))
+        Strainer(FabricItemSettings().maxCount(1).maxDamage(16))
     )
 
     @AutoGenItemData(enLang = "Paper Strainer", cnLang = "纸滤网")
@@ -32,10 +32,22 @@ object ModItems {
         Item(FabricItemSettings())
     )
 
-    @AutoGenItemData(enLang = "Leather Water Bag", cnLang = "皮水袋")
-    val LEATHER_WATER_BAG = registerItem(
-        "leather_water_bag",
+    @AutoGenItemData(enLang = "Leather Water Bag (Small)", cnLang = "皮水袋（小）")
+    val LEATHER_WATER_BAG_SMALL = registerItem(
+        "leather_water_bag_small",
         DrinkableContainer(FabricItemSettings().maxCount(1), 1000)
+    )
+
+    @AutoGenItemData(enLang = "Leather Water Bag (Medium)", cnLang = "皮水袋（中）")
+    val LEATHER_WATER_BAG_MEDIUM = registerItem(
+        "leather_water_bag_medium",
+        DrinkableContainer(FabricItemSettings().maxCount(1), 2000)
+    )
+
+    @AutoGenItemData(enLang = "Leather Water Bag (Large)", cnLang = "皮水袋（大）")
+    val LEATHER_WATER_BAG_LARGE = registerItem(
+        "leather_water_bag_large",
+        DrinkableContainer(FabricItemSettings().maxCount(1), 4000, drinkVolumeMultiplier = 2)
     )
 
     @AutoGenItemData(enLang = "Wooden Cup", cnLang = "木杯子", modelType = ModelType.DontGen)
@@ -52,6 +64,25 @@ object ModItems {
     val WOODEN_CUP_EMPTY: Item = registerItem(
         "wooden_cup_empty",
         EmptyDrinkableContainer(FabricItemSettings()) { ItemStack(WOODEN_CUP) }
+    )
+
+    @AutoGenItemData(enLang = "Raw Pottery Cup", cnLang = "陶杯子（未烤制）")
+    val RAW_POTTERY_CUP = registerItem("raw_pottery_cup", Item(FabricItemSettings()))
+
+    @AutoGenItemData(enLang = "Pottery Cup", cnLang = "陶杯子")
+    val POTTERY_CUP_EMPTY: Item = registerItem(
+        "pottery_cup_empty",
+        EmptyDrinkableContainer(FabricItemSettings()) { ItemStack(POTTERY_CUP) }
+    )
+
+    @AutoGenItemData(enLang = "Pottery Cup", cnLang = "陶杯子", modelType = ModelType.DontGen)
+    val POTTERY_CUP: Item = registerItem(
+        "pottery_cup",
+        DrinkableContainer(
+            FabricItemSettings().maxCount(1),
+            750,
+            emptyContainerStack = { ItemStack(POTTERY_CUP_EMPTY) }
+        )
     )
 
     @AutoGenItemData(enLang = "Purified Water Bucket", cnLang = "净水桶")

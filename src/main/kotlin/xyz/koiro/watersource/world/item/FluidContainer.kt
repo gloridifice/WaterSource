@@ -98,8 +98,8 @@ open class FluidContainer(
         stack.getOrCreateFluidStorageData()?.let { storageData ->
             val name = storageData.fluid.defaultState.blockState.block.name
             val rawText =
-                if (storageData.isBlank()) Text.of("Empty") else
-                    name.append(Text.of(": ${storageData.amount}/${storageData.capacity}"))
+                if (storageData.isBlank()) Text.of("Empty: ${storageData.capacity} mB") else
+                    name.append(Text.of(": ${storageData.amount}/${storageData.capacity} mB"))
 
             tooltip.add(rawText.copy().styled { it.withColor(Formatting.GRAY) })
         }

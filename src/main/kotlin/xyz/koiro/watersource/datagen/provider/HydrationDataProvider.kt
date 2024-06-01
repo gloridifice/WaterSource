@@ -14,18 +14,25 @@ import net.minecraft.registry.tag.TagKey
 import net.minecraft.util.Identifier
 import xyz.koiro.watersource.WaterSource
 import xyz.koiro.watersource.data.HydrationData
+import xyz.koiro.watersource.identifier
 import java.io.ByteArrayOutputStream
 import java.io.IOException
 import java.util.concurrent.CompletableFuture
 
 abstract class HydrationDataProvider(val output: DataOutput) : DataProvider {
-    class HydrationDataAdder(){
+    class HydrationDataAdder() {
         val dataMap = hashMapOf<Identifier, HydrationData>()
 
-        fun add(identifier: Identifier, hydrationData: HydrationData){
+        fun add(identifier: Identifier, hydrationData: HydrationData) {
             dataMap[identifier] = hydrationData
         }
+
+        fun addItemWithAutoId(item: Item, level: Int, saturation: Int) {
+            val itemId = item.identifier()
+            dataMap[Identifier(itemId.namespace, "item_${itemId.path}")] = item(item, level, saturation)
+        }
     }
+
     override fun run(writer: DataWriter): CompletableFuture<*> {
         val dataAdder = HydrationDataAdder()
         addData(dataAdder)
@@ -47,48 +54,55 @@ abstract class HydrationDataProvider(val output: DataOutput) : DataProvider {
 
     abstract fun addData(adder: HydrationDataAdder)
 
-    fun item(item: Item, level: Int, saturation: Int, vararg effectInstance: StatusEffectInstance): HydrationData {
-        val effects = ArrayList(effectInstance.toList())
-        return HydrationData(
-            level,
-            saturation,
-            matchList = arrayListOf(HydrationData.ItemMatch(item)),
-            effects = effects
-        )
-    }
+    companion object {
+        fun item(item: Item, level: Int, saturation: Int, vararg effectInstance: StatusEffectInstance): HydrationData {
+            val effects = ArrayList(effectInstance.toList())
+            return HydrationData(
+                level,
+                saturation,
+                matchList = arrayListOf(HydrationData.ItemMatch(item)),
+                effects = effects
+            )
+        }
 
-    fun fluid(fluid: Fluid, level: Int, saturation: Int, vararg effectInstance: StatusEffectInstance): HydrationData {
-        val effects = ArrayList(effectInstance.toList())
-        return HydrationData(
-            level, saturation, matchList = arrayListOf(HydrationData.FluidMatch(fluid)),
-            effects = effects
-        )
-    }
+        fun fluid(
+            fluid: Fluid,
+            level: Int,
+            saturation: Int,
+            vararg effectInstance: StatusEffectInstance
+        ): HydrationData {
+            val effects = ArrayList(effectInstance.toList())
+            return HydrationData(
+                level, saturation, matchList = arrayListOf(HydrationData.FluidMatch(fluid)),
+                effects = effects
+            )
+        }
 
-    fun itemTag(
-        tag: TagKey<Item>,
-        level: Int,
-        saturation: Int,
-        vararg effectInstance: StatusEffectInstance
-    ): HydrationData {
-        val effects = ArrayList(effectInstance.toList())
-        return HydrationData(
-            level, saturation, matchList = arrayListOf(HydrationData.ItemTagMatch(tag)),
-            effects = effects
-        )
-    }
+        fun itemTag(
+            tag: TagKey<Item>,
+            level: Int,
+            saturation: Int,
+            vararg effectInstance: StatusEffectInstance
+        ): HydrationData {
+            val effects = ArrayList(effectInstance.toList())
+            return HydrationData(
+                level, saturation, matchList = arrayListOf(HydrationData.ItemTagMatch(tag)),
+                effects = effects
+            )
+        }
 
-    fun fluidTag(
-        tag: TagKey<Fluid>,
-        level: Int,
-        saturation: Int,
-        vararg effectInstance: StatusEffectInstance
-    ): HydrationData {
-        val effects = ArrayList(effectInstance.toList())
-        return HydrationData(
-            level, saturation, matchList = arrayListOf(HydrationData.FluidTagMatch(tag)),
-            effects = effects
-        )
+        fun fluidTag(
+            tag: TagKey<Fluid>,
+            level: Int,
+            saturation: Int,
+            vararg effectInstance: StatusEffectInstance
+        ): HydrationData {
+            val effects = ArrayList(effectInstance.toList())
+            return HydrationData(
+                level, saturation, matchList = arrayListOf(HydrationData.FluidTagMatch(tag)),
+                effects = effects
+            )
+        }
     }
 
     override fun getName(): String {

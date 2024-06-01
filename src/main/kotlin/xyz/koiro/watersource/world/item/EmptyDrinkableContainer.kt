@@ -1,38 +1,58 @@
 package xyz.koiro.watersource.world.item
 
+import net.minecraft.client.item.TooltipContext
+import net.minecraft.entity.LivingEntity
 import net.minecraft.entity.player.PlayerEntity
-import net.minecraft.fluid.Fluid
 import net.minecraft.fluid.Fluids
 import net.minecraft.item.Item
 import net.minecraft.item.ItemStack
+import net.minecraft.server.network.ServerPlayerEntity
+import net.minecraft.text.Text
+import net.minecraft.util.Formatting
 import net.minecraft.util.Hand
 import net.minecraft.util.TypedActionResult
 import net.minecraft.util.hit.BlockHitResult
 import net.minecraft.world.World
+import xyz.koiro.watersource.api.getOrCreateFluidStorageData
 import xyz.koiro.watersource.api.insertFluid
 
 class EmptyDrinkableContainer(settings: Settings?, val containerStack: () -> ItemStack) : Item(settings) {
     override fun use(world: World, user: PlayerEntity, hand: Hand): TypedActionResult<ItemStack> {
-        if (!world.isClient()) {
-            val hit = user.raycast(3.0, 0.05f, true)
-            if (hit is BlockHitResult) {
-                val stack = containerStack();
-                val blockState = world.getBlockState(hit.blockPos)
-                if (blockState.fluidState.fluid == Fluids.WATER) {
-                    stack.insertFluid(Fluids.WATER) { it.capacity }
-                    (stack.item as? FluidContainer)?.onFluidDataChanged(stack, user, hand)
-                    val heldStack = user.getStackInHand(hand)
-                    val handSlot = user.inventory.getSlotWithStack(heldStack)
-
-                    heldStack.decrement(1)
-
-                    if (heldStack.isEmpty) user.inventory.insertStack(handSlot, stack)
-                    else user.inventory.insertStack(stack)
-
-                    return TypedActionResult.success(stack)
+        val hit = user.raycast(3.0, 0.05f, true)
+        if (hit is BlockHitResult) {
+            val blockState = world.getBlockState(hit.blockPos)
+            if (blockState.fluidState.fluid == Fluids.WATER) {
+                val stack = user.getStackInHand(hand)
+                val containerStack = run {
+                    val ret = containerStack()
+                    ret.insertFluid(Fluids.WATER) { it.capacity }
+                    (ret.item as? FluidContainer)?.onFluidDataChanged(ret, user, hand)
+                    ret
                 }
+                stack.decrement(1)
+
+                val retStack =
+                    if (stack.isEmpty) containerStack
+                    else {
+                        user.inventory.insertStack(containerStack)
+                        stack
+                    }
+                return TypedActionResult.success(retStack)
             }
         }
         return super.use(world, user, hand)
+    }
+
+    override fun appendTooltip(
+        stack: ItemStack?,
+        world: World?,
+        tooltip: MutableList<Text>?,
+        context: TooltipContext?
+    ) {
+        containerStack().getOrCreateFluidStorageData()?.let { storageData ->
+            val rawText = Text.of("Empty: ${storageData.capacity} mB")
+            tooltip?.add(rawText.copy().styled { it.withColor(Formatting.GRAY) })
+        }
+        super.appendTooltip(stack, world, tooltip, context)
     }
 }
