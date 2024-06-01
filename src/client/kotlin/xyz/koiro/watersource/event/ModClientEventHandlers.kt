@@ -115,7 +115,7 @@ object ModClientEventHandlers {
 
                 val tr = MinecraftClient.getInstance().textRenderer
                 val textX = newX + 11
-                context.drawText(tr, "-${dryLevel}", textX, levelY + 1, 0xAAAAAA, false)
+                context.drawText(tr, "-${dryLevel}", textX, levelY + 1, 0x888888, false)
 
                 context.matrices.pop()
             }

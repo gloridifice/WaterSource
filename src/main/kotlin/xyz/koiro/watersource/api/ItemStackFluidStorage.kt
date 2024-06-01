@@ -5,7 +5,10 @@ import net.minecraft.fluid.Fluids
 import net.minecraft.item.ItemStack
 import net.minecraft.nbt.NbtCompound
 import net.minecraft.registry.Registries
+import net.minecraft.text.MutableText
+import net.minecraft.text.Text
 import net.minecraft.util.Identifier
+import xyz.koiro.watersource.datagen.ModLanguages
 import xyz.koiro.watersource.identifier
 import xyz.koiro.watersource.world.item.FluidContainer
 
@@ -22,9 +25,10 @@ data class FluidStorageData(
         return ret
     }
 
-    fun isBlank(): Boolean{
+    fun isBlank(): Boolean {
         return amount == 0L || fluid == Fluids.EMPTY
     }
+
     companion object {
         fun fromNbt(nbtCompound: NbtCompound?): FluidStorageData? {
             if (nbtCompound == null) return null
@@ -38,12 +42,21 @@ data class FluidStorageData(
             }
             return null
         }
+
+        fun getEmptyText(capacity: Long): MutableText {
+            return Text.translatable(ModLanguages.INFO_CAPCITY_KYE).append(Text.of(": $capacity mB"))
+        }
+    }
+
+    fun getDisplayText(): MutableText {
+        val name = this.fluid.defaultState.blockState.block.name
+        return if (this.isBlank()) getEmptyText(this.capacity) else
+            name.append(Text.of(": ${amount}/${capacity} mB"))
     }
 }
 
 const val FLUID_STORAGE_KEY = "WaterSourceFluidStorage"
 
-//todo test
 fun ItemStack.insertFluid(fluid: Fluid, amountGetter: (FluidStorageData) -> Long): Long? {
     var flag: Long? = null
     this.modifyFluidStorage { itemStack, data ->
@@ -59,7 +72,6 @@ fun ItemStack.insertFluid(fluid: Fluid, amountGetter: (FluidStorageData) -> Long
     return flag
 }
 
-//todo test
 fun ItemStack.extractFluid(amount: Long): Long? {
     var flag: Long? = null
     this.modifyFluidStorage { itemStack, fluidStorageData ->
