@@ -13,6 +13,7 @@ import net.minecraft.util.Hand
 import net.minecraft.util.TypedActionResult
 import net.minecraft.util.hit.BlockHitResult
 import net.minecraft.world.World
+import xyz.koiro.watersource.api.FluidStorageData
 import xyz.koiro.watersource.api.getOrCreateFluidStorageData
 import xyz.koiro.watersource.api.insertFluid
 
@@ -50,8 +51,7 @@ class EmptyDrinkableContainer(settings: Settings?, val containerStack: () -> Ite
         context: TooltipContext?
     ) {
         containerStack().getOrCreateFluidStorageData()?.let { storageData ->
-            val rawText = Text.of("Empty: ${storageData.capacity} mB")
-            tooltip?.add(rawText.copy().styled { it.withColor(Formatting.GRAY) })
+            tooltip?.add(FluidStorageData.getEmptyText(storageData.capacity).styled { it.withColor(Formatting.GRAY) })
         }
         super.appendTooltip(stack, world, tooltip, context)
     }

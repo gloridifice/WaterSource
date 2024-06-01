@@ -20,6 +20,12 @@ object ModItems {
         Strainer(FabricItemSettings().maxCount(1).maxDamage(16))
     )
 
+    @AutoGenItemData(enLang = "Compressed Strainer", cnLang = "压缩滤网")
+    val COMPRESSED_STRAINER = registerItem(
+        "compressed_strainer",
+        Strainer(FabricItemSettings().maxCount(1).maxDamage(80))
+    )
+
     @AutoGenItemData(enLang = "Paper Strainer", cnLang = "纸滤网")
     val PAPER_STRAINER = registerItem(
         "paper_strainer",

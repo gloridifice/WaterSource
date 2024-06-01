@@ -24,6 +24,7 @@ import xyz.koiro.watersource.*
 import xyz.koiro.watersource.api.FluidStorageData
 import xyz.koiro.watersource.api.getOrCreateFluidStorageData
 import xyz.koiro.watersource.api.insertFluid
+import xyz.koiro.watersource.datagen.ModLanguages
 import kotlin.math.round
 
 open class FluidContainer(
@@ -96,12 +97,7 @@ open class FluidContainer(
         context: TooltipContext
     ) {
         stack.getOrCreateFluidStorageData()?.let { storageData ->
-            val name = storageData.fluid.defaultState.blockState.block.name
-            val rawText =
-                if (storageData.isBlank()) Text.of("Empty: ${storageData.capacity} mB") else
-                    name.append(Text.of(": ${storageData.amount}/${storageData.capacity} mB"))
-
-            tooltip.add(rawText.copy().styled { it.withColor(Formatting.GRAY) })
+            tooltip.add(storageData.getDisplayText().styled { it.withColor(Formatting.GRAY) })
         }
         super.appendTooltip(stack, world, tooltip, context)
     }

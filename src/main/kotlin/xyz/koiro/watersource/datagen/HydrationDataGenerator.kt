@@ -23,9 +23,9 @@ class HydrationDataGenerator(output: DataOutput) : HydrationDataProvider(output)
         )
         adder.add(
             WaterSource.identifier("fluid_purified_water"),
-            fluid(ModFluids.PURIFIED_WATER, 4, 8)
+            fluid(ModFluids.PURIFIED_WATER, 4, 7)
         )
-        adder.addItemWithAutoId(ModItems.PURIFIED_WATER_BOTTLE, 4, 6)
+        adder.addItemWithAutoId(ModItems.PURIFIED_WATER_BOTTLE, 4, 7)
 
         // Vanilla -----------------------
         adder.addItemWithAutoId(Items.APPLE, 1, 2)

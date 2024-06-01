@@ -19,6 +19,7 @@ object ModItemGroups {
         // Strainers
         ModItems.PAPER_STRAINER.simpleStack(),
         ModItems.NATURAL_STRAINER.simpleStack(),
+        ModItems.COMPRESSED_STRAINER.simpleStack(),
 
         // Drink Containers
         ModItems.LEATHER_WATER_BAG_SMALL.simpleStack(),
