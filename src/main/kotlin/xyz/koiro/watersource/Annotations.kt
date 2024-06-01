@@ -6,6 +6,7 @@ import net.minecraft.item.Item
 import net.minecraft.registry.tag.TagKey
 
 enum class ModelType(val model: Model){
+    DontGen(Models.GENERATED),
     Generated(Models.GENERATED),
 }
 

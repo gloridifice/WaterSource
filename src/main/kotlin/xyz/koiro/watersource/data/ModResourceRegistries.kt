@@ -5,6 +5,6 @@ import net.minecraft.resource.ResourceType
 
 object ModResourceRegistries {
     fun initialize(){
-        ResourceManagerHelper.get(ResourceType.SERVER_DATA).registerReloadListener(HydrationDataManager.SERVER)
+        ResourceManagerHelper.get(ResourceType.SERVER_DATA).registerReloadListener(HydrationDataManager.INSTANCE)
     }
 }

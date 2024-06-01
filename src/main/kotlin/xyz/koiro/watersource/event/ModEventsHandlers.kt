@@ -8,23 +8,18 @@ import net.minecraft.entity.effect.StatusEffectInstance
 import net.minecraft.server.network.ServerPlayerEntity
 import net.minecraft.util.ActionResult
 import net.minecraft.world.World
-import xyz.koiro.watersource.WSConfig
 import xyz.koiro.watersource.WSConfig.Exhaustion
 import xyz.koiro.watersource.WSConfig.Punishment
 import xyz.koiro.watersource.WaterSource
 import xyz.koiro.watersource.WaterSource.getWaterSourceDifficulty
-import xyz.koiro.watersource.api.extractFluid
-import xyz.koiro.watersource.api.getOrCreateFluidStorageData
 import xyz.koiro.watersource.world.attachment.ModAttachmentTypes
 import xyz.koiro.watersource.data.HydrationDataManager
 import xyz.koiro.watersource.api.ifInSurvivalAndGetWaterData
-import xyz.koiro.watersource.data.HydrationData
 import xyz.koiro.watersource.world.effect.ModStatusEffects
-import xyz.koiro.watersource.world.item.DrinkableContainer
 import xyz.koiro.watersource.world.item.IHydrationUsable
 import java.util.*
 
-object ModEventsRegistries {
+object ModEventsHandlers {
     fun initialize() {
         ServerEntityEvents.ENTITY_LOAD.register(serverEntityLoadHandler)
         ServerTickEvents.END_WORLD_TICK.register(worldTickHandler)
@@ -148,13 +143,13 @@ object ModEventsRegistries {
 
                 val item = stack.item
                 if (item is IHydrationUsable) {
-                    val data = item.findHydrationData(stack, HydrationDataManager.SERVER)
+                    val data = item.findHydrationData(stack, HydrationDataManager.INSTANCE)
                     data?.let {
                         item.hydrationUse(stack, it, waterLevelData, player)
                         item.onHydrationUsingFinished(stack, player, player.activeHand)
                     }
                 } else {
-                    val data = HydrationDataManager.SERVER.findByItemStack(stack)
+                    val data = HydrationDataManager.INSTANCE.findByItemStack(stack)
                     data?.let {
                         IHydrationUsable.restoreWaterFromHydrationData(it, waterLevelData, player)
                     }

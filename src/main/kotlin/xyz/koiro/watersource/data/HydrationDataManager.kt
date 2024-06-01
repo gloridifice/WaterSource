@@ -1,6 +1,5 @@
 package xyz.koiro.watersource.data
 
-import com.google.gson.Gson
 import kotlinx.serialization.json.Json
 import net.fabricmc.fabric.api.resource.SimpleSynchronousResourceReloadListener
 import net.minecraft.fluid.Fluid
@@ -8,22 +7,23 @@ import net.minecraft.item.ItemStack
 import net.minecraft.resource.ResourceManager
 import net.minecraft.util.Identifier
 import xyz.koiro.watersource.WaterSource
+import xyz.koiro.watersource.api.getOrCreateFluidStorageData
 
-class HydrationDataManager: SimpleSynchronousResourceReloadListener{
+class HydrationDataManager : SimpleSynchronousResourceReloadListener {
     private val map = HashMap<String, HydrationData>()
     private var sequence: Sequence<HydrationData>? = null
 
-    companion object{
-        val SERVER = HydrationDataManager()
-        val CLIENT = HydrationDataManager()
+    companion object {
+        val INSTANCE = HydrationDataManager()
     }
 
-    fun findByItemStack(itemStack: ItemStack): HydrationData?{
+    fun findByItemStack(itemStack: ItemStack): HydrationData? {
         return sequence?.find {
             it.match(itemStack)
-        }
+        } ?: itemStack.getOrCreateFluidStorageData()?.let { data -> sequence?.find { it.match(data.fluid) } }
     }
-    fun findByFluid(fluid: Fluid): HydrationData?{
+
+    fun findByFluid(fluid: Fluid): HydrationData? {
         return sequence?.find {
             it.match(fluid)
         }
@@ -40,8 +40,8 @@ class HydrationDataManager: SimpleSynchronousResourceReloadListener{
                 val data = HydrationData(format)
                 map.putIfAbsent(id.toString(), data)
                 WaterSource.LOGGER.info("Successfully load water level data <${id}>")
-            } catch (e: Exception){
-                WaterSource.LOGGER.error("Error occurred while loading water level json <${id}>" )
+            } catch (e: Exception) {
+                WaterSource.LOGGER.error("Error occurred while loading water level json <${id}>")
             }
         }
         WaterSource.LOGGER.info("All water level data loaded. Count: ${map.count()}.")

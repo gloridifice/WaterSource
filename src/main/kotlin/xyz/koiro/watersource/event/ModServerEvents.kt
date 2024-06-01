@@ -10,6 +10,9 @@ import net.minecraft.server.world.ServerWorld
 import net.minecraft.util.ActionResult
 
 object ModServerEvents {
+    fun interface PlayerJump {
+        fun interact(player: PlayerEntity): ActionResult
+    }
     val PLAYER_JUMP = EventFactory.createArrayBacked(PlayerJump::class.java) { listeners ->
         PlayerJump {
             for (listener in listeners) {
@@ -20,6 +23,9 @@ object ModServerEvents {
         }
     }!!
 
+    fun interface FinishUsingItem {
+        fun interact(user: LivingEntity, world: ServerWorld, stack: ItemStack): ActionResult
+    }
     val FINISH_USING_ITEM = EventFactory.createArrayBacked(FinishUsingItem::class.java) { listeners ->
         FinishUsingItem { livingEntity: LivingEntity, serverWorld: ServerWorld, itemStack: ItemStack ->
             for (listener in listeners) {
@@ -30,7 +36,9 @@ object ModServerEvents {
         }
     }!!
 
-
+    fun interface PlayerWriteCustomNbt {
+        fun interact(player: ServerPlayerEntity, nbt: NbtCompound): ActionResult
+    }
     val PLAYER_WRITE_CUSTOM_NBT = EventFactory.createArrayBacked(PlayerWriteCustomNbt::class.java) { listeners ->
         PlayerWriteCustomNbt { player: ServerPlayerEntity, nbt: NbtCompound ->
             for (listener in listeners) {
@@ -41,6 +49,9 @@ object ModServerEvents {
         }
     }!!
 
+    fun interface PlayerReadCustomNbt {
+        fun interact(player: ServerPlayerEntity, nbt: NbtCompound): ActionResult
+    }
     val PLAYER_READ_CUSTOM_NBT = EventFactory.createArrayBacked(PlayerReadCustomNbt::class.java) { listeners ->
         PlayerReadCustomNbt { player: ServerPlayerEntity, nbt: NbtCompound ->
             for (listener in listeners) {
@@ -50,20 +61,4 @@ object ModServerEvents {
             ActionResult.PASS
         }
     }!!
-
-    fun interface PlayerWriteCustomNbt {
-        fun interact(player: ServerPlayerEntity, nbt: NbtCompound): ActionResult
-    }
-
-    fun interface PlayerReadCustomNbt {
-        fun interact(player: ServerPlayerEntity, nbt: NbtCompound): ActionResult
-    }
-
-    fun interface PlayerJump {
-        fun interact(player: PlayerEntity): ActionResult
-    }
-    fun interface FinishUsingItem {
-        fun interact(user: LivingEntity, world: ServerWorld, stack: ItemStack): ActionResult
-    }
-
 }

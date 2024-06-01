@@ -36,7 +36,7 @@ open class DrinkableContainer(
         val storage = handStack.getOrCreateFluidStorageData()
         storage?.let { storageData ->
             val fluid = storageData.fluid
-            HydrationDataManager.SERVER.findByFluid(fluid)?.let { hydration ->
+            HydrationDataManager.INSTANCE.findByFluid(fluid)?.let { hydration ->
                 if (storageData.amount >= WSConfig.UNIT_DRINK_VOLUME) {
                     return ItemUsage.consumeHeldItem(world, user, hand)
                 }

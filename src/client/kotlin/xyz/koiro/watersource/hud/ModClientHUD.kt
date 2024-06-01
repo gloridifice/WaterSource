@@ -1,16 +1,16 @@
 package xyz.koiro.watersource.hud
 
+import com.mojang.blaze3d.systems.RenderSystem
 import net.fabricmc.fabric.api.client.rendering.v1.HudRenderCallback
 import net.minecraft.client.MinecraftClient
 import net.minecraft.client.gui.DrawContext
-import xyz.koiro.watersource.WaterSource
+import xyz.koiro.watersource.api.DrawWaterBallUtils
 import xyz.koiro.watersource.world.attachment.ModAttachmentTypes
 import xyz.koiro.watersource.world.effect.ModStatusEffects
 import kotlin.math.ceil
 import kotlin.random.Random
 
 object ModClientHUD {
-    val WATER_LEVEL_ICONS = WaterSource.identifier("textures/gui/hud/icons.png")
     private var elapsedTime: Float = 0f
     fun initialize() {
         HudRenderCallback.EVENT.register { context: DrawContext, deltaTime: Float ->
@@ -80,18 +80,4 @@ object ModClientHUD {
         }
     }
 
-    data class DrawWaterBallUtils(val x: Int, val y: Int, val isThirty: Boolean, val part: Part) {
-        enum class Part(val u: Int) {
-            Empty(0), Full(9), LeftHalf(18), RightHalf(27), UpFrame(36), DownFrame(45)
-        }
-
-        fun draw(context: DrawContext) {
-            val y = when (part) {
-                Part.UpFrame -> this.y - 1
-                Part.DownFrame -> this.y + 1
-                else -> this.y
-            }
-            context.drawTexture(WATER_LEVEL_ICONS, x, y, part.u, if (isThirty) 9 else 0, 9, 9)
-        }
-    }
 }

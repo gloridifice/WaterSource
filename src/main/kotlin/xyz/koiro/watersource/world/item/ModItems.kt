@@ -9,6 +9,7 @@ import net.minecraft.registry.Registries
 import net.minecraft.registry.Registry
 import net.minecraft.util.Identifier
 import xyz.koiro.watersource.AutoGenItemData
+import xyz.koiro.watersource.ModelType
 import xyz.koiro.watersource.WaterSource
 import xyz.koiro.watersource.world.fluid.ModFluids
 
@@ -37,7 +38,7 @@ object ModItems {
         DrinkableContainer(FabricItemSettings().maxCount(1), 1000)
     )
 
-    @AutoGenItemData(enLang = "Wooden Cup", cnLang = "木杯子")
+    @AutoGenItemData(enLang = "Wooden Cup", cnLang = "木杯子", modelType = ModelType.DontGen)
     val WOODEN_CUP: Item = registerItem(
         "wooden_cup",
         DrinkableContainer(

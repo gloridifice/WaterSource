@@ -1,7 +1,9 @@
 package xyz.koiro.watersource.world.block
 
+import net.fabricmc.fabric.api.`object`.builder.v1.block.FabricBlockSettings
 import net.minecraft.block.AbstractBlock
 import net.minecraft.block.Block
+import net.minecraft.block.Blocks
 import net.minecraft.block.FluidBlock
 import net.minecraft.block.MapColor
 import net.minecraft.block.piston.PistonBehavior
@@ -18,9 +20,12 @@ import xyz.koiro.watersource.world.item.ModItems
 
 object ModBlocks {
     @AutoGenBlockData("Purified Water", "净化水", false)
-    val PURIFIED_WATER = registerBlock("purified_water", FluidBlock(ModFluids.FLOWING_PURIFIED_WATER as FlowableFluid, AbstractBlock.Settings.create().mapColor(MapColor.WATER_BLUE).replaceable().noCollision().strength(100.0f).pistonBehavior(PistonBehavior.DESTROY).dropsNothing().liquid().sounds(BlockSoundGroup.INTENTIONALLY_EMPTY)))
+    val PURIFIED_WATER = registerBlock(
+        "purified_water",
+        FluidBlock(ModFluids.PURIFIED_WATER as FlowableFluid, FabricBlockSettings.copy(Blocks.WATER))
+    )
 
-    fun active(){}
+    fun active() {}
     fun registerBlock(registryName: String, block: Block): Block {
         return Registry.register(Registries.BLOCK, Identifier(WaterSource.MODID, registryName), block)
     }
