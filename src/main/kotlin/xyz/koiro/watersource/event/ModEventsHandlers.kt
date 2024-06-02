@@ -61,7 +61,7 @@ object ModEventsHandlers {
                 tick.add(1)
                 if (tick.value > 125) {
                     player.heal(1f)
-                    waterLevelData.addExhaustion(Exhaustion.REWARD_HEALTH, player)
+                    waterLevelData.addExhaustion(Exhaustion.healthReward, player)
                     waterLevelData.updateToClient(player)
                     tick.setValue(0)
                 }
@@ -74,13 +74,13 @@ object ModEventsHandlers {
             val diff = world.getWaterSourceDifficulty()
             when {
                 waterData.level <= 0 -> {
-                    Punishment.getPunishmentStatusEffectsZero(diff).forEach { effect ->
+                    Punishment.getPunishmentStatusEffectsHeavy(diff).forEach { effect ->
                         player.addStatusEffect(StatusEffectInstance(effect))
                     }
                 }
 
                 waterData.level <= 6 -> {
-                    Punishment.getPunishmentStatusEffectsSix(diff).forEach { effect ->
+                    Punishment.getPunishmentStatusEffectsLight(diff).forEach { effect ->
                         player.addStatusEffect(StatusEffectInstance(effect))
                     }
                 }
@@ -119,7 +119,7 @@ object ModEventsHandlers {
             //Movement
             posOffset.ifPresent {
                 if (player.isSprinting) {
-                    waterData.addExhaustion(Exhaustion.SPRINT * it.offset.length().toFloat(), player)
+                    waterData.addExhaustion(Exhaustion.sprint * it.offset.length().toFloat(), player)
                     waterData.updateToClient(player)
                 }
             }
@@ -129,7 +129,7 @@ object ModEventsHandlers {
     private val playerJumpWaterExhaustion = ModServerEvents.PlayerJump { player ->
         if (player is ServerPlayerEntity) {
             player.ifInSurvivalAndGetWaterData {
-                it.addExhaustion(Exhaustion.JUMP, player)
+                it.addExhaustion(Exhaustion.jump, player)
                 it.updateToClient(player)
             }
         }

@@ -38,11 +38,11 @@ class WaterLevelData(
      * */
     fun addExhaustion(amount: Float, player: PlayerEntity) {
         val effect = player.getStatusEffect(ModStatusEffects.THIRSTY)
-        var amount =  amount
+        var finalAmount = amount * WSConfig.Exhaustion.multiplier
         effect?.let {
-            amount *= WSConfig.Exhaustion.thirstyMultiplier(it.amplifier)
+            finalAmount *= WSConfig.Exhaustion.thirstyMultiplier(it.amplifier)
         }
-        val added = amount + exhaustion
+        val added = finalAmount + exhaustion
         exhaustion = if (added >= maxExhaustion) {
             val count = (added / maxExhaustion).toInt()
             consumeWater(count)

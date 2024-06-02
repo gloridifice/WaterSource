@@ -4,6 +4,7 @@ import net.fabricmc.api.ModInitializer
 import net.minecraft.util.Identifier
 import net.minecraft.world.World
 import org.slf4j.LoggerFactory
+import xyz.koiro.watersource.config.WaterSourceConfig
 import xyz.koiro.watersource.data.ModResourceRegistries
 import xyz.koiro.watersource.event.ModEventsHandlers
 import xyz.koiro.watersource.world.block.ModBlocks
@@ -28,6 +29,7 @@ object WaterSource : ModInitializer {
         ModResourceRegistries.initialize()
         ModEventsHandlers.initialize()
         ModCommands.initialize()
+        WaterSourceConfig.loadConfig()
     }
 
     fun identifier(name: String): Identifier = Identifier(MODID, name)
