@@ -13,7 +13,7 @@ object ModItemColorProviders {
     val cupColorProvider = { stack: ItemStack, layer: Int ->
         if (layer == 1) {
             stack.getOrCreateFluidStorageData()?.let {
-                FluidRenderHandlerRegistry.INSTANCE.get(it.fluid).getFluidColor(
+                FluidRenderHandlerRegistry.INSTANCE?.get(it.fluid)?.getFluidColor(
                     MinecraftClient.getInstance().world,
                     BlockPos.ORIGIN,
                     ModFluids.PURIFIED_WATER.defaultState

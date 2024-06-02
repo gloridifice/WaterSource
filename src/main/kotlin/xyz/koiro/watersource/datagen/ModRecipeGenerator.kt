@@ -3,13 +3,22 @@ package xyz.koiro.watersource.datagen
 import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricRecipeProvider
 import net.minecraft.data.server.recipe.RecipeJsonProvider
+import net.minecraft.data.server.recipe.RecipeProvider
+import net.minecraft.data.server.recipe.ShapedRecipeJsonBuilder
 import net.minecraft.fluid.Fluid
 import net.minecraft.fluid.Fluids
+import net.minecraft.item.Item
+import net.minecraft.item.ItemStack
+import net.minecraft.item.Items
 import net.minecraft.recipe.Ingredient
+import net.minecraft.recipe.book.RecipeCategory
+import net.minecraft.registry.tag.ItemTags
 import net.minecraft.util.Identifier
 import xyz.koiro.watersource.WaterSource
+import xyz.koiro.watersource.api.inputWithCriterion
 import xyz.koiro.watersource.datagen.recipe.StrainerFilteringFluidRecipeJsonBuilder
 import xyz.koiro.watersource.world.fluid.ModFluids
+import xyz.koiro.watersource.world.item.ModItems
 import xyz.koiro.watersource.world.tag.ModTags
 import java.util.function.Consumer
 
@@ -22,6 +31,70 @@ class ModRecipeGenerator(output: FabricDataOutput?) : FabricRecipeProvider(outpu
             ModFluids.PURIFIED_WATER,
             Ingredient.fromTag(ModTags.Item.PURIFICATION_STRAINER)
         )
+        ShapedRecipeJsonBuilder.create(RecipeCategory.MISC, ModItems.WOODEN_CUP_EMPTY, 2)
+            .inputWithCriterion('w', ItemTags.PLANKS)
+            .pattern("w w")
+            .pattern("w w")
+            .pattern(" w ")
+            .offerTo(exporter)
+
+        ShapedRecipeJsonBuilder.create(RecipeCategory.MISC, ModItems.RAW_POTTERY_CUP)
+            .inputWithCriterion('w', Items.CLAY_BALL)
+            .pattern("w w")
+            .pattern("w w")
+            .pattern(" w ")
+            .offerTo(exporter)
+        RecipeProvider.offerSmelting(
+            exporter,
+            listOf(ModItems.RAW_POTTERY_CUP), RecipeCategory.MISC,
+            ModItems.POTTERY_CUP_EMPTY, 0.5f, 200, "pottery"
+        )
+
+        ShapedRecipeJsonBuilder.create(RecipeCategory.MISC, ModItems.PAPER_STRAINER)
+            .inputWithCriterion('p', Items.PAPER)
+            .inputWithCriterion('c', Items.CHARCOAL)
+            .pattern("ppp")
+            .pattern("ccc")
+            .pattern("ppp")
+            .offerTo(exporter)
+
+        ShapedRecipeJsonBuilder.create(RecipeCategory.MISC, ModItems.NATURAL_STRAINER)
+            .inputWithCriterion('s', ItemTags.SAND)
+            .inputWithCriterion('c', Items.CHARCOAL)
+            .inputWithCriterion('r', Items.CLAY_BALL)
+            .pattern("ccc")
+            .pattern("sss")
+            .pattern("rrr")
+            .offerTo(exporter)
+
+        ShapedRecipeJsonBuilder.create(RecipeCategory.MISC, ModItems.LEATHER_WATER_BAG_SMALL)
+            .inputWithCriterion('l', Items.LEATHER)
+            .inputWithCriterion('s', Items.STRING)
+            .inputWithCriterion('i', ModTags.Item.BASICS_INGOT)
+            .pattern("sis")
+            .pattern("l l")
+            .pattern("lll")
+            .offerTo(exporter)
+
+        ShapedRecipeJsonBuilder.create(RecipeCategory.MISC, ModItems.LEATHER_WATER_BAG_MEDIUM)
+            .inputWithCriterion('b', ModItems.LEATHER_WATER_BAG_SMALL)
+            .inputWithCriterion('l', Items.LEATHER)
+            .inputWithCriterion('s', Items.STRING)
+            .inputWithCriterion('i', Items.IRON_INGOT)
+            .pattern("sis")
+            .pattern("ibi")
+            .pattern("lll")
+            .offerTo(exporter)
+
+        ShapedRecipeJsonBuilder.create(RecipeCategory.MISC, ModItems.LEATHER_WATER_BAG_LARGE)
+            .inputWithCriterion('b', ModItems.LEATHER_WATER_BAG_MEDIUM)
+            .inputWithCriterion('l', Items.LEATHER)
+            .inputWithCriterion('d', Items.DIAMOND)
+            .inputWithCriterion('h', Items.HEART_OF_THE_SEA)
+            .pattern("dhd")
+            .pattern("lbl")
+            .pattern("lll")
+            .offerTo(exporter)
     }
 
     private fun genSFFRecipe(

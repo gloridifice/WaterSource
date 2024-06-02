@@ -3,6 +3,7 @@ package xyz.koiro.watersource.datagen
 import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricTagProvider.ItemTagProvider
 import net.minecraft.item.Item
+import net.minecraft.item.Items
 import net.minecraft.registry.RegistryKeys
 import net.minecraft.registry.RegistryWrapper
 import net.minecraft.registry.tag.TagKey
@@ -26,5 +27,9 @@ class ModItemTagGenerator(
         getOrCreateTagBuilder(ModTags.Item.PURIFICATION_STRAINER)
             .add(ModItems.PAPER_STRAINER)
             .add(ModItems.NATURAL_STRAINER)
+
+        getOrCreateTagBuilder(ModTags.Item.BASICS_INGOT)
+            .add(Items.IRON_INGOT)
+            .add(Items.COPPER_INGOT)
     }
 }
