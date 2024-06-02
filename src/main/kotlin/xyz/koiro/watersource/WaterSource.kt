@@ -9,6 +9,7 @@ import xyz.koiro.watersource.event.ModEventsHandlers
 import xyz.koiro.watersource.world.block.ModBlocks
 import xyz.koiro.watersource.world.effect.ModStatusEffects
 import xyz.koiro.watersource.world.fluid.ModFluids
+import xyz.koiro.watersource.world.item.ModFuelRegister
 import xyz.koiro.watersource.world.recipe.ModRecipes
 import xyz.koiro.watersource.world.item.ModItems
 
@@ -18,6 +19,7 @@ object WaterSource : ModInitializer {
 
     override fun onInitialize() {
         ModItems.active()
+        ModFuelRegister.initialize()
         ModBlocks.active()
         ModFluids.active()
         ModStatusEffects.active()

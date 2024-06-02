@@ -10,13 +10,12 @@ class Strainer(settings: Settings?) : Item(settings) {
         return ceil(volume.toDouble() / WSConfig.UNIT_DRINK_VOLUME.toDouble()).toInt()
     }
 
-    fun useStrainer(strainerStack: ItemStack, volume: Long): ItemStack {
-        val dmg = calCostDamage(strainerStack, volume)
-        val remainedStrainer = if (strainerStack.damage + dmg >= strainerStack.maxDamage) {
+    fun useStrainer(strainerStack: ItemStack, cost: Int): ItemStack {
+        val remainedStrainer = if (strainerStack.damage + cost >= strainerStack.maxDamage) {
             ItemStack(ModItems.WASTE_STRAINER)
         } else {
             val strainerCopy = strainerStack.copy()
-            strainerCopy.damage += dmg
+            strainerCopy.damage += cost
             strainerCopy
         }
         return remainedStrainer

@@ -27,6 +27,7 @@ class ModItemTagGenerator(
         getOrCreateTagBuilder(ModTags.Item.PURIFICATION_STRAINER)
             .add(ModItems.PAPER_STRAINER)
             .add(ModItems.NATURAL_STRAINER)
+            .add(ModItems.COMPRESSED_STRAINER)
 
         getOrCreateTagBuilder(ModTags.Item.BASICS_INGOT)
             .add(Items.IRON_INGOT)

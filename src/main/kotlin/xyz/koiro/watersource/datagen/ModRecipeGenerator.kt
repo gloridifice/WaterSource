@@ -5,18 +5,16 @@ import net.fabricmc.fabric.api.datagen.v1.provider.FabricRecipeProvider
 import net.minecraft.data.server.recipe.RecipeJsonProvider
 import net.minecraft.data.server.recipe.RecipeProvider
 import net.minecraft.data.server.recipe.ShapedRecipeJsonBuilder
-import net.minecraft.fluid.Fluid
 import net.minecraft.fluid.Fluids
-import net.minecraft.item.Item
-import net.minecraft.item.ItemStack
 import net.minecraft.item.Items
 import net.minecraft.recipe.Ingredient
 import net.minecraft.recipe.book.RecipeCategory
 import net.minecraft.registry.tag.ItemTags
-import net.minecraft.util.Identifier
 import xyz.koiro.watersource.WaterSource
 import xyz.koiro.watersource.api.inputWithCriterion
 import xyz.koiro.watersource.datagen.recipe.StrainerFilteringFluidRecipeJsonBuilder
+import xyz.koiro.watersource.datagen.recipe.StrainerFilteringItemRecipeJsonBuilder
+import xyz.koiro.watersource.simpleStack
 import xyz.koiro.watersource.world.fluid.ModFluids
 import xyz.koiro.watersource.world.item.ModItems
 import xyz.koiro.watersource.world.tag.ModTags
@@ -24,13 +22,21 @@ import java.util.function.Consumer
 
 class ModRecipeGenerator(output: FabricDataOutput?) : FabricRecipeProvider(output) {
     override fun generate(exporter: Consumer<RecipeJsonProvider>?) {
-        genSFFRecipe(
-            exporter,
+        StrainerFilteringFluidRecipeJsonBuilder(
             WaterSource.identifier("water_to_purified_water"),
             Fluids.WATER,
             ModFluids.PURIFIED_WATER,
             Ingredient.fromTag(ModTags.Item.PURIFICATION_STRAINER)
-        )
+        ).offerTo(exporter)
+
+        StrainerFilteringItemRecipeJsonBuilder(
+            WaterSource.identifier("potion_to_purified_water"),
+            Ingredient.ofItems(Items.POTION),
+            ModItems.PURIFIED_WATER_BOTTLE.simpleStack(),
+            1,
+            Ingredient.fromTag(ModTags.Item.PURIFICATION_STRAINER)
+        ).offerTo(exporter)
+
         ShapedRecipeJsonBuilder.create(RecipeCategory.MISC, ModItems.WOODEN_CUP_EMPTY, 2)
             .inputWithCriterion('w', ItemTags.PLANKS)
             .pattern("w w")
@@ -95,15 +101,5 @@ class ModRecipeGenerator(output: FabricDataOutput?) : FabricRecipeProvider(outpu
             .pattern("lbl")
             .pattern("lll")
             .offerTo(exporter)
-    }
-
-    private fun genSFFRecipe(
-        exporter: Consumer<RecipeJsonProvider>?,
-        id: Identifier,
-        inFluid: Fluid,
-        outFluid: Fluid,
-        strainer: Ingredient
-    ) {
-        StrainerFilteringFluidRecipeJsonBuilder(id, inFluid, outFluid, strainer).offerTo(exporter, id)
     }
 }
