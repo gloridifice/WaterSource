@@ -2,8 +2,6 @@ package xyz.koiro.watersource.config
 
 import com.akuleshov7.ktoml.Toml
 import com.akuleshov7.ktoml.source.decodeFromStream
-import kotlinx.serialization.SerializationStrategy
-import kotlinx.serialization.Serializer
 import kotlinx.serialization.encodeToString
 import net.fabricmc.loader.api.FabricLoader
 import xyz.koiro.watersource.WSConfig
@@ -13,22 +11,23 @@ import kotlin.io.path.createFile
 import kotlin.io.path.createParentDirectories
 import kotlin.io.path.exists
 
-object WaterSourceConfig {
+object ModConfigLoader {
     fun getConfigDir(): Path {
         return FabricLoader.getInstance().configDir
     }
 
-    fun loadConfig() {
+    inline fun <reified T> loadOrCreateConfig(path: String, defaultConfig: T): T {
         val dir = getConfigDir()
-        val filePath = Paths.get(dir.toString(), "watersource", "common.toml")
+        val filePath = Paths.get(dir.toString(), "watersource", "${path}.toml")
         if (filePath.exists() && filePath.toFile().isFile) {
             val stream = filePath.toFile().inputStream()
-            val format = Toml.decodeFromStream<WSConfig.Format>(stream)
-            WSConfig.format = format
+            val format = Toml.decodeFromStream<T>(stream)
+            return format
         } else {
             filePath.createParentDirectories()
             filePath.createFile()
-            filePath.toFile().writeText(Toml.encodeToString<WSConfig.Format>(WSConfig.Format()))
+            filePath.toFile().writeText(Toml.encodeToString<T>(defaultConfig))
         }
+        return defaultConfig
     }
 }

@@ -3,6 +3,7 @@ package xyz.koiro.watersource.hud
 import net.fabricmc.fabric.api.client.rendering.v1.HudRenderCallback
 import net.minecraft.client.MinecraftClient
 import net.minecraft.client.gui.DrawContext
+import xyz.koiro.watersource.WSClientConfig
 import xyz.koiro.watersource.api.DrawWaterBallUtils
 import xyz.koiro.watersource.world.attachment.ModAttachmentTypes
 import xyz.koiro.watersource.world.effect.ModStatusEffects
@@ -23,25 +24,26 @@ object ModClientHUD {
         }
     }
 
-    fun drawWaterLevelHUD(context: DrawContext, elapsedTime: Float){
+    fun drawWaterLevelHUD(context: DrawContext, elapsedTime: Float) {
         val mc = MinecraftClient.getInstance()
         val player = mc.player!!
 
         if (mc.options.hudHidden || mc.interactionManager?.hasStatusBars() != true) return
+        if (!WSClientConfig.format.showWaterLevelBar) return
 
         val textRenderer = mc.textRenderer
         val random = Random.Default
         player.getAttached(ModAttachmentTypes.WATER_LEVEL)?.let { waterLevelData ->
             val level = waterLevelData.level
             val saturation = waterLevelData.saturation
-            val offsetBetweenFoodBar = 10
+            val offsetBetweenFoodBar = 10 + WSClientConfig.format.waterLevelBarOffsetY
             var y: Int = context.scaledWindowHeight - 39 - offsetBetweenFoodBar
             if (player.isSubmergedInWater || player.air < player.maxAir) y -= 10
             val xStart: Int = context.scaledWindowWidth / 2 + 91
             val isThirty = player.hasStatusEffect(ModStatusEffects.THIRSTY)
 
             val yOffsetList = if (saturation <= 0.0f && elapsedTime.toInt() % (level * 3 + 1) == 0) {
-                List(10){
+                List(10) {
                     random.nextInt(3) - 1
                 }
             } else List(10) { 0 }
@@ -63,21 +65,22 @@ object ModClientHUD {
                 DrawWaterBallUtils(x, y + yOffsetList[i], isThirty, part).draw(context)
             }
 
-            // Draw Frames (Saturation)
-            val frameCount = ceil(saturation.toFloat() / 2f).toInt()
-            val fEndIsHalf = saturation % 2 != 0
-            for (i in 0..<frameCount) {
-                val x = xStart - i * 8 - 9
-                val isEndAndEndIsHalf = i == frameCount - 1 && fEndIsHalf
-                val fY = y + yOffsetList[i]
-                if (isEndAndEndIsHalf) {
-                    DrawWaterBallUtils(x, fY, isThirty, DrawWaterBallUtils.Part.SaturationDown).draw(context)
-                } else {
-                    DrawWaterBallUtils(x, fY, isThirty, DrawWaterBallUtils.Part.SaturationUp).draw(context)
-                    DrawWaterBallUtils(x, fY, isThirty, DrawWaterBallUtils.Part.SaturationDown).draw(context)
+            if (WSClientConfig.format.showWaterSaturationInBar) {
+                // Draw Frames (Saturation)
+                val frameCount = ceil(saturation.toFloat() / 2f).toInt()
+                val fEndIsHalf = saturation % 2 != 0
+                for (i in 0..<frameCount) {
+                    val x = xStart - i * 8 - 9
+                    val isEndAndEndIsHalf = i == frameCount - 1 && fEndIsHalf
+                    val fY = y + yOffsetList[i]
+                    if (isEndAndEndIsHalf) {
+                        DrawWaterBallUtils(x, fY, isThirty, DrawWaterBallUtils.Part.SaturationDown).draw(context)
+                    } else {
+                        DrawWaterBallUtils(x, fY, isThirty, DrawWaterBallUtils.Part.SaturationUp).draw(context)
+                        DrawWaterBallUtils(x, fY, isThirty, DrawWaterBallUtils.Part.SaturationDown).draw(context)
+                    }
                 }
             }
         }
     }
-
 }

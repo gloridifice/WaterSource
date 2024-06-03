@@ -4,7 +4,7 @@ import net.fabricmc.api.ModInitializer
 import net.minecraft.util.Identifier
 import net.minecraft.world.World
 import org.slf4j.LoggerFactory
-import xyz.koiro.watersource.config.WaterSourceConfig
+import xyz.koiro.watersource.config.ModConfigLoader
 import xyz.koiro.watersource.data.ModResourceRegistries
 import xyz.koiro.watersource.event.ModEventsHandlers
 import xyz.koiro.watersource.world.block.ModBlocks
@@ -29,14 +29,14 @@ object WaterSource : ModInitializer {
         ModResourceRegistries.initialize()
         ModEventsHandlers.initialize()
         ModCommands.initialize()
-        WaterSourceConfig.loadConfig()
+        WSConfig.format = ModConfigLoader.loadOrCreateConfig<WSConfig.Format>("common", WSConfig.Format())
     }
 
     fun identifier(name: String): Identifier = Identifier(MODID, name)
 
     fun World.getWaterSourceDifficulty(): ModDifficulty {
         return this.difficulty?.let {
-            when(it){
+            when (it) {
                 net.minecraft.world.Difficulty.PEACEFUL -> ModDifficulty.PEACEFUL
                 net.minecraft.world.Difficulty.EASY -> ModDifficulty.EASY
                 net.minecraft.world.Difficulty.NORMAL -> ModDifficulty.NORMAL
