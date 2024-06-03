@@ -33,49 +33,57 @@ object WSConfig {
 
     @Serializable
     class PunishmentFormat(
-        val enableLowWaterPunishment: Boolean = true,
         val effectDuration: Int = 50,
-        val lightInLowWater: LowWaterPunishmentObject = LowWaterPunishmentObject().apply {
-            effectsInDifficulty[WaterSource.ModDifficulty.NORMAL] = arrayListOf(
+        val lightPunishmentInLowWater: LowWaterPunishmentObject = LowWaterPunishmentObject().apply {
+            effectsInNormal = arrayOf(
                 EffectObject(StatusEffects.SLOWNESS),
                 EffectObject(StatusEffects.WEAKNESS)
-            )
-            effectsInDifficulty[WaterSource.ModDifficulty.HARD] = arrayListOf(
+            ).map { it.toString() }
+            effectsInHard = arrayOf(
                 EffectObject(StatusEffects.SLOWNESS, 1),
                 EffectObject(StatusEffects.WEAKNESS, 1)
-            )
+            ).map {it.toString() }
         },
-        val heavyInLowWater: LowWaterPunishmentObject = LowWaterPunishmentObject().apply {
-            effectsInDifficulty[WaterSource.ModDifficulty.EASY] = arrayListOf(
+        val heavyPunishmentInLowWater: LowWaterPunishmentObject = LowWaterPunishmentObject().apply {
+            effectsInEasy = arrayOf(
                 EffectObject(StatusEffects.SLOWNESS),
                 EffectObject(StatusEffects.WEAKNESS, 2)
-            )
-            effectsInDifficulty[WaterSource.ModDifficulty.NORMAL] = arrayListOf(
+            ).map {it.toString() }
+            effectsInNormal = arrayOf(
                 EffectObject(StatusEffects.SLOWNESS, 1),
                 EffectObject(StatusEffects.WEAKNESS, 2)
-            )
-            effectsInDifficulty[WaterSource.ModDifficulty.HARD] = arrayListOf(
+            ).map {it.toString() }
+            effectsInHard = arrayOf(
                 EffectObject(StatusEffects.SLOWNESS, 2),
                 EffectObject(StatusEffects.WEAKNESS, 2)
-            )
+            ).map {it.toString() }
         }
     )
 
     @Serializable
     class LowWaterPunishmentObject(
         val enable: Boolean = true,
-        val effectsInDifficulty: HashMap<WaterSource.ModDifficulty, List<EffectObject>> = HashMap()
+        
+        var effectsInEasy: List<String> = emptyList(),
+        var effectsInNormal: List<String> = emptyList(),
+        var effectsInHard: List<String> = emptyList(),
     ) {
         fun getEffectList(duration: Int, difficulty: WaterSource.ModDifficulty): List<StatusEffectInstance> {
             if (!enable) return emptyList()
-            val raw = effectsInDifficulty[difficulty]
-            return raw?.map {
+            val raw =
+                when (difficulty) {
+                    WaterSource.ModDifficulty.PEACEFUL -> emptyList()
+                    WaterSource.ModDifficulty.EASY -> effectsInEasy.map { EffectObject.fromString(it) }.toList()
+                    WaterSource.ModDifficulty.NORMAL -> effectsInNormal.map { EffectObject.fromString(it) }.toList()
+                    WaterSource.ModDifficulty.HARD -> effectsInHard.map { EffectObject.fromString(it) }.toList()
+                }
+            return raw.map {
                 StatusEffectInstance(
                     Registries.STATUS_EFFECT.get(Identifier.tryParse(it.id)),
                     duration,
                     it.amplifier
                 )
-            } ?: emptyList()
+            }
         }
     }
 
@@ -90,6 +98,15 @@ object WSConfig {
             fun fromInstance(instance: StatusEffectInstance): EffectObject {
                 return EffectObject(instance.effectType.identifier().toString(), instance.amplifier)
             }
+            fun fromString(str: String): EffectObject{
+                val list = str.split("::")
+                val id = list[0]
+                val amplifier = list[1].toInt()
+                return EffectObject(id, amplifier)
+            }
+        }
+        override fun toString(): String {
+            return "$id::$amplifier"
         }
     }
 
@@ -132,11 +149,11 @@ object WSConfig {
             get() = format.punishment
 
         fun getPunishmentStatusEffectsLight(difficulty: WaterSource.ModDifficulty): Iterable<StatusEffectInstance> {
-            return config.lightInLowWater.getEffectList(config.effectDuration, difficulty);
+            return config.lightPunishmentInLowWater.getEffectList(config.effectDuration, difficulty);
         }
 
         fun getPunishmentStatusEffectsHeavy(difficulty: WaterSource.ModDifficulty): Iterable<StatusEffectInstance> {
-            return config.heavyInLowWater.getEffectList(config.effectDuration, difficulty);
+            return config.heavyPunishmentInLowWater.getEffectList(config.effectDuration, difficulty);
         }
     }
 }
