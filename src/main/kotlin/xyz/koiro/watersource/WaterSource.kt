@@ -8,6 +8,7 @@ import xyz.koiro.watersource.config.ModConfigLoader
 import xyz.koiro.watersource.data.ModResourceRegistries
 import xyz.koiro.watersource.event.ModEventsHandlers
 import xyz.koiro.watersource.world.block.ModBlocks
+import xyz.koiro.watersource.world.block.entity.ModBlockEntities
 import xyz.koiro.watersource.world.effect.ModStatusEffects
 import xyz.koiro.watersource.world.fluid.ModFluids
 import xyz.koiro.watersource.world.item.ModFuelRegister
@@ -23,6 +24,7 @@ object WaterSource : ModInitializer {
         ModFuelRegister.initialize()
         ModBlocks.active()
         ModFluids.active()
+        ModBlockEntities.active()
         ModStatusEffects.active()
         ModItemGroups.active()
         ModRecipes.initialize()

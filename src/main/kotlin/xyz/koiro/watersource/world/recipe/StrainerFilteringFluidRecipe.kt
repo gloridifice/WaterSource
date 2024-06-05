@@ -7,16 +7,12 @@ import net.minecraft.item.ItemStack
 import net.minecraft.network.PacketByteBuf
 import net.minecraft.recipe.Ingredient
 import net.minecraft.recipe.RecipeSerializer
-import net.minecraft.recipe.RecipeType
-import net.minecraft.recipe.SpecialCraftingRecipe
 import net.minecraft.recipe.book.CraftingRecipeCategory
 import net.minecraft.registry.DynamicRegistryManager
 import net.minecraft.registry.Registries
 import net.minecraft.util.Identifier
-import net.minecraft.util.collection.DefaultedList
-import net.minecraft.world.World
-import xyz.koiro.watersource.api.getOrCreateFluidStorageData
-import xyz.koiro.watersource.api.modifyFluidStorage
+import xyz.koiro.watersource.api.fluidData.getOrCreateFluidStorageData
+import xyz.koiro.watersource.api.fluidData.modifyFluidStorage
 import xyz.koiro.watersource.identifier
 import xyz.koiro.watersource.world.item.Strainer
 
@@ -40,7 +36,7 @@ class StrainerFilteringFluidRecipe(
 
             val output = input.copy()
             output.modifyFluidStorage { _, fluidStorageData ->
-                fluidStorageData.copy(fluid = outFluid)
+                fluidStorageData.fluid = outFluid
             }
             return output
         }

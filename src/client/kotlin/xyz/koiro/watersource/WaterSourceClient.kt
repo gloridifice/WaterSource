@@ -8,11 +8,14 @@ import net.fabricmc.fabric.api.client.render.fluid.v1.FluidRenderHandlerRegistry
 import net.fabricmc.fabric.api.client.render.fluid.v1.SimpleFluidRenderHandler
 import net.minecraft.client.render.RenderLayer
 import net.minecraft.util.Identifier
-import xyz.koiro.watersource.color.ModItemColorProviders
+import xyz.koiro.watersource.render.blockentity.ModBlockEntityRenderers
+import xyz.koiro.watersource.render.color.ModItemColorProviders
 import xyz.koiro.watersource.config.ModConfigLoader
 import xyz.koiro.watersource.event.ModClientItemTooltipEventHandlers
-import xyz.koiro.watersource.hud.ModClientHUD
+import xyz.koiro.watersource.render.hud.ModClientHUD
 import xyz.koiro.watersource.network.ModClientNetworking
+import xyz.koiro.watersource.render.ModFluidAndBlockRenderRegistry
+import xyz.koiro.watersource.world.block.ModBlocks
 import xyz.koiro.watersource.world.fluid.ModFluids
 
 object WaterSourceClient : ClientModInitializer {
@@ -21,20 +24,8 @@ object WaterSourceClient : ClientModInitializer {
         ModClientNetworking.initialize()
         ModClientHUD.initialize()
         ModClientItemTooltipEventHandlers.initialize()
-
-        FluidRenderHandlerRegistry.INSTANCE.register(
-            ModFluids.PURIFIED_WATER, ModFluids.FLOWING_PURIFIED_WATER, SimpleFluidRenderHandler(
-                Identifier("minecraft:block/water_still"),
-                Identifier("minecraft:block/water_flow"),
-                0x62A9E7
-            )
-        )
-        BlockRenderLayerMap.INSTANCE.putFluids(
-            RenderLayer.getTranslucent(),
-            ModFluids.PURIFIED_WATER,
-            ModFluids.FLOWING_PURIFIED_WATER
-        );
-
-        WSClientConfig.format = ModConfigLoader.loadOrCreateConfig<WSClientConfig.Format>("client", WSClientConfig.Format())
+        ModBlockEntityRenderers.initialize()
+        ModFluidAndBlockRenderRegistry.initialize()
+        WSClientConfig.reload()
     }
 }

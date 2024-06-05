@@ -1,10 +1,11 @@
 package xyz.koiro.watersource
 
-import kotlinx.serialization.SerialInfo
 import kotlinx.serialization.Serializable
+import xyz.koiro.watersource.config.ModConfigLoader
 
 object WSClientConfig {
     var format: Format = Format()
+
     @Serializable
     class Format(
         val showHydrationRestorationDataOnItemTooltip: Boolean = true,
@@ -13,4 +14,8 @@ object WSClientConfig {
         val showWaterSaturationInBar: Boolean = true,
         val waterLevelBarOffsetY: Int = 0
     )
+
+    fun reload() {
+        format = ModConfigLoader.loadOrCreateConfig<Format>("client", Format())
+    }
 }

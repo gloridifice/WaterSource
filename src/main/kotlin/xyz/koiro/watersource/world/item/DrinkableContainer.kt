@@ -12,8 +12,8 @@ import net.minecraft.util.TypedActionResult
 import net.minecraft.util.UseAction
 import net.minecraft.world.World
 import xyz.koiro.watersource.WSConfig
-import xyz.koiro.watersource.api.extractFluid
-import xyz.koiro.watersource.api.getOrCreateFluidStorageData
+import xyz.koiro.watersource.api.fluidData.extractFluid
+import xyz.koiro.watersource.api.fluidData.getOrCreateFluidStorageData
 import xyz.koiro.watersource.data.HydrationData
 import xyz.koiro.watersource.data.HydrationDataManager
 import xyz.koiro.watersource.world.attachment.WaterLevelData

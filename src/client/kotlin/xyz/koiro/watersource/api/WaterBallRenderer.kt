@@ -3,10 +3,10 @@ package xyz.koiro.watersource.api
 import com.mojang.blaze3d.systems.RenderSystem
 import net.minecraft.client.gui.DrawContext
 import xyz.koiro.watersource.WaterSource
-import xyz.koiro.watersource.hud.ModClientHUD
+import xyz.koiro.watersource.render.hud.ModClientHUD
 import kotlin.math.sin
 
-data class DrawWaterBallUtils(
+data class WaterBallRenderer(
     val x: Int,
     val y: Int,
     val isThirty: Boolean,

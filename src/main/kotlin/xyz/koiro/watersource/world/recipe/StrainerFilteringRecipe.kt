@@ -8,6 +8,7 @@ import net.minecraft.recipe.book.CraftingRecipeCategory
 import net.minecraft.util.Identifier
 import net.minecraft.util.collection.DefaultedList
 import net.minecraft.world.World
+import xyz.koiro.watersource.WSConfig
 import xyz.koiro.watersource.world.item.Strainer
 
 abstract class StrainerFilteringRecipe(
@@ -41,6 +42,7 @@ abstract class StrainerFilteringRecipe(
     }
 
     override fun matches(inventory: RecipeInputInventory, world: World): Boolean {
+        if (!WSConfig.Filtering.config.enableStrainerRecipe) return false
         getInputAndStrainer(inventory)?.let { ctx ->
             val strainer = ctx.strainer
             return strainer.damage + getCost(ctx) <= strainer.maxDamage

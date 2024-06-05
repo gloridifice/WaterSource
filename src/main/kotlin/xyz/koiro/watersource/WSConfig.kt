@@ -13,7 +13,13 @@ object WSConfig {
     @Serializable
     class Format(
         val exhaustion: ExhaustionFormat = ExhaustionFormat(),
-        val punishment: PunishmentFormat = PunishmentFormat()
+        val punishment: PunishmentFormat = PunishmentFormat(),
+        val filtering: FilteringFormat = FilteringFormat()
+    )
+
+    @Serializable
+    class FilteringFormat(
+        val enableStrainerRecipe: Boolean = true
     )
 
     @Serializable
@@ -155,6 +161,11 @@ object WSConfig {
         fun getPunishmentStatusEffectsHeavy(difficulty: WaterSource.ModDifficulty): Iterable<StatusEffectInstance> {
             return config.heavyPunishmentInLowWater.getEffectList(config.effectDuration, difficulty);
         }
+    }
+
+    object Filtering {
+        val config
+            get() = format.filtering
     }
 }
 

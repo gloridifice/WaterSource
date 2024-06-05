@@ -6,7 +6,7 @@ import net.minecraft.item.ItemStack
 import net.minecraft.registry.Registries
 import net.minecraft.registry.Registry
 import net.minecraft.text.Text
-import xyz.koiro.watersource.api.insertFluid
+import xyz.koiro.watersource.api.fluidData.insertFluid
 import xyz.koiro.watersource.world.fluid.ModFluids
 import xyz.koiro.watersource.world.item.ModItems
 
@@ -49,6 +49,8 @@ object ModItemGroups {
             stack.insertFluid(ModFluids.PURIFIED_WATER) { it.capacity }
             stack
         },
+
+        ModItems.WOODEN_FILTER_BLOCK.simpleStack()
     )
 
     val MAIN_ITEM_GROUP = Registry.register(

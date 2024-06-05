@@ -7,7 +7,7 @@ import net.minecraft.item.ItemStack
 import net.minecraft.resource.ResourceManager
 import net.minecraft.util.Identifier
 import xyz.koiro.watersource.WaterSource
-import xyz.koiro.watersource.api.getOrCreateFluidStorageData
+import xyz.koiro.watersource.api.fluidData.getOrCreateFluidStorageData
 import xyz.koiro.watersource.datagen.provider.HydrationDataProvider
 import kotlin.math.floor
 

@@ -1,21 +1,19 @@
 package xyz.koiro.watersource.world.item
 
 import net.minecraft.client.item.TooltipContext
-import net.minecraft.entity.LivingEntity
 import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.fluid.Fluids
 import net.minecraft.item.Item
 import net.minecraft.item.ItemStack
-import net.minecraft.server.network.ServerPlayerEntity
 import net.minecraft.text.Text
 import net.minecraft.util.Formatting
 import net.minecraft.util.Hand
 import net.minecraft.util.TypedActionResult
 import net.minecraft.util.hit.BlockHitResult
 import net.minecraft.world.World
-import xyz.koiro.watersource.api.FluidStorageData
-import xyz.koiro.watersource.api.getOrCreateFluidStorageData
-import xyz.koiro.watersource.api.insertFluid
+import xyz.koiro.watersource.api.fluidData.FluidStorageData
+import xyz.koiro.watersource.api.fluidData.getOrCreateFluidStorageData
+import xyz.koiro.watersource.api.fluidData.insertFluid
 
 class EmptyDrinkableContainer(settings: Settings?, val containerStack: () -> ItemStack) : Item(settings) {
     override fun use(world: World, user: PlayerEntity, hand: Hand): TypedActionResult<ItemStack> {

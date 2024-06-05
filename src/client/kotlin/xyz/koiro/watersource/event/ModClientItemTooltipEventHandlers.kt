@@ -5,7 +5,7 @@ import net.minecraft.client.gui.DrawContext
 import net.minecraft.client.gui.tooltip.TooltipBackgroundRenderer
 import net.minecraft.util.ActionResult
 import xyz.koiro.watersource.WSClientConfig
-import xyz.koiro.watersource.api.DrawWaterBallUtils
+import xyz.koiro.watersource.api.WaterBallRenderer
 import xyz.koiro.watersource.data.HydrationData
 import xyz.koiro.watersource.data.HydrationDataManager
 import xyz.koiro.watersource.world.effect.ModStatusEffects
@@ -48,8 +48,8 @@ object ModClientItemTooltipEventHandlers {
 
         val levelY = fY + 1
         val newX = fX + 2
-        DrawWaterBallUtils(newX, levelY, isThirty, DrawWaterBallUtils.Part.Empty).draw(context)
-        DrawWaterBallUtils(newX, levelY, isThirty, DrawWaterBallUtils.Part.DryDown, true).draw(context)
+        WaterBallRenderer(newX, levelY, isThirty, WaterBallRenderer.Part.Empty).draw(context)
+        WaterBallRenderer(newX, levelY, isThirty, WaterBallRenderer.Part.DryDown, true).draw(context)
 
         val tr = MinecraftClient.getInstance().textRenderer
         val textX = newX + 11
@@ -84,28 +84,28 @@ object ModClientItemTooltipEventHandlers {
             val newY = fY + 1
             for (i in 0..<emptyCount) {
                 val newX = fX + i * 8 + 1
-                DrawWaterBallUtils(newX, newY, isThirty, DrawWaterBallUtils.Part.Empty).draw(context)
+                WaterBallRenderer(newX, newY, isThirty, WaterBallRenderer.Part.Empty).draw(context)
             }
 
             for (i in 0..<levelCount) {
                 val newX = fX + i * 8 + 1
                 val isEndAndHalf = i == levelCount - 1 && isLevelEndHalf
-                val part = if (isEndAndHalf) DrawWaterBallUtils.Part.LeftHalf else DrawWaterBallUtils.Part.Full
-                DrawWaterBallUtils(newX, newY, isThirty, part).draw(context)
+                val part = if (isEndAndHalf) WaterBallRenderer.Part.LeftHalf else WaterBallRenderer.Part.Full
+                WaterBallRenderer(newX, newY, isThirty, part).draw(context)
             }
 
             for (i in 0..<satCount) {
                 val newX = fX + i * 8 + 1
                 val isEndAndHalf = i == satCount - 1 && isSatEndHalf
                 if (isEndAndHalf) {
-                    DrawWaterBallUtils(newX, newY, isThirty, DrawWaterBallUtils.Part.SaturationDown, true).draw(
+                    WaterBallRenderer(newX, newY, isThirty, WaterBallRenderer.Part.SaturationDown, true).draw(
                         context
                     )
                 } else {
-                    DrawWaterBallUtils(newX, newY, isThirty, DrawWaterBallUtils.Part.SaturationUp, true).draw(
+                    WaterBallRenderer(newX, newY, isThirty, WaterBallRenderer.Part.SaturationUp, true).draw(
                         context
                     )
-                    DrawWaterBallUtils(newX, newY, isThirty, DrawWaterBallUtils.Part.SaturationDown, true).draw(
+                    WaterBallRenderer(newX, newY, isThirty, WaterBallRenderer.Part.SaturationDown, true).draw(
                         context
                     )
                 }
@@ -127,10 +127,10 @@ object ModClientItemTooltipEventHandlers {
             val levelY = fY + 1
             val satY = levelY + 10
             val newX = fX + 2
-            DrawWaterBallUtils(newX, levelY, isThirty, DrawWaterBallUtils.Part.Empty).draw(context)
-            DrawWaterBallUtils(newX, levelY, isThirty, DrawWaterBallUtils.Part.LeftHalf).draw(context)
-            DrawWaterBallUtils(newX, satY, isThirty, DrawWaterBallUtils.Part.Empty).draw(context)
-            DrawWaterBallUtils(newX, satY, isThirty, DrawWaterBallUtils.Part.SaturationDown, true).draw(context)
+            WaterBallRenderer(newX, levelY, isThirty, WaterBallRenderer.Part.Empty).draw(context)
+            WaterBallRenderer(newX, levelY, isThirty, WaterBallRenderer.Part.LeftHalf).draw(context)
+            WaterBallRenderer(newX, satY, isThirty, WaterBallRenderer.Part.Empty).draw(context)
+            WaterBallRenderer(newX, satY, isThirty, WaterBallRenderer.Part.SaturationDown, true).draw(context)
 
             val tr = MinecraftClient.getInstance().textRenderer
             val textX = newX + 11

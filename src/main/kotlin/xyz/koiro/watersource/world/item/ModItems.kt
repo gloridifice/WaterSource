@@ -1,6 +1,7 @@
 package xyz.koiro.watersource.world.item
 
 import net.fabricmc.fabric.api.item.v1.FabricItemSettings
+import net.minecraft.item.BlockItem
 import net.minecraft.item.BucketItem
 import net.minecraft.item.Item
 import net.minecraft.item.ItemStack
@@ -11,6 +12,7 @@ import net.minecraft.util.Identifier
 import xyz.koiro.watersource.AutoGenItemData
 import xyz.koiro.watersource.ModelType
 import xyz.koiro.watersource.WaterSource
+import xyz.koiro.watersource.world.block.ModBlocks
 import xyz.koiro.watersource.world.fluid.ModFluids
 
 object ModItems {
@@ -102,6 +104,11 @@ object ModItems {
             DrinkOnceItem(FabricItemSettings().maxCount(16), 32) { ItemStack(Items.GLASS_BOTTLE) }
         )
 
+    @AutoGenItemData(enLang = "Wooden Filter", cnLang = "木质滤水器", modelType = ModelType.DontGen)
+    val WOODEN_FILTER_BLOCK = registerItem(
+        "wooden_filter",
+        BlockItem(ModBlocks.WOODEN_FILTER, FabricItemSettings())
+    )
 
     fun active() {
     }

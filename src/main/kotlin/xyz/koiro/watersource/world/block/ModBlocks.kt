@@ -25,6 +25,12 @@ object ModBlocks {
         FluidBlock(ModFluids.PURIFIED_WATER as FlowableFluid, FabricBlockSettings.copy(Blocks.WATER))
     )
 
+    @AutoGenBlockData("Wooden Filter", "木质滤水器", false)
+    val WOODEN_FILTER = registerBlock(
+        "wooden_filter",
+        FilterBlock(2000L ,FabricBlockSettings.create())
+    )
+
     fun active() {}
     fun registerBlock(registryName: String, block: Block): Block {
         return Registry.register(Registries.BLOCK, Identifier(WaterSource.MODID, registryName), block)

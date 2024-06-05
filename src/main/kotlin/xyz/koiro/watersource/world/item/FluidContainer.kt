@@ -21,10 +21,9 @@ import net.minecraft.util.TypedActionResult
 import net.minecraft.util.hit.BlockHitResult
 import net.minecraft.world.World
 import xyz.koiro.watersource.*
-import xyz.koiro.watersource.api.FluidStorageData
-import xyz.koiro.watersource.api.getOrCreateFluidStorageData
-import xyz.koiro.watersource.api.insertFluid
-import xyz.koiro.watersource.datagen.ModLanguages
+import xyz.koiro.watersource.api.fluidData.FluidStorageData
+import xyz.koiro.watersource.api.fluidData.getOrCreateFluidStorageData
+import xyz.koiro.watersource.api.fluidData.insertFluid
 import kotlin.math.round
 
 open class FluidContainer(

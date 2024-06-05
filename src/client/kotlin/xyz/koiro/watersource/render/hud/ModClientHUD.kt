@@ -1,10 +1,10 @@
-package xyz.koiro.watersource.hud
+package xyz.koiro.watersource.render.hud
 
 import net.fabricmc.fabric.api.client.rendering.v1.HudRenderCallback
 import net.minecraft.client.MinecraftClient
 import net.minecraft.client.gui.DrawContext
 import xyz.koiro.watersource.WSClientConfig
-import xyz.koiro.watersource.api.DrawWaterBallUtils
+import xyz.koiro.watersource.api.WaterBallRenderer
 import xyz.koiro.watersource.world.attachment.ModAttachmentTypes
 import xyz.koiro.watersource.world.effect.ModStatusEffects
 import kotlin.math.ceil
@@ -51,7 +51,7 @@ object ModClientHUD {
             // Draw Empties
             for (i in 0..<10) {
                 val x = xStart - i * 8 - 9
-                DrawWaterBallUtils(x, y + yOffsetList[i], isThirty, DrawWaterBallUtils.Part.Empty).draw(context)
+                WaterBallRenderer(x, y + yOffsetList[i], isThirty, WaterBallRenderer.Part.Empty).draw(context)
             }
 
             // Draw Balls (Level)
@@ -61,8 +61,8 @@ object ModClientHUD {
                 val x = xStart - i * 8 - 9
                 val isEndAndEndIsHalf = i == ballCount - 1 && endIsHalf
                 val part =
-                    if (isEndAndEndIsHalf) DrawWaterBallUtils.Part.RightHalf else DrawWaterBallUtils.Part.Full
-                DrawWaterBallUtils(x, y + yOffsetList[i], isThirty, part).draw(context)
+                    if (isEndAndEndIsHalf) WaterBallRenderer.Part.RightHalf else WaterBallRenderer.Part.Full
+                WaterBallRenderer(x, y + yOffsetList[i], isThirty, part).draw(context)
             }
 
             if (WSClientConfig.format.showWaterSaturationInBar) {
@@ -74,10 +74,10 @@ object ModClientHUD {
                     val isEndAndEndIsHalf = i == frameCount - 1 && fEndIsHalf
                     val fY = y + yOffsetList[i]
                     if (isEndAndEndIsHalf) {
-                        DrawWaterBallUtils(x, fY, isThirty, DrawWaterBallUtils.Part.SaturationDown).draw(context)
+                        WaterBallRenderer(x, fY, isThirty, WaterBallRenderer.Part.SaturationDown).draw(context)
                     } else {
-                        DrawWaterBallUtils(x, fY, isThirty, DrawWaterBallUtils.Part.SaturationUp).draw(context)
-                        DrawWaterBallUtils(x, fY, isThirty, DrawWaterBallUtils.Part.SaturationDown).draw(context)
+                        WaterBallRenderer(x, fY, isThirty, WaterBallRenderer.Part.SaturationUp).draw(context)
+                        WaterBallRenderer(x, fY, isThirty, WaterBallRenderer.Part.SaturationDown).draw(context)
                     }
                 }
             }
