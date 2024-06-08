@@ -1,0 +1,7 @@
+{
+"parent":"watersource:block/strainer",
+	"textures": {
+		"0": "watersource:strainer/natural_strainer",
+		"particle": "watersource:strainer/natural_strainer"
+	}
+}

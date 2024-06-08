@@ -1,10 +1,9 @@
 package xyz.koiro.watersource.world.block
 
-import net.minecraft.block.Block
-import net.minecraft.block.BlockEntityProvider
-import net.minecraft.block.BlockState
-import net.minecraft.block.ShapeContext
+import net.minecraft.block.*
 import net.minecraft.block.entity.BlockEntity
+import net.minecraft.block.entity.BlockEntityTicker
+import net.minecraft.block.entity.BlockEntityType
 import net.minecraft.entity.LivingEntity
 import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.fluid.Fluids
@@ -22,15 +21,16 @@ import net.minecraft.util.shape.VoxelShape
 import net.minecraft.world.BlockView
 import net.minecraft.world.World
 import net.minecraft.world.WorldView
-import xyz.koiro.watersource.api.fluidData.getOrCreateFluidStorageData
+import xyz.koiro.watersource.api.storage.getOrCreateFluidStorageData
+import xyz.koiro.watersource.api.storage.setFluidStorage
 import xyz.koiro.watersource.simpleStack
 import xyz.koiro.watersource.world.block.entity.FilterBlockEntity
+import xyz.koiro.watersource.world.block.entity.ModBlockEntities
 import xyz.koiro.watersource.world.fluid.ModFluids
-import xyz.koiro.watersource.world.item.FluidContainer
-import xyz.koiro.watersource.world.item.ModItems
+import xyz.koiro.watersource.world.item.*
 import kotlin.math.min
 
-class FilterBlock(val capacity: Long, settings: Settings?) : Block(settings), BlockEntityProvider {
+class FilterBlock(val capacity: Long, settings: Settings?) : BlockWithEntity(settings) {
     init {
         defaultState = defaultState.with(IS_UP, false)
     }
@@ -47,67 +47,105 @@ class FilterBlock(val capacity: Long, settings: Settings?) : Block(settings), Bl
         hand: Hand?,
         hit: BlockHitResult?
     ): ActionResult {
-        val filterBlockEntity = world.getBlockEntity(pos)
-        if (player != null && hand != null && filterBlockEntity is FilterBlockEntity) {
+        val entity = world.getBlockEntity(pos)
+        if (player != null && hand != null && entity is FilterBlockEntity && !world.isClient) {
             val handStack = player.getStackInHand(hand)
-            val data = filterBlockEntity.fluidStorageData
+            val data = entity.fluidStorageData
             val handItem = handStack.item
+            val canModifyStrainer = entity.getUpFluidStorage(world)?.isBlank() ?: return ActionResult.SUCCESS
+            val strainerStorage = entity.getStrainerStorage(world) ?: return ActionResult.SUCCESS
+            val hasStrainerAndIsUp = !strainerStorage.stack.isEmpty && isUp(state)
 
-            if (handStack.isEmpty && player.isSneaking) {
-                data.clear()
-                return ActionResult.SUCCESS
+            if (handStack.isEmpty) {
+                when {
+                    player.isSneaking -> {
+                        if (!entity.fluidStorageData.isBlank()) {
+                            data.clear()
+                        } else {
+                            if (!strainerStorage.stack.isEmpty && canModifyStrainer) {
+                                player.setStackInHand(hand, entity.extractStrainerInUp(world))
+                            }
+                        }
+                    }
+                }
             } else {
-                return when {
+                when {
+                    handItem is Strainer && canModifyStrainer -> {
+                        val insert = entity.insertStrainerInUp(world, handStack)
+                        player.setStackInHand(hand, insert)
+                    }
+
                     handItem is FluidContainer -> {
-                        handStack.getOrCreateFluidStorageData()?.let { itemData ->
-                            if (itemData.isBlank()) {
-                                data.transferTo(itemData, min(itemData.restCapacity(), data.amount), true)
-                                ActionResult.SUCCESS
+                        handStack.getOrCreateFluidStorageData()?.let { containerFluidData ->
+                            if (containerFluidData.isBlank()) {
+                                val transferResult = data.transferTo(
+                                    containerFluidData,
+                                    min(containerFluidData.restCapacity(), data.amount),
+                                    true
+                                )
+                                if (transferResult != null) {
+                                    player.setStackInHand(hand, handItem.setStorageData(handStack, transferResult.second))
+                                }
                             } else {
                                 if (isUp(state)) {
-                                    itemData.transferTo(data, min(data.restCapacity(), itemData.amount), true)
-                                    ActionResult.SUCCESS
-                                } else ActionResult.PASS
+                                    val transferResult = containerFluidData.transferTo(
+                                        data,
+                                        min(data.restCapacity(), containerFluidData.amount),
+                                        true
+                                    )
+                                    if (transferResult != null) {
+                                        player.setStackInHand(hand, handItem.setStorageData(handStack, transferResult.first))
+                                    }
+                                }
                             }
-                        } ?: ActionResult.PASS
+                        }
                     }
 
-                    handItem == Items.WATER_BUCKET && isUp(state) -> {
+                    handItem is EmptyFluidContainerItem -> {
+                        val containerStack = handItem.containerStack()
+                        if (!data.isBlank()) {
+                            containerStack.getOrCreateFluidStorageData()?.let { containerFluidData ->
+                                val transferResult = data.transferTo(
+                                    containerFluidData,
+                                    min(containerFluidData.restCapacity(), data.amount),
+                                    true
+                                )
+                                if (transferResult != null) {
+                                    player.setStackInHand(hand, (containerStack.item as FluidContainer).setStorageData(containerStack, transferResult.second))
+
+                                }
+                            }
+                        }
+                    }
+
+                    handItem == Items.WATER_BUCKET && hasStrainerAndIsUp -> {
                         if (data.insert(1000, Fluids.WATER, true)) {
                             player.setStackInHand(hand, ItemStack(Items.BUCKET))
-                            ActionResult.SUCCESS
-                        } else ActionResult.PASS
+                        }
                     }
 
-                    handItem == Items.BUCKET -> {
-                        if (data.fluid == Fluids.WATER && data.amount >= 1000) {
-                            data.extract(1000)
-                            player.setStackInHand(hand, ItemStack(Items.BUCKET))
-                            ActionResult.SUCCESS
-                        } else ActionResult.PASS
+                    handItem == Items.BUCKET && data.fluid == Fluids.WATER && data.amount >= 1000 -> {
+                        data.extract(1000)
+                        player.setStackInHand(hand, ItemStack(Items.WATER_BUCKET))
                     }
 
-                    handItem == Items.GLASS_BOTTLE -> {
-                        if (data.amount >= 250) {
-                            val newStack = when (data.fluid) {
-                                Fluids.WATER -> PotionUtil.setPotion(Items.POTION.simpleStack(), Potions.WATER)
-                                ModFluids.PURIFIED_WATER -> ModItems.PURIFIED_WATER_BOTTLE.simpleStack()
-                                else -> null
-                            }
-                            newStack?.let { newStack ->
-                                handStack.decrement(1)
-                                if (handStack.isEmpty)
-                                    player.setStackInHand(hand, newStack)
-                                else
-                                    player.inventory.insertStack(newStack)
-                                data.extract(250)
-                                ActionResult.SUCCESS
-                            } ?: ActionResult.PASS
-                        } else
-                            ActionResult.PASS
+                    handItem == Items.GLASS_BOTTLE && (data.fluid == Fluids.WATER || data.fluid == ModFluids.PURIFIED_WATER) && data.amount >= 250 -> {
+                        val newStack = when (data.fluid) {
+                            Fluids.WATER -> PotionUtil.setPotion(Items.POTION.simpleStack(), Potions.WATER)
+                            ModFluids.PURIFIED_WATER -> ModItems.PURIFIED_WATER_BOTTLE.simpleStack()
+                            else -> null
+                        }
+                        newStack?.let { newStack ->
+                            handStack.decrement(1)
+                            if (handStack.isEmpty)
+                                player.setStackInHand(hand, newStack)
+                            else
+                                player.inventory.insertStack(newStack)
+                            data.extract(250)
+                        }
                     }
 
-                    handItem == Items.POTION && PotionUtil.getPotion(handStack) == Potions.WATER && isUp(state) -> {
+                    handItem == Items.POTION && PotionUtil.getPotion(handStack) == Potions.WATER && hasStrainerAndIsUp -> {
                         if (data.insert(250, Fluids.WATER, true)) {
                             handStack.decrement(1)
                             val newStack = Items.GLASS_BOTTLE.simpleStack()
@@ -115,18 +153,16 @@ class FilterBlock(val capacity: Long, settings: Settings?) : Block(settings), Bl
                                 player.setStackInHand(hand, newStack)
                             else
                                 player.inventory.insertStack(newStack)
-
-                            ActionResult.SUCCESS
-                        } else {
-                            ActionResult.PASS
                         }
                     }
 
-                    else -> ActionResult.PASS
+                    else -> {}
                 }
             }
+            entity.syncToClientOfPlayersInRadius(world, 50f)
         }
-        return super.onUse(state, world, pos, player, hand, hit)
+
+        return ActionResult.SUCCESS
     }
 
     override fun getOutlineShape(
@@ -181,5 +217,19 @@ class FilterBlock(val capacity: Long, settings: Settings?) : Block(settings), Bl
 
     override fun createBlockEntity(pos: BlockPos, state: BlockState): BlockEntity {
         return FilterBlockEntity(pos, state, isUp = state.get(IS_UP), capacity = capacity)
+    }
+
+    override fun getRenderType(state: BlockState?): BlockRenderType {
+        return BlockRenderType.MODEL
+    }
+
+    override fun <T : BlockEntity?> getTicker(
+        world: World?,
+        state: BlockState?,
+        type: BlockEntityType<T>?
+    ): BlockEntityTicker<T>? {
+        return checkType(type, ModBlockEntities.FILTER) { world1, pos, state1, be ->
+            FilterBlockEntity.tick(world1, pos, state1, be)
+        }
     }
 }

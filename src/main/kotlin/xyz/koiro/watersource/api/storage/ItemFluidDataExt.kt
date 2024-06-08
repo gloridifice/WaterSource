@@ -1,4 +1,4 @@
-package xyz.koiro.watersource.api.fluidData
+package xyz.koiro.watersource.api.storage
 
 import net.minecraft.fluid.Fluid
 import net.minecraft.fluid.Fluids
@@ -57,4 +57,11 @@ fun ItemStack.modifyFluidStorage(action: (ItemStack, FluidStorageData) -> Unit) 
         action(this, it)
         this.setSubNbt(FLUID_STORAGE_KEY, it.toNbt())
     }
+}
+
+fun ItemStack.setFluidStorage(data: FluidStorageData): Boolean {
+    val ret = this.getOrCreateFluidStorageData() != null
+    if (ret)
+        this.setSubNbt(FLUID_STORAGE_KEY, data.toNbt())
+    return ret
 }

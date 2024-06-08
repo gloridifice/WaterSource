@@ -1,23 +1,18 @@
 package xyz.koiro.watersource.data
 
 import kotlinx.serialization.json.Json
-import net.fabricmc.fabric.api.resource.SimpleSynchronousResourceReloadListener
 import net.minecraft.fluid.Fluid
 import net.minecraft.item.ItemStack
-import net.minecraft.resource.ResourceManager
+import net.minecraft.resource.Resource
 import net.minecraft.util.Identifier
 import xyz.koiro.watersource.WaterSource
-import xyz.koiro.watersource.api.fluidData.getOrCreateFluidStorageData
+import xyz.koiro.watersource.api.storage.getOrCreateFluidStorageData
 import xyz.koiro.watersource.datagen.provider.HydrationDataProvider
 import kotlin.math.floor
 
-class HydrationDataManager : SimpleSynchronousResourceReloadListener {
-    private val map = HashMap<String, HydrationData>()
-    private var sequence: Sequence<HydrationData>? = null
+object HydrationDataManager :
+    DataManager<HydrationData>(ModResourceRegistries.HYDRATION_KEY, WaterSource.identifier(ModResourceRegistries.HYDRATION_KEY)) {
 
-    companion object {
-        val INSTANCE = HydrationDataManager()
-    }
 
     fun findByItemStack(itemStack: ItemStack): HydrationData? {
         val data = sequence?.find {
@@ -39,26 +34,15 @@ class HydrationDataManager : SimpleSynchronousResourceReloadListener {
         }
     }
 
-    override fun reload(manager: ResourceManager) {
-        val res = manager.findResources("water_level") { it.path.endsWith(".json") }
-        WaterSource.LOGGER.info("Res Count: ${res.count()}")
-        res.forEach { (id, resource) ->
-            try {
-                val stream = manager.getResource(id).get().inputStream
-                val string = String(stream.readAllBytes())
-                val format = Json.decodeFromString<HydrationData.Format>(string)
-                val data = HydrationData(format)
-                map.putIfAbsent(id.toString(), data)
-                WaterSource.LOGGER.info("Successfully load water level data <${id}>")
-            } catch (e: Exception) {
-                WaterSource.LOGGER.error("Error occurred while loading water level json <${id}>")
-            }
-        }
-        WaterSource.LOGGER.info("All water level data loaded. Count: ${map.count()}.")
-        sequence = map.values.asSequence()
+    override fun processResourceToData(resId: Identifier, res: Resource): HydrationData {
+        val stream = res.inputStream
+        val string = String(stream.readAllBytes())
+        val format = Json.decodeFromString<HydrationData.Format>(string)
+        val data = HydrationData(format)
+        return data
     }
 
     override fun getFabricId(): Identifier {
-        return WaterSource.identifier("water_level")
+        return WaterSource.identifier(ModResourceRegistries.HYDRATION_KEY)
     }
 }

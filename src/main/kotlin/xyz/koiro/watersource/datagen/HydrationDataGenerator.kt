@@ -1,7 +1,6 @@
 package xyz.koiro.watersource.datagen
 
 import net.minecraft.data.DataOutput
-import net.minecraft.entity.effect.StatusEffectInstance
 import net.minecraft.fluid.Fluids
 import net.minecraft.item.Items
 import net.minecraft.nbt.NbtCompound
@@ -10,12 +9,13 @@ import xyz.koiro.watersource.WSConfig
 import xyz.koiro.watersource.WaterSource
 import xyz.koiro.watersource.data.HydrationData
 import xyz.koiro.watersource.datagen.provider.HydrationDataProvider
-import xyz.koiro.watersource.world.effect.ModStatusEffects
+import xyz.koiro.watersource.datagen.provider.addDryItemWithAutoId
+import xyz.koiro.watersource.datagen.provider.addItemWithAutoId
 import xyz.koiro.watersource.world.fluid.ModFluids
 import xyz.koiro.watersource.world.item.ModItems
 
 class HydrationDataGenerator(output: DataOutput) : HydrationDataProvider(output) {
-    override fun addData(adder: HydrationDataAdder) {
+    override fun addData(adder: DataAdder<HydrationData>) {
         // WaterSource -----------------------
         adder.add(
             WaterSource.identifier("fluid_water"),

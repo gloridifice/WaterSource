@@ -6,11 +6,11 @@ import net.minecraft.block.entity.BlockEntityType
 import net.minecraft.fluid.Fluids
 import net.minecraft.nbt.NbtCompound
 import net.minecraft.util.math.BlockPos
-import xyz.koiro.watersource.api.fluidData.FluidStorageData
+import xyz.koiro.watersource.api.storage.FluidStorageData
 
 open class ContainerBlockEntity(type: BlockEntityType<*>?, pos: BlockPos?, state: BlockState?, capacity: Long) :
     BlockEntity(type, pos, state) {
-    var fluidStorageData: FluidStorageData = FluidStorageData(Fluids.WATER, capacity, capacity)
+    var fluidStorageData: FluidStorageData = FluidStorageData(Fluids.EMPTY, 0, capacity)
 
     override fun writeNbt(nbt: NbtCompound?) {
         super.writeNbt(nbt)

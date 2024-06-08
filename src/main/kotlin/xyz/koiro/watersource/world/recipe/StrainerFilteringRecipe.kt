@@ -58,7 +58,7 @@ abstract class StrainerFilteringRecipe(
             defaultedList[i] = ItemStack(item.recipeRemainder)
         }
         getInputAndStrainer(inventory)?.let { ctx ->
-            val remained = (ctx.strainer.item as? Strainer)?.useStrainer(ctx.strainer, getCost(ctx)) ?: ItemStack.EMPTY
+            val remained = (ctx.strainer.item as? Strainer)?.getUsedStrainer(ctx.strainer, getCost(ctx)) ?: ItemStack.EMPTY
             defaultedList[ctx.strainerIndex] = remained
         }
         return defaultedList

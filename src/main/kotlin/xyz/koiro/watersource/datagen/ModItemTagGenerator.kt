@@ -30,7 +30,7 @@ class ModItemTagGenerator(
             .add(ModItems.COMPRESSED_STRAINER)
 
         getOrCreateTagBuilder(ModTags.Item.BASICS_INGOT)
-            .add(Items.IRON_INGOT)
             .add(Items.COPPER_INGOT)
+            .add(Items.IRON_INGOT)
     }
 }

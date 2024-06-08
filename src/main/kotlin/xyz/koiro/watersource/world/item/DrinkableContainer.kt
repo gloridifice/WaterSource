@@ -12,8 +12,10 @@ import net.minecraft.util.TypedActionResult
 import net.minecraft.util.UseAction
 import net.minecraft.world.World
 import xyz.koiro.watersource.WSConfig
-import xyz.koiro.watersource.api.fluidData.extractFluid
-import xyz.koiro.watersource.api.fluidData.getOrCreateFluidStorageData
+import xyz.koiro.watersource.api.storage.FluidStorageData
+import xyz.koiro.watersource.api.storage.extractFluid
+import xyz.koiro.watersource.api.storage.getOrCreateFluidStorageData
+import xyz.koiro.watersource.api.storage.setFluidStorage
 import xyz.koiro.watersource.data.HydrationData
 import xyz.koiro.watersource.data.HydrationDataManager
 import xyz.koiro.watersource.world.attachment.WaterLevelData
@@ -36,7 +38,7 @@ open class DrinkableContainer(
         val storage = handStack.getOrCreateFluidStorageData()
         storage?.let { storageData ->
             val fluid = storageData.fluid
-            HydrationDataManager.INSTANCE.findByFluid(fluid)?.let { hydration ->
+            HydrationDataManager.findByFluid(fluid)?.let { hydration ->
                 if (storageData.amount >= WSConfig.UNIT_DRINK_VOLUME) {
                     return ItemUsage.consumeHeldItem(world, user, hand)
                 }
@@ -56,7 +58,6 @@ open class DrinkableContainer(
     override fun onHydrationUsingFinished(stack: ItemStack, player: ServerPlayerEntity, hand: Hand) {
         onFluidDataChanged(stack, player, hand)
     }
-
 
     override fun hydrationUse(
         stack: ItemStack,

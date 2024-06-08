@@ -1,4 +1,4 @@
-package xyz.koiro.watersource.api
+package xyz.koiro.watersource.api.serialize
 
 import com.google.gson.JsonObject
 import net.minecraft.item.ItemStack

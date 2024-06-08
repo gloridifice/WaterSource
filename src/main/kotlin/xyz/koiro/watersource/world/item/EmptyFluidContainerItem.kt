@@ -11,11 +11,11 @@ import net.minecraft.util.Hand
 import net.minecraft.util.TypedActionResult
 import net.minecraft.util.hit.BlockHitResult
 import net.minecraft.world.World
-import xyz.koiro.watersource.api.fluidData.FluidStorageData
-import xyz.koiro.watersource.api.fluidData.getOrCreateFluidStorageData
-import xyz.koiro.watersource.api.fluidData.insertFluid
+import xyz.koiro.watersource.api.storage.FluidStorageData
+import xyz.koiro.watersource.api.storage.getOrCreateFluidStorageData
+import xyz.koiro.watersource.api.storage.insertFluid
 
-class EmptyDrinkableContainer(settings: Settings?, val containerStack: () -> ItemStack) : Item(settings) {
+class EmptyFluidContainerItem(settings: Settings?, val containerStack: () -> ItemStack) : Item(settings) {
     override fun use(world: World, user: PlayerEntity, hand: Hand): TypedActionResult<ItemStack> {
         val hit = user.raycast(3.0, 0.05f, true)
         if (hit is BlockHitResult) {

@@ -71,7 +71,7 @@ object ModItems {
     @AutoGenItemData(enLang = "Wooden Cup", cnLang = "木杯子")
     val WOODEN_CUP_EMPTY: Item = registerItem(
         "wooden_cup_empty",
-        EmptyDrinkableContainer(FabricItemSettings()) { ItemStack(WOODEN_CUP) }
+        EmptyFluidContainerItem(FabricItemSettings()) { ItemStack(WOODEN_CUP) }
     )
 
     @AutoGenItemData(enLang = "Raw Pottery Cup", cnLang = "陶杯子（未烤制）")
@@ -80,7 +80,7 @@ object ModItems {
     @AutoGenItemData(enLang = "Pottery Cup", cnLang = "陶杯子")
     val POTTERY_CUP_EMPTY: Item = registerItem(
         "pottery_cup_empty",
-        EmptyDrinkableContainer(FabricItemSettings()) { ItemStack(POTTERY_CUP) }
+        EmptyFluidContainerItem(FabricItemSettings()) { ItemStack(POTTERY_CUP) }
     )
 
     @AutoGenItemData(enLang = "Pottery Cup", cnLang = "陶杯子", modelType = ModelType.DontGen)
@@ -104,7 +104,6 @@ object ModItems {
             DrinkOnceItem(FabricItemSettings().maxCount(16), 32) { ItemStack(Items.GLASS_BOTTLE) }
         )
 
-    @AutoGenItemData(enLang = "Wooden Filter", cnLang = "木质滤水器", modelType = ModelType.DontGen)
     val WOODEN_FILTER_BLOCK = registerItem(
         "wooden_filter",
         BlockItem(ModBlocks.WOODEN_FILTER, FabricItemSettings())

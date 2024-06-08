@@ -14,53 +14,29 @@ import net.minecraft.registry.tag.TagKey
 import net.minecraft.util.Identifier
 import xyz.koiro.watersource.WaterSource
 import xyz.koiro.watersource.data.HydrationData
+import xyz.koiro.watersource.data.ModResourceRegistries
 import xyz.koiro.watersource.identifier
 import java.io.ByteArrayOutputStream
 import java.io.IOException
+import java.nio.file.Path
 import java.util.concurrent.CompletableFuture
 
-abstract class HydrationDataProvider(val output: DataOutput) : DataProvider {
-    class HydrationDataAdder() {
-        val dataMap = hashMapOf<Identifier, HydrationData>()
+abstract class HydrationDataProvider(output: DataOutput) :
+    ModDataProvider<HydrationData>(output, ModResourceRegistries.HYDRATION_KEY, "Hydration Data") {
 
-        fun add(identifier: Identifier, hydrationData: HydrationData) {
-            dataMap[identifier] = hydrationData
-        }
-
-        fun addItemWithAutoId(item: Item, level: Int, saturation: Int) {
-            val itemId = item.identifier()
-            dataMap[Identifier(itemId.namespace, "item_${itemId.path}")] = item(item, level, saturation)
-        }
-
-        fun addDryItemWithAutoId(item: Item, dryLevel: Int) {
-            val itemId = item.identifier()
-            dataMap[Identifier(itemId.namespace, "dry_item_${itemId.path}")] = dryItem(item, dryLevel)
-        }
+    override fun writeData(id: Identifier, data: HydrationData, path: Path, writer: DataWriter) {
+        val byteArrayOutputStream = ByteArrayOutputStream()
+        val hashingOutputStream = HashingOutputStream(Hashing.sha1(), byteArrayOutputStream)
+        Json.encodeToStream(data.format(), hashingOutputStream)
+        writer.write(path, byteArrayOutputStream.toByteArray(), hashingOutputStream.hash())
     }
-
-    override fun run(writer: DataWriter): CompletableFuture<*> {
-        val dataAdder = HydrationDataAdder()
-        addData(dataAdder)
-        val array = dataAdder.dataMap.map { (ident, data) ->
-            val path = output.getResolver(DataOutput.OutputType.DATA_PACK, "water_level").resolveJson(ident)
-            CompletableFuture.runAsync {
-                try {
-                    val byteArrayOutputStream = ByteArrayOutputStream()
-                    val hashingOutputStream = HashingOutputStream(Hashing.sha1(), byteArrayOutputStream)
-                    Json.encodeToStream(data.format(), hashingOutputStream)
-                    writer.write(path, byteArrayOutputStream.toByteArray(), hashingOutputStream.hash())
-                } catch (e: IOException) {
-                    WaterSource.LOGGER.error("Failed to save file {}", path, e)
-                }
-            }
-        }.toTypedArray()
-        return (CompletableFuture.allOf(*array))
-    }
-
-    abstract fun addData(adder: HydrationDataAdder)
 
     companion object {
-        fun dryItem(item: Item, dryLevel: Int, vararg effectInstance: HydrationData.ProbabilityStatusEffectInstance): HydrationData {
+        fun dryItem(
+            item: Item,
+            dryLevel: Int,
+            vararg effectInstance: HydrationData.ProbabilityStatusEffectInstance
+        ): HydrationData {
             val effects = ArrayList(effectInstance.toList())
             return HydrationData(
                 0,
@@ -71,7 +47,12 @@ abstract class HydrationDataProvider(val output: DataOutput) : DataProvider {
             )
         }
 
-        fun item(item: Item, level: Int, saturation: Int, vararg effectInstance: HydrationData.ProbabilityStatusEffectInstance): HydrationData {
+        fun item(
+            item: Item,
+            level: Int,
+            saturation: Int,
+            vararg effectInstance: HydrationData.ProbabilityStatusEffectInstance
+        ): HydrationData {
             val effects = ArrayList(effectInstance.toList())
             return HydrationData(
                 level,

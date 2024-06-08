@@ -3,9 +3,11 @@ package xyz.koiro.watersource.render.hud
 import net.fabricmc.fabric.api.client.rendering.v1.HudRenderCallback
 import net.minecraft.client.MinecraftClient
 import net.minecraft.client.gui.DrawContext
+import net.minecraft.util.hit.BlockHitResult
 import xyz.koiro.watersource.WSClientConfig
 import xyz.koiro.watersource.api.WaterBallRenderer
 import xyz.koiro.watersource.world.attachment.ModAttachmentTypes
+import xyz.koiro.watersource.world.block.entity.FilterBlockEntity
 import xyz.koiro.watersource.world.effect.ModStatusEffects
 import kotlin.math.ceil
 import kotlin.random.Random
@@ -21,6 +23,22 @@ object ModClientHUD {
             mc.profiler.push("waterLevel")
             drawWaterLevelHUD(context, elapsedTime)
             mc.profiler.pop()
+
+            drawFilterInfo(context, mc)
+        }
+    }
+
+    fun drawFilterInfo(context: DrawContext, mc: MinecraftClient) {
+        val rct = mc.player?.raycast(3.0, 0.1f, false)
+        val world = mc.world
+        if (rct is BlockHitResult && world != null) {
+            val entity = mc.world?.getBlockEntity(rct.blockPos);
+            if (entity is FilterBlockEntity) {
+                val strainer = entity.getStrainerStorage(world) ?: return
+                context.drawText(mc.textRenderer, entity.fluidStorageData.getDisplayText(), 10, 10, 0xFFFFFF, false)
+                context.drawText(mc.textRenderer, strainer.stack.name, 10, 20, 0xFFFFFF, false)
+                context.drawText(mc.textRenderer, "Ticks: ${entity.filterTicks}, Working: ${entity.isWorking}", 10, 30, 0xFFFFFF, false)
+            }
         }
     }
 

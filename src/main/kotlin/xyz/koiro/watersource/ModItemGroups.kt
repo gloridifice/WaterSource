@@ -6,7 +6,7 @@ import net.minecraft.item.ItemStack
 import net.minecraft.registry.Registries
 import net.minecraft.registry.Registry
 import net.minecraft.text.Text
-import xyz.koiro.watersource.api.fluidData.insertFluid
+import xyz.koiro.watersource.api.storage.insertFluid
 import xyz.koiro.watersource.world.fluid.ModFluids
 import xyz.koiro.watersource.world.item.ModItems
 

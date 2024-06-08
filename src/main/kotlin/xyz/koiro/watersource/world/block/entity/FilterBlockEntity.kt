@@ -1,31 +1,92 @@
+@file:Suppress("UnstableApiUsage")
+
 package xyz.koiro.watersource.world.block.entity
 
-import net.fabricmc.fabric.api.transfer.v1.item.ItemStorage
-import net.fabricmc.fabric.api.transfer.v1.item.base.SingleStackStorage
+import net.fabricmc.fabric.api.networking.v1.PacketByteBufs
+import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking
 import net.minecraft.block.BlockState
 import net.minecraft.fluid.Fluid
 import net.minecraft.item.ItemStack
 import net.minecraft.nbt.NbtCompound
+import net.minecraft.network.PacketByteBuf
+import net.minecraft.network.listener.ClientPlayPacketListener
+import net.minecraft.network.packet.Packet
+import net.minecraft.network.packet.s2c.play.BlockEntityUpdateS2CPacket
+import net.minecraft.server.network.ServerPlayerEntity
 import net.minecraft.util.math.BlockPos
+import net.minecraft.world.World
+import xyz.koiro.watersource.WSConfig
+import xyz.koiro.watersource.api.storage.FluidStorageData
+import xyz.koiro.watersource.api.storage.ItemStorageData
+import xyz.koiro.watersource.data.FilterRecipeDataManager
+import xyz.koiro.watersource.network.ModNetworking
+import xyz.koiro.watersource.world.item.Strainer
 
-class FilterBlockEntity(pos: BlockPos?, state: BlockState?, var capacity: Long, var isUp: Boolean = false) :
+class FilterBlockEntity(pos: BlockPos, state: BlockState, var capacity: Long, var isUp: Boolean = false) :
     ContainerBlockEntity(ModBlockEntities.FILTER, pos, state, capacity) {
+
+        var isWorking: Boolean = false;
 
     class RenderCtx(
         var heightRatio: Float = 0f,
         var targetHeightRatio: Float = 0f,
         var fluidCache: Fluid? = null,
+        var strainerRotY: Float = 0f
     )
+
     val renderCtx = RenderCtx()
-    var strainer: ItemStack = ItemStack.EMPTY
+    protected var strainerStorage: ItemStorageData = ItemStorageData()
+    var filterTicks: Int = 0
+
+    /** Return the strainer in the up filter. If inserting failed, return null. */
+    fun insertStrainerInUp(world: World, insert: ItemStack): ItemStack? {
+        val storage = getStrainerStorage(world)
+        if (insert.item is Strainer) {
+            val ret = storage?.stack
+            storage?.stack = insert
+            return ret
+        }
+        return null
+    }
+
+    fun extractStrainerInUp(world: World): ItemStack? {
+        val storage = getStrainerStorage(world)
+
+        val ret = storage?.stack
+        storage?.clear()
+
+        return ret
+    }
+
+    fun getUpEntity(world: World): FilterBlockEntity? {
+        return if (isUp) this else (world.getBlockEntity(pos.up()) as? FilterBlockEntity)
+    }
+
+    fun getUpFluidStorage(world: World): FluidStorageData? {
+        return getUpEntity(world)?.fluidStorageData
+    }
+
+    fun getDownFluidStorage(world: World): FluidStorageData? {
+        return getDownEntity(world)?.fluidStorageData
+    }
+
+    fun getDownEntity(world: World): FilterBlockEntity? {
+        return if (!isUp) this else (world.getBlockEntity(pos.down()) as? FilterBlockEntity)
+    }
+
+    fun getStrainerStorage(world: World): ItemStorageData? {
+        return getUpEntity(world)?.strainerStorage
+    }
 
     override fun writeNbt(nbt: NbtCompound?) {
         super.writeNbt(nbt)
         if (nbt == null) return
         nbt.putBoolean("isUp", isUp)
         val strainerNbt = NbtCompound()
-        strainer.writeNbt(strainerNbt)
+        strainerStorage.writeNbt(strainerNbt)
         nbt.put("strainer", strainerNbt)
+        nbt.putBoolean("isWorking", isWorking)
+        nbt.putInt("ticks", filterTicks)
     }
 
     override fun readNbt(nbt: NbtCompound?) {
@@ -33,6 +94,100 @@ class FilterBlockEntity(pos: BlockPos?, state: BlockState?, var capacity: Long, 
         if (nbt == null) return
         isUp = nbt.getBoolean("isUp") ?: false
         val strainerNbt = nbt.getCompound("strainer")
-        strainerNbt?.let { strainer = ItemStack.fromNbt(it) }
+        strainerNbt?.let { strainerStorage.readNbt(it) }
+        isWorking = nbt.getBoolean("isWorking")
+        nbt.putInt("ticks", filterTicks)
+    }
+
+    override fun toUpdatePacket(): Packet<ClientPlayPacketListener>? {
+        return BlockEntityUpdateS2CPacket.create(this)
+    }
+
+    fun syncToClient(player: ServerPlayerEntity) {
+        val buf = PacketByteBufs.create()
+        buf.writeBlockPos(pos)
+        writePacket(buf)
+        ServerPlayNetworking.send(player, ModNetworking.UPDATE_FILTER_ENTITY_ID, buf)
+    }
+
+    fun syncToClientOfPlayersInRadius(world: World, radius: Float) {
+        val players = world.players.filter {
+            it.pos.subtract(pos.toCenterPos()).length() < radius
+        }.mapNotNull { it as? ServerPlayerEntity }
+        players.forEach {
+            syncToClient(player = it)
+        }
+    }
+
+    fun writePacket(buf: PacketByteBuf) {
+        val nbt = NbtCompound()
+        writeNbt(nbt)
+
+        buf.writeNbt(nbt)
+    }
+
+    fun readPacket(buf: PacketByteBuf) {
+        val nbt = buf.readNbt()
+
+        this.readNbt(nbt)
+    }
+
+    override fun toInitialChunkDataNbt(): NbtCompound {
+        return createNbt()
+    }
+
+    var endSynced: Boolean = false
+    companion object {
+        fun tick(world: World?, pos: BlockPos?, state: BlockState?, entity: FilterBlockEntity?) {
+            if (world == null || pos == null || state == null || entity == null) return
+            if (world.isClient) return
+            if (!entity.isUp) return
+
+            val volumePerSecond = 25L
+
+            val upFluidStorageData = entity.getUpFluidStorage(world) ?: return
+            val downFluidStorageData = entity.getDownFluidStorage(world) ?: return
+            val strainerStorage = entity.getStrainerStorage(world) ?: return
+            val recipe =
+                FilterRecipeDataManager.findRecipe(upFluidStorageData.fluid, strainerStorage.stack)
+
+            val isWorking = recipe != null
+                    && (downFluidStorageData.fluid == recipe.outFluid || downFluidStorageData.isBlank())
+                    && downFluidStorageData.amount < downFluidStorageData.capacity
+                    && upFluidStorageData.amount >= volumePerSecond
+            entity.isWorking =isWorking
+            if (recipe != null && isWorking) {
+                entity.endSynced = false
+                val tickAmount = 20
+
+                // 0.05 * 20 = 1s
+                if (entity.filterTicks % tickAmount == 0) {
+                    val outFluid = recipe.outFluid
+                    val shouldDamageStrainer =
+                        entity.filterTicks % (WSConfig.UNIT_DRINK_VOLUME / volumePerSecond * tickAmount).toInt() == 0
+
+                    if (shouldDamageStrainer) {
+                        val strainer = strainerStorage.stack
+                        (strainer.item as? Strainer)?.let {
+                            strainerStorage.stack = it.getUsedStrainer(strainer, 1)
+                        }
+                    }
+
+                    upFluidStorageData.extract(volumePerSecond)
+                    downFluidStorageData.insert(volumePerSecond, outFluid, true)
+                }
+                entity.filterTicks += 1;
+
+                entity.getUpEntity(world)?.syncToClientOfPlayersInRadius(world, 50f)
+                entity.getDownEntity(world)?.syncToClientOfPlayersInRadius(world, 50f)
+            } else {
+                entity.filterTicks = 0
+                if (!entity.endSynced) {
+                    entity.endSynced = true
+                    entity.getUpEntity(world)?.syncToClientOfPlayersInRadius(world, 50f)
+                    entity.getDownEntity(world)?.syncToClientOfPlayersInRadius(world, 50f)
+                }
+            }
+        }
     }
 }

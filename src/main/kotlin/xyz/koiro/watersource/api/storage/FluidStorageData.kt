@@ -1,4 +1,4 @@
-package xyz.koiro.watersource.api.fluidData
+package xyz.koiro.watersource.api.storage
 
 import net.minecraft.fluid.Fluid
 import net.minecraft.fluid.Fluids
@@ -58,12 +58,12 @@ class FluidStorageData(
         }
     }
 
-    fun transferTo(other: FluidStorageData, amount: Long, canOverflow: Boolean): Boolean{
-        if (this.amount < amount) return false
-        if (!other.canInsert(amount, other.fluid, canOverflow)) return false
-        if (!other.insert(amount, this.fluid, canOverflow)) return false
+    fun transferTo(other: FluidStorageData, amount: Long, canOverflow: Boolean): Pair<FluidStorageData, FluidStorageData>?{
+        if (this.amount < amount) return null
+        if (!other.canInsert(amount, other.fluid, canOverflow)) return null
+        if (!other.insert(amount, this.fluid, canOverflow)) return null
         this.extract(amount)
-        return true
+        return Pair(this, other)
     }
 
     fun clear(){

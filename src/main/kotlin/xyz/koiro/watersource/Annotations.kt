@@ -17,3 +17,5 @@ annotation class AutoGenItemData(val modelType: ModelType = ModelType.Generated,
 @Target(AnnotationTarget.FIELD)
 @Retention(AnnotationRetention.RUNTIME)
 annotation class AutoGenBlockData(val enLang: String, val cnLang: String, val genItemModel: Boolean)
+
+

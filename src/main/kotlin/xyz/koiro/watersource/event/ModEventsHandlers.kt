@@ -143,13 +143,13 @@ object ModEventsHandlers {
 
                 val item = stack.item
                 if (item is IHydrationUsable) {
-                    val data = item.findHydrationData(stack, HydrationDataManager.INSTANCE)
+                    val data = item.findHydrationData(stack, HydrationDataManager)
                     data?.let {
                         item.hydrationUse(stack, it, waterLevelData, player)
                         item.onHydrationUsingFinished(stack, player, player.activeHand)
                     }
                 } else {
-                    val data = HydrationDataManager.INSTANCE.findByItemStack(stack)
+                    val data = HydrationDataManager.findByItemStack(stack)
                     data?.let {
                         IHydrationUsable.restoreWaterFromHydrationData(it, waterLevelData, player)
                     }

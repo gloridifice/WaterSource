@@ -9,7 +9,7 @@ import net.minecraft.recipe.RecipeSerializer
 import net.minecraft.recipe.book.CraftingRecipeCategory
 import net.minecraft.registry.DynamicRegistryManager
 import net.minecraft.util.Identifier
-import xyz.koiro.watersource.api.SerializeUtils
+import xyz.koiro.watersource.api.serialize.SerializeUtils
 
 class StrainerFilteringItemRecipe(
     val input: Ingredient,

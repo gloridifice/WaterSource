@@ -9,11 +9,13 @@ import xyz.koiro.watersource.datagen.ModModelGenerator
 import xyz.koiro.watersource.datagen.ModItemTagGenerator
 import xyz.koiro.watersource.datagen.ModFluidTagGenerator
 import xyz.koiro.watersource.datagen.ModRecipeGenerator
+import xyz.koiro.watersource.datagen.FilterRecipeDataGenerator
 
 object WaterSourceDataGenerator : DataGeneratorEntrypoint {
 	override fun onInitializeDataGenerator(fabricDataGenerator: FabricDataGenerator) {
 		val pack = fabricDataGenerator.createPack()
 		pack.addProvider(::HydrationDataGenerator)
+		pack.addProvider(::FilterRecipeDataGenerator)
 		pack.addProvider(::ModModelGenerator)
 		pack.addProvider(::ModChineseLangGenerator)
 		pack.addProvider(::ModEnglishLangGenerator)

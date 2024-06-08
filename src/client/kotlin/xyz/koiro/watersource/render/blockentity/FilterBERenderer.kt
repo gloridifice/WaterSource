@@ -1,12 +1,16 @@
 package xyz.koiro.watersource.render.blockentity
 
 import com.mojang.blaze3d.systems.RenderSystem
+import net.fabricmc.fabric.api.renderer.v1.render.RenderContext
 import net.minecraft.client.MinecraftClient
 import net.minecraft.client.render.RenderLayer
 import net.minecraft.client.render.VertexConsumerProvider
 import net.minecraft.client.render.block.entity.BlockEntityRenderer
+import net.minecraft.client.render.model.json.ModelTransformationMode
 import net.minecraft.client.util.math.MatrixStack
+import org.joml.AxisAngle4f
 import org.joml.Math
+import org.joml.Quaternionf
 import org.joml.Vector2f
 import org.joml.Vector3f
 import xyz.koiro.watersource.api.FluidCubeRenderUtils.fluidCube
@@ -25,18 +29,37 @@ class FilterBERenderer : BlockEntityRenderer<FilterBlockEntity> {
     ) {
         val mc = MinecraftClient.getInstance()
         val blockState = entity.cachedState
-
+        val renderCtx = entity.renderCtx
         val fluid = entity.fluidStorageData.fluid
         val amount = entity.fluidStorageData.amount
         val capacity = entity.fluidStorageData.capacity
-        val renderCtx = entity.renderCtx
+
+        if (entity.isUp) {
+            matrices.push()
+            matrices.translate(0.5f, -0.1f, 0.5f)
+            if (entity.isWorking) {
+                renderCtx.strainerRotY += tickDelta * 0.1f
+            }
+            matrices.multiply(Quaternionf(AxisAngle4f(renderCtx.strainerRotY, newY())))
+            val strainer = entity.getStrainerStorage(mc.world!!)?.stack ?: return
+            mc.itemRenderer.renderItem(
+                strainer,
+                ModelTransformationMode.GROUND,
+                light,
+                0,
+                matrices,
+                vertexConsumers,
+                mc.world,
+                42
+            )
+            matrices.pop()
+        }
 
         if (!entity.fluidStorageData.isBlank()) renderCtx.fluidCache = fluid
 
         val fluidCache = renderCtx.fluidCache ?: return
         val fluidSprite = FluidRenderUtils.getFluidSprite(fluidCache)?.getOrNull(0) ?: return
         val fluidColor = FluidRenderUtils.getFluidColor(fluidCache) ?: return
-
 
         matrices.push()
         RenderSystem.enableBlend()
@@ -62,7 +85,7 @@ class FilterBERenderer : BlockEntityRenderer<FilterBlockEntity> {
         RenderSystem.disableBlend()
         matrices.pop()
 
-        renderCtx.targetHeightRatio = (amount / capacity).toFloat()
+        renderCtx.targetHeightRatio = amount.toFloat() / capacity.toFloat()
         renderCtx.heightRatio = Math.lerp(renderCtx.heightRatio, renderCtx.targetHeightRatio, 0.15f * tickDelta)
         if (renderCtx.heightRatio < 0.01f) {
             renderCtx.fluidCache = null

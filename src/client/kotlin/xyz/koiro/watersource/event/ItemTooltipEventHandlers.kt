@@ -12,13 +12,13 @@ import xyz.koiro.watersource.world.effect.ModStatusEffects
 import kotlin.math.ceil
 import kotlin.math.max
 
-object ModClientItemTooltipEventHandlers {
+object ItemTooltipEventHandlers {
     fun initialize() {
         ModClientEvents.DRAW_MOUSEOVER_TOOLTIP.register(renderItemTooltipHydrationData)
     }
 
     val renderItemTooltipHydrationData = ModClientEvents.DrawMouseoverTooltip { context, x, y, stack ->
-        HydrationDataManager.INSTANCE.findByItemStack(stack)?.let { hydrationData ->
+        HydrationDataManager.findByItemStack(stack)?.let { hydrationData ->
             val isThirty = hydrationData.effects.any { it.effect.effectType == ModStatusEffects.THIRSTY }
             if (hydrationData.isDry()) {
                 if (WSClientConfig.format.showHydrationDryDataOnItemTooltip)

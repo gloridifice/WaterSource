@@ -10,12 +10,10 @@ import net.minecraft.data.server.recipe.CraftingRecipeJsonBuilder
 import net.minecraft.data.server.recipe.RecipeJsonProvider
 import net.minecraft.item.Item
 import net.minecraft.item.ItemStack
-import net.minecraft.item.Items
 import net.minecraft.recipe.Ingredient
 import net.minecraft.recipe.RecipeSerializer
 import net.minecraft.util.Identifier
-import xyz.koiro.watersource.api.SerializeUtils
-import xyz.koiro.watersource.identifier
+import xyz.koiro.watersource.api.serialize.SerializeUtils
 import xyz.koiro.watersource.world.recipe.ModRecipes
 import java.util.function.Consumer
 

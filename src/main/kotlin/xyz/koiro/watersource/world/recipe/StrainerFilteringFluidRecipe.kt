@@ -11,8 +11,8 @@ import net.minecraft.recipe.book.CraftingRecipeCategory
 import net.minecraft.registry.DynamicRegistryManager
 import net.minecraft.registry.Registries
 import net.minecraft.util.Identifier
-import xyz.koiro.watersource.api.fluidData.getOrCreateFluidStorageData
-import xyz.koiro.watersource.api.fluidData.modifyFluidStorage
+import xyz.koiro.watersource.api.storage.getOrCreateFluidStorageData
+import xyz.koiro.watersource.api.storage.modifyFluidStorage
 import xyz.koiro.watersource.identifier
 import xyz.koiro.watersource.world.item.Strainer
 

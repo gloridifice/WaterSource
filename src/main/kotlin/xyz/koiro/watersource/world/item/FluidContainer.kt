@@ -21,9 +21,10 @@ import net.minecraft.util.TypedActionResult
 import net.minecraft.util.hit.BlockHitResult
 import net.minecraft.world.World
 import xyz.koiro.watersource.*
-import xyz.koiro.watersource.api.fluidData.FluidStorageData
-import xyz.koiro.watersource.api.fluidData.getOrCreateFluidStorageData
-import xyz.koiro.watersource.api.fluidData.insertFluid
+import xyz.koiro.watersource.api.storage.FluidStorageData
+import xyz.koiro.watersource.api.storage.getOrCreateFluidStorageData
+import xyz.koiro.watersource.api.storage.insertFluid
+import xyz.koiro.watersource.api.storage.setFluidStorage
 import kotlin.math.round
 
 open class FluidContainer(
@@ -51,6 +52,11 @@ open class FluidContainer(
                 stack.damage = damage
             }
         }
+    }
+
+    open fun setStorageData(stack: ItemStack, data: FluidStorageData): ItemStack {
+        stack.setFluidStorage(data)
+        return if (data.isBlank()) emptyContainer?.invoke() ?: stack else stack
     }
 
     override fun use(world: World, user: PlayerEntity, hand: Hand): TypedActionResult<ItemStack> {
