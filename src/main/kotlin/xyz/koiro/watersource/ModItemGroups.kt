@@ -8,13 +8,13 @@ import net.minecraft.registry.Registry
 import net.minecraft.text.Text
 import xyz.koiro.watersource.api.storage.insertFluid
 import xyz.koiro.watersource.world.fluid.ModFluids
+import xyz.koiro.watersource.world.item.FluidContainerItem
 import xyz.koiro.watersource.world.item.ModItems
 
 object ModItemGroups {
     const val MAIN_ITEM_GROUP_TRANSLATION_KEY = "watersource.item_group.main"
     private val list = listOf<ItemStack>(
         ModItems.PURIFIED_WATER_BOTTLE.simpleStack(),
-        ModItems.PURIFIED_WATER_BUCKET.simpleStack(),
 
         // Strainers
         ModItems.PAPER_STRAINER.simpleStack(),
@@ -50,7 +50,8 @@ object ModItemGroups {
             stack
         },
 
-        ModItems.WOODEN_FILTER_BLOCK.simpleStack()
+        ModItems.WOODEN_FILTER_BLOCK.simpleStack(),
+        ModItems.IRON_FILTER_BLOCK.simpleStack()
     )
 
     val MAIN_ITEM_GROUP = Registry.register(

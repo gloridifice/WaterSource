@@ -24,7 +24,8 @@ object ModFluidAndBlockRenderRegistry {
         );
         BlockRenderLayerMap.INSTANCE.putBlocks(
             RenderLayer.getTranslucent(),
-            ModBlocks.WOODEN_FILTER
+            ModBlocks.WOODEN_FILTER,
+            ModBlocks.PURIFIED_WATER
         )
     }
 }

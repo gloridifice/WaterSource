@@ -3,14 +3,14 @@ package xyz.koiro.watersource.api.storage
 import net.minecraft.fluid.Fluid
 import net.minecraft.fluid.Fluids
 import net.minecraft.item.ItemStack
-import xyz.koiro.watersource.world.item.FluidContainer
+import xyz.koiro.watersource.world.item.FluidContainerItem
 
 const val FLUID_STORAGE_KEY = "WaterSourceFluidStorage"
 
 fun ItemStack.insertFluid(fluid: Fluid, amountGetter: (FluidStorageData) -> Long): Long? {
     var flag: Long? = null
     this.modifyFluidStorage { itemStack, data ->
-        val item = this.item as FluidContainer
+        val item = this.item as FluidContainerItem
         val amount = amountGetter(data)
         val canInsert = item.canInsert(this, fluid, amount, data)
         if (canInsert) {
@@ -35,7 +35,7 @@ fun ItemStack.extractFluid(amount: Long): Long? {
  */
 fun ItemStack.getOrCreateFluidStorageData(): FluidStorageData? {
     val item = this.item
-    if (item is FluidContainer) {
+    if (item is FluidContainerItem) {
         val data = FluidStorageData.fromNbt(this.getSubNbt(FLUID_STORAGE_KEY))
         return if (data != null) {
             data

@@ -27,7 +27,7 @@ import xyz.koiro.watersource.api.storage.insertFluid
 import xyz.koiro.watersource.api.storage.setFluidStorage
 import kotlin.math.round
 
-open class FluidContainer(
+open class FluidContainerItem(
     settings: Settings,
     val capacity: Long,
     val emptyContainer: (() -> ItemStack)? = null
@@ -79,7 +79,7 @@ open class FluidContainer(
         val nbt = stack.getSubNbt("FluidStorage")
         val ret = object : SingleFluidStorage() {
             override fun getCapacity(variant: FluidVariant?): Long {
-                return (stack.item as FluidContainer).capacity
+                return (stack.item as FluidContainerItem).capacity
             }
 
             override fun onFinalCommit() {

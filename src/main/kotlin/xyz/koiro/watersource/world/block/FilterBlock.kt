@@ -30,7 +30,7 @@ import xyz.koiro.watersource.world.fluid.ModFluids
 import xyz.koiro.watersource.world.item.*
 import kotlin.math.min
 
-open class FilterBlock(val capacity: Long, settings: Settings?) : BlockWithEntity(settings) {
+open class FilterBlock(val capacity: Long, val filterVolumePerSecond: Long, settings: Settings?) : BlockWithEntity(settings) {
     init {
         defaultState = defaultState.with(IS_UP, false)
     }
@@ -78,7 +78,7 @@ open class FilterBlock(val capacity: Long, settings: Settings?) : BlockWithEntit
                         }
                     }
 
-                    handItem is FluidContainer -> {
+                    handItem is FluidContainerItem -> {
                         handStack.getOrCreateFluidStorageData()?.let { containerFluidData ->
                             if (containerFluidData.isBlank()) {
                                 val transferResult = data.transferTo(
@@ -90,7 +90,7 @@ open class FilterBlock(val capacity: Long, settings: Settings?) : BlockWithEntit
                                     val stack = handItem.setStorageData(handStack.copy(), transferResult.second)
                                     handStack.decrement(1)
                                     player.setStackInHandOrInsertIntoInventory(hand, stack)
-                                    (stack.item as FluidContainer).onFluidDataChanged(stack, player, hand)
+                                    (stack.item as FluidContainerItem).onFluidDataChanged(stack, player, hand)
                                 }
                             } else {
                                 if (isUp(state)) {
@@ -103,7 +103,7 @@ open class FilterBlock(val capacity: Long, settings: Settings?) : BlockWithEntit
                                         val stack = handItem.setStorageData(handStack.copy(), transferResult.first)
                                         handStack.decrement(1)
                                         player.setStackInHandOrInsertIntoInventory(hand, stack)
-                                        (stack.item as FluidContainer).onFluidDataChanged(stack, player, hand)
+                                        (stack.item as FluidContainerItem).onFluidDataChanged(stack, player, hand)
                                     }
                                 }
                             }
@@ -120,13 +120,13 @@ open class FilterBlock(val capacity: Long, settings: Settings?) : BlockWithEntit
                                     true
                                 )
                                 if (transferResult != null) {
-                                    val stack = (containerStack.item as FluidContainer).setStorageData(
+                                    val stack = (containerStack.item as FluidContainerItem).setStorageData(
                                         containerStack,
                                         transferResult.second
                                     )
                                     handStack.decrement(1)
                                     player.setStackInHandOrInsertIntoInventory(hand, stack)
-                                    (stack.item as FluidContainer).onFluidDataChanged(stack, player, hand)
+                                    (stack.item as FluidContainerItem).onFluidDataChanged(stack, player, hand)
                                 }
                             }
                         }

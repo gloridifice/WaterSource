@@ -93,7 +93,7 @@ class FluidStorageData(
         }
 
         fun getEmptyText(capacity: Long): MutableText {
-            return Text.translatable(ModLanguages.INFO_CAPCITY_KYE).append(Text.of(": $capacity mB"))
+            return Text.translatable(ModLanguages.INFO_CAPACITY_KYE).append(Text.of(": $capacity mB"))
         }
     }
 

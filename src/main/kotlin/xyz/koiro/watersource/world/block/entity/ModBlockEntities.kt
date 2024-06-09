@@ -6,6 +6,7 @@ import net.minecraft.block.entity.BlockEntityType
 import net.minecraft.registry.Registries
 import net.minecraft.registry.Registry
 import xyz.koiro.watersource.WaterSource
+import xyz.koiro.watersource.world.block.FilterBlock
 import xyz.koiro.watersource.world.block.ModBlocks
 
 object ModBlockEntities {
@@ -13,8 +14,8 @@ object ModBlockEntities {
     val FILTER = regBlockEntity(
         "filter",
         FabricBlockEntityTypeBuilder.create({ pos, state ->
-            FilterBlockEntity(pos, state, 114514)
-        }, ModBlocks.WOODEN_FILTER).build()
+            FilterBlockEntity(pos, state, (state.block as FilterBlock).capacity)
+        }, ModBlocks.WOODEN_FILTER, ModBlocks.IRON_FILTER).build()
     )
 
     fun <T : BlockEntity?> regBlockEntity(id: String, type: BlockEntityType<T>): BlockEntityType<T> {

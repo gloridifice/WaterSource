@@ -31,7 +31,7 @@ object ModBlocks {
     val WOODEN_FILTER = registerBlock(
         "wooden_filter",
         FilterBlock(
-            2000L,
+            2000L, 10L,
             AbstractBlock.Settings.copy(Blocks.OAK_PLANKS).strength(1.0f, 1.0f).nonOpaque().blockVision(Blocks::never)
         )
     )
@@ -40,7 +40,7 @@ object ModBlocks {
     val IRON_FILTER = registerBlock(
         "iron_filter",
         FilterBlock(
-            4000L,
+            4000L, 25L,
             AbstractBlock.Settings.copy(Blocks.IRON_BLOCK).strength(2.2f, 3.0f).nonOpaque().blockVision(Blocks::never)
         )
     )

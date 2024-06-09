@@ -14,6 +14,7 @@ import xyz.koiro.watersource.world.attachment.ModAttachmentTypes
 
 
 object ModCommands {
+    const val RESTORE_ALL_TARGET_ERROR_TRANS_KEY = "watersource.command.error.restore_all_target_must_be_player"
     /** # Usage in mc
      * `$ waterlevel set <player> <level> <saturation>`
      *
@@ -52,7 +53,7 @@ object ModCommands {
                                 restoreAll(player)
                                 1
                             }else {
-                                throw SimpleCommandExceptionType(Text.translatable("watersource.command.error.restore_all_must_be_player")).create()
+                                throw SimpleCommandExceptionType(Text.translatable(RESTORE_ALL_TARGET_ERROR_TRANS_KEY)).create()
                             }
                         }.then(argument("player", EntityArgumentType.players()).executes {
                             val players = EntityArgumentType.getPlayers(it, "player")

@@ -12,10 +12,8 @@ import net.minecraft.util.TypedActionResult
 import net.minecraft.util.UseAction
 import net.minecraft.world.World
 import xyz.koiro.watersource.WSConfig
-import xyz.koiro.watersource.api.storage.FluidStorageData
 import xyz.koiro.watersource.api.storage.extractFluid
 import xyz.koiro.watersource.api.storage.getOrCreateFluidStorageData
-import xyz.koiro.watersource.api.storage.setFluidStorage
 import xyz.koiro.watersource.data.HydrationData
 import xyz.koiro.watersource.data.HydrationDataManager
 import xyz.koiro.watersource.world.attachment.WaterLevelData
@@ -25,7 +23,7 @@ open class DrinkableContainer(
     val useDuration: Int = 32,
     val drinkVolumeMultiplier: Int = 1,
     emptyContainerStack: (() -> ItemStack)? = null
-) : FluidContainer(settings, capacity, emptyContainerStack), IHydrationUsable {
+) : FluidContainerItem(settings, capacity, emptyContainerStack), IHydrationUsable {
     override fun use(world: World, user: PlayerEntity, hand: Hand): TypedActionResult<ItemStack> {
         val result = super.use(world, user, hand)
         if (result.result != ActionResult.PASS) return result

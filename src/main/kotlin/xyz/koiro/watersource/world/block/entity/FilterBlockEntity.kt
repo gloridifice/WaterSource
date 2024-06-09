@@ -20,12 +20,14 @@ import xyz.koiro.watersource.api.storage.FluidStorageData
 import xyz.koiro.watersource.api.storage.ItemStorageData
 import xyz.koiro.watersource.data.FilterRecipeDataManager
 import xyz.koiro.watersource.network.ModNetworking
+import xyz.koiro.watersource.world.block.FilterBlock
 import xyz.koiro.watersource.world.item.Strainer
+import kotlin.math.min
 
 class FilterBlockEntity(pos: BlockPos, state: BlockState, var capacity: Long, var isUp: Boolean = false) :
     ContainerBlockEntity(ModBlockEntities.FILTER, pos, state, capacity) {
 
-        var isWorking: Boolean = false;
+    var isWorking: Boolean = false;
 
     class RenderCtx(
         var heightRatio: Float = 0f,
@@ -38,6 +40,9 @@ class FilterBlockEntity(pos: BlockPos, state: BlockState, var capacity: Long, va
     protected var strainerStorage: ItemStorageData = ItemStorageData()
     var filterTicks: Int = 0
 
+    fun getFilterVolumePerSecond(): Long{
+        return (cachedState.block as FilterBlock).filterVolumePerSecond
+    }
     /** Return the strainer in the up filter. If inserting failed, return null. */
     fun insertStrainerInUp(world: World, insert: ItemStack): ItemStack? {
         val storage = getStrainerStorage(world)
@@ -137,13 +142,14 @@ class FilterBlockEntity(pos: BlockPos, state: BlockState, var capacity: Long, va
     }
 
     var endSynced: Boolean = false
+
     companion object {
         fun tick(world: World?, pos: BlockPos?, state: BlockState?, entity: FilterBlockEntity?) {
             if (world == null || pos == null || state == null || entity == null) return
             if (world.isClient) return
             if (!entity.isUp) return
 
-            val volumePerSecond = 25L
+            val volumePerSecond = entity.getFilterVolumePerSecond()
 
             val upFluidStorageData = entity.getUpFluidStorage(world) ?: return
             val downFluidStorageData = entity.getDownFluidStorage(world) ?: return
@@ -154,8 +160,8 @@ class FilterBlockEntity(pos: BlockPos, state: BlockState, var capacity: Long, va
             val isWorking = recipe != null
                     && (downFluidStorageData.fluid == recipe.outFluid || downFluidStorageData.isBlank())
                     && downFluidStorageData.amount < downFluidStorageData.capacity
-                    && upFluidStorageData.amount >= volumePerSecond
-            entity.isWorking =isWorking
+                    && upFluidStorageData.amount > 0
+            entity.isWorking = isWorking
             if (recipe != null && isWorking) {
                 entity.endSynced = false
                 val tickAmount = 20
@@ -173,8 +179,9 @@ class FilterBlockEntity(pos: BlockPos, state: BlockState, var capacity: Long, va
                         }
                     }
 
-                    upFluidStorageData.extract(volumePerSecond)
-                    downFluidStorageData.insert(volumePerSecond, outFluid, true)
+                    val min = min(volumePerSecond, upFluidStorageData.amount)
+                    upFluidStorageData.extract(min)
+                    downFluidStorageData.insert(min, outFluid, true)
                 }
                 entity.filterTicks += 1;
 
@@ -194,8 +201,9 @@ class FilterBlockEntity(pos: BlockPos, state: BlockState, var capacity: Long, va
             }
         }
     }
-    fun markAllDirty(world: World){
-        val otherPos = if(isUp) pos.down() else pos.up()
+
+    fun markAllDirty(world: World) {
+        val otherPos = if (isUp) pos.down() else pos.up()
         world.markDirty(pos)
         world.markDirty(otherPos)
         world.updateComparators(pos, cachedState.block)

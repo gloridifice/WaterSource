@@ -109,6 +109,11 @@ object ModItems {
         BlockItem(ModBlocks.WOODEN_FILTER, FabricItemSettings())
     )
 
+    val IRON_FILTER_BLOCK = registerItem(
+        "iron_filter",
+        BlockItem(ModBlocks.IRON_FILTER, FabricItemSettings())
+    )
+
     fun active() {
     }
 

@@ -25,7 +25,7 @@ class EmptyFluidContainerItem(settings: Settings?, val containerStack: () -> Ite
                 val containerStack = run {
                     val ret = containerStack()
                     ret.insertFluid(Fluids.WATER) { it.capacity }
-                    (ret.item as? FluidContainer)?.onFluidDataChanged(ret, user, hand)
+                    (ret.item as? FluidContainerItem)?.onFluidDataChanged(ret, user, hand)
                     ret
                 }
                 stack.decrement(1)
