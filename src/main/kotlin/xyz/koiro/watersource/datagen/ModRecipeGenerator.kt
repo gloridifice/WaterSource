@@ -5,6 +5,7 @@ import net.fabricmc.fabric.api.datagen.v1.provider.FabricRecipeProvider
 import net.minecraft.data.server.recipe.RecipeJsonProvider
 import net.minecraft.data.server.recipe.RecipeProvider
 import net.minecraft.data.server.recipe.ShapedRecipeJsonBuilder
+import net.minecraft.data.server.recipe.ShapelessRecipeJsonBuilder
 import net.minecraft.fluid.Fluids
 import net.minecraft.item.Items
 import net.minecraft.recipe.Ingredient
@@ -100,6 +101,24 @@ class ModRecipeGenerator(output: FabricDataOutput?) : FabricRecipeProvider(outpu
             .pattern("dhd")
             .pattern("lbl")
             .pattern("lll")
+            .offerTo(exporter)
+
+        ShapedRecipeJsonBuilder.create(RecipeCategory.MISC, ModItems.WOODEN_FILTER_BLOCK)
+            .inputWithCriterion('w', ItemTags.LOGS)
+            .inputWithCriterion('p', ItemTags.PLANKS)
+            .inputWithCriterion('g', Items.GLASS)
+            .pattern("wgw")
+            .pattern("ppp")
+            .pattern("wgw")
+            .offerTo(exporter)
+
+        ShapedRecipeJsonBuilder.create(RecipeCategory.MISC, ModItems.IRON_FILTER_BLOCK)
+            .inputWithCriterion('w', Items.IRON_INGOT)
+            .inputWithCriterion('p', Items.IRON_BLOCK)
+            .inputWithCriterion('g', Items.GLASS)
+            .pattern("wgw")
+            .pattern("wpw")
+            .pattern("wgw")
             .offerTo(exporter)
     }
 }

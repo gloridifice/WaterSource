@@ -6,6 +6,7 @@ import net.minecraft.client.gui.DrawContext
 import net.minecraft.util.hit.BlockHitResult
 import xyz.koiro.watersource.WSClientConfig
 import xyz.koiro.watersource.api.WaterBallRenderer
+import xyz.koiro.watersource.api.WaterLevelUiRenderUtils
 import xyz.koiro.watersource.world.attachment.ModAttachmentTypes
 import xyz.koiro.watersource.world.block.entity.FilterBlockEntity
 import xyz.koiro.watersource.world.effect.ModStatusEffects
@@ -66,6 +67,8 @@ object ModClientHUD {
                 }
             } else List(10) { 0 }
 
+            context.matrices.push()
+            context.matrices.translate(0f, 0f, 200f)
             // Draw Empties
             for (i in 0..<10) {
                 val x = xStart - i * 8 - 9
@@ -85,20 +88,24 @@ object ModClientHUD {
 
             if (WSClientConfig.format.showWaterSaturationInBar) {
                 // Draw Frames (Saturation)
-                val frameCount = ceil(saturation.toFloat() / 2f).toInt()
-                val fEndIsHalf = saturation % 2 != 0
+                val frameCount = ceil(saturation.toFloat() / 4f).toInt()
+                val restPartCount = saturation % 4
                 for (i in 0..<frameCount) {
                     val x = xStart - i * 8 - 9
-                    val isEndAndEndIsHalf = i == frameCount - 1 && fEndIsHalf
+                    val isEndAndEndIsRest = i == frameCount - 1 && restPartCount != 0
                     val fY = y + yOffsetList[i]
-                    if (isEndAndEndIsHalf) {
-                        WaterBallRenderer(x, fY, isThirty, WaterBallRenderer.Part.SaturationDown).draw(context)
+                    if (isEndAndEndIsRest) {
+                        for (j in 0..<restPartCount) {
+                            WaterBallRenderer(x, fY, isThirty, WaterLevelUiRenderUtils.anticlockwiseSaturationParts[j]).draw(context)
+                        }
                     } else {
-                        WaterBallRenderer(x, fY, isThirty, WaterBallRenderer.Part.SaturationUp).draw(context)
-                        WaterBallRenderer(x, fY, isThirty, WaterBallRenderer.Part.SaturationDown).draw(context)
+                        WaterLevelUiRenderUtils.anticlockwiseSaturationParts.forEach {
+                            WaterBallRenderer(x, fY, isThirty, it).draw(context)
+                        }
                     }
                 }
             }
+            context.matrices.pop()
         }
     }
 }

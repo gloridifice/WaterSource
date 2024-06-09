@@ -129,6 +129,10 @@ object WSConfig {
             StatusEffectInstance(ModStatusEffects.THIRSTY, 1200)
         )
 
+    fun getMoisturizingRatio(levelSum: Int): Float {
+        return 1f / (1f + levelSum.toFloat() * 0.15f)
+    }
+
     object Exhaustion {
         val config
             get() = format.exhaustion

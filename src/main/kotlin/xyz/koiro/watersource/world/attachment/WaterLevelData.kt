@@ -8,13 +8,14 @@ import net.minecraft.server.network.ServerPlayerEntity
 import xyz.koiro.watersource.WSConfig
 import xyz.koiro.watersource.network.ModNetworking
 import xyz.koiro.watersource.world.effect.ModStatusEffects
+import xyz.koiro.watersource.world.enchantment.MoisturizingEnchantment
 
 class WaterLevelData(
     level: Int = 20,
-    saturation: Int = 8,
+    saturation: Int = 16,
     exhaustion: Float = 0f,
     maxLevel: Int = 20,
-    maxSaturation: Int = 20,
+    maxSaturation: Int = 40,
     maxExhaustion: Float = 4f,
 ) {
     var level = level
@@ -38,7 +39,8 @@ class WaterLevelData(
      * */
     fun addExhaustion(amount: Float, player: PlayerEntity) {
         val effect = player.getStatusEffect(ModStatusEffects.THIRSTY)
-        var finalAmount = amount * WSConfig.Exhaustion.multiplier
+        var finalAmount =
+            amount * WSConfig.Exhaustion.multiplier * MoisturizingEnchantment.getPlayerMoisturizingRatio(player)
         effect?.let {
             finalAmount *= WSConfig.Exhaustion.thirstyMultiplier(it.amplifier)
         }
@@ -68,11 +70,11 @@ class WaterLevelData(
     }
 
     /** Consume only water saturation */
-    fun dryConsumeWater(amount: Int){
+    fun dryConsumeWater(amount: Int) {
         saturation -= amount
     }
 
-    fun writeBuf(buf: PacketByteBuf): PacketByteBuf{
+    fun writeBuf(buf: PacketByteBuf): PacketByteBuf {
         buf.writeInt(level)
         buf.writeInt(saturation)
         buf.writeFloat(exhaustion)
@@ -94,11 +96,11 @@ class WaterLevelData(
         }
     }
 
-    fun updateToClient(user: ServerPlayerEntity){
+    fun updateToClient(user: ServerPlayerEntity) {
         ServerPlayNetworking.send(user, ModNetworking.UPDATE_WATER_DATA_ID, writeBuf(PacketByteBufs.create()))
     }
 
-    fun setData(level: Int = 20, saturation: Int = 8, exhaustion: Float = 0f){
+    fun setData(level: Int = 20, saturation: Int = 16, exhaustion: Float = 0f) {
         this.level = level
         this.saturation = saturation
         this.exhaustion = exhaustion

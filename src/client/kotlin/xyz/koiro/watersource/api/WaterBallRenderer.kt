@@ -18,13 +18,20 @@ data class WaterBallRenderer(
     }
 
     enum class Part(val u: Int) {
-        Empty(0), Full(9), LeftHalf(18), RightHalf(27), SaturationUp(36), SaturationDown(45), DryUp(54), DryDown(63)
+        Empty(0), Full(9), LeftHalf(18), RightHalf(27), SaturationDown(36), SaturationRight(45), SaturationUp(54), SaturationLeft(
+            63
+        )
     }
 
     fun draw(context: DrawContext) {
+        val x = when (part) {
+            Part.SaturationLeft -> this.x - 1
+            Part.SaturationRight -> this.x + 1
+            else -> x
+        }
         val y = when (part) {
-            Part.SaturationUp, Part.DryUp -> this.y - 1
-            Part.SaturationDown, Part.DryDown -> this.y + 1
+            Part.SaturationUp -> this.y - 1
+            Part.SaturationDown -> this.y + 1
             else -> this.y
         }
 
