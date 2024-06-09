@@ -21,8 +21,8 @@ import net.minecraft.util.shape.VoxelShape
 import net.minecraft.world.BlockView
 import net.minecraft.world.World
 import net.minecraft.world.WorldView
+import xyz.koiro.watersource.api.setStackInHandOrInsertIntoInventory
 import xyz.koiro.watersource.api.storage.getOrCreateFluidStorageData
-import xyz.koiro.watersource.api.storage.setFluidStorage
 import xyz.koiro.watersource.simpleStack
 import xyz.koiro.watersource.world.block.entity.FilterBlockEntity
 import xyz.koiro.watersource.world.block.entity.ModBlockEntities
@@ -30,7 +30,7 @@ import xyz.koiro.watersource.world.fluid.ModFluids
 import xyz.koiro.watersource.world.item.*
 import kotlin.math.min
 
-class FilterBlock(val capacity: Long, settings: Settings?) : BlockWithEntity(settings) {
+open class FilterBlock(val capacity: Long, settings: Settings?) : BlockWithEntity(settings) {
     init {
         defaultState = defaultState.with(IS_UP, false)
     }
@@ -70,9 +70,12 @@ class FilterBlock(val capacity: Long, settings: Settings?) : BlockWithEntity(set
                 }
             } else {
                 when {
-                    handItem is Strainer && canModifyStrainer -> {
-                        val insert = entity.insertStrainerInUp(world, handStack)
-                        player.setStackInHand(hand, insert)
+                    handItem is Strainer -> {
+                        val inner = entity.insertStrainerInUp(world, handStack.copy())
+                        inner?.let {
+                            handStack.decrement(1)
+                            player.setStackInHandOrInsertIntoInventory(hand, it)
+                        }
                     }
 
                     handItem is FluidContainer -> {
@@ -84,7 +87,10 @@ class FilterBlock(val capacity: Long, settings: Settings?) : BlockWithEntity(set
                                     true
                                 )
                                 if (transferResult != null) {
-                                    player.setStackInHand(hand, handItem.setStorageData(handStack, transferResult.second))
+                                    val stack = handItem.setStorageData(handStack.copy(), transferResult.second)
+                                    handStack.decrement(1)
+                                    player.setStackInHandOrInsertIntoInventory(hand, stack)
+                                    (stack.item as FluidContainer).onFluidDataChanged(stack, player, hand)
                                 }
                             } else {
                                 if (isUp(state)) {
@@ -94,7 +100,10 @@ class FilterBlock(val capacity: Long, settings: Settings?) : BlockWithEntity(set
                                         true
                                     )
                                     if (transferResult != null) {
-                                        player.setStackInHand(hand, handItem.setStorageData(handStack, transferResult.first))
+                                        val stack = handItem.setStorageData(handStack.copy(), transferResult.first)
+                                        handStack.decrement(1)
+                                        player.setStackInHandOrInsertIntoInventory(hand, stack)
+                                        (stack.item as FluidContainer).onFluidDataChanged(stack, player, hand)
                                     }
                                 }
                             }
@@ -111,8 +120,13 @@ class FilterBlock(val capacity: Long, settings: Settings?) : BlockWithEntity(set
                                     true
                                 )
                                 if (transferResult != null) {
-                                    player.setStackInHand(hand, (containerStack.item as FluidContainer).setStorageData(containerStack, transferResult.second))
-
+                                    val stack = (containerStack.item as FluidContainer).setStorageData(
+                                        containerStack,
+                                        transferResult.second
+                                    )
+                                    handStack.decrement(1)
+                                    player.setStackInHandOrInsertIntoInventory(hand, stack)
+                                    (stack.item as FluidContainer).onFluidDataChanged(stack, player, hand)
                                 }
                             }
                         }
@@ -137,10 +151,7 @@ class FilterBlock(val capacity: Long, settings: Settings?) : BlockWithEntity(set
                         }
                         newStack?.let { newStack ->
                             handStack.decrement(1)
-                            if (handStack.isEmpty)
-                                player.setStackInHand(hand, newStack)
-                            else
-                                player.inventory.insertStack(newStack)
+                            player.inventory.insertStack(newStack)
                             data.extract(250)
                         }
                     }
@@ -160,6 +171,7 @@ class FilterBlock(val capacity: Long, settings: Settings?) : BlockWithEntity(set
                 }
             }
             entity.syncToClientOfPlayersInRadius(world, 50f)
+            entity.markAllDirty(world)
         }
 
         return ActionResult.SUCCESS
@@ -171,7 +183,7 @@ class FilterBlock(val capacity: Long, settings: Settings?) : BlockWithEntity(set
         pos: BlockPos?,
         context: ShapeContext?
     ): VoxelShape {
-        return if (state.get(IS_UP)) UP_SHAPE else DOWN_SHAPE
+        return if (isUp(state)) UP_SHAPE else DOWN_SHAPE
     }
 
     override fun onPlaced(
@@ -221,6 +233,24 @@ class FilterBlock(val capacity: Long, settings: Settings?) : BlockWithEntity(set
 
     override fun getRenderType(state: BlockState?): BlockRenderType {
         return BlockRenderType.MODEL
+    }
+
+    override fun hasComparatorOutput(state: BlockState?): Boolean {
+        return true
+    }
+
+    override fun getComparatorOutput(state: BlockState, world: World, pos: BlockPos): Int {
+        val entity = world.getBlockEntity(pos) as? FilterBlockEntity ?: return 0
+        val strainer = entity.getStrainerStorage(world) ?: return 0
+        val downFluidData = entity.getDownFluidStorage(world) ?: return 0
+        var ret = 0
+        if (strainer.stack.item is Strainer) {
+            ret += 5
+        }
+        if (!downFluidData.isBlank()) ret += 2
+        if (downFluidData.isFull()) ret += 4
+
+        return ret
     }
 
     override fun <T : BlockEntity?> getTicker(

@@ -10,6 +10,7 @@ import xyz.koiro.watersource.datagen.ModItemTagGenerator
 import xyz.koiro.watersource.datagen.ModFluidTagGenerator
 import xyz.koiro.watersource.datagen.ModRecipeGenerator
 import xyz.koiro.watersource.datagen.FilterRecipeDataGenerator
+import xyz.koiro.watersource.datagen.ModBlockLootTableGenerator
 
 object WaterSourceDataGenerator : DataGeneratorEntrypoint {
 	override fun onInitializeDataGenerator(fabricDataGenerator: FabricDataGenerator) {
@@ -22,5 +23,6 @@ object WaterSourceDataGenerator : DataGeneratorEntrypoint {
 		pack.addProvider(::ModItemTagGenerator)
 		pack.addProvider(::ModFluidTagGenerator)
 		pack.addProvider(::ModRecipeGenerator)
+		pack.addProvider(::ModBlockLootTableGenerator)
 	}
 }

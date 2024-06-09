@@ -32,6 +32,10 @@ class FluidStorageData(
         return amount == 0L || fluid == Fluids.EMPTY
     }
 
+    fun isFull() : Boolean {
+        return amount == capacity
+    }
+
     fun restCapacity() = this.capacity - this.amount
 
     fun canInsert(amount: Long, fluid: Fluid, canOverflow: Boolean): Boolean{

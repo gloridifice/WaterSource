@@ -19,7 +19,8 @@ public class ItemMixin {
     @Inject(at = @At("RETURN"), method = "finishUsing")
     private void finishUsing(final World world, final LivingEntity user, final CallbackInfoReturnable<ItemStack> info){
         if (!world.isClient()){
-            ActionResult result = ModServerEvents.INSTANCE.getFINISH_USING_ITEM().invoker().interact(user, (ServerWorld) world, (ItemStack) (Object) this);
+            ItemStack self = (ItemStack) (Object) this;
+            ActionResult result = ModServerEvents.INSTANCE.getFINISH_USING_ITEM().invoker().interact(user, (ServerWorld) world, self);
         }
     }
 }

@@ -180,14 +180,25 @@ class FilterBlockEntity(pos: BlockPos, state: BlockState, var capacity: Long, va
 
                 entity.getUpEntity(world)?.syncToClientOfPlayersInRadius(world, 50f)
                 entity.getDownEntity(world)?.syncToClientOfPlayersInRadius(world, 50f)
+
+                entity.markAllDirty(world)
             } else {
                 entity.filterTicks = 0
                 if (!entity.endSynced) {
                     entity.endSynced = true
                     entity.getUpEntity(world)?.syncToClientOfPlayersInRadius(world, 50f)
                     entity.getDownEntity(world)?.syncToClientOfPlayersInRadius(world, 50f)
+
+                    entity.markAllDirty(world)
                 }
             }
         }
+    }
+    fun markAllDirty(world: World){
+        val otherPos = if(isUp) pos.down() else pos.up()
+        world.markDirty(pos)
+        world.markDirty(otherPos)
+        world.updateComparators(pos, cachedState.block)
+        world.updateComparators(otherPos, cachedState.block)
     }
 }

@@ -8,12 +8,14 @@ import net.minecraft.block.FluidBlock
 import net.minecraft.block.MapColor
 import net.minecraft.block.piston.PistonBehavior
 import net.minecraft.fluid.FlowableFluid
+import net.minecraft.item.Items
 import net.minecraft.registry.Registries
 import net.minecraft.registry.Registry
 import net.minecraft.sound.BlockSoundGroup
 import net.minecraft.util.Identifier
 import xyz.koiro.watersource.AutoGenBlockData
 import xyz.koiro.watersource.AutoGenItemData
+import xyz.koiro.watersource.BlockLootTableType
 import xyz.koiro.watersource.WaterSource
 import xyz.koiro.watersource.world.fluid.ModFluids
 import xyz.koiro.watersource.world.item.ModItems
@@ -25,10 +27,22 @@ object ModBlocks {
         FluidBlock(ModFluids.PURIFIED_WATER as FlowableFluid, FabricBlockSettings.copy(Blocks.WATER))
     )
 
-    @AutoGenBlockData("Wooden Filter", "木质滤水器", false)
+    @AutoGenBlockData("Wooden Filter", "木质滤水器", false, BlockLootTableType.SingleBlockItem)
     val WOODEN_FILTER = registerBlock(
         "wooden_filter",
-        FilterBlock(2000L ,FabricBlockSettings.create())
+        FilterBlock(
+            2000L,
+            AbstractBlock.Settings.copy(Blocks.OAK_PLANKS).strength(1.0f, 1.0f).nonOpaque().blockVision(Blocks::never)
+        )
+    )
+
+    @AutoGenBlockData("Iron Filter", "铁质滤水器", false, BlockLootTableType.SingleBlockItem)
+    val IRON_FILTER = registerBlock(
+        "iron_filter",
+        FilterBlock(
+            4000L,
+            AbstractBlock.Settings.copy(Blocks.IRON_BLOCK).strength(2.2f, 3.0f).nonOpaque().blockVision(Blocks::never)
+        )
     )
 
     fun active() {}

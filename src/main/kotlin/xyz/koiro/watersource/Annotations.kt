@@ -10,12 +10,17 @@ enum class ModelType(val model: Model){
     Generated(Models.GENERATED),
 }
 
+enum class BlockLootTableType(){
+    DontGen,
+    SingleBlockItem
+}
+
 @Target(AnnotationTarget.FIELD)
 @Retention(AnnotationRetention.RUNTIME)
 annotation class AutoGenItemData(val modelType: ModelType = ModelType.Generated, val enLang: String, val cnLang: String, val tags: Array<String> = [])
 
 @Target(AnnotationTarget.FIELD)
 @Retention(AnnotationRetention.RUNTIME)
-annotation class AutoGenBlockData(val enLang: String, val cnLang: String, val genItemModel: Boolean)
+annotation class AutoGenBlockData(val enLang: String, val cnLang: String, val genItemModel: Boolean, val lootTable: BlockLootTableType = BlockLootTableType.DontGen)
 
 
