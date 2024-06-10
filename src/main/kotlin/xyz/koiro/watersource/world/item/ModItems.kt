@@ -101,7 +101,7 @@ object ModItems {
     val PURIFIED_WATER_BOTTLE =
         registerItem(
             "purified_water_bottle",
-            DrinkOnceItem(FabricItemSettings().maxCount(16), 32) { ItemStack(Items.GLASS_BOTTLE) }
+            DrinkOnceItem(FabricItemSettings().maxCount(8), 32) { ItemStack(Items.GLASS_BOTTLE) }
         )
 
     val WOODEN_FILTER_BLOCK = registerItem(

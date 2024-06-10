@@ -11,6 +11,8 @@ import net.minecraft.item.ItemStack
 import net.minecraft.item.Items
 import net.minecraft.potion.PotionUtil
 import net.minecraft.potion.Potions
+import net.minecraft.sound.SoundCategory
+import net.minecraft.sound.SoundEvents
 import net.minecraft.state.StateManager
 import net.minecraft.state.property.BooleanProperty
 import net.minecraft.util.ActionResult
@@ -30,7 +32,8 @@ import xyz.koiro.watersource.world.fluid.ModFluids
 import xyz.koiro.watersource.world.item.*
 import kotlin.math.min
 
-open class FilterBlock(val capacity: Long, val filterVolumePerSecond: Long, settings: Settings?) : BlockWithEntity(settings) {
+open class FilterBlock(val capacity: Long, val filterVolumePerSecond: Long, settings: Settings?) :
+    BlockWithEntity(settings) {
     init {
         defaultState = defaultState.with(IS_UP, false)
     }
@@ -48,7 +51,7 @@ open class FilterBlock(val capacity: Long, val filterVolumePerSecond: Long, sett
         hit: BlockHitResult?
     ): ActionResult {
         val entity = world.getBlockEntity(pos)
-        if (player != null && hand != null && entity is FilterBlockEntity && !world.isClient) {
+        if (player != null && hand != null && entity is FilterBlockEntity) {
             val handStack = player.getStackInHand(hand)
             val data = entity.fluidStorageData
             val handItem = handStack.item
@@ -56,14 +59,31 @@ open class FilterBlock(val capacity: Long, val filterVolumePerSecond: Long, sett
             val strainerStorage = entity.getStrainerStorage(world) ?: return ActionResult.SUCCESS
             val hasStrainerAndIsUp = !strainerStorage.stack.isEmpty && isUp(state)
 
+            fun playInsertSound() {
+                world.playSoundAtBlockCenter(pos, SoundEvents.ITEM_BUCKET_FILL, SoundCategory.PLAYERS, 1f, 1f, true)
+            }
+
+            fun playExtractSound() {
+                world.playSoundAtBlockCenter(pos, SoundEvents.ITEM_BOTTLE_EMPTY, SoundCategory.PLAYERS, 1f, 1f, true)
+            }
+
             if (handStack.isEmpty) {
                 when {
                     player.isSneaking -> {
                         if (!entity.fluidStorageData.isBlank()) {
                             data.clear()
+                            playExtractSound()
                         } else {
                             if (!strainerStorage.stack.isEmpty && canModifyStrainer) {
                                 player.setStackInHand(hand, entity.extractStrainerInUp(world))
+                                world.playSoundAtBlockCenter(
+                                    pos,
+                                    SoundEvents.ENTITY_ITEM_PICKUP,
+                                    SoundCategory.PLAYERS,
+                                    1f,
+                                    1f,
+                                    true
+                                )
                             }
                         }
                     }
@@ -75,12 +95,20 @@ open class FilterBlock(val capacity: Long, val filterVolumePerSecond: Long, sett
                         inner?.let {
                             handStack.decrement(1)
                             player.setStackInHandOrInsertIntoInventory(hand, it)
+                            world.playSoundAtBlockCenter(
+                                pos,
+                                SoundEvents.BLOCK_WOOL_PLACE,
+                                SoundCategory.PLAYERS,
+                                1f,
+                                1f,
+                                true
+                            )
                         }
                     }
 
                     handItem is FluidContainerItem -> {
                         handStack.getOrCreateFluidStorageData()?.let { containerFluidData ->
-                            if (containerFluidData.isBlank()) {
+                            fun transferFilterToContainer() {
                                 val transferResult = data.transferTo(
                                     containerFluidData,
                                     min(containerFluidData.restCapacity(), data.amount),
@@ -90,21 +118,33 @@ open class FilterBlock(val capacity: Long, val filterVolumePerSecond: Long, sett
                                     val stack = handItem.setStorageData(handStack.copy(), transferResult.second)
                                     handStack.decrement(1)
                                     player.setStackInHandOrInsertIntoInventory(hand, stack)
-                                    (stack.item as FluidContainerItem).onFluidDataChanged(stack, player, hand)
+                                    (stack.item as? FluidContainerItem)?.onFluidDataChanged(stack, player, hand)
+                                    playExtractSound()
                                 }
+                            }
+
+                            fun transferContainerToFilter() {
+                                val transferResult = containerFluidData.transferTo(
+                                    data,
+                                    min(data.restCapacity(), containerFluidData.amount),
+                                    true
+                                )
+                                if (transferResult != null) {
+                                    val stack = handItem.setStorageData(handStack.copy(), transferResult.first)
+                                    handStack.decrement(1)
+                                    player.setStackInHandOrInsertIntoInventory(hand, stack)
+                                    (stack.item as? FluidContainerItem)?.onFluidDataChanged(stack, player, hand)
+                                    playInsertSound()
+                                }
+                            }
+
+                            if (containerFluidData.isBlank()) {
+                                transferFilterToContainer()
                             } else {
                                 if (isUp(state)) {
-                                    val transferResult = containerFluidData.transferTo(
-                                        data,
-                                        min(data.restCapacity(), containerFluidData.amount),
-                                        true
-                                    )
-                                    if (transferResult != null) {
-                                        val stack = handItem.setStorageData(handStack.copy(), transferResult.first)
-                                        handStack.decrement(1)
-                                        player.setStackInHandOrInsertIntoInventory(hand, stack)
-                                        (stack.item as FluidContainerItem).onFluidDataChanged(stack, player, hand)
-                                    }
+                                    transferContainerToFilter()
+                                } else {
+                                    transferFilterToContainer()
                                 }
                             }
                         }
@@ -120,13 +160,16 @@ open class FilterBlock(val capacity: Long, val filterVolumePerSecond: Long, sett
                                     true
                                 )
                                 if (transferResult != null) {
-                                    val stack = (containerStack.item as FluidContainerItem).setStorageData(
+                                    val stack = (containerStack.item as? FluidContainerItem)?.setStorageData(
                                         containerStack,
                                         transferResult.second
                                     )
-                                    handStack.decrement(1)
-                                    player.setStackInHandOrInsertIntoInventory(hand, stack)
-                                    (stack.item as FluidContainerItem).onFluidDataChanged(stack, player, hand)
+                                    if (stack != null) {
+                                        handStack.decrement(1)
+                                        player.setStackInHandOrInsertIntoInventory(hand, stack)
+                                        (stack.item as FluidContainerItem).onFluidDataChanged(stack, player, hand)
+                                        playExtractSound()
+                                    }
                                 }
                             }
                         }
@@ -135,12 +178,14 @@ open class FilterBlock(val capacity: Long, val filterVolumePerSecond: Long, sett
                     handItem == Items.WATER_BUCKET && hasStrainerAndIsUp -> {
                         if (data.insert(1000, Fluids.WATER, true)) {
                             player.setStackInHand(hand, ItemStack(Items.BUCKET))
+                            playInsertSound()
                         }
                     }
 
                     handItem == Items.BUCKET && data.fluid == Fluids.WATER && data.amount >= 1000 -> {
                         data.extract(1000)
                         player.setStackInHand(hand, ItemStack(Items.WATER_BUCKET))
+                        playExtractSound()
                     }
 
                     handItem == Items.GLASS_BOTTLE && (data.fluid == Fluids.WATER || data.fluid == ModFluids.PURIFIED_WATER) && data.amount >= 250 -> {
@@ -153,6 +198,7 @@ open class FilterBlock(val capacity: Long, val filterVolumePerSecond: Long, sett
                             handStack.decrement(1)
                             player.inventory.insertStack(newStack)
                             data.extract(250)
+                            playExtractSound()
                         }
                     }
 
@@ -164,6 +210,7 @@ open class FilterBlock(val capacity: Long, val filterVolumePerSecond: Long, sett
                                 player.setStackInHand(hand, newStack)
                             else
                                 player.inventory.insertStack(newStack)
+                            playInsertSound()
                         }
                     }
 
