@@ -6,7 +6,7 @@ plugins {
 
 }
 
-version = project.mod_version
+version = project.mod_version + "+" + project.mc_version + "-fabric" + "-" + project.build_state
 group = project.maven_group
 
 base {
