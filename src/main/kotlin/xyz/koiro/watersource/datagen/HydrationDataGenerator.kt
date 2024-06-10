@@ -23,22 +23,22 @@ class HydrationDataGenerator(output: DataOutput) : HydrationDataProvider(output)
         )
         adder.add(
             WaterSource.identifier("fluid_purified_water"),
-            fluid(ModFluids.PURIFIED_WATER, 4, 10)
+            fluid(ModFluids.PURIFIED_WATER, 4, 12)
         )
-        adder.addItemWithAutoId(ModItems.PURIFIED_WATER_BOTTLE, 4, 10)
+        adder.addItemWithAutoId(ModItems.PURIFIED_WATER_BOTTLE, 4, 12)
 
         // Vanilla -----------------------
-        adder.addItemWithAutoId(Items.APPLE, 1, 3)
+        adder.addItemWithAutoId(Items.APPLE, 1, 4)
         adder.addItemWithAutoId(Items.GOLDEN_APPLE, 2, 8)
         adder.addItemWithAutoId(Items.ENCHANTED_GOLDEN_APPLE, 4, 20)
-        adder.addItemWithAutoId(Items.MUSHROOM_STEW, 1, 1)
-        adder.addItemWithAutoId(Items.SUSPICIOUS_STEW, 1, 1)
-        adder.addItemWithAutoId(Items.RABBIT_STEW, 1, 1)
-        adder.addItemWithAutoId(Items.BEETROOT_SOUP, 1, 1)
-        adder.addItemWithAutoId(Items.MELON_SLICE, 1, 2)
+        adder.addItemWithAutoId(Items.MUSHROOM_STEW, 1, 2)
+        adder.addItemWithAutoId(Items.SUSPICIOUS_STEW, 1, 2)
+        adder.addItemWithAutoId(Items.RABBIT_STEW, 1, 2)
+        adder.addItemWithAutoId(Items.BEETROOT_SOUP, 1, 2)
+        adder.addItemWithAutoId(Items.MELON_SLICE, 1, 3)
         adder.addItemWithAutoId(Items.GLISTERING_MELON_SLICE, 1, 3)
-        adder.addItemWithAutoId(Items.SWEET_BERRIES, 1, 1)
-        adder.addItemWithAutoId(Items.GLOW_BERRIES, 1, 1)
+        adder.addItemWithAutoId(Items.SWEET_BERRIES, 1, 3)
+        adder.addItemWithAutoId(Items.GLOW_BERRIES, 1, 3)
         adder.add(
             Identifier("item_potion_water"),
             item(Items.POTION, 2, 0, WSConfig.getWaterThirstyProbabilityEffect()).apply { matchList.add(HydrationData.NBTMatch(
