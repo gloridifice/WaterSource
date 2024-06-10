@@ -26,15 +26,15 @@ object WSConfig {
     class ExhaustionFormat(
         val multiplier: Float = 1f,
 
-        val sprint: Float = 0.05f,
-        val jump: Float = 0.4f,
-        val healthReward: Float = 2f,
+        val sprintCost: Float = 0.05f,
+        val jumpCost: Float = 0.4f,
+        val healthRewardCost: Float = 2f,
 
-        val thirtyPerSecondRate: Float = 0.3f,
-        val thirtyPerSecondOffset: Float = 0.5f,
+        val thirtyCostPerSecondRate: Float = 0.3f,
+        val thirtyCostPerSecondOffset: Float = 0.5f,
 
-        val thirtyMultiplierRate: Float = 0.4f,
-        val thirtyMultiplierOffset: Float = 1f,
+        val thirtyCostMultiplierRate: Float = 0.4f,
+        val thirtyCostMultiplierOffset: Float = 1f,
     )
 
     @Serializable
@@ -139,18 +139,18 @@ object WSConfig {
         val multiplier
             get() = format.exhaustion.multiplier
         val sprint
-            get() = format.exhaustion.sprint
+            get() = format.exhaustion.sprintCost
         val jump
-            get() = format.exhaustion.jump
+            get() = format.exhaustion.jumpCost
         val healthReward
-            get() = format.exhaustion.healthReward
+            get() = format.exhaustion.healthRewardCost
 
         fun thirstyPerSecond(amplifier: Int): Float {
-            return config.thirtyPerSecondOffset + (amplifier + 1) * config.thirtyPerSecondRate
+            return config.thirtyCostPerSecondOffset + (amplifier + 1) * config.thirtyCostPerSecondRate
         }
 
         fun thirstyMultiplier(amplifier: Int): Float {
-            return config.thirtyMultiplierOffset + (1f + amplifier.toFloat()) * config.thirtyMultiplierRate
+            return config.thirtyCostMultiplierOffset + (1f + amplifier.toFloat()) * config.thirtyCostMultiplierRate
         }
     }
 

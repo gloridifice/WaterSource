@@ -8,9 +8,9 @@ object WSClientConfig {
 
     @Serializable
     class Format(
-        val showHydrationRestorationDataOnItemTooltip: Boolean = true,
-        val showHydrationSaturationInTooltip: Boolean = true,
-        val showHydrationDryDataOnItemTooltip: Boolean = true,
+        val showHydrationRestorationItemTooltip: Boolean = true,
+        val showHydrationSaturationInItemTooltip: Boolean = true,
+        val showHydrationDryItemTooltip: Boolean = true,
         val showWaterLevelBar: Boolean = true,
         val showWaterSaturationInBar: Boolean = true,
         val waterLevelBarOffsetY: Int = 0

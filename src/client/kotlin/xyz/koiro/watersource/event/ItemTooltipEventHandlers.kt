@@ -22,10 +22,10 @@ object ItemTooltipEventHandlers {
         HydrationDataManager.findByItemStack(stack)?.let { hydrationData ->
             val isThirty = hydrationData.effects.any { it.effect.effectType == ModStatusEffects.THIRSTY }
             if (hydrationData.isDry()) {
-                if (WSClientConfig.format.showHydrationDryDataOnItemTooltip)
+                if (WSClientConfig.format.showHydrationDryItemTooltip)
                     drawDry(context, hydrationData, isThirty, x, y)
             } else {
-                if (WSClientConfig.format.showHydrationRestorationDataOnItemTooltip)
+                if (WSClientConfig.format.showHydrationRestorationItemTooltip)
                     drawRestoration(context, hydrationData, isThirty, x, y)
             }
         }
@@ -100,7 +100,7 @@ object ItemTooltipEventHandlers {
             }
 
             // Saturation
-            if (WSClientConfig.format.showHydrationSaturationInTooltip)
+            if (WSClientConfig.format.showHydrationSaturationInItemTooltip)
                 for (i in 0..<satCount) {
                     val newX = fX + i * 8 + 1
                     val isEndAndRest = i == satCount - 1 && satRest != 0
