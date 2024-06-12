@@ -71,15 +71,16 @@ public class CommonEventHandler {
     public static void onLivingEntityUseItemEventFinish(LivingEntityUseItemEvent.Finish event) {
         LivingEntity entity = event.getEntityLiving();
         ItemStack stack = event.getItem();
-        if (entity instanceof Player player) {
+        if (entity instanceof ServerPlayer player) {
             WaterLevelUtil.drink(player, stack);
+            SimpleNetworkHandler.CHANNEL.send(PacketDistributor.PLAYER.with(() -> player), new DrinkWaterMessage());
         }
     }
 
     @SubscribeEvent
     public static void onJump(LivingEvent.LivingJumpEvent event) {
         Entity entity = event.getEntityLiving();
-        if (entity instanceof Player player) {
+        if (entity instanceof ServerPlayer player) {
             if (WaterLevelUtil.canPlayerAddWaterExhaustionLevel(player)) {
                 entity.getCapability(CapabilityRegistry.PLAYER_WATER_LEVEL).ifPresent(data -> {
                     if (entity.isSprinting()) {
@@ -131,6 +132,7 @@ public class CommonEventHandler {
         tick %= 8000;
         Player player = event.player;
         Level level = player.level;
+        if (!(player instanceof ServerPlayer)) return;
         if (WaterLevelUtil.canPlayerAddWaterExhaustionLevel(player)) {
             if (tick % 2 == 0) {
                 player.getCapability(CapabilityRegistry.PLAYER_LAST_POSITION).ifPresent(data -> {
@@ -159,21 +161,6 @@ public class CommonEventHandler {
             }
 
             if (tick % 10 == 0) {
-                //Natural State
-/*                if (ModList.get().isLoaded("afterthedrizzle") && player.getCapability(CapabilityPlayerTemperature.PLAYER_TEMP) != null) {
-                    player.getCapability(CapabilityPlayerTemperature.PLAYER_TEMP).ifPresent(d -> {
-                        if (d.getApparentTemperature() == ApparentTemperature.HOT) {
-                            player.getCapability(CapabilityRegistry.PLAYER_WATER_LEVEL).ifPresent(data -> {
-                                data.addExhaustion(player, 0.0075f);
-                            });
-                        }
-                        if (d.getApparentTemperature() == ApparentTemperature.HOT) {
-                            player.getCapability(CapabilityRegistry.PLAYER_WATER_LEVEL).ifPresent(data -> {
-                                data.addExhaustion(player, 0.0135f);
-                            });
-                        }
-                    });
-                } else {*/
                 //WaterRestoring effect
                 MobEffectInstance effectInstance1 = player.getEffect(MobEffectRegistry.WATER_RESTORING.get());
                 if (effectInstance1 != null) {
@@ -233,7 +220,7 @@ public class CommonEventHandler {
     @SubscribeEvent
     public static void onBlockBreakEvent(BlockEvent.BreakEvent event) {
         Player player = event.getPlayer();
-        if (WaterLevelUtil.canPlayerAddWaterExhaustionLevel(player)) {
+        if (WaterLevelUtil.canPlayerAddWaterExhaustionLevel(player) && !player.level.isClientSide()) {
             player.getCapability(CapabilityRegistry.PLAYER_WATER_LEVEL).ifPresent(data -> data.addExhaustion(player, 0.005f));
         }
     }

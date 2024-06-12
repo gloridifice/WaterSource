@@ -1,5 +1,6 @@
 package gloridifice.watersource.common.capability;
 
+import gloridifice.watersource.common.network.DrinkWaterMessage;
 import gloridifice.watersource.common.network.PlayerWaterLevelMessage;
 import gloridifice.watersource.common.network.SimpleNetworkHandler;
 import gloridifice.watersource.helper.WaterLevelUtil;
@@ -48,12 +49,12 @@ public class WaterLevelCapability {
 
     public void addWaterLevel(Player player, int add) {
         this.waterLevel = Math.min(this.waterLevel + add, 20);
-        restoreUpdate(player);
+        syncToClientOnRestore(player);
     }
 
     public void addWaterSaturationLevel(Player player, int add) {
         this.waterSaturationLevel = Math.min(this.waterSaturationLevel + add, 20);
-        restoreUpdate(player);
+        syncToClientOnRestore(player);
     }
 
     protected void addExhaustion(float add) {
@@ -68,6 +69,10 @@ public class WaterLevelCapability {
         if (effect != null) {
             addExhaustion(finalValue * (4 + effect.getAmplifier()) / 2);
         } else addExhaustion(finalValue);
+
+        if (player instanceof ServerPlayer serverPlayer) {
+            syncToClient(serverPlayer);
+        }
     }
 
     public void setWaterLevel(int temp) {
@@ -111,16 +116,19 @@ public class WaterLevelCapability {
     public void restoreWater(Player player, int restore) {
         this.waterLevel = Math.min(waterLevel + restore, 20);
         if (this.waterLevel == 20) this.waterSaturationLevel = Math.min(waterLevel + restore, 20);
-        restoreUpdate(player);
+        syncToClientOnRestore(player);
     }
 
-    public static void restoreUpdate(Player player) {
+    public static void syncToClient(ServerPlayer player) {
+        player.getCapability(CapabilityRegistry.PLAYER_WATER_LEVEL).ifPresent(t -> SimpleNetworkHandler.CHANNEL.send(PacketDistributor.PLAYER.with(() -> player), new PlayerWaterLevelMessage(t.getWaterLevel(), t.getWaterSaturationLevel(), t.getWaterExhaustionLevel())));
+    }
+
+    public static void syncToClientOnRestore(Player player) {
         if (!player.level.isClientSide()) {
             ServerPlayer serverPlayer = (ServerPlayer) player;
             CriteriaTriggerRegistry.WATER_LEVEL_RESTORED_TRIGGER.trigger(serverPlayer);
-            player.getCapability(CapabilityRegistry.PLAYER_WATER_LEVEL).ifPresent(t -> SimpleNetworkHandler.CHANNEL.send(PacketDistributor.PLAYER.with(() -> serverPlayer), new PlayerWaterLevelMessage(t.getWaterLevel(), t.getWaterSaturationLevel(), t.getWaterExhaustionLevel())));
+            syncToClient(serverPlayer);
         }
-
     }
 
     public void award(Player player) {

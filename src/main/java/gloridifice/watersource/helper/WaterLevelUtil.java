@@ -1,5 +1,7 @@
 package gloridifice.watersource.helper;
 
+import gloridifice.watersource.common.network.DrinkWaterMessage;
+import gloridifice.watersource.common.network.SimpleNetworkHandler;
 import gloridifice.watersource.common.recipe.IThirstRecipe;
 import gloridifice.watersource.common.recipe.ModRecipeManager;
 import gloridifice.watersource.common.recipe.WaterLevelAndEffectRecipe;
@@ -7,6 +9,7 @@ import gloridifice.watersource.registry.CapabilityRegistry;
 import gloridifice.watersource.registry.MobEffectRegistry;
 import gloridifice.watersource.registry.EnchantmentRegistry;
 import gloridifice.watersource.registry.ItemRegistry;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.player.Player;
@@ -18,14 +21,16 @@ import net.minecraftforge.common.util.FakePlayer;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidUtil;
 import net.minecraftforge.fluids.capability.IFluidHandler;
+import net.minecraftforge.network.PacketDistributor;
 
 import java.util.Random;
 
 import static net.minecraft.world.Difficulty.PEACEFUL;
+import static net.minecraftforge.network.NetworkDirection.PLAY_TO_CLIENT;
 
 
 public class WaterLevelUtil {
-    public static void drink(Player player, ItemStack stack){
+    public static void drink(Player player, ItemStack stack) {
         Level level = player.getLevel();
         Random rand = new Random();
 
@@ -59,10 +64,11 @@ public class WaterLevelUtil {
             }
         }
     }
-    public static void drink(Player player, Fluid fluid){
+
+    public static void drink(Player player, Fluid fluid) {
         ItemStack stack = new ItemStack(ItemRegistry.FLUID_BOTTLE.get());
         IFluidHandler fluidHandler = FluidUtil.getFluidHandler(stack).orElse(null);
-        fluidHandler.fill(new FluidStack(fluid,250), IFluidHandler.FluidAction.EXECUTE);
+        fluidHandler.fill(new FluidStack(fluid, 250), IFluidHandler.FluidAction.EXECUTE);
         WaterLevelUtil.drink(player, stack);
     }
 
@@ -70,7 +76,7 @@ public class WaterLevelUtil {
         return !(player instanceof FakePlayer) && !player.isCreative() && !player.isSpectator() && player.getCapability(CapabilityRegistry.PLAYER_WATER_LEVEL) != null && player.level.getDifficulty() != PEACEFUL;
     }
 
-    public static float getMoisturizingRate(Player player){
+    public static float getMoisturizingRate(Player player) {
         int moisturizingLevel = 0;
         for (ItemStack stack : player.getArmorSlots()) {
             moisturizingLevel += EnchantmentHelper.getItemEnchantmentLevel(EnchantmentRegistry.MOISTURIZING.get(), stack);
