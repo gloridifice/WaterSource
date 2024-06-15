@@ -8,6 +8,7 @@ import net.minecraft.entity.effect.StatusEffectInstance
 import net.minecraft.server.network.ServerPlayerEntity
 import net.minecraft.util.ActionResult
 import net.minecraft.world.World
+import xyz.koiro.watersource.WSConfig
 import xyz.koiro.watersource.WSConfig.Exhaustion
 import xyz.koiro.watersource.WSConfig.Punishment
 import xyz.koiro.watersource.WaterSource
@@ -55,11 +56,12 @@ object ModEventsHandlers {
     }
 
     private fun highWaterLevelReward(player: ServerPlayerEntity, world: World) {
+        if (world.isClient()) return
         player.ifInSurvivalAndGetWaterData { waterLevelData ->
             if (waterLevelData.level > 16 && !player.hasStatusEffect(ModStatusEffects.THIRSTY)) {
                 val tick = player.getAttachedOrCreate(ModAttachmentTypes.WATER_REWARD_HEAL_TICKER)
                 tick.add(1)
-                if (tick.value > 125) {
+                if (tick.value > (WSConfig.format.highWaterPlayerHealingIntervalSecond * 50).toInt()) {
                     player.heal(1f)
                     waterLevelData.addExhaustion(Exhaustion.healthReward, player)
                     waterLevelData.updateToClient(player)

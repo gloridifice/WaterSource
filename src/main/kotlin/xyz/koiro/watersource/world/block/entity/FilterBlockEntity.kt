@@ -158,7 +158,7 @@ class FilterBlockEntity(pos: BlockPos, state: BlockState, var capacity: Long, va
                 FilterRecipeDataManager.findRecipe(upFluidStorageData.fluid, strainerStorage.stack)
 
             val isWorking = recipe != null
-                    && (downFluidStorageData.fluid == recipe.outFluid || downFluidStorageData.isBlank())
+                    && (downFluidStorageData.fluid == recipe.outputFluid || downFluidStorageData.isBlank())
                     && downFluidStorageData.amount < downFluidStorageData.capacity
                     && upFluidStorageData.amount > 0
             entity.isWorking = isWorking
@@ -168,7 +168,7 @@ class FilterBlockEntity(pos: BlockPos, state: BlockState, var capacity: Long, va
 
                 // 0.05 * 20 = 1s
                 if (entity.filterTicks % tickAmount == 0) {
-                    val outFluid = recipe.outFluid
+                    val outFluid = recipe.outputFluid
                     val shouldDamageStrainer =
                         entity.filterTicks % (WSConfig.UNIT_DRINK_VOLUME / volumePerSecond * tickAmount).toInt() == 0
 

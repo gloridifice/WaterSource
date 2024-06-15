@@ -4,17 +4,23 @@ import kotlinx.serialization.Serializable
 import net.minecraft.entity.effect.StatusEffect
 import net.minecraft.entity.effect.StatusEffectInstance
 import net.minecraft.entity.effect.StatusEffects
+import net.minecraft.item.ItemStack
 import net.minecraft.registry.Registries
 import net.minecraft.util.Identifier
 import xyz.koiro.watersource.data.HydrationData
+import xyz.koiro.watersource.datagen.provider.HydrationDataProvider
 import xyz.koiro.watersource.world.effect.ModStatusEffects
+import kotlin.math.floor
 
 object WSConfig {
     @Serializable
     class Format(
         val exhaustion: ExhaustionFormat = ExhaustionFormat(),
         val punishment: PunishmentFormat = PunishmentFormat(),
-        val filtering: FilteringFormat = FilteringFormat()
+        val filtering: FilteringFormat = FilteringFormat(),
+        val highWaterPlayerHealingIntervalSecond: Float = 2.5f,
+        val enableDryFeature: Boolean = true,
+        val enableDefaultDryData: Boolean = true,
     )
 
     @Serializable
@@ -48,28 +54,28 @@ object WSConfig {
             effectsInHard = arrayOf(
                 EffectObject(StatusEffects.SLOWNESS, 1),
                 EffectObject(StatusEffects.WEAKNESS, 1)
-            ).map {it.toString() }
+            ).map { it.toString() }
         },
         val heavyPunishmentInLowWater: LowWaterPunishmentObject = LowWaterPunishmentObject().apply {
             effectsInEasy = arrayOf(
                 EffectObject(StatusEffects.SLOWNESS),
                 EffectObject(StatusEffects.WEAKNESS, 2)
-            ).map {it.toString() }
+            ).map { it.toString() }
             effectsInNormal = arrayOf(
                 EffectObject(StatusEffects.SLOWNESS, 1),
                 EffectObject(StatusEffects.WEAKNESS, 2)
-            ).map {it.toString() }
+            ).map { it.toString() }
             effectsInHard = arrayOf(
                 EffectObject(StatusEffects.SLOWNESS, 2),
                 EffectObject(StatusEffects.WEAKNESS, 2)
-            ).map {it.toString() }
+            ).map { it.toString() }
         }
     )
 
     @Serializable
     class LowWaterPunishmentObject(
         val enable: Boolean = true,
-        
+
         var effectsInEasy: List<String> = emptyList(),
         var effectsInNormal: List<String> = emptyList(),
         var effectsInHard: List<String> = emptyList(),
@@ -104,13 +110,15 @@ object WSConfig {
             fun fromInstance(instance: StatusEffectInstance): EffectObject {
                 return EffectObject(instance.effectType.identifier().toString(), instance.amplifier)
             }
-            fun fromString(str: String): EffectObject{
+
+            fun fromString(str: String): EffectObject {
                 val list = str.split("::")
                 val id = list[0]
                 val amplifier = list[1].toInt()
                 return EffectObject(id, amplifier)
             }
         }
+
         override fun toString(): String {
             return "$id::$amplifier"
         }
@@ -170,6 +178,17 @@ object WSConfig {
     object Filtering {
         val config
             get() = format.filtering
+    }
+
+    fun getDefaultFoodDryData(itemStack: ItemStack): HydrationData? {
+        if (format.enableDefaultDryData && itemStack.isFood) {
+            itemStack.item.foodComponent?.hunger?.let {
+                if (it > 1) {
+                    return HydrationDataProvider.dryItem(itemStack.item, floor(it / 2f).toInt())
+                }
+            }
+        }
+        return null
     }
 }
 

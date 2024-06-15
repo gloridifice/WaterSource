@@ -1,6 +1,9 @@
 package xyz.koiro.watersource.api.serialize
 
+import kotlinx.serialization.SerialInfo
+import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
+import kotlinx.serialization.Serializer
 import net.minecraft.item.Item
 import net.minecraft.recipe.Ingredient
 import net.minecraft.registry.Registries
@@ -14,7 +17,9 @@ import kotlin.jvm.optionals.getOrNull
 
 @Serializable
 class IngredientFormat(
+    @SerialName("item")
     val itemId: String? = null,
+    @SerialName("tag")
     val tagId: String? = null
 ) {
     fun asItem(): Item?{

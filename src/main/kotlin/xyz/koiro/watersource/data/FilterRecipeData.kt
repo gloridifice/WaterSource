@@ -1,5 +1,6 @@
 package xyz.koiro.watersource.data
 
+import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import net.minecraft.fluid.Fluid
 import net.minecraft.item.ItemStack
@@ -10,26 +11,26 @@ import xyz.koiro.watersource.api.serialize.IngredientFormat
 import xyz.koiro.watersource.identifier
 
 class FilterRecipeData(
-    val inFluid: Fluid,
-    val outFluid: Fluid,
+    val inputFluid: Fluid,
+    val outputFluid: Fluid,
     val strainer: Ingredient,
 ) {
 
     fun match(fluidIn: Fluid, strainerStack: ItemStack): Boolean {
-        return fluidIn == this.inFluid && strainer.test(strainerStack)
+        return fluidIn == this.inputFluid && strainer.test(strainerStack)
     }
 
     fun format(): Format {
         return Format(
             IngredientFormat.fromIngredient(strainer),
-            inFluid.identifier().toString(),
-            outFluid.identifier().toString()
+            inputFluid.identifier().toString(),
+            outputFluid.identifier().toString()
         )
     }
 
     constructor(format: Format) : this(
-        Registries.FLUID.get(Identifier.tryParse(format.fluidIn)),
-        Registries.FLUID.get(Identifier.tryParse(format.fluidOut)),
+        Registries.FLUID.get(Identifier.tryParse(format.inputFluid)),
+        Registries.FLUID.get(Identifier.tryParse(format.outputFluid)),
         format.strainer.toIngredient()
     )
 
@@ -37,7 +38,9 @@ class FilterRecipeData(
     @Serializable
     class Format(
         val strainer: IngredientFormat,
-        val fluidIn: String,
-        val fluidOut: String
+        @SerialName("input_fluid")
+        val inputFluid: String,
+        @SerialName("output_fluid")
+        val outputFluid: String
     )
 }
