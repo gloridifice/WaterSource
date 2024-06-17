@@ -7,19 +7,11 @@ import xyz.koiro.watersource.world.block.entity.FilterBlockEntity
 
 object ModClientNetworking {
     fun initialize() {
-        ClientPlayNetworking.registerGlobalReceiver(ModNetworking.UPDATE_WATER_DATA_ID){ client, _, buf, sent ->
-            val data = WaterLevelData.readBuf(buf)
-
+        ClientPlayNetworking.registerGlobalReceiver(ModNetworking.UPDATE_WATER_LEVEL){ payload, handler ->
+            val client = handler.client()
             client.execute {
                 val player = client.player!!
-                player.setAttached(ModAttachmentTypes.WATER_LEVEL, data)
-            }
-        }
-        ClientPlayNetworking.registerGlobalReceiver(ModNetworking.UPDATE_FILTER_ENTITY_ID) { mc, _, buf, sent ->
-            val pos = buf.readBlockPos()
-            val entity = mc.world?.getBlockEntity(pos)
-            if (entity is FilterBlockEntity) {
-                entity.readPacket(buf)
+                player.getAttachedOrCreate(ModAttachmentTypes.WATER_LEVEL).setData(payload.level, payload.saturation, payload.exhaustion)
             }
         }
     }

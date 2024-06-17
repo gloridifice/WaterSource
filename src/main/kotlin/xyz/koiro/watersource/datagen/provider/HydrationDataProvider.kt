@@ -1,41 +1,38 @@
 package xyz.koiro.watersource.datagen.provider
 
-import com.google.common.hash.Hashing
-import com.google.common.hash.HashingOutputStream
-import kotlinx.serialization.json.Json
-import kotlinx.serialization.json.encodeToStream
 import net.minecraft.data.DataOutput
 import net.minecraft.data.DataProvider
 import net.minecraft.data.DataWriter
-import net.minecraft.entity.effect.StatusEffectInstance
 import net.minecraft.fluid.Fluid
 import net.minecraft.item.Item
+import net.minecraft.registry.RegistryWrapper
+import net.minecraft.registry.RegistryWrapper.WrapperLookup
 import net.minecraft.registry.tag.TagKey
 import net.minecraft.util.Identifier
-import xyz.koiro.watersource.WaterSource
 import xyz.koiro.watersource.data.HydrationData
 import xyz.koiro.watersource.data.ModResourceRegistries
-import xyz.koiro.watersource.identifier
-import java.io.ByteArrayOutputStream
-import java.io.IOException
 import java.nio.file.Path
 import java.util.concurrent.CompletableFuture
 
-abstract class HydrationDataProvider(output: DataOutput) :
-    ModDataProvider<HydrationData>(output, ModResourceRegistries.HYDRATION_KEY, "Hydration Data") {
+abstract class HydrationDataProvider(output: DataOutput, lookup: CompletableFuture<RegistryWrapper.WrapperLookup>) :
+    ModDataProvider<HydrationData>(output, ModResourceRegistries.HYDRATION_KEY, "Hydration Data", lookup) {
 
-    override fun writeData(id: Identifier, data: HydrationData, path: Path, writer: DataWriter) {
-        val byteArrayOutputStream = ByteArrayOutputStream()
-        val hashingOutputStream = HashingOutputStream(Hashing.sha1(), byteArrayOutputStream)
-        Json.encodeToStream(data.format(), hashingOutputStream)
-        writer.write(path, byteArrayOutputStream.toByteArray(), hashingOutputStream.hash())
+
+    override fun writeData(
+        id: Identifier,
+        data: HydrationData,
+        path: Path,
+        writer: DataWriter,
+        lookup: WrapperLookup
+    ): CompletableFuture<*> {
+        return DataProvider.writeCodecToPath(writer, lookup, HydrationData.CODEC, data, path);
     }
 
     companion object {
         fun dryItem(
             item: Item,
             dryLevel: Int,
-            vararg effectInstance: HydrationData.ProbabilityStatusEffectInstance
+            vararg effectInstance: HydrationData.StatusEffectObject
         ): HydrationData {
             val effects = ArrayList(effectInstance.toList())
             return HydrationData(
@@ -51,7 +48,7 @@ abstract class HydrationDataProvider(output: DataOutput) :
             item: Item,
             level: Int,
             saturation: Int,
-            vararg effectInstance: HydrationData.ProbabilityStatusEffectInstance
+            vararg effectInstance: HydrationData.StatusEffectObject
         ): HydrationData {
             val effects = ArrayList(effectInstance.toList())
             return HydrationData(
@@ -67,7 +64,7 @@ abstract class HydrationDataProvider(output: DataOutput) :
             fluid: Fluid,
             level: Int,
             saturation: Int,
-            vararg effectInstance: HydrationData.ProbabilityStatusEffectInstance
+            vararg effectInstance: HydrationData.StatusEffectObject
         ): HydrationData {
             val effects = ArrayList(effectInstance.toList())
             return HydrationData(
@@ -80,7 +77,7 @@ abstract class HydrationDataProvider(output: DataOutput) :
             tag: TagKey<Item>,
             level: Int,
             saturation: Int,
-            vararg effectInstance: HydrationData.ProbabilityStatusEffectInstance
+            vararg effectInstance: HydrationData.StatusEffectObject
         ): HydrationData {
             val effects = ArrayList(effectInstance.toList())
             return HydrationData(
@@ -93,7 +90,7 @@ abstract class HydrationDataProvider(output: DataOutput) :
             tag: TagKey<Fluid>,
             level: Int,
             saturation: Int,
-            vararg effectInstance: HydrationData.ProbabilityStatusEffectInstance
+            vararg effectInstance: HydrationData.StatusEffectObject
         ): HydrationData {
             val effects = ArrayList(effectInstance.toList())
             return HydrationData(

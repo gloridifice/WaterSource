@@ -20,7 +20,7 @@ object ItemTooltipEventHandlers {
 
     val renderItemTooltipHydrationData = ModClientEvents.DrawMouseoverTooltip { context, x, y, stack ->
         HydrationDataManager.findByItemStack(stack)?.let { hydrationData ->
-            val isThirty = hydrationData.effects.any { it.effect.effectType == ModStatusEffects.THIRSTY }
+            val isThirty = hydrationData.effects?.any { it.effect == ModStatusEffects.THIRSTY } ?: false
             if (hydrationData.isDry()) {
                 if (WSClientConfig.format.showHydrationDryItemTooltip)
                     drawDry(context, hydrationData, isThirty, x, y)
@@ -62,8 +62,8 @@ object ItemTooltipEventHandlers {
     }
 
     fun drawRestoration(context: DrawContext, hydrationData: HydrationData, isThirty: Boolean, x: Int, y: Int) {
-        val level = hydrationData.level
-        val saturation = hydrationData.saturation
+        val level = hydrationData.level ?: 0
+        val saturation = hydrationData.saturation ?: 0
 
         val levelCount = ceil(level.toFloat() / 2f).toInt()
         val isLevelEndHalf = level % 2 != 0

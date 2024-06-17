@@ -2,27 +2,27 @@ package xyz.koiro.watersource.datagen
 
 import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricRecipeProvider
-import net.minecraft.data.server.recipe.RecipeJsonProvider
-import net.minecraft.data.server.recipe.RecipeProvider
-import net.minecraft.data.server.recipe.ShapedRecipeJsonBuilder
-import net.minecraft.data.server.recipe.ShapelessRecipeJsonBuilder
+import net.minecraft.data.server.recipe.*
 import net.minecraft.fluid.Fluids
 import net.minecraft.item.Items
 import net.minecraft.recipe.Ingredient
 import net.minecraft.recipe.book.RecipeCategory
+import net.minecraft.registry.RegistryWrapper
 import net.minecraft.registry.tag.ItemTags
 import xyz.koiro.watersource.WaterSource
 import xyz.koiro.watersource.api.inputWithCriterion
 import xyz.koiro.watersource.datagen.recipe.StrainerFilteringFluidRecipeJsonBuilder
 import xyz.koiro.watersource.datagen.recipe.StrainerFilteringItemRecipeJsonBuilder
-import xyz.koiro.watersource.simpleStack
+import xyz.koiro.watersource.api.simpleStack
 import xyz.koiro.watersource.world.fluid.ModFluids
 import xyz.koiro.watersource.world.item.ModItems
 import xyz.koiro.watersource.world.tag.ModTags
-import java.util.function.Consumer
+import java.util.concurrent.CompletableFuture
 
-class ModRecipeGenerator(output: FabricDataOutput?) : FabricRecipeProvider(output) {
-    override fun generate(exporter: Consumer<RecipeJsonProvider>?) {
+class ModRecipeGenerator(output: FabricDataOutput?,
+                         registriesFuture: CompletableFuture<RegistryWrapper.WrapperLookup>?
+) : FabricRecipeProvider(output, registriesFuture) {
+    override fun generate(exporter: RecipeExporter?) {
         StrainerFilteringFluidRecipeJsonBuilder(
             WaterSource.identifier("water_to_purified_water"),
             Fluids.WATER,

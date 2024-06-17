@@ -2,29 +2,34 @@ package xyz.koiro.watersource.world.enchantment
 
 import net.minecraft.enchantment.Enchantment
 import net.minecraft.enchantment.EnchantmentHelper
-import net.minecraft.enchantment.EnchantmentTarget
+import net.minecraft.enchantment.Enchantments
 import net.minecraft.entity.EquipmentSlot
 import net.minecraft.entity.player.PlayerEntity
+import net.minecraft.registry.tag.ItemTags
 import xyz.koiro.watersource.WSConfig
-import xyz.koiro.watersource.WaterSource
 
 class MoisturizingEnchantment() :
-    Enchantment(Rarity.UNCOMMON, EnchantmentTarget.ARMOR, arrayOf(EquipmentSlot.FEET, EquipmentSlot.HEAD, EquipmentSlot.LEGS, EquipmentSlot.CHEST)) {
-    override fun getMaxLevel(): Int {
-        return 3
-    }
-    override fun getMinPower(level: Int): Int {
-        return 1
-    }
+    Enchantment(
+        properties(
+            ItemTags.ARMOR_ENCHANTABLE,
+            ItemTags.CHEST_ARMOR_ENCHANTABLE,
+            1,
+            3,
+            leveledCost(10, 20),
+            leveledCost(60, 20),
+            8,
+            EquipmentSlot.HEAD, EquipmentSlot.CHEST, EquipmentSlot.LEGS, EquipmentSlot.FEET
+        )
+    ) {
 
     companion object {
         fun getPlayerMoisturizingLevelSum(player: PlayerEntity): Int{
             var levelSum = 0
             player.armorItems.forEach {
-                val enchantments = EnchantmentHelper.fromNbt(it.enchantments)
-                enchantments.forEach { enchantment, level ->
-                    if (enchantment == ModEnchantments.MOISTURIZING)
-                        levelSum += level
+                val enchantments = EnchantmentHelper.getEnchantments(it)
+                enchantments.enchantmentsMap.forEach { enchantment ->
+                    if (enchantment.key.value() == ModEnchantments.MOISTURIZING)
+                        levelSum += enchantment.intValue
                 }
             }
             return levelSum

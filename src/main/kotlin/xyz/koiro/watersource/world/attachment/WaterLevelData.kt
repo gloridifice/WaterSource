@@ -4,9 +4,11 @@ import net.fabricmc.fabric.api.networking.v1.PacketByteBufs
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking
 import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.network.PacketByteBuf
+import net.minecraft.registry.entry.RegistryEntry
 import net.minecraft.server.network.ServerPlayerEntity
 import xyz.koiro.watersource.WSConfig
 import xyz.koiro.watersource.network.ModNetworking
+import xyz.koiro.watersource.network.UpdateWaterLevelPayload
 import xyz.koiro.watersource.world.effect.ModStatusEffects
 import xyz.koiro.watersource.world.enchantment.MoisturizingEnchantment
 
@@ -38,7 +40,7 @@ class WaterLevelData(
     /** Consume water by adding exhaustion like hungry system in vanilla.
      * */
     fun addExhaustion(amount: Float, player: PlayerEntity) {
-        val effect = player.getStatusEffect(ModStatusEffects.THIRSTY)
+        val effect = player.getStatusEffect(RegistryEntry.of(ModStatusEffects.THIRSTY))
         var finalAmount =
             amount * WSConfig.Exhaustion.multiplier * MoisturizingEnchantment.getPlayerMoisturizingRatio(player)
         effect?.let {
@@ -97,7 +99,7 @@ class WaterLevelData(
     }
 
     fun updateToClient(user: ServerPlayerEntity) {
-        ServerPlayNetworking.send(user, ModNetworking.UPDATE_WATER_DATA_ID, writeBuf(PacketByteBufs.create()))
+        ServerPlayNetworking.send(user, UpdateWaterLevelPayload(level, saturation, exhaustion))
     }
 
     fun setData(level: Int = 20, saturation: Int = 16, exhaustion: Float = 0f) {

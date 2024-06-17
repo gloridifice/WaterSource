@@ -2,16 +2,14 @@
 
 package xyz.koiro.watersource.world.block.entity
 
-import net.fabricmc.fabric.api.networking.v1.PacketByteBufs
-import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking
 import net.minecraft.block.BlockState
 import net.minecraft.fluid.Fluid
 import net.minecraft.item.ItemStack
 import net.minecraft.nbt.NbtCompound
-import net.minecraft.network.PacketByteBuf
 import net.minecraft.network.listener.ClientPlayPacketListener
 import net.minecraft.network.packet.Packet
 import net.minecraft.network.packet.s2c.play.BlockEntityUpdateS2CPacket
+import net.minecraft.registry.RegistryWrapper
 import net.minecraft.server.network.ServerPlayerEntity
 import net.minecraft.util.math.BlockPos
 import net.minecraft.world.World
@@ -19,7 +17,6 @@ import xyz.koiro.watersource.WSConfig
 import xyz.koiro.watersource.api.storage.FluidStorageData
 import xyz.koiro.watersource.api.storage.ItemStorageData
 import xyz.koiro.watersource.data.FilterRecipeDataManager
-import xyz.koiro.watersource.network.ModNetworking
 import xyz.koiro.watersource.world.block.FilterBlock
 import xyz.koiro.watersource.world.item.Strainer
 import kotlin.math.min
@@ -40,9 +37,10 @@ class FilterBlockEntity(pos: BlockPos, state: BlockState, var capacity: Long, va
     protected var strainerStorage: ItemStorageData = ItemStorageData()
     var filterTicks: Int = 0
 
-    fun getFilterVolumePerSecond(): Long{
+    fun getFilterVolumePerSecond(): Long {
         return (cachedState.block as FilterBlock).filterVolumePerSecond
     }
+
     /** Return the strainer in the up filter. If inserting failed, return null. */
     fun insertStrainerInUp(world: World, insert: ItemStack): ItemStack? {
         val storage = getStrainerStorage(world)
@@ -83,23 +81,23 @@ class FilterBlockEntity(pos: BlockPos, state: BlockState, var capacity: Long, va
         return getUpEntity(world)?.strainerStorage
     }
 
-    override fun writeNbt(nbt: NbtCompound?) {
-        super.writeNbt(nbt)
-        if (nbt == null) return
+    override fun writeNbt(nbt: NbtCompound?, registryLookup: RegistryWrapper.WrapperLookup?) {
+        super.writeNbt(nbt, registryLookup)
+        if (nbt == null || registryLookup == null) return
         nbt.putBoolean("isUp", isUp)
         val strainerNbt = NbtCompound()
-        strainerStorage.writeNbt(strainerNbt)
+        strainerStorage.writeNbt(registryLookup, strainerNbt)
         nbt.put("strainer", strainerNbt)
         nbt.putBoolean("isWorking", isWorking)
         nbt.putInt("ticks", filterTicks)
     }
 
-    override fun readNbt(nbt: NbtCompound?) {
-        super.readNbt(nbt)
-        if (nbt == null) return
+    override fun readNbt(nbt: NbtCompound?, registryLookup: RegistryWrapper.WrapperLookup?) {
+        super.readNbt(nbt, registryLookup)
+        if (nbt == null || registryLookup == null) return
         isUp = nbt.getBoolean("isUp") ?: false
         val strainerNbt = nbt.getCompound("strainer")
-        strainerNbt?.let { strainerStorage.readNbt(it) }
+        strainerNbt?.let { strainerStorage = ItemStorageData.fromNbt(registryLookup, it) ?: ItemStorageData() }
         isWorking = nbt.getBoolean("isWorking")
         nbt.putInt("ticks", filterTicks)
     }
@@ -109,10 +107,7 @@ class FilterBlockEntity(pos: BlockPos, state: BlockState, var capacity: Long, va
     }
 
     fun syncToClient(player: ServerPlayerEntity) {
-        val buf = PacketByteBufs.create()
-        buf.writeBlockPos(pos)
-        writePacket(buf)
-        ServerPlayNetworking.send(player, ModNetworking.UPDATE_FILTER_ENTITY_ID, buf)
+        player.networkHandler.sendPacket(toUpdatePacket())
     }
 
     fun syncToClientOfPlayersInRadius(world: World, radius: Float) {
@@ -124,21 +119,8 @@ class FilterBlockEntity(pos: BlockPos, state: BlockState, var capacity: Long, va
         }
     }
 
-    fun writePacket(buf: PacketByteBuf) {
-        val nbt = NbtCompound()
-        writeNbt(nbt)
-
-        buf.writeNbt(nbt)
-    }
-
-    fun readPacket(buf: PacketByteBuf) {
-        val nbt = buf.readNbt()
-
-        this.readNbt(nbt)
-    }
-
-    override fun toInitialChunkDataNbt(): NbtCompound {
-        return createNbt()
+    override fun toInitialChunkDataNbt(registryLookup: RegistryWrapper.WrapperLookup?): NbtCompound? {
+        return createNbt(registryLookup)
     }
 
     var endSynced: Boolean = false

@@ -1,7 +1,6 @@
 package xyz.koiro.watersource
 
 import net.fabricmc.fabric.api.itemgroup.v1.FabricItemGroup
-import net.minecraft.enchantment.EnchantmentHelper
 import net.minecraft.enchantment.EnchantmentLevelEntry
 import net.minecraft.fluid.Fluids
 import net.minecraft.item.EnchantedBookItem
@@ -9,11 +8,10 @@ import net.minecraft.item.ItemStack
 import net.minecraft.registry.Registries
 import net.minecraft.registry.Registry
 import net.minecraft.text.Text
-import net.minecraft.village.TradeOffers.EnchantBookFactory
+import xyz.koiro.watersource.api.simpleStack
 import xyz.koiro.watersource.api.storage.insertFluid
 import xyz.koiro.watersource.world.enchantment.ModEnchantments
 import xyz.koiro.watersource.world.fluid.ModFluids
-import xyz.koiro.watersource.world.item.FluidContainerItem
 import xyz.koiro.watersource.world.item.ModItems
 
 object ModItemGroups {

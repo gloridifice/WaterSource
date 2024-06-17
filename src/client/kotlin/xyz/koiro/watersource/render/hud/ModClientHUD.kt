@@ -7,6 +7,7 @@ import net.minecraft.util.hit.BlockHitResult
 import xyz.koiro.watersource.WSClientConfig
 import xyz.koiro.watersource.api.WaterBallRenderer
 import xyz.koiro.watersource.api.WaterLevelUiRenderUtils
+import xyz.koiro.watersource.api.entry
 import xyz.koiro.watersource.world.attachment.ModAttachmentTypes
 import xyz.koiro.watersource.world.block.entity.FilterBlockEntity
 import xyz.koiro.watersource.world.effect.ModStatusEffects
@@ -59,7 +60,7 @@ object ModClientHUD {
             var y: Int = context.scaledWindowHeight - 39 - offsetBetweenFoodBar
             if (player.isSubmergedInWater || player.air < player.maxAir) y -= 10
             val xStart: Int = context.scaledWindowWidth / 2 + 91
-            val isThirty = player.hasStatusEffect(ModStatusEffects.THIRSTY)
+            val isThirty = player.hasStatusEffect(ModStatusEffects.THIRSTY.entry())
 
             val yOffsetList = if (saturation <= 0.0f && elapsedTime.toInt() % (level * 3 + 1) == 0) {
                 List(10) {

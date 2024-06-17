@@ -1,23 +1,22 @@
 package xyz.koiro.watersource.world.recipe
 
-import com.google.gson.JsonObject
+import com.mojang.serialization.Codec
+import com.mojang.serialization.MapCodec
+import com.mojang.serialization.codecs.RecordCodecBuilder
 import net.minecraft.inventory.RecipeInputInventory
 import net.minecraft.item.ItemStack
-import net.minecraft.network.PacketByteBuf
+import net.minecraft.network.RegistryByteBuf
 import net.minecraft.recipe.Ingredient
 import net.minecraft.recipe.RecipeSerializer
 import net.minecraft.recipe.book.CraftingRecipeCategory
-import net.minecraft.registry.DynamicRegistryManager
-import net.minecraft.util.Identifier
-import xyz.koiro.watersource.api.serialize.SerializeUtils
+import net.minecraft.registry.RegistryWrapper
 
 class StrainerFilteringItemRecipe(
     val input: Ingredient,
     val output: ItemStack,
     val cost: Int,
-    id: Identifier,
     strainer: Ingredient
-) : StrainerFilteringRecipe(id, CraftingRecipeCategory.MISC, strainer) {
+) : StrainerFilteringRecipe(CraftingRecipeCategory.MISC, strainer) {
     override fun matchInput(stack: ItemStack): Boolean {
         return input.test(stack)
     }
@@ -26,7 +25,7 @@ class StrainerFilteringItemRecipe(
         return cost
     }
 
-    override fun craft(inventory: RecipeInputInventory, registryManager: DynamicRegistryManager): ItemStack {
+    override fun craft(inventory: RecipeInputInventory?, lookup: RegistryWrapper.WrapperLookup?): ItemStack {
         return output.copy()
     }
 
@@ -34,28 +33,46 @@ class StrainerFilteringItemRecipe(
         return ModRecipes.STRAINER_FILTERING_ITEM_SERIALIZER
     }
 
-    class Serializer : RecipeSerializer<StrainerFilteringItemRecipe> {
-        override fun read(id: Identifier, json: JsonObject): StrainerFilteringItemRecipe {
-            val input = Ingredient.fromJson(json.get("input"))
-            val output = SerializeUtils.jsonObjectToItemStack(json.getAsJsonObject("output"))
-            val cost = json.get("cost").asInt
-            val strainer = Ingredient.fromJson(json.get("strainer"))
-            return StrainerFilteringItemRecipe(input, output!!, cost, id, strainer)
+    class Serializer : StrainerFilteringRecipe.Serializer<StrainerFilteringItemRecipe>() {
+        val codec = RecordCodecBuilder.mapCodec { instance ->
+            val grouped =
+                instance.group(
+                    Ingredient.DISALLOW_EMPTY_CODEC.fieldOf("input").forGetter<StrainerFilteringItemRecipe> {
+                        it.input
+                    },
+                    ItemStack.CODEC.fieldOf("output").forGetter<StrainerFilteringItemRecipe> {
+                        it.output
+                    },
+                    Codec.INT.fieldOf("cost").forGetter<StrainerFilteringItemRecipe> {
+                        it.cost
+                    },
+                    Ingredient.DISALLOW_EMPTY_CODEC.fieldOf("strainer")
+                        .forGetter<StrainerFilteringItemRecipe> { it.strainer }
+                )
+            return@mapCodec grouped.apply(instance) { input, output, cost, strainer ->
+                StrainerFilteringItemRecipe(
+                    input, output, cost, strainer
+                )
+            }
         }
 
-        override fun read(id: Identifier, buf: PacketByteBuf): StrainerFilteringItemRecipe {
-            val input = Ingredient.fromPacket(buf)
-            val output = buf.readItemStack()
+        override fun codec(): MapCodec<StrainerFilteringItemRecipe> {
+            return codec
+        }
+
+        override fun read(buf: RegistryByteBuf): StrainerFilteringItemRecipe {
+            val input = Ingredient.PACKET_CODEC.decode(buf)
+            val output = ItemStack.PACKET_CODEC.decode(buf)
             val cost = buf.readInt()
-            val strainer = Ingredient.fromPacket(buf)
-            return StrainerFilteringItemRecipe(input, output, cost, id, strainer)
+            val strainer = Ingredient.PACKET_CODEC.decode(buf)
+            return StrainerFilteringItemRecipe(input, output, cost, strainer)
         }
 
-        override fun write(buf: PacketByteBuf, recipe: StrainerFilteringItemRecipe) {
-            recipe.input.write(buf)
-            buf.writeItemStack(recipe.output)
+        override fun write(buf: RegistryByteBuf, recipe: StrainerFilteringItemRecipe) {
+            Ingredient.PACKET_CODEC.encode(buf, recipe.input)
+            ItemStack.PACKET_CODEC.encode(buf, recipe.output)
             buf.writeInt(recipe.cost)
-            recipe.strainer.write(buf)
+            Ingredient.PACKET_CODEC.encode(buf, recipe.strainer)
         }
     }
 }

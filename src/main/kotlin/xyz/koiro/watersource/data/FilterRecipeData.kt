@@ -1,14 +1,11 @@
 package xyz.koiro.watersource.data
 
-import kotlinx.serialization.SerialName
-import kotlinx.serialization.Serializable
+import com.mojang.serialization.Codec
+import com.mojang.serialization.codecs.RecordCodecBuilder
 import net.minecraft.fluid.Fluid
 import net.minecraft.item.ItemStack
 import net.minecraft.recipe.Ingredient
 import net.minecraft.registry.Registries
-import net.minecraft.util.Identifier
-import xyz.koiro.watersource.api.serialize.IngredientFormat
-import xyz.koiro.watersource.identifier
 
 class FilterRecipeData(
     val inputFluid: Fluid,
@@ -20,27 +17,17 @@ class FilterRecipeData(
         return fluidIn == this.inputFluid && strainer.test(strainerStack)
     }
 
-    fun format(): Format {
-        return Format(
-            IngredientFormat.fromIngredient(strainer),
-            inputFluid.identifier().toString(),
-            outputFluid.identifier().toString()
-        )
+    companion object {
+        val CODEC: Codec<FilterRecipeData> =
+            RecordCodecBuilder.mapCodec { instance ->
+                val group = instance.group(
+                    Ingredient.DISALLOW_EMPTY_CODEC.fieldOf("strainer").forGetter<FilterRecipeData> { it.strainer },
+                    Registries.FLUID.codec.fieldOf("input_fluid").forGetter<FilterRecipeData> { it.inputFluid },
+                    Registries.FLUID.codec.fieldOf("output_fluid").forGetter<FilterRecipeData> { it.outputFluid },
+                )
+                group.apply(instance) { strainer, iF, oF ->
+                    FilterRecipeData(iF, oF, strainer)
+                }
+            }.codec()
     }
-
-    constructor(format: Format) : this(
-        Registries.FLUID.get(Identifier.tryParse(format.inputFluid)),
-        Registries.FLUID.get(Identifier.tryParse(format.outputFluid)),
-        format.strainer.toIngredient()
-    )
-
-
-    @Serializable
-    class Format(
-        val strainer: IngredientFormat,
-        @SerialName("input_fluid")
-        val inputFluid: String,
-        @SerialName("output_fluid")
-        val outputFluid: String
-    )
 }

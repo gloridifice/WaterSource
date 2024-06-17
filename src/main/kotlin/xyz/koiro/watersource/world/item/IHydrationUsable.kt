@@ -31,7 +31,7 @@ interface IHydrationUsable {
                 val dryLevel = hydrationData.dryLevel!!
                 waterLevelData.dryConsumeWater(dryLevel)
             } else {
-                waterLevelData.restoreWater(level, saturation, multiplier)
+                waterLevelData.restoreWater(level!!, saturation!!, multiplier)
             }
             waterLevelData.updateToClient(player)
             hydrationData.applyEffectsToPlayer(player, multiplier)

@@ -2,20 +2,24 @@ package xyz.koiro.watersource.world.recipe
 
 import net.minecraft.inventory.RecipeInputInventory
 import net.minecraft.item.ItemStack
+import net.minecraft.item.Items
+import net.minecraft.network.RegistryByteBuf
+import net.minecraft.network.codec.PacketCodec
 import net.minecraft.recipe.Ingredient
+import net.minecraft.recipe.RecipeSerializer
 import net.minecraft.recipe.SpecialCraftingRecipe
 import net.minecraft.recipe.book.CraftingRecipeCategory
-import net.minecraft.util.Identifier
 import net.minecraft.util.collection.DefaultedList
 import net.minecraft.world.World
 import xyz.koiro.watersource.WSConfig
+import xyz.koiro.watersource.world.item.ModItems
 import xyz.koiro.watersource.world.item.Strainer
 
 abstract class StrainerFilteringRecipe(
-    id: Identifier, category: CraftingRecipeCategory,
+    category: CraftingRecipeCategory,
     val strainer: Ingredient
 ) :
-    SpecialCraftingRecipe(id, category) {
+    SpecialCraftingRecipe(category) {
     abstract fun matchInput(stack: ItemStack): Boolean
     abstract fun getCost(ctx: Ctx): Int
 
@@ -51,7 +55,7 @@ abstract class StrainerFilteringRecipe(
     }
 
     override fun getRemainder(inventory: RecipeInputInventory): DefaultedList<ItemStack> {
-        val defaultedList = DefaultedList.ofSize(inventory.size(), ItemStack.EMPTY)
+        val defaultedList = DefaultedList.ofSize(inventory.size(), ItemStack(Items.APPLE))
         for (i in defaultedList.indices) {
             val item = inventory.getStack(i).item
             if (!item.hasRecipeRemainder()) continue
@@ -69,4 +73,12 @@ abstract class StrainerFilteringRecipe(
     }
 
     data class Ctx(val strainer: ItemStack, val input: ItemStack, val strainerIndex: Int, val inputIndex: Int)
+
+    abstract class Serializer<T: StrainerFilteringRecipe>: RecipeSerializer<T> {
+        override fun packetCodec(): PacketCodec<RegistryByteBuf, T> {
+            return PacketCodec.ofStatic(::write, ::read)
+        }
+        abstract fun read(buf: RegistryByteBuf): T
+        abstract fun write(buf: RegistryByteBuf, recipe: T)
+    }
 }

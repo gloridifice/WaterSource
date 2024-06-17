@@ -1,12 +1,15 @@
 package xyz.koiro.watersource
 
 import kotlinx.serialization.Serializable
+import net.minecraft.component.DataComponentTypes
 import net.minecraft.entity.effect.StatusEffect
 import net.minecraft.entity.effect.StatusEffectInstance
 import net.minecraft.entity.effect.StatusEffects
 import net.minecraft.item.ItemStack
 import net.minecraft.registry.Registries
+import net.minecraft.registry.entry.RegistryEntry
 import net.minecraft.util.Identifier
+import xyz.koiro.watersource.api.identifier
 import xyz.koiro.watersource.data.HydrationData
 import xyz.koiro.watersource.datagen.provider.HydrationDataProvider
 import xyz.koiro.watersource.world.effect.ModStatusEffects
@@ -91,7 +94,7 @@ object WSConfig {
                 }
             return raw.map {
                 StatusEffectInstance(
-                    Registries.STATUS_EFFECT.get(Identifier.tryParse(it.id)),
+                    RegistryEntry.of(Registries.STATUS_EFFECT.get(Identifier.tryParse(it.id))) ,
                     duration,
                     it.amplifier
                 )
@@ -104,7 +107,7 @@ object WSConfig {
         val id: String,
         val amplifier: Int = 0
     ) {
-        constructor(effectType: StatusEffect, amplifier: Int = 0) : this(effectType.identifier().toString(), amplifier)
+        constructor(effectType: RegistryEntry<StatusEffect>, amplifier: Int = 0) : this(effectType.identifier().toString(), amplifier)
 
         companion object {
             fun fromInstance(instance: StatusEffectInstance): EffectObject {
@@ -131,11 +134,8 @@ object WSConfig {
         return value * (1 + (mul - 1) / 2)
     }
 
-    fun getWaterThirstyProbabilityEffect(): HydrationData.ProbabilityStatusEffectInstance =
-        HydrationData.ProbabilityStatusEffectInstance(
-            0.8f,
-            StatusEffectInstance(ModStatusEffects.THIRSTY, 1200)
-        )
+    fun getWaterThirstyProbabilityEffect(): HydrationData.StatusEffectObject =
+        HydrationData.StatusEffectObject(ModStatusEffects.THIRSTY, 0, 10f, 0.8f)
 
     fun getMoisturizingRatio(levelSum: Int): Float {
         return 1f / (1f + levelSum.toFloat() * 0.15f)
@@ -181,8 +181,9 @@ object WSConfig {
     }
 
     fun getDefaultFoodDryData(itemStack: ItemStack): HydrationData? {
-        if (format.enableDefaultDryData && itemStack.isFood) {
-            itemStack.item.foodComponent?.hunger?.let {
+        val foodData = itemStack.get(DataComponentTypes.FOOD)
+        if (format.enableDefaultDryData && foodData != null) {
+            foodData.nutrition.let {
                 if (it > 1) {
                     return HydrationDataProvider.dryItem(itemStack.item, floor(it / 2f).toInt())
                 }

@@ -1,9 +1,14 @@
 package xyz.koiro.watersource.datagen
 
+import net.minecraft.component.ComponentChanges
+import net.minecraft.component.DataComponentTypes
+import net.minecraft.component.type.PotionContentsComponent
 import net.minecraft.data.DataOutput
 import net.minecraft.fluid.Fluids
 import net.minecraft.item.Items
 import net.minecraft.nbt.NbtCompound
+import net.minecraft.potion.Potions
+import net.minecraft.registry.RegistryWrapper
 import net.minecraft.util.Identifier
 import xyz.koiro.watersource.WSConfig
 import xyz.koiro.watersource.WaterSource
@@ -13,8 +18,12 @@ import xyz.koiro.watersource.datagen.provider.addDryItemWithAutoId
 import xyz.koiro.watersource.datagen.provider.addItemWithAutoId
 import xyz.koiro.watersource.world.fluid.ModFluids
 import xyz.koiro.watersource.world.item.ModItems
+import java.util.concurrent.CompletableFuture
 
-class HydrationDataGenerator(output: DataOutput) : HydrationDataProvider(output) {
+class HydrationDataGenerator(output: DataOutput, lookup: CompletableFuture<RegistryWrapper.WrapperLookup>) : HydrationDataProvider(
+    output,
+    lookup
+) {
     override fun addData(adder: DataAdder<HydrationData>) {
         // WaterSource -----------------------
         adder.add(
@@ -41,9 +50,14 @@ class HydrationDataGenerator(output: DataOutput) : HydrationDataProvider(output)
         adder.addItemWithAutoId(Items.GLOW_BERRIES, 1, 3)
         adder.add(
             Identifier("item_potion_water"),
-            item(Items.POTION, 2, 0, WSConfig.getWaterThirstyProbabilityEffect()).apply { matchList.add(HydrationData.NBTMatch(
-                NbtCompound().apply { this.putString("Potion", "minecraft:water") }
-            ))}
+            item(Items.POTION, 2, 0, WSConfig.getWaterThirstyProbabilityEffect()).apply {
+                matchList.add(
+                    HydrationData.ComponentMatch(
+                        ComponentChanges.builder()
+                            .add(DataComponentTypes.POTION_CONTENTS, PotionContentsComponent(Potions.WATER)).build()
+                    )
+                )
+            }
         )
 
         adder.addDryItemWithAutoId(Items.COOKIE, 1)

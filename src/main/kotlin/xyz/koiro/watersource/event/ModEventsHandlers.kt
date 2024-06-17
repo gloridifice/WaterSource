@@ -5,6 +5,7 @@ package xyz.koiro.watersource.event
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerEntityEvents
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents
 import net.minecraft.entity.effect.StatusEffectInstance
+import net.minecraft.registry.entry.RegistryEntry
 import net.minecraft.server.network.ServerPlayerEntity
 import net.minecraft.util.ActionResult
 import net.minecraft.world.World
@@ -48,7 +49,7 @@ object ModEventsHandlers {
 
     private fun thirstyTick(player: ServerPlayerEntity) {
         player.ifInSurvivalAndGetWaterData { waterData ->
-            player.getStatusEffect(ModStatusEffects.THIRSTY)?.let { effectInstance ->
+            player.getStatusEffect(RegistryEntry.of(ModStatusEffects.THIRSTY))?.let { effectInstance ->
                 waterData.addExhaustion(Exhaustion.thirstyPerSecond(effectInstance.amplifier) / 50f, player)
                 waterData.updateToClient(player)
             }
@@ -58,7 +59,7 @@ object ModEventsHandlers {
     private fun highWaterLevelReward(player: ServerPlayerEntity, world: World) {
         if (world.isClient()) return
         player.ifInSurvivalAndGetWaterData { waterLevelData ->
-            if (waterLevelData.level > 16 && !player.hasStatusEffect(ModStatusEffects.THIRSTY)) {
+            if (waterLevelData.level > 16 && !player.hasStatusEffect(RegistryEntry.of(ModStatusEffects.THIRSTY))) {
                 val tick = player.getAttachedOrCreate(ModAttachmentTypes.WATER_REWARD_HEAL_TICKER)
                 tick.add(1)
                 if (tick.value > (WSConfig.format.highWaterPlayerHealingIntervalSecond * 50).toInt()) {

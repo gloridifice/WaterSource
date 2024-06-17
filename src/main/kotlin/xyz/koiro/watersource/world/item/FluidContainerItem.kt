@@ -2,18 +2,12 @@
 
 package xyz.koiro.watersource.world.item
 
-import net.fabricmc.fabric.api.transfer.v1.context.ContainerItemContext
-import net.fabricmc.fabric.api.transfer.v1.fluid.FluidStorage
-import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariant
-import net.fabricmc.fabric.api.transfer.v1.fluid.base.SingleFluidStorage
-import net.fabricmc.fabric.api.transfer.v1.storage.Storage
-import net.minecraft.client.item.TooltipContext
+import net.minecraft.client.item.TooltipType
 import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.fluid.Fluid
 import net.minecraft.fluid.Fluids
 import net.minecraft.item.Item
 import net.minecraft.item.ItemStack
-import net.minecraft.nbt.NbtCompound
 import net.minecraft.text.Text
 import net.minecraft.util.Formatting
 import net.minecraft.util.Hand
@@ -32,9 +26,6 @@ open class FluidContainerItem(
     val capacity: Long,
     val emptyContainer: (() -> ItemStack)? = null
 ) : Item(settings.maxDamage((capacity / WSConfig.UNIT_DRINK_VOLUME).toInt())) {
-    init {
-        FluidStorage.ITEM.registerForItems(::getFluidStorage, this)
-    }
 
     fun canInsert(itemStack: ItemStack, fluid: Fluid, amount: Long, currentData: FluidStorageData): Boolean {
         return fluid == currentData.fluid || currentData.isBlank()
@@ -43,6 +34,7 @@ open class FluidContainerItem(
     fun onFluidDataChanged(stack: ItemStack, playerEntity: PlayerEntity, hand: Hand) {
         stack.getOrCreateFluidStorageData()?.let {
             val amount = it.amount
+            val maxDamage = stack.maxDamage
             val damage = round((1 - amount.toDouble() / capacity.toDouble()) * maxDamage).toInt()
             if (damage >= maxDamage){
                 if (emptyContainer != null){
@@ -75,35 +67,15 @@ open class FluidContainerItem(
         return super.use(world, user, hand)
     }
 
-    open fun getFluidStorage(stack: ItemStack, context: ContainerItemContext): Storage<FluidVariant> {
-        val nbt = stack.getSubNbt("FluidStorage")
-        val ret = object : SingleFluidStorage() {
-            override fun getCapacity(variant: FluidVariant?): Long {
-                return (stack.item as FluidContainerItem).capacity
-            }
-
-            override fun onFinalCommit() {
-                super.onFinalCommit()
-                val nbtCompound = NbtCompound()
-                this.writeNbt(nbtCompound)
-                stack.setSubNbt("FluidStorage", nbtCompound)
-            }
-        }
-        if (nbt != null) {
-            ret.readNbt(nbt)
-        }
-        return ret
-    }
-
     override fun appendTooltip(
-        stack: ItemStack,
-        world: World?,
-        tooltip: MutableList<Text>,
-        context: TooltipContext
+        stack: ItemStack?,
+        context: TooltipContext?,
+        tooltip: MutableList<Text>?,
+        type: TooltipType?
     ) {
-        stack.getOrCreateFluidStorageData()?.let { storageData ->
-            tooltip.add(storageData.getDisplayText().styled { it.withColor(Formatting.GRAY) })
+        stack?.getOrCreateFluidStorageData()?.let { storageData ->
+            tooltip?.add(storageData.getDisplayText().styled { it.withColor(Formatting.GRAY) })
         }
-        super.appendTooltip(stack, world, tooltip, context)
+        super.appendTooltip(stack, context, tooltip, type)
     }
 }

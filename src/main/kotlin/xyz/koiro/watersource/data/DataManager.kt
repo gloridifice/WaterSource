@@ -1,6 +1,7 @@
 package xyz.koiro.watersource.data
 
 import net.fabricmc.fabric.api.resource.SimpleSynchronousResourceReloadListener
+import net.minecraft.data.DataProvider
 import net.minecraft.resource.Resource
 import net.minecraft.resource.ResourceManager
 import net.minecraft.util.Identifier
@@ -15,10 +16,6 @@ abstract class DataManager<Data>(val startingPath: String, val id: Identifier): 
     }
 
     abstract fun processResourceToData(resId: Identifier, res: Resource): Data
-//        val stream = res.inputStream
-//        val string = String(stream.readAllBytes())
-//        val format = Json.decodeFromString<HydrationData.Format>(string)
-//        val data = HydrationData(format)
 
     override fun reload(manager: ResourceManager) {
         val res = findResource(manager)

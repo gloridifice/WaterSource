@@ -1,6 +1,6 @@
 package xyz.koiro.watersource.world.item
 
-import net.minecraft.client.item.TooltipContext
+import net.minecraft.client.item.TooltipType
 import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.fluid.Fluids
 import net.minecraft.item.Item
@@ -44,13 +44,13 @@ class EmptyFluidContainerItem(settings: Settings?, val containerStack: () -> Ite
 
     override fun appendTooltip(
         stack: ItemStack?,
-        world: World?,
+        context: TooltipContext?,
         tooltip: MutableList<Text>?,
-        context: TooltipContext?
+        type: TooltipType?
     ) {
         containerStack().getOrCreateFluidStorageData()?.let { storageData ->
             tooltip?.add(FluidStorageData.getEmptyText(storageData.capacity).styled { it.withColor(Formatting.GRAY) })
         }
-        super.appendTooltip(stack, world, tooltip, context)
+        super.appendTooltip(stack, context, tooltip, type)
     }
 }

@@ -1,16 +1,24 @@
 package xyz.koiro.watersource.data
 
+import com.mojang.brigadier.StringReader
 import kotlinx.serialization.json.Json
 import net.minecraft.fluid.Fluid
 import net.minecraft.item.ItemStack
+import net.minecraft.registry.BuiltinRegistries
+import net.minecraft.registry.RegistryWrapper.WrapperLookup
 import net.minecraft.resource.Resource
 import net.minecraft.util.Identifier
+import net.minecraft.util.JsonReaderUtils
 import xyz.koiro.watersource.WSConfig
 import xyz.koiro.watersource.WaterSource
 import xyz.koiro.watersource.api.storage.getOrCreateFluidStorageData
 
 object HydrationDataManager :
-    DataManager<HydrationData>(ModResourceRegistries.HYDRATION_KEY, WaterSource.identifier(ModResourceRegistries.HYDRATION_KEY)) {
+    DataManager<HydrationData>(
+        ModResourceRegistries.HYDRATION_KEY,
+        WaterSource.identifier(ModResourceRegistries.HYDRATION_KEY)
+    ) {
+    val registryLookup = BuiltinRegistries.createWrapperLookup()
 
     fun findByItemStack(itemStack: ItemStack): HydrationData? {
         val data = sequence?.find {
@@ -27,10 +35,8 @@ object HydrationDataManager :
     }
 
     override fun processResourceToData(resId: Identifier, res: Resource): HydrationData {
-        val stream = res.inputStream
-        val string = String(stream.readAllBytes())
-        val format = Json.decodeFromString<HydrationData.Format>(string)
-        val data = HydrationData(format)
+        val reader = StringReader(String(res.inputStream.readAllBytes()))
+        val data = JsonReaderUtils.parse(registryLookup, reader, HydrationData.CODEC)
         return data
     }
 

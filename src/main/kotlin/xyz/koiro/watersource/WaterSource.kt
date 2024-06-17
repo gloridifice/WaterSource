@@ -7,8 +7,10 @@ import org.slf4j.LoggerFactory
 import xyz.koiro.watersource.config.ModConfigLoader
 import xyz.koiro.watersource.data.ModResourceRegistries
 import xyz.koiro.watersource.event.ModEventsHandlers
+import xyz.koiro.watersource.network.ModNetworking
 import xyz.koiro.watersource.world.block.ModBlocks
 import xyz.koiro.watersource.world.block.entity.ModBlockEntities
+import xyz.koiro.watersource.world.datacomponent.ModDataComponentTypes
 import xyz.koiro.watersource.world.effect.ModStatusEffects
 import xyz.koiro.watersource.world.fluid.ModFluids
 import xyz.koiro.watersource.world.item.ModFuelRegister
@@ -27,10 +29,12 @@ object WaterSource : ModInitializer {
         ModBlockEntities.active()
         ModStatusEffects.active()
         ModItemGroups.active()
+        ModDataComponentTypes.active()
         ModRecipes.initialize()
         ModResourceRegistries.initialize()
         ModEventsHandlers.initialize()
         ModCommands.initialize()
+        ModNetworking.initialize()
         WSConfig.format = ModConfigLoader.loadOrCreateConfig<WSConfig.Format>("common", WSConfig.Format())
     }
 

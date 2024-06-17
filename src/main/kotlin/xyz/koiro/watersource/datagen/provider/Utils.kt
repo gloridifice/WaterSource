@@ -5,7 +5,7 @@ import net.minecraft.util.Identifier
 import xyz.koiro.watersource.data.HydrationData
 import xyz.koiro.watersource.datagen.provider.HydrationDataProvider.Companion.dryItem
 import xyz.koiro.watersource.datagen.provider.HydrationDataProvider.Companion.item
-import xyz.koiro.watersource.identifier
+import xyz.koiro.watersource.api.identifier
 
 
 fun ModDataProvider.DataAdder<HydrationData>.addItemWithAutoId(item: Item, level: Int, saturation: Int) {

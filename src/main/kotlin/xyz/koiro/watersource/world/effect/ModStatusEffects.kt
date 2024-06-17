@@ -9,9 +9,10 @@ import xyz.koiro.watersource.WaterSource
 object ModStatusEffects {
     val THIRSTY = regStatusEffect("thirsty") { CustomEffect(StatusEffectCategory.HARMFUL, 0xE8A655) };
 
-    fun active(){
+    fun active() {
 
     }
+
     fun regStatusEffect(id: String, effect: () -> StatusEffect): StatusEffect {
         return Registry.register(Registries.STATUS_EFFECT, WaterSource.identifier(id), effect())
     }

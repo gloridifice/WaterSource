@@ -1,15 +1,18 @@
 package xyz.koiro.watersource.world.block
 
+import com.mojang.serialization.MapCodec
 import net.minecraft.block.*
 import net.minecraft.block.entity.BlockEntity
 import net.minecraft.block.entity.BlockEntityTicker
 import net.minecraft.block.entity.BlockEntityType
+import net.minecraft.component.DataComponentTypes
+import net.minecraft.component.type.PotionContentsComponent
 import net.minecraft.entity.LivingEntity
 import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.fluid.Fluids
 import net.minecraft.item.ItemStack
 import net.minecraft.item.Items
-import net.minecraft.potion.PotionUtil
+import net.minecraft.potion.Potion
 import net.minecraft.potion.Potions
 import net.minecraft.sound.SoundCategory
 import net.minecraft.sound.SoundEvents
@@ -25,11 +28,12 @@ import net.minecraft.world.World
 import net.minecraft.world.WorldView
 import xyz.koiro.watersource.api.setStackInHandOrInsertIntoInventory
 import xyz.koiro.watersource.api.storage.getOrCreateFluidStorageData
-import xyz.koiro.watersource.simpleStack
+import xyz.koiro.watersource.api.simpleStack
 import xyz.koiro.watersource.world.block.entity.FilterBlockEntity
 import xyz.koiro.watersource.world.block.entity.ModBlockEntities
 import xyz.koiro.watersource.world.fluid.ModFluids
 import xyz.koiro.watersource.world.item.*
+import kotlin.jvm.optionals.getOrNull
 import kotlin.math.min
 
 open class FilterBlock(val capacity: Long, val filterVolumePerSecond: Long, settings: Settings?) :
@@ -47,11 +51,11 @@ open class FilterBlock(val capacity: Long, val filterVolumePerSecond: Long, sett
         world: World,
         pos: BlockPos,
         player: PlayerEntity?,
-        hand: Hand?,
         hit: BlockHitResult?
-    ): ActionResult {
+    ): ActionResult? {
         val entity = world.getBlockEntity(pos)
-        if (player != null && hand != null && entity is FilterBlockEntity) {
+        if (player != null && entity is FilterBlockEntity) {
+            val hand = player.activeHand
             val handStack = player.getStackInHand(hand)
             val data = entity.fluidStorageData
             val handItem = handStack.item
@@ -190,7 +194,7 @@ open class FilterBlock(val capacity: Long, val filterVolumePerSecond: Long, sett
 
                     handItem == Items.GLASS_BOTTLE && (data.fluid == Fluids.WATER || data.fluid == ModFluids.PURIFIED_WATER) && data.amount >= 250 -> {
                         val newStack = when (data.fluid) {
-                            Fluids.WATER -> PotionUtil.setPotion(Items.POTION.simpleStack(), Potions.WATER)
+                            Fluids.WATER -> PotionContentsComponent.createStack(Items.POTION, Potions.WATER)
                             ModFluids.PURIFIED_WATER -> ModItems.PURIFIED_WATER_BOTTLE.simpleStack()
                             else -> null
                         }
@@ -202,7 +206,7 @@ open class FilterBlock(val capacity: Long, val filterVolumePerSecond: Long, sett
                         }
                     }
 
-                    handItem == Items.POTION && PotionUtil.getPotion(handStack) == Potions.WATER && hasStrainerAndIsUp -> {
+                    handItem == Items.POTION && handStack.get(DataComponentTypes.POTION_CONTENTS)?.potion?.getOrNull()?.value() == Potions.WATER && hasStrainerAndIsUp -> {
                         if (data.insert(250, Fluids.WATER, true)) {
                             handStack.decrement(1)
                             val newStack = Items.GLASS_BOTTLE.simpleStack()
@@ -255,12 +259,13 @@ open class FilterBlock(val capacity: Long, val filterVolumePerSecond: Long, sett
         builder?.add(IS_UP)
     }
 
-    override fun onBreak(world: World?, pos: BlockPos, state: BlockState, player: PlayerEntity?) {
+    override fun onBreak(world: World?, pos: BlockPos, state: BlockState, player: PlayerEntity?): BlockState? {
         super.onBreak(world, pos, state, player)
         val isUp = state.get(IS_UP)
         val otherPos = if (isUp) pos.down() else pos.up()
         world?.removeBlock(otherPos, false)
         world?.removeBlockEntity(otherPos)
+        return state
     }
 
     override fun isCullingShapeFullCube(state: BlockState?, world: BlockView?, pos: BlockPos?): Boolean {
@@ -276,6 +281,10 @@ open class FilterBlock(val capacity: Long, val filterVolumePerSecond: Long, sett
 
     override fun createBlockEntity(pos: BlockPos, state: BlockState): BlockEntity {
         return FilterBlockEntity(pos, state, isUp = state.get(IS_UP), capacity = capacity)
+    }
+
+    override fun getCodec(): MapCodec<out BlockWithEntity> {
+        TODO("Not yet implemented")
     }
 
     override fun getRenderType(state: BlockState?): BlockRenderType {
@@ -305,7 +314,7 @@ open class FilterBlock(val capacity: Long, val filterVolumePerSecond: Long, sett
         state: BlockState?,
         type: BlockEntityType<T>?
     ): BlockEntityTicker<T>? {
-        return checkType(type, ModBlockEntities.FILTER) { world1, pos, state1, be ->
+        return validateTicker(type, ModBlockEntities.FILTER) { world1, pos, state1, be ->
             FilterBlockEntity.tick(world1, pos, state1, be)
         }
     }

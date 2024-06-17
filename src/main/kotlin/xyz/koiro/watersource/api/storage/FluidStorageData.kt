@@ -1,14 +1,18 @@
 package xyz.koiro.watersource.api.storage
 
+import com.mojang.serialization.Codec
+import com.mojang.serialization.codecs.RecordCodecBuilder
 import net.minecraft.fluid.Fluid
 import net.minecraft.fluid.Fluids
 import net.minecraft.nbt.NbtCompound
+import net.minecraft.network.RegistryByteBuf
+import net.minecraft.network.codec.PacketCodec
 import net.minecraft.registry.Registries
 import net.minecraft.text.MutableText
 import net.minecraft.text.Text
 import net.minecraft.util.Identifier
 import xyz.koiro.watersource.datagen.ModLanguages
-import xyz.koiro.watersource.identifier
+import xyz.koiro.watersource.api.identifier
 
 class FluidStorageData(
     var fluid: Fluid,
@@ -94,6 +98,38 @@ class FluidStorageData(
 
         fun getEmptyText(capacity: Long): MutableText {
             return Text.translatable(ModLanguages.INFO_CAPACITY_KYE).append(Text.of(": $capacity mB"))
+        }
+
+
+        val CODEC: Codec<FluidStorageData> = RecordCodecBuilder.mapCodec { instance ->
+            val a = instance.group(
+                Codec.LONG.fieldOf("amount").forGetter<FluidStorageData> {
+                    it.amount
+                },
+                Codec.LONG.fieldOf("capacity").forGetter<FluidStorageData> {
+                    it.capacity
+                },
+                Registries.FLUID.codec.fieldOf("fluid").forGetter<FluidStorageData> {
+                    it.fluid
+                }
+            )
+            return@mapCodec a.apply(instance) { amount, capacity, fluid ->
+                FluidStorageData(fluid, amount, capacity)
+            }
+        }.codec()
+
+        val PACKET_CODEC = PacketCodec.ofStatic(::write, ::read)
+        fun write(buf: RegistryByteBuf, it: FluidStorageData) {
+            buf.writeLong(it.amount)
+            buf.writeLong(it.capacity)
+            buf.writeIdentifier(it.fluid.identifier())
+        }
+        fun read(buf: RegistryByteBuf): FluidStorageData {
+            val amount = buf.readLong()
+            val capacity = buf.readLong()
+            val id =buf.readIdentifier()
+            val fluid = Registries.FLUID.get(id)
+            return FluidStorageData(fluid, amount, capacity)
         }
     }
 

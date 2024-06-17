@@ -1,6 +1,6 @@
 package xyz.koiro.watersource.world.item
 
-import net.minecraft.client.item.TooltipContext
+import net.minecraft.client.item.TooltipType
 import net.minecraft.item.Item
 import net.minecraft.item.ItemStack
 import net.minecraft.text.Text
@@ -26,12 +26,13 @@ class Strainer(settings: Settings?) : Item(settings) {
     }
 
     override fun appendTooltip(
-        stack: ItemStack,
-        world: World?,
-        tooltip: MutableList<Text>,
-        context: TooltipContext
+        stack: ItemStack?,
+        context: TooltipContext?,
+        tooltip: MutableList<Text>?,
+        type: TooltipType?
     ) {
-        super.appendTooltip(stack, world, tooltip, context)
+        super.appendTooltip(stack, context, tooltip, type)
+        if (stack != null && tooltip != null)
         tooltip.add(
             Text.of("${stack.maxDamage - stack.damage}/${stack.maxDamage}").copy()
                 .styled { it.withColor(Formatting.GRAY) })

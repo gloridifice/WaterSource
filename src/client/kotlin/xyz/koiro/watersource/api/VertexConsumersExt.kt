@@ -51,6 +51,6 @@ fun VertexConsumer.quadFace(
             .overlay(OverlayTexture.DEFAULT_UV)
             .texture(u, v)
             .light(240)
-            .normal(matrixStack.peek().normalMatrix, normalN.x, normalN.y, normalN.z).next()
+            .normal(matrixStack.peek(), normalN.x, normalN.y, normalN.z).next()
     }
 }

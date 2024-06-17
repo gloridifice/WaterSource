@@ -64,11 +64,11 @@ dependencies {
 	implementation 'com.akuleshov7:ktoml-core:0.5.1'
 	implementation 'com.akuleshov7:ktoml-file:0.5.1'
 
-	// compile against the JEI API but do not include it at runtime
-	modCompileOnlyApi("mezz.jei:jei-${mc_version}-common-api:${jei_version}")
-	modCompileOnlyApi("mezz.jei:jei-${mc_version}-fabric-api:${jei_version}")
-	// at runtime, use the full JEI jar for Fabric
-	modRuntimeOnly("mezz.jei:jei-${mc_version}-fabric:${jei_version}")
+//	// compile against the JEI API but do not include it at runtime
+//	modCompileOnlyApi("mezz.jei:jei-${mc_version}-common-api:${jei_version}")
+//	modCompileOnlyApi("mezz.jei:jei-${mc_version}-fabric-api:${jei_version}")
+//	// at runtime, use the full JEI jar for Fabric
+//	modRuntimeOnly("mezz.jei:jei-${mc_version}-fabric:${jei_version}")
 }
 
 processResources {
@@ -80,12 +80,12 @@ processResources {
 }
 
 tasks.withType(JavaCompile).configureEach {
-	it.options.release = 17
+	it.options.release = 21
 }
 
 tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile).all {
 	kotlinOptions {
-		jvmTarget = 17
+		jvmTarget = 21
 	}
 }
 
@@ -95,8 +95,8 @@ java {
 	// If you remove this line, sources will not be generated.
 	withSourcesJar()
 
-	sourceCompatibility = JavaVersion.VERSION_17
-	targetCompatibility = JavaVersion.VERSION_17
+	sourceCompatibility = JavaVersion.VERSION_21
+	targetCompatibility = JavaVersion.VERSION_21
 }
 
 jar {
