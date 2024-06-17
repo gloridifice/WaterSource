@@ -1,20 +1,26 @@
 package xyz.koiro.watersource.world.recipe
 
 import com.mojang.serialization.Codec
+import com.mojang.serialization.DynamicOps
 import com.mojang.serialization.MapCodec
 import com.mojang.serialization.codecs.RecordCodecBuilder
 import net.minecraft.fluid.Fluid
 import net.minecraft.inventory.RecipeInputInventory
 import net.minecraft.item.ItemStack
+import net.minecraft.item.Items
+import net.minecraft.nbt.NbtOps
 import net.minecraft.network.RegistryByteBuf
 import net.minecraft.recipe.Ingredient
 import net.minecraft.recipe.RecipeSerializer
 import net.minecraft.recipe.book.CraftingRecipeCategory
 import net.minecraft.registry.Registries
+import net.minecraft.registry.RegistryOps
 import net.minecraft.registry.RegistryWrapper
+import net.minecraft.util.collection.DefaultedList
 import xyz.koiro.watersource.api.storage.getOrCreateFluidStorageData
 import xyz.koiro.watersource.api.storage.modifyFluidStorage
 import xyz.koiro.watersource.api.identifier
+import xyz.koiro.watersource.api.simpleStack
 import xyz.koiro.watersource.api.toIdentifier
 import xyz.koiro.watersource.world.item.Strainer
 
@@ -54,17 +60,15 @@ class StrainerFilteringFluidRecipe(
         val codec = RecordCodecBuilder.mapCodec { instance ->
             val grouped =
                 instance.group(
-                    Codec.STRING.fieldOf("fluidIn")
-                        .forGetter<StrainerFilteringFluidRecipe> { it.inFluid.identifier().toString() },
-                    Codec.STRING.fieldOf("fluidOut")
-                        .forGetter<StrainerFilteringFluidRecipe> { it.outFluid.identifier().toString() },
+                    Registries.FLUID.codec.fieldOf("input").forGetter<StrainerFilteringFluidRecipe> { it.inFluid } ,
+                    Registries.FLUID.codec.fieldOf("output").forGetter<StrainerFilteringFluidRecipe> { it.outFluid } ,
                     Ingredient.DISALLOW_EMPTY_CODEC.fieldOf("strainer")
                         .forGetter<StrainerFilteringFluidRecipe> { it.strainer }
                 )
-            return@mapCodec grouped.apply(instance) { fluidInId, fluidOutId, strainer ->
+            return@mapCodec grouped.apply(instance) { fluidIn, fluidOut, strainer ->
                 StrainerFilteringFluidRecipe(
-                    Registries.FLUID.get(fluidInId.toIdentifier()),
-                    Registries.FLUID.get(fluidOutId.toIdentifier()),
+                    fluidIn,
+                    fluidOut,
                     strainer
                 )
             }
@@ -78,7 +82,9 @@ class StrainerFilteringFluidRecipe(
             val inId = buf.readString()
             val outId = buf.readString()
             val strainer = Ingredient.PACKET_CODEC.decode(buf)
-            return StrainerFilteringFluidRecipe(Registries.FLUID.get(inId.toIdentifier()), Registries.FLUID.get(outId.toIdentifier()), strainer)
+            val fluidIn = Registries.FLUID.get(inId.toIdentifier())
+            val fluidOut = Registries.FLUID.get(outId.toIdentifier())
+            return StrainerFilteringFluidRecipe(fluidIn, fluidOut, strainer)
         }
 
         override fun write(buf: RegistryByteBuf, recipe: StrainerFilteringFluidRecipe) {

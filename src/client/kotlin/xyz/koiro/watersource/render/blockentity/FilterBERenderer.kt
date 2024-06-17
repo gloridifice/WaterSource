@@ -1,6 +1,7 @@
 package xyz.koiro.watersource.render.blockentity
 
 import com.mojang.blaze3d.systems.RenderSystem
+import net.fabricmc.fabric.impl.client.indigo.renderer.helper.ColorHelper
 import net.minecraft.client.MinecraftClient
 import net.minecraft.client.render.RenderLayer
 import net.minecraft.client.render.VertexConsumerProvider
@@ -62,7 +63,7 @@ class FilterBERenderer : BlockEntityRenderer<FilterBlockEntity> {
 
         matrices.push()
         RenderSystem.enableBlend()
-        val consumer = vertexConsumers.getBuffer(RenderLayer.getGlintTranslucent())
+        val consumer = vertexConsumers.getBuffer(RenderLayer.getCutout())
         val u0 = fluidSprite.minU
         val v0 = fluidSprite.minV
         val u1 = fluidSprite.maxU

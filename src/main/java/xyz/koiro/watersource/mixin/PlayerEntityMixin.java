@@ -21,16 +21,16 @@ public class PlayerEntityMixin {
         }
     }
 
-    @Inject(at = @At(value = "INVOKE"), method = "readCustomDataFromNbt")
-    private void onReadCustomNbt(final NbtCompound nbt, final CallbackInfo info){
+    @Inject(at = @At(value = "RETURN"), method = "readCustomDataFromNbt")
+    private void readCustomDataFromNbt(final NbtCompound nbt, final CallbackInfo info){
         var player = (net.minecraft.entity.player.PlayerEntity) (Object) this;
         if (player instanceof ServerPlayerEntity serverPlayer) {
             ActionResult result = ModServerEvents.INSTANCE.getPLAYER_READ_CUSTOM_NBT().invoker().interact(serverPlayer, nbt);
         }
     }
 
-    @Inject(at = @At(value = "INVOKE"), method = "writeCustomDataToNbt")
-    private void onWriteCustomNbt(final NbtCompound nbt, final CallbackInfo info){
+    @Inject(at = @At(value = "RETURN"), method = "writeCustomDataToNbt")
+    private void writeCustomDataToNbt(final NbtCompound nbt, final CallbackInfo info){
         var player = (net.minecraft.entity.player.PlayerEntity) (Object) this;
         if (player instanceof ServerPlayerEntity serverPlayer) {
             ActionResult result = ModServerEvents.INSTANCE.getPLAYER_WRITE_CUSTOM_NBT().invoker().interact(serverPlayer, nbt);

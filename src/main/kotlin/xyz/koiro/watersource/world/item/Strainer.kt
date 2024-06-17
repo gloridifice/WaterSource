@@ -10,11 +10,11 @@ import xyz.koiro.watersource.WSConfig
 import kotlin.math.ceil
 
 class Strainer(settings: Settings?) : Item(settings) {
-    fun calCostDamage(strainerStack: ItemStack, volume: Long): Int {
+    open fun calCostDamage(strainerStack: ItemStack, volume: Long): Int {
         return ceil(volume.toDouble() / WSConfig.UNIT_DRINK_VOLUME.toDouble()).toInt()
     }
 
-    fun getUsedStrainer(strainerStack: ItemStack, cost: Int): ItemStack {
+    open fun getUsedStrainer(strainerStack: ItemStack, cost: Int): ItemStack {
         val remainedStrainer = if (strainerStack.damage + cost >= strainerStack.maxDamage) {
             ItemStack(ModItems.WASTE_STRAINER)
         } else {

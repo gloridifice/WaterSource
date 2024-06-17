@@ -19,13 +19,16 @@ import xyz.koiro.watersource.api.storage.FluidStorageData
 import xyz.koiro.watersource.api.storage.getOrCreateFluidStorageData
 import xyz.koiro.watersource.api.storage.insertFluid
 import xyz.koiro.watersource.api.storage.setFluidStorage
+import xyz.koiro.watersource.world.datacomponent.ModDataComponentTypes
 import kotlin.math.round
 
 open class FluidContainerItem(
     settings: Settings,
     val capacity: Long,
     val emptyContainer: (() -> ItemStack)? = null
-) : Item(settings.maxDamage((capacity / WSConfig.UNIT_DRINK_VOLUME).toInt())) {
+) : Item(
+    settings.maxDamage((capacity / WSConfig.UNIT_DRINK_VOLUME).toInt())
+) {
 
     fun canInsert(itemStack: ItemStack, fluid: Fluid, amount: Long, currentData: FluidStorageData): Boolean {
         return fluid == currentData.fluid || currentData.isBlank()
@@ -36,8 +39,8 @@ open class FluidContainerItem(
             val amount = it.amount
             val maxDamage = stack.maxDamage
             val damage = round((1 - amount.toDouble() / capacity.toDouble()) * maxDamage).toInt()
-            if (damage >= maxDamage){
-                if (emptyContainer != null){
+            if (damage >= maxDamage) {
+                if (emptyContainer != null) {
                     playerEntity.setStackInHand(hand, emptyContainer.invoke())
                 } else stack.damage = maxDamage
             } else {

@@ -6,6 +6,7 @@ import net.minecraft.nbt.NbtCompound
 import net.minecraft.nbt.NbtOps
 import net.minecraft.registry.RegistryWrapper.WrapperLookup
 import java.util.Optional
+import java.util.Stack
 import kotlin.jvm.optionals.getOrNull
 
 class ItemStorageData(var stack: ItemStack = ItemStack.EMPTY) {
@@ -29,7 +30,8 @@ class ItemStorageData(var stack: ItemStack = ItemStack.EMPTY) {
         stack = ItemStack.EMPTY
     }
 
-    fun writeNbt(lookup: WrapperLookup, nbtCompound: NbtCompound) {
-        CODEC.encode(this, lookup.getOps(NbtOps.INSTANCE), nbtCompound).getOrThrow()
+    fun writeNbt(lookup: WrapperLookup): NbtCompound {
+        val a = CODEC.encode(this, lookup.getOps(NbtOps.INSTANCE), NbtCompound()).getOrThrow()
+        return a as NbtCompound
     }
 }

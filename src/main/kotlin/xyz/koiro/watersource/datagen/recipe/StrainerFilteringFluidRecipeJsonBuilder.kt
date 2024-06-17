@@ -41,8 +41,7 @@ class StrainerFilteringFluidRecipeJsonBuilder(
         return Items.APPLE
     }
 
-
     override fun offerTo(exporter: RecipeExporter, recipeId: Identifier) {
-        exporter.accept(recipeId, StrainerFilteringFluidRecipe(inFluid, outFluid, strainer), advancementBuilder?.build(recipeId.withPrefixedPath("recipes/")))
+        exporter.accept(id, StrainerFilteringFluidRecipe(inFluid, outFluid, strainer), advancementBuilder?.build(recipeId.withPrefixedPath("recipes/")))
     }
 }

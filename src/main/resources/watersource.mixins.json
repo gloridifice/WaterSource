@@ -3,7 +3,6 @@
 	"package": "xyz.koiro.watersource.mixin",
 	"compatibilityLevel": "JAVA_21",
 	"mixins": [
-		"ExampleMixin",
 		"PlayerEntityMixin",
 		"ItemMixin"
 	],

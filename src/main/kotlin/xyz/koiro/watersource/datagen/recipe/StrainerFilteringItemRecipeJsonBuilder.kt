@@ -42,6 +42,6 @@ class StrainerFilteringItemRecipeJsonBuilder(
     }
 
     override fun offerTo(exporter: RecipeExporter, recipeId: Identifier) {
-        exporter.accept(recipeId, StrainerFilteringItemRecipe(input, output, cost, strainer), advancementBuilder?.build(recipeId.withPrefixedPath("recipes/")))
+        exporter.accept(id, StrainerFilteringItemRecipe(input, output, cost, strainer), advancementBuilder?.build(recipeId.withPrefixedPath("recipes/")))
     }
 }

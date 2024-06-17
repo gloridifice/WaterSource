@@ -55,7 +55,7 @@ abstract class StrainerFilteringRecipe(
     }
 
     override fun getRemainder(inventory: RecipeInputInventory): DefaultedList<ItemStack> {
-        val defaultedList = DefaultedList.ofSize(inventory.size(), ItemStack(Items.APPLE))
+        val defaultedList = DefaultedList.ofSize(inventory.size(), ItemStack.EMPTY)
         for (i in defaultedList.indices) {
             val item = inventory.getStack(i).item
             if (!item.hasRecipeRemainder()) continue

@@ -32,6 +32,10 @@ class FluidStorageData(
         return ret
     }
 
+    fun copy(): FluidStorageData{
+        return FluidStorageData(fluid, amount, capacity)
+    }
+
     fun isBlank(): Boolean {
         return amount == 0L || fluid == Fluids.EMPTY
     }

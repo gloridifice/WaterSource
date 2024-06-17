@@ -85,8 +85,7 @@ class FilterBlockEntity(pos: BlockPos, state: BlockState, var capacity: Long, va
         super.writeNbt(nbt, registryLookup)
         if (nbt == null || registryLookup == null) return
         nbt.putBoolean("isUp", isUp)
-        val strainerNbt = NbtCompound()
-        strainerStorage.writeNbt(registryLookup, strainerNbt)
+        val strainerNbt = strainerStorage.writeNbt(registryLookup)
         nbt.put("strainer", strainerNbt)
         nbt.putBoolean("isWorking", isWorking)
         nbt.putInt("ticks", filterTicks)

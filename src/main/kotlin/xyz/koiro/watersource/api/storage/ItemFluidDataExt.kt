@@ -35,15 +35,8 @@ fun ItemStack.extractFluid(amount: Long): Long? {
 fun ItemStack.getOrCreateFluidStorageData(): FluidStorageData? {
     val item = this.item
     if (item is FluidContainerItem) {
-        val data = this.get(ModDataComponentTypes.FLUID_STORAGE)
-        return if (data != null) {
-            data
-        } else {
-            // Init
-            val ret = FluidStorageData(Fluids.EMPTY, 0, item.capacity)
-            this.set(ModDataComponentTypes.FLUID_STORAGE, ret)
-            ret
-        }
+        val data = this.getOrDefault(ModDataComponentTypes.FLUID_STORAGE, FluidStorageData(Fluids.EMPTY, 0, item.capacity))
+        return data
     }
     return null
 }
@@ -52,9 +45,12 @@ fun ItemStack.getOrCreateFluidStorageData(): FluidStorageData? {
  * Modify fluid storage and apply for nbt if item is `FluidContainer`
  * */
 fun ItemStack.modifyFluidStorage(action: (ItemStack, FluidStorageData) -> Unit) {
-    this.getOrCreateFluidStorageData()?.let {
-        action(this, it)
-        this.set(ModDataComponentTypes.FLUID_STORAGE, it)
+    this.getOrCreateFluidStorageData()?.let { data ->
+        this.apply(ModDataComponentTypes.FLUID_STORAGE, data) {
+            val applied = it.copy()
+            action(this, applied)
+            applied
+        }
     }
 }
 
