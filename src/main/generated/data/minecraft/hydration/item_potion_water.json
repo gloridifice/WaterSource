@@ -1,0 +1,1 @@
+{"level":2,"saturation":0,"match_mode":"all","item":"minecraft:potion","nbt":"{Potion:\"minecraft:water\"}","effects":[{"id":"watersource:thirsty","amplifier":0,"duration":60.0,"probability":0.8}]}

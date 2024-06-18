@@ -1,0 +1,24 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "g": {
+      "item": "minecraft:glass"
+    },
+    "p": {
+      "tag": "minecraft:planks"
+    },
+    "w": {
+      "tag": "minecraft:logs"
+    }
+  },
+  "pattern": [
+    "wgw",
+    "ppp",
+    "wgw"
+  ],
+  "result": {
+    "item": "watersource:wooden_filter"
+  },
+  "show_notification": true
+}

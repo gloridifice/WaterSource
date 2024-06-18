@@ -1,8 +1,8 @@
 plugins {
-	id 'fabric-loom' version '1.6-SNAPSHOT'
-	id 'maven-publish'
-  	id "org.jetbrains.kotlin.jvm" version "2.0.0"
-	id 'org.jetbrains.kotlin.plugin.serialization' version '2.0.0'
+    id 'fabric-loom' version '1.6-SNAPSHOT'
+    id 'maven-publish'
+    id "org.jetbrains.kotlin.jvm" version "2.0.0"
+    id 'org.jetbrains.kotlin.plugin.serialization' version '2.0.0'
 
 }
 
@@ -10,114 +10,120 @@ version = project.mod_version + "+" + project.mc_version + "-fabric" + "-" + pro
 group = project.maven_group
 
 base {
-	archivesName = project.archives_base_name
+    archivesName = project.archives_base_name
 }
 
 repositories {
-	maven {
-		name = 'Xander Maven'
-		url = 'https://maven.isxander.dev/releases'
-	}
-	maven {
-		// location of the maven that hosts JEI files before January 2023
-		name = "Progwml6's maven"
-		url = "https://dvs1.progwml6.com/files/maven/"
-	}
-	maven {
-		// location of the maven that hosts JEI files since January 2023
-		name = "Jared's maven"
-		url = "https://maven.blamejared.com/"
-	}
-	maven {
-		// location of a maven mirror for JEI files, as a fallback
-		name = "ModMaven"
-		url = "https://modmaven.dev"
-	}
+    maven {
+        name = 'Xander Maven'
+        url = 'https://maven.isxander.dev/releases'
+    }
+    maven {
+        // location of the maven that hosts JEI files before January 2023
+        name = "Progwml6's maven"
+        url = "https://dvs1.progwml6.com/files/maven/"
+    }
+    maven {
+        // location of the maven that hosts JEI files since January 2023
+        name = "Jared's maven"
+        url = "https://maven.blamejared.com/"
+    }
+    maven {
+        // location of a maven mirror for JEI files, as a fallback
+        name = "ModMaven"
+        url = "https://modmaven.dev"
+    }
 }
 
 loom {
     splitEnvironmentSourceSets()
 
-	mods {
-		"watersource" {
-			sourceSet sourceSets.main
-			sourceSet sourceSets.client
-		}
-	}
+    mods {
+        "watersource" {
+            sourceSet sourceSets.main
+            sourceSet sourceSets.client
+        }
+    }
 }
 
 fabricApi {
-	configureDataGeneration()
+    configureDataGeneration()
 }
 
 dependencies {
-	minecraft "com.mojang:minecraft:${project.mc_version}"
-	mappings "net.fabricmc:yarn:${project.yarn_mappings}:v2"
-	implementation 'org.jetbrains.kotlinx:kotlinx-serialization-json:1.6.0'
+    minecraft "com.mojang:minecraft:${project.mc_version}"
+    mappings "net.fabricmc:yarn:${project.yarn_mappings}:v2"
 
-	modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
+    modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
 
-	modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
-	modImplementation "net.fabricmc:fabric-language-kotlin:${project.fabric_kotlin_version}"
+    modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
+    modImplementation "net.fabricmc:fabric-language-kotlin:${project.fabric_kotlin_version}"
 
-	// toml
-	implementation 'com.akuleshov7:ktoml-core:0.5.1'
-	implementation 'com.akuleshov7:ktoml-file:0.5.1'
+    // toml
+    include(implementation 'com.akuleshov7:ktoml-core-jvm:0.5.1')
+    include(implementation 'com.akuleshov7:ktoml-file-jvm:0.5.1')
+    include(implementation 'com.akuleshov7:ktoml-source-jvm:0.5.1')
+    include(implementation 'org.jetbrains.kotlinx:kotlinx-serialization-json-jvm:1.6.0')
+    include(implementation 'com.squareup.okio:okio-jvm:3.1.0')
 
-	// compile against the JEI API but do not include it at runtime
-	modCompileOnlyApi("mezz.jei:jei-${mc_version}-common-api:${jei_version}")
-	modCompileOnlyApi("mezz.jei:jei-${mc_version}-fabric-api:${jei_version}")
-	// at runtime, use the full JEI jar for Fabric
-	modRuntimeOnly("mezz.jei:jei-${mc_version}-fabric:${jei_version}")
+    // compile against the JEI API but do not include it at runtime
+    modCompileOnlyApi("mezz.jei:jei-${mc_version}-common-api:${jei_version}")
+    modCompileOnlyApi("mezz.jei:jei-${mc_version}-fabric-api:${jei_version}")
+    // at runtime, use the full JEI jar for Fabric
+    modRuntimeOnly("mezz.jei:jei-${mc_version}-fabric:${jei_version}")
+}
+
+remapJar {
+    addNestedDependencies = true
 }
 
 processResources {
-	inputs.property "version", project.version
+    inputs.property "version", project.version
 
-	filesMatching("fabric.mod.json") {
-		expand "version": project.version
-	}
+    filesMatching("fabric.mod.json") {
+        expand "version": project.version
+    }
 }
 
 tasks.withType(JavaCompile).configureEach {
-	it.options.release = 17
+    it.options.release = 17
 }
 
 tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile).all {
-	kotlinOptions {
-		jvmTarget = 17
-	}
+    kotlinOptions {
+        jvmTarget = 17
+    }
 }
 
 java {
-	// Loom will automatically attach sourcesJar to a RemapSourcesJar task and to the "build" task
-	// if it is present.
-	// If you remove this line, sources will not be generated.
-	withSourcesJar()
+    // Loom will automatically attach sourcesJar to a RemapSourcesJar task and to the "build" task
+    // if it is present.
+    // If you remove this line, sources will not be generated.
+    withSourcesJar()
 
-	sourceCompatibility = JavaVersion.VERSION_17
-	targetCompatibility = JavaVersion.VERSION_17
+    sourceCompatibility = JavaVersion.VERSION_17
+    targetCompatibility = JavaVersion.VERSION_17
 }
 
 jar {
-	from("LICENSE") {
-		rename { "${it}_${project.base.archivesName.get()}"}
-	}
+    from("LICENSE") {
+        rename { "${it}_${project.base.archivesName.get()}" }
+    }
 }
 
 // configure the maven publication
 publishing {
-	publications {
-		mavenJava(MavenPublication) {
-			from components.java
-		}
-	}
+    publications {
+        mavenJava(MavenPublication) {
+            from components.java
+        }
+    }
 
-	// See https://docs.gradle.org/current/userguide/publishing_maven.html for information on how to set up publishing.
-	repositories {
-		// Add repositories to publish to here.
-		// Notice: This block does NOT have the same function as the block in the top level.
-		// The repositories here will be used for publishing your artifact, not for
-		// retrieving dependencies.
-	}
+    // See https://docs.gradle.org/current/userguide/publishing_maven.html for information on how to set up publishing.
+    repositories {
+        // Add repositories to publish to here.
+        // Notice: This block does NOT have the same function as the block in the top level.
+        // The repositories here will be used for publishing your artifact, not for
+        // retrieving dependencies.
+    }
 }

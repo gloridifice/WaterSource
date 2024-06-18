@@ -1,0 +1,24 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "i": {
+      "tag": "watersource:basics_ingot"
+    },
+    "l": {
+      "item": "minecraft:leather"
+    },
+    "s": {
+      "item": "minecraft:string"
+    }
+  },
+  "pattern": [
+    "sis",
+    "l l",
+    "lll"
+  ],
+  "result": {
+    "item": "watersource:leather_water_bag_small"
+  },
+  "show_notification": true
+}

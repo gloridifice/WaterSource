@@ -21,7 +21,7 @@ public class PlayerEntityMixin {
         }
     }
 
-    @Inject(at = @At(value = "INVOKE"), method = "readCustomDataFromNbt")
+    @Inject(at = @At(value = "RETURN"), method = "readCustomDataFromNbt")
     private void onReadCustomNbt(final NbtCompound nbt, final CallbackInfo info){
         var player = (net.minecraft.entity.player.PlayerEntity) (Object) this;
         if (player instanceof ServerPlayerEntity serverPlayer) {
@@ -29,7 +29,7 @@ public class PlayerEntityMixin {
         }
     }
 
-    @Inject(at = @At(value = "INVOKE"), method = "writeCustomDataToNbt")
+    @Inject(at = @At(value = "RETURN"), method = "writeCustomDataToNbt")
     private void onWriteCustomNbt(final NbtCompound nbt, final CallbackInfo info){
         var player = (net.minecraft.entity.player.PlayerEntity) (Object) this;
         if (player instanceof ServerPlayerEntity serverPlayer) {

@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "w": {
+      "tag": "minecraft:planks"
+    }
+  },
+  "pattern": [
+    "w w",
+    "w w",
+    " w "
+  ],
+  "result": {
+    "count": 2,
+    "item": "watersource:wooden_cup_empty"
+  },
+  "show_notification": true
+}

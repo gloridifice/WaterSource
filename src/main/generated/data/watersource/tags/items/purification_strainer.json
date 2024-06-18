@@ -1,0 +1,8 @@
+{
+  "replace": false,
+  "values": [
+    "watersource:paper_strainer",
+    "watersource:natural_strainer",
+    "watersource:compressed_strainer"
+  ]
+}

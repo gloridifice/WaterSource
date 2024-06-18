@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "w": {
+      "item": "minecraft:clay_ball"
+    }
+  },
+  "pattern": [
+    "w w",
+    "w w",
+    " w "
+  ],
+  "result": {
+    "item": "watersource:raw_pottery_cup"
+  },
+  "show_notification": true
+}

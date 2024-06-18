@@ -1,0 +1,24 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "c": {
+      "item": "minecraft:charcoal"
+    },
+    "r": {
+      "item": "minecraft:clay_ball"
+    },
+    "s": {
+      "tag": "minecraft:sand"
+    }
+  },
+  "pattern": [
+    "ccc",
+    "sss",
+    "rrr"
+  ],
+  "result": {
+    "item": "watersource:natural_strainer"
+  },
+  "show_notification": true
+}

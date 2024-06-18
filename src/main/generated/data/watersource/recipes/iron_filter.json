@@ -1,0 +1,24 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "g": {
+      "item": "minecraft:glass"
+    },
+    "p": {
+      "item": "minecraft:iron_block"
+    },
+    "w": {
+      "item": "minecraft:iron_ingot"
+    }
+  },
+  "pattern": [
+    "wgw",
+    "wpw",
+    "wgw"
+  ],
+  "result": {
+    "item": "watersource:iron_filter"
+  },
+  "show_notification": true
+}

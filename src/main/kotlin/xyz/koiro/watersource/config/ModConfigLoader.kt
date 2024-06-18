@@ -5,12 +5,8 @@ import com.akuleshov7.ktoml.TomlInputConfig
 import com.akuleshov7.ktoml.source.decodeFromStream
 import kotlinx.serialization.encodeToString
 import net.fabricmc.loader.api.FabricLoader
-import xyz.koiro.watersource.WSConfig
 import java.nio.file.Path
 import java.nio.file.Paths
-import kotlin.io.path.createFile
-import kotlin.io.path.createParentDirectories
-import kotlin.io.path.exists
 
 object ModConfigLoader {
     fun getConfigDir(): Path {
@@ -22,15 +18,18 @@ object ModConfigLoader {
             ignoreUnknownNames = true
         )
         val dir = getConfigDir()
-        val filePath = Paths.get(dir.toString(), "watersource", "${path}.toml")
-        if (filePath.exists() && filePath.toFile().isFile) {
-            val stream = filePath.toFile().inputStream()
+        val filePath = Paths.get(dir.toString(), "watersource", "${path}.toml").toFile()
+        if (filePath.exists() && filePath.isFile) {
+            val stream = filePath.inputStream()
             val format = Toml(inputConfig).decodeFromStream<T>(stream)
             return format
         } else {
-            filePath.createParentDirectories()
-            filePath.createFile()
-            filePath.toFile().writeText(Toml().encodeToString<T>(defaultConfig))
+            val it = Paths.get(dir.toString(), "watersource").toFile()
+            if (!it.exists()) {
+                it.mkdirs()
+            }
+            if (filePath.createNewFile())
+                filePath.writeText(Toml().encodeToString<T>(defaultConfig))
         }
         return defaultConfig
     }

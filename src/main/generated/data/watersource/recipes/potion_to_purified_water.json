@@ -1,0 +1,13 @@
+{
+  "type": "watersource:strainer_filtering_item",
+  "cost": 1,
+  "input": {
+    "item": "minecraft:potion"
+  },
+  "output": {
+    "item": "watersource:purified_water_bottle"
+  },
+  "strainer": {
+    "tag": "watersource:purification_strainer"
+  }
+}

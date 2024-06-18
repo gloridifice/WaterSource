@@ -1,0 +1,27 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "b": {
+      "item": "watersource:leather_water_bag_medium"
+    },
+    "d": {
+      "item": "minecraft:diamond"
+    },
+    "h": {
+      "item": "minecraft:heart_of_the_sea"
+    },
+    "l": {
+      "item": "minecraft:leather"
+    }
+  },
+  "pattern": [
+    "dhd",
+    "lbl",
+    "lll"
+  ],
+  "result": {
+    "item": "watersource:leather_water_bag_large"
+  },
+  "show_notification": true
+}
