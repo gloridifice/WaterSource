@@ -165,9 +165,9 @@ open class FilterBlock(val capacity: Long, val filterVolumePerSecond: Long, sett
                                         transferResult.second
                                     )
                                     if (stack != null) {
+                                        (stack.item as? FluidContainerItem)?.onFluidDataChanged(stack, player, hand)
                                         handStack.decrement(1)
                                         player.setStackInHandOrInsertIntoInventory(hand, stack)
-                                        (stack.item as FluidContainerItem).onFluidDataChanged(stack, player, hand)
                                         playExtractSound()
                                     }
                                 }

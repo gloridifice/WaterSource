@@ -5,6 +5,8 @@ import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.fluid.Fluids
 import net.minecraft.item.Item
 import net.minecraft.item.ItemStack
+import net.minecraft.sound.SoundCategory
+import net.minecraft.sound.SoundEvents
 import net.minecraft.text.Text
 import net.minecraft.util.Formatting
 import net.minecraft.util.Hand
@@ -36,6 +38,7 @@ class EmptyFluidContainerItem(settings: Settings?, val containerStack: () -> Ite
                         user.inventory.insertStack(containerStack)
                         stack
                     }
+                world.playSoundAtBlockCenter(user.blockPos, SoundEvents.ITEM_BOTTLE_EMPTY, SoundCategory.PLAYERS, 1f, 1f, true)
                 return TypedActionResult.success(retStack)
             }
         }
