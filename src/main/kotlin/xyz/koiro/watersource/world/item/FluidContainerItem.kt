@@ -25,7 +25,7 @@ import xyz.koiro.watersource.api.storage.FluidStorageData
 import xyz.koiro.watersource.api.storage.getOrCreateFluidStorageData
 import xyz.koiro.watersource.api.storage.insertFluid
 import xyz.koiro.watersource.api.storage.setFluidStorage
-import kotlin.math.round
+import kotlin.math.*
 
 open class FluidContainerItem(
     settings: Settings,
@@ -40,18 +40,19 @@ open class FluidContainerItem(
         return fluid == currentData.fluid || currentData.isBlank()
     }
 
-    fun onFluidDataChanged(stack: ItemStack, playerEntity: PlayerEntity, hand: Hand) {
+    fun onFluidDataChanged(stack: ItemStack, playerEntity: PlayerEntity): ItemStack {
         stack.getOrCreateFluidStorageData()?.let {
             val amount = it.amount
-            val damage = round((1 - amount.toDouble() / capacity.toDouble()) * maxDamage).toInt()
-            if (damage >= maxDamage){
+            val damage = ceil((1 - amount.toDouble() / capacity.toDouble()) * maxDamage.toDouble()).toInt()
+            if (it.isBlank()){
                 if (emptyContainer != null){
-                    playerEntity.setStackInHand(hand, emptyContainer.invoke())
-                } else stack.damage = maxDamage
+                    return emptyContainer.invoke()
+                }
             } else {
-                stack.damage = damage
+                stack.damage = min(damage, maxDamage)
             }
         }
+        return stack
     }
 
     open fun setStorageData(stack: ItemStack, data: FluidStorageData): ItemStack {
@@ -67,7 +68,7 @@ open class FluidContainerItem(
                 val blockState = world.getBlockState(hit.blockPos)
                 if (blockState.fluidState.fluid == Fluids.WATER) {
                     handItem.insertFluid(Fluids.WATER) { it.capacity }
-                    onFluidDataChanged(handItem, user, hand)
+                    user.setStackInHand(hand, onFluidDataChanged(handItem, user))
                     return TypedActionResult.success(handItem)
                 }
             }

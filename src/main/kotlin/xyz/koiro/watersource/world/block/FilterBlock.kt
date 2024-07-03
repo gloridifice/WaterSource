@@ -117,8 +117,11 @@ open class FilterBlock(val capacity: Long, val filterVolumePerSecond: Long, sett
                                 if (transferResult != null) {
                                     val stack = handItem.setStorageData(handStack.copy(), transferResult.second)
                                     handStack.decrement(1)
-                                    player.setStackInHandOrInsertIntoInventory(hand, stack)
-                                    (stack.item as? FluidContainerItem)?.onFluidDataChanged(stack, player, hand)
+                                    val newStack =
+                                        (stack.item as? FluidContainerItem)?.onFluidDataChanged(stack, player)
+                                    newStack?.let {
+                                        player.setStackInHandOrInsertIntoInventory(hand, it)
+                                    }
                                     playExtractSound()
                                 }
                             }
@@ -131,9 +134,14 @@ open class FilterBlock(val capacity: Long, val filterVolumePerSecond: Long, sett
                                 )
                                 if (transferResult != null) {
                                     val stack = handItem.setStorageData(handStack.copy(), transferResult.first)
+                                    val item = stack.item
                                     handStack.decrement(1)
-                                    player.setStackInHandOrInsertIntoInventory(hand, stack)
-                                    (stack.item as? FluidContainerItem)?.onFluidDataChanged(stack, player, hand)
+                                    if (item is FluidContainerItem) {
+                                        val newStack = item.onFluidDataChanged(stack, player)
+                                        player.setStackInHandOrInsertIntoInventory(hand, newStack)
+                                    } else {
+                                        player.setStackInHandOrInsertIntoInventory(hand, stack)
+                                    }
                                     playInsertSound()
                                 }
                             }
@@ -164,10 +172,11 @@ open class FilterBlock(val capacity: Long, val filterVolumePerSecond: Long, sett
                                         containerStack,
                                         transferResult.second
                                     )
-                                    if (stack != null) {
-                                        (stack.item as? FluidContainerItem)?.onFluidDataChanged(stack, player, hand)
+                                    val newHandStack =
+                                        (stack?.item as? FluidContainerItem)?.onFluidDataChanged(stack, player)
+                                    if (newHandStack != null) {
                                         handStack.decrement(1)
-                                        player.setStackInHandOrInsertIntoInventory(hand, stack)
+                                        player.setStackInHandOrInsertIntoInventory(hand, newHandStack)
                                         playExtractSound()
                                     }
                                 }

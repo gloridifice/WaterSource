@@ -54,7 +54,7 @@ open class DrinkableContainer(
     }
 
     override fun onHydrationUsingFinished(stack: ItemStack, player: ServerPlayerEntity, hand: Hand) {
-        onFluidDataChanged(stack, player, hand)
+        onFluidDataChanged(stack, player)
     }
 
     override fun hydrationUse(
