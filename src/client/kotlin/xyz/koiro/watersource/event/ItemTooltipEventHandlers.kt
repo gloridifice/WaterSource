@@ -120,7 +120,7 @@ object ItemTooltipEventHandlers {
                 }
             context.matrices.pop()
         } else {
-            val w = 32
+            val w = 40
             val h = 22
             val fX = x - w - 10
             val fY = y - h / 2
@@ -144,10 +144,10 @@ object ItemTooltipEventHandlers {
 
             val tr = MinecraftClient.getInstance().textRenderer
             val textX = newX + 11
-            context.drawText(tr, "+${String.format("%.1", level.toFloat() / 2f)}", textX, levelY + 1, 0xAAAAAA, false)
+            context.drawText(tr, "+${String.format("%.1f", level.toFloat() / 2f)}", textX, levelY + 1, 0xAAAAAA, false)
             context.drawText(
                 tr,
-                "+${String.format("%.2", saturation.toFloat() / 4f)}",
+                "+${String.format("%.2f", saturation.toFloat() / 4f)}",
                 textX,
                 satY + 1,
                 0xAAAAAA,
