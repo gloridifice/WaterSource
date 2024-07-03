@@ -104,6 +104,13 @@ object ModItems {
             DrinkOnceItem(FabricItemSettings().maxCount(8), 32) { ItemStack(Items.GLASS_BOTTLE) }
         )
 
+    @AutoGenItemData(enLang = "Watermelon Juice", cnLang = "西瓜汁")
+    val WATERMELON_JUICE =
+        registerItem(
+            "watermelon_juice",
+            DrinkOnceItem(FabricItemSettings().maxCount(8), 32) { ItemStack(Items.GLASS_BOTTLE) }
+        )
+
     val WOODEN_FILTER_BLOCK = registerItem(
         "wooden_filter",
         BlockItem(ModBlocks.WOODEN_FILTER, FabricItemSettings())

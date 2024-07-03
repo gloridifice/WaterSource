@@ -55,6 +55,9 @@ object ModItemGroups {
 
         ModItems.WOODEN_FILTER_BLOCK.simpleStack(),
         ModItems.IRON_FILTER_BLOCK.simpleStack(),
+
+        ModItems.WATERMELON_JUICE.simpleStack(),
+
         EnchantedBookItem.forEnchantment(EnchantmentLevelEntry(ModEnchantments.MOISTURIZING, 3))
     )
 

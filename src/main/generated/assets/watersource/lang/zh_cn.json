@@ -16,6 +16,7 @@
   "item.watersource.purified_water_bucket": "净水桶",
   "item.watersource.raw_pottery_cup": "陶杯子（未烤制）",
   "item.watersource.waste_strainer": "旧滤网",
+  "item.watersource.watermelon_juice": "西瓜汁",
   "item.watersource.wooden_cup": "木杯子",
   "item.watersource.wooden_cup_empty": "木杯子",
   "watersource.command.error.restore_all_target_must_be_player": "<restoreAll> 命令的目标只能是玩家",

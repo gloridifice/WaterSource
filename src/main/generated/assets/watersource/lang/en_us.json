@@ -16,6 +16,7 @@
   "item.watersource.purified_water_bucket": "Purified Water Bucket",
   "item.watersource.raw_pottery_cup": "Raw Pottery Cup",
   "item.watersource.waste_strainer": "Waste Strainer",
+  "item.watersource.watermelon_juice": "Watermelon Juice",
   "item.watersource.wooden_cup": "Wooden Cup",
   "item.watersource.wooden_cup_empty": "Wooden Cup",
   "watersource.command.error.restore_all_target_must_be_player": "<restoreAll> command's target must be player!",

@@ -120,5 +120,11 @@ class ModRecipeGenerator(output: FabricDataOutput?) : FabricRecipeProvider(outpu
             .pattern("wpw")
             .pattern("wgw")
             .offerTo(exporter)
+
+        ShapelessRecipeJsonBuilder.create(RecipeCategory.FOOD, ModItems.WATERMELON_JUICE).input(Items.MELON_SLICE)
+            .input(Items.MELON_SLICE).input(Items.MELON_SLICE).input(Items.GLASS_BOTTLE)
+            .criterion(hasItem(Items.MELON_SLICE), conditionsFromItem(Items.MELON_SLICE))
+            .criterion(hasItem(Items.GLASS_BOTTLE), conditionsFromItem(Items.GLASS_BOTTLE))
+            .offerTo(exporter)
     }
 }
