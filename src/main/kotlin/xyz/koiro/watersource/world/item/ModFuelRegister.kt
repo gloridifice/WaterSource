@@ -4,6 +4,6 @@ import net.fabricmc.fabric.api.registry.FuelRegistry
 
 object ModFuelRegister {
     fun initialize() {
-        FuelRegistry.INSTANCE.add(ModItems.WASTE_STRAINER, 200)
+        FuelRegistry.INSTANCE.add(ModItems.WASTE_STRAINER, 600)
     }
 }
